@@ -1,5 +1,7 @@
 # MAME.NET
 C# arcade emulator
+
+This article looks at: How Main.NET loads ROMs, hacking ROMs with the M68000 debugger and Z80 debugger, and using a game example of how to do that.
 ## Introduction
 MAME (Multiple Arcade Machine Emulator) is a free and open source emulator designed to recreate the hardware of arcade game system in software on modern personal computers and other platforms. MAME.NET is a C# based arcade emulator, and it maintains the same architecture of MAME. By using C# and the powerful integrated development environment -- Microsoft Visual Studio, there is no macro and you can debug the supported arcade game anywhere. There are some classic boards supported by now: M72, M92, Taito B, Capcom, CPS-1, CPS-1(Qsound), CPS2, Data East, Tehkan, Konami 68000, Neo Geo, Technos, Namco System 1, IGS011, PGM(PolyGame Master).
 
