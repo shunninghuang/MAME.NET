@@ -236,7 +236,6 @@ namespace cpu.m68000
                     {
                         //throw new Exception(string.Format("unhandled opcode at pc={0:X6}", PC));
                     }
-                    //if (Opcodes[op] == ASLd0 || Opcodes[op] == ASRd0 || Opcodes[op] == LSLd0 || Opcodes[op] == LSRd0 || Opcodes[op] == ROXLd0 || Opcodes[op] == ROXRd0 || Opcodes[op] == ROLd0 || Opcodes[op] == RORd0 || Opcodes[op] == NBCD || Opcodes[op] == ILLEGAL || Opcodes[op] == STOP || Opcodes[op] == TRAPV || Opcodes[op] == CHK || Opcodes[op] == NEGX || Opcodes[op] == SBCD0 || Opcodes[op] == SBCD1 || Opcodes[op] == ABCD0 || Opcodes[op] == ABCD1 || Opcodes[op] == EXGdd || Opcodes[op] == EXGaa || Opcodes[op] == EXGda || Opcodes[op] == TAS || Opcodes[op] == MOVEP || Opcodes[op] == ADDX0 || Opcodes[op] == ADDX1 || Opcodes[op] == SUBX0 || Opcodes[op] == SUBX1)
                     Opcodes[op]();
                     m68ki_check_interrupts();
                     debugger_stop_cpu_hook_callback();
@@ -272,7 +271,6 @@ namespace cpu.m68000
                 int_cycles += 0x2c;
             }
         }
-
         public string State()
         {
             string a = Disassemble(PC).ToString().PadRight(64);

@@ -6,18 +6,30 @@ using System.Drawing;
 
 namespace mame
 {
-    public class Palette
+    public partial class Palette
     {
-        public static uint[] entry_color;
-        public static float[] entry_contrast;
+        public static uint[] entry_color,entry_color2;
+        public static float[] group_bright, group_contrast, entry_contrast;
         private static uint trans_uint;
-        private static int numcolors,numgroups;
+        private static int numcolors, numgroups;
+        public static int[] dirty;
+        public static int mindirty, maxdirty;
         public static Color trans_color;
-        public delegate void palette_delegate(int index,uint rgb);
+        public delegate void palette_delegate(int index, uint rgb);
         public static palette_delegate palette_set_callback;
         public static void palette_init()
         {
-            int index;            
+            int i,index;
+            numgroups = 1;
+            group_bright = new float[3];
+            group_contrast = new float[3];
+            group_bright[0] = 0;
+            group_bright[1] = 0;
+            group_bright[2] = 0;
+            group_contrast[0] = 1;
+            group_contrast[1] = (float)0.6;
+            group_contrast[2] = (float)(1 / 0.6);
+            Video.video_attributes = 0;
             switch (Machine.sBoard)
             {
                 case "CPS-1":
@@ -82,7 +94,7 @@ namespace mame
                     numcolors = 0x801;
                     palette_set_callback = palette_entry_set_color2;
                     break;
-                case "Taito":                    
+                case "Taito":
                     switch (Machine.sName)
                     {
                         case "tokio":
@@ -133,7 +145,32 @@ namespace mame
                     trans_color = Color.Black;
                     trans_uint = (uint)trans_color.ToArgb();
                     numcolors = 0x800;
-                    palette_set_callback = palette_entry_set_color3;
+                    numgroups = 3;
+                    Video.video_attributes = 0x34;
+                    switch (Machine.sName)
+                    {
+                        case "mia":
+                        case "mia2":
+                        case "tmnt":
+                        case "tmntu":
+                        case "tmntua":
+                        case "tmntub":
+                        case "tmht":
+                        case "tmhta":
+                        case "tmhtb":
+                        case "tmntj":
+                        case "tmnta":
+                        case "tmht2p":
+                        case "tmht2pa":
+                        case "tmnt2pj":
+                        case "tmnt2po":
+                        case "thndrx2":
+                        case "thndrx2a":
+                        case "thndrx2j":
+                            Video.video_attributes = 0x30;
+                            break;
+                    }
+                    palette_set_callback = palette_entry_set_color4;
                     break;
                 case "Capcom":
                     switch (Machine.sName)
@@ -165,14 +202,18 @@ namespace mame
                             numcolors = 0x400;
                             palette_set_callback = palette_entry_set_color3;
                             break;
-                    }                    
+                    }
                     break;
             }
             entry_color = new uint[numcolors];
+            entry_color2 = new uint[numcolors * numgroups];
             entry_contrast = new float[numcolors];
+            allocate_palette();
+            allocate_shadow_tables();
             for (index = 0; index < numcolors; index++)
             {
-                palette_set_callback(index, make_argb(0xff, pal1bit((byte)(index >> 0)), pal1bit((byte)(index >> 1)), pal1bit((byte)(index >> 2))));
+                entry_contrast[index] = (float)1.0;
+                palette_set_callback(index, make_argb(0xff, pal1bit((byte)(index >> 0)), pal1bit((byte)(index >> 1)), pal1bit((byte)(index >> 2))));                
             }
             switch (Machine.sBoard)
             {
@@ -278,6 +319,7 @@ namespace mame
         }
         public static void palette_entry_set_color2(int index, uint rgb)
         {
+            int groupnum;
             if (index >= numcolors || entry_color[index] == rgb)
             {
                 return;
@@ -292,6 +334,19 @@ namespace mame
             }
             entry_color[index] = 0xff000000 | rgb;
         }
+        public static void palette_entry_set_color4(int index, uint rgb)
+        {
+            int groupnum;
+            if (index >= numcolors || entry_color[index] == rgb)
+            {
+                return;
+            }
+            entry_color[index] = 0xff000000 | rgb;
+            for (groupnum = 0; groupnum < numgroups; groupnum++)
+            {
+                update_adjusted_color(groupnum, index);
+            }
+        }
         public static void palette_entry_set_contrast(int index, float contrast)
         {
             int groupnum;
@@ -302,7 +357,20 @@ namespace mame
             entry_contrast[index] = contrast;
             for (groupnum = 0; groupnum < numgroups; groupnum++)
             {
-                //update_adjusted_color(palette, groupnum, index);
+                update_adjusted_color(groupnum, index);
+            }
+        }
+        public static void palette_group_set_contrast(int group, float contrast)
+        {
+            int index;
+            if (group >= numgroups || group_contrast[group] == contrast)
+            {
+                return;
+            }
+            group_contrast[group] = contrast;
+            for (index = 0; index < numcolors; index++)
+            {
+                update_adjusted_color(group, index);
             }
         }
         public static uint make_rgb(int r, int g, int b)
@@ -315,7 +383,7 @@ namespace mame
         }
         public static byte pal1bit(byte bits)
         {
-	        return (byte)(((bits & 1)!=0) ? 0xff : 0x00);
+            return (byte)(((bits & 1) != 0) ? 0xff : 0x00);
         }
         public static byte pal4bit(byte bits)
         {
@@ -326,6 +394,53 @@ namespace mame
         {
             bits &= 0x1f;
             return (byte)((bits << 3) | (bits >> 2));
+        }
+        public static byte RGB_RED(uint rgb)
+        {
+            return (byte)((rgb >> 16) & 0xff);
+        }
+        public static byte RGB_GREEN(uint rgb)
+        {
+            return (byte)((rgb >> 8) & 0xff);
+        }
+        public static byte RGB_BLUE(uint rgb)
+        {
+            return (byte)(rgb & 0xff);
+        }
+        public static byte rgb_clamp(int value)
+        {
+            byte value2;
+            if (value < 0)
+            {
+                value2 = 0;
+            }
+            if (value > 255)
+            {
+                value2 = 255;
+            }
+            else
+            {
+                value2 = (byte)value;
+            }
+            return value2;
+        }
+        public static uint adjust_palette_entry(uint entry, float brightness, float contrast)
+        {
+            int r = rgb_clamp((int)((float)RGB_RED(entry) * contrast + brightness));
+            int g = rgb_clamp((int)((float)RGB_GREEN(entry) * contrast + brightness));
+            int b = rgb_clamp((int)((float)RGB_BLUE(entry) * contrast + brightness));
+            return make_argb(0xff,r, g, b);
+        }
+        public static void update_adjusted_color(int group, int index)
+        {
+            int finalindex = group * numcolors + index;
+            uint adjusted;
+            adjusted = adjust_palette_entry(entry_color[index], group_bright[group], group_contrast[group] * entry_contrast[index]);
+            if (entry_color2[finalindex] == adjusted)
+            {
+                return;
+            }
+            entry_color2[finalindex] = adjusted;
         }
     }
 }

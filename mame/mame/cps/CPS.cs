@@ -1427,6 +1427,7 @@ namespace mame
                     case "sf2dongb":
                     case "sf2hf":
                     case "sf2hfu":
+                    case "sf2mix":
                         cpsb_addr = 0x32;
                         cpsb_value = -1;
                         mult_factor1 = 0x00;

@@ -38,6 +38,14 @@ namespace mame
             {
                 Palette.palette_entry_set_color1(i, Palette.make_rgb(0, 0, 0));
             }
+            for (i = 0; i < 0x2000; i++)
+            {
+                Drawgfx.shadow_table[0][i] = i;
+            }
+            for (i = 0x0800; i < 0x1000; i++)
+            {
+                Drawgfx.shadow_table[0][i] = i + 0x0800;
+            }
             copy_sprites = 0;
         }
         public static byte namcos1_videoram_r(int offset)
@@ -150,6 +158,7 @@ namespace mame
                 int sprite = namcos1_spriteram[source_offset + 11];
                 int sprite_bank = attr1 & 7;
                 int priority = (namcos1_spriteram[source_offset + 14] & 0xe0) >> 5;
+                int pri_mask = (0xff << (priority + 1)) & 0xff;
                 namcos1_pri = priority;
                 sprite += sprite_bank * 256;
                 color = color >> 1;
@@ -163,7 +172,7 @@ namespace mame
                     flipy ^= 1;
                 }
                 sy++;
-                Drawgfx.common_drawgfx_na(sizex,sizey,tx,ty,sprite,color,flipx,flipy,sx & 0x1ff,((sy + 16) & 0xff) - 16,cliprect);
+                Drawgfx.common_drawgfx_na(sizex, sizey, tx, ty, sprite, color, flipx, flipy, sx & 0x1ff, ((sy + 16) & 0xff) - 16, pri_mask, cliprect);
             }
         }
         public static void video_update_namcos1()

@@ -117,6 +117,7 @@ namespace ui
             dataeastToolStripMenuItem.Enabled = false;
             tehkanToolStripMenuItem.Enabled = false;
             neogeoToolStripMenuItem.Enabled = false;
+            technosToolStripMenuItem.Enabled = false;
             suna8ToolStripMenuItem.Enabled = false;
             namcos1ToolStripMenuItem.Enabled = false;
             igs011ToolStripMenuItem.Enabled = false;
@@ -144,6 +145,7 @@ namespace ui
                     itemSize[2].Text = "384x224";
                     resetToolStripMenuItem.DropDownItems.Clear();
                     resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
                     itemSelect();
                     cpsToolStripMenuItem.Enabled = true;
                     CPS.CPSInit();
@@ -161,7 +163,8 @@ namespace ui
                     itemSize[0].Text = "512x256";
                     itemSize[1].Text = "384x224";
                     resetToolStripMenuItem.DropDownItems.Clear();
-                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);                    
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
                     itemSelect();
                     cpsToolStripMenuItem.Enabled = true;
                     CPS.CPSInit();

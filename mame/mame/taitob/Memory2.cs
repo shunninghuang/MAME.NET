@@ -79,7 +79,7 @@ namespace mame
                 }
                 else if (address % 2 == 1)
                 {
-                    result = (sbyte)TC0220IOC_halfword_r(offset);
+                    result = (sbyte)Taito.TC0220IOC_halfword_r(offset);
                 }
             }
             else if (address >= 0x210000 && address <= 0x210001)
@@ -90,7 +90,7 @@ namespace mame
                 }
                 else if (address % 2 == 1)
                 {
-                    result = sbyte3;
+                    result = Taito.sbyte3;
                 }
             }
             else if (address >= 0x220000 && address <= 0x220001)
@@ -101,7 +101,7 @@ namespace mame
                 }
                 else if (address % 2 == 1)
                 {
-                    result = sbyte4;
+                    result = Taito.sbyte4;
                 }
             }
             else if (address >= 0x230000 && address <= 0x230001)
@@ -112,7 +112,7 @@ namespace mame
                 }
                 else if (address % 2 == 1)
                 {
-                    result = sbyte5;
+                    result = Taito.sbyte5;
                 }
             }
             else if (address >= 0x300000 && address <= 0x301fff)
@@ -249,19 +249,19 @@ namespace mame
             else if (address >= 0x200000 && address + 1 <= 0x20000f)
             {
                 int offset = (address - 0x200000) / 2;
-                result = (short)TC0220IOC_halfword_r(offset);
+                result = (short)Taito.TC0220IOC_halfword_r(offset);
             }
             else if (address >= 0x210000 && address + 1 <= 0x210001)
             {
-                result = (short)sbyte3;
+                result = (short)Taito.sbyte3;
             }
             else if (address >= 0x220000 && address + 1 <= 0x220001)
             {
-                result = (short)sbyte4;
+                result = (short)Taito.sbyte4;
             }
             else if (address >= 0x230000 && address + 1 <= 0x230001)
             {
-                result = (short) sbyte5;
+                result = (short)Taito.sbyte5;
             }
             else if (address >= 0x300000 && address + 1 <= 0x301fff)
             {
@@ -347,7 +347,7 @@ namespace mame
             else if (address >= 0x200000 && address + 3 <= 0x20000f)
             {
                 int offset = (address - 0x200000) / 2;
-                result = (int)(TC0220IOC_halfword_r(offset) * 0x10000 + TC0220IOC_halfword_r(offset + 1));
+                result = (int)(Taito.TC0220IOC_halfword_r(offset) * 0x10000 + Taito.TC0220IOC_halfword_r(offset + 1));
             }
             else if (address >= 0x300000 && address + 1 <= 0x301fff)
             {
@@ -416,7 +416,7 @@ namespace mame
             else if (address >= 0x200000 && address <= 0x20000f)
             {
                 int offset = (address - 0x200000) / 2;
-                TC0220IOC_halfword_w1(offset, (byte)value);
+                Taito.TC0220IOC_halfword_w1(offset, (byte)value);
             }
             else if (address >= 0x240000 && address <= 0x240001)
             {
@@ -527,7 +527,7 @@ namespace mame
             else if (address >= 0x200000 && address + 1 <= 0x20000f)
             {
                 int offset = (address - 0x200000) / 2;
-                TC0220IOC_halfword_w(offset, (ushort)value);
+                Taito.TC0220IOC_halfword_w(offset, (ushort)value);
             }
             else if (address >= 0x240000 && address + 1 <= 0x240001)
             {
@@ -592,8 +592,8 @@ namespace mame
             else if (address >= 0x200000 && address + 3 <= 0x20000f)
             {
                 int offset = (address - 0x200000) / 2;
-                TC0220IOC_halfword_w(offset, (ushort)(value >> 16));
-                TC0220IOC_halfword_w(offset + 1, (ushort)value);
+                Taito.TC0220IOC_halfword_w(offset, (ushort)(value >> 16));
+                Taito.TC0220IOC_halfword_w(offset + 1, (ushort)value);
             }
             else if (address >= 0x300000 && address + 3 <= 0x301fff)
             {

@@ -414,10 +414,24 @@ namespace mame
                     record_port_callback = Taito.record_port_opwolfp;
                     replay_port_callback = Taito.replay_port_opwolfp;
                     break;
+                case "masterw":
+                case "masterwu":
+                case "masterwj":
+                case "yukiwo":
+                case "nastar":
+                case "nastarw":
+                case "rastsag2":
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_masterw;
+                    break;
                 case "pbobble":
                     loop_inputports_callback = Taitob.loop_inputports_taitob_pbobble;
                     record_port_callback = Taitob.record_port_pbobble;
                     replay_port_callback = Taitob.replay_port_pbobble;
+                    break;
+                case "rambo3":
+                case "rambo3u":
+                case "rambo3p":
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_rambo3;
                     break;
                 case "silentd":
                 case "silentdj":

@@ -478,6 +478,13 @@ namespace mame
         }
         public static void K051960_vh_start()
         {
+            int i;
+            Drawgfx.gfx_drawmode_table[0] = 0;
+            for (i = 1; i < 15; i++)
+            {
+                Drawgfx.gfx_drawmode_table[i] = 1;
+            }
+            Drawgfx.gfx_drawmode_table[15] = 2;
             K051960_dx = K051960_dy = 0;
             K051960_ram = new byte[0x400];
             K051960_spriterombank = new byte[3];
@@ -653,7 +660,7 @@ namespace mame
                             }
                             if (max_priority == -1)
                             {
-                                common_drawgfx_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, (uint)(pri | (1 << 31)));
+                                Drawgfx.common_drawgfx_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect,shadow, (uint)(pri | (1 << 31)));
                                 /*pdrawgfx(bitmap, K051960_gfx,
                                         c,
                                         color,
@@ -663,7 +670,7 @@ namespace mame
                             }
                             else
                             {
-                                common_drawgfx_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, 0);
+                                Drawgfx.common_drawgfx_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0);
                                 /*drawgfx(bitmap, K051960_gfx,
                                         c,
                                         color,
@@ -701,7 +708,7 @@ namespace mame
                             }
                             if (max_priority == -1)
                             {
-                                common_drawgfxzoom_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri | (1 << 31)));
+                                Drawgfx.common_drawgfxzoom_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri | (1 << 31)));
                                 /*pdrawgfxzoom(bitmap, K051960_gfx,
                                         c,
                                         color,
@@ -712,7 +719,7 @@ namespace mame
                             }
                             else
                             {
-                                common_drawgfxzoom_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, 0, (zw << 16) / 16, (zh << 16) / 16);
+                                Drawgfx.common_drawgfxzoom_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16);
                                 /*drawgfxzoom(bitmap, K051960_gfx,
                                         c,
                                         color,
@@ -1061,24 +1068,11 @@ namespace mame
                         c = (c & 0x3f) | (code2 & ~0x3f);
                         if (zoomx == 0x10000 && zoomy == 0x10000)
                         {
-                            common_drawgfx_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, (uint)(pri2 | (1 << 31)));
-                            /*pdrawgfx(bitmap, K053245_gfx[chip],
-                                    c,
-                                    color2,
-                                    fx, fy,
-                                    sx, sy,
-                                    cliprect, shadow ? TRANSPARENCY_PEN_TABLE : TRANSPARENCY_PEN, 0, pri);*/
+                            Drawgfx.common_drawgfx_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, shadow, (uint)(pri2 | (1 << 31)));
                         }
                         else
                         {
-                            common_drawgfxzoom_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri2 | 1 << 31));
-                            /*pdrawgfxzoom(bitmap, K053245_gfx[chip],
-                                    c,
-                                    color2,
-                                    fx, fy,
-                                    sx, sy,
-                                    cliprect, shadow ? TRANSPARENCY_PEN_TABLE : TRANSPARENCY_PEN, 0,
-                                    (zw << 16) / 16, (zh << 16) / 16, pri);*/
+                            Drawgfx.common_drawgfxzoom_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri2 | 1 << 31));
                         }
                     }
                 }

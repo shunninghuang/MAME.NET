@@ -144,14 +144,7 @@ namespace mame
             }
             else if (address >= 0x800000 && address + 1 <= 0x800007)
             {
-                /*if (Attotime.attotime_compare(Timer.global_basetime, new Atime(0x0d, 0x00)) >= 0 && Attotime.attotime_compare(Timer.global_basetime, new Atime(0x0d, 0x06e1c1488dedd160)) < 0)
-                {
-                    return -0x200;
-                }
-                else*/
-                {
-                    result = short1;// input_port_4_word_r
-                }
+                result = short1;// input_port_4_word_r
             }
             else if (address >= 0x800018 && address + 1 <= 0x80001f)
             {
@@ -281,23 +274,6 @@ namespace mame
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
             {
-                /*if (address >= 0xffa994 && address<0xffaa94)
-                {
-                    StreamWriter sw1 = new StreamWriter("1.txt", true);
-                    sw1.WriteLine(Video.screenstate.frame_number.ToString() + "\t" + MC68000.m1.TotalExecutedCycles.ToString("X") + "\ta994\t" + (address - 0xffa994).ToString("X4") + "\t" + value.ToString("X2"));
-                    sw1.Close();
-                }
-                if (address >= 0xffca14 && address < 0xffcad4)
-                {
-                    StreamWriter sw1 = new StreamWriter("1.txt", true);
-                    sw1.WriteLine(Video.screenstate.frame_number.ToString() + "\t" + MC68000.m1.TotalExecutedCycles.ToString("X") + "\tca14\t" + (address - 0xffca14).ToString("X4") + "\t" + value.ToString("X2"));
-                    sw1.Close();
-                }*/
-                /*if (Video.screenstate.frame_number>=1733&& address == 0xffca14 + 0x00 && (value == 0x02))
-                {
-                    int i1 = 1;
-                    return;
-                }*/
                 Memory.mainram[(address & 0xffff)] = (byte)(value);
             }
             else
@@ -336,26 +312,6 @@ namespace mame
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
-                if(address==0xffa9fe&&value==0)
-                {
-                    int i1=1;
-                }
-                /*if (address >= 0xffa994 && address < 0xffaa94)
-                {
-                    StreamWriter sw1 = new StreamWriter("1.txt", true);
-                    sw1.WriteLine(Video.screenstate.frame_number.ToString() + "\t" + MC68000.m1.TotalExecutedCycles.ToString("X") + "\ta994\t" + (address - 0xffa994).ToString("X4") + "\t" + value.ToString("X4"));
-                    sw1.Close();
-                }
-                if (address >= 0xffca14 && address < 0xffcad4)
-                {
-                    StreamWriter sw1 = new StreamWriter("1.txt", true);
-                    sw1.WriteLine(Video.screenstate.frame_number.ToString() + "\t" + MC68000.m1.TotalExecutedCycles.ToString("X") + "\tca14\t" + (address - 0xffca14).ToString("X4") + "\t" + value.ToString("X4"));
-                    sw1.Close();
-                }*/
-                /*if ((address == 0xffa994 + 0x08 && value == 0))
-                {
-                    return;
-                }*/
                 Memory.mainram[(address & 0xffff)] = (byte)(value >> 8);
                 Memory.mainram[(address & 0xffff) + 1] = (byte)(value);
             }
@@ -400,18 +356,6 @@ namespace mame
             }
             else if (address >= 0xff0000 && address + 3 <= 0xffffff)
             {
-                /*if (address >= 0xffa994 && address < 0xffaa94)
-                {
-                    StreamWriter sw1 = new StreamWriter("1.txt", true);
-                    sw1.WriteLine(Video.screenstate.frame_number.ToString() + "\t" + MC68000.m1.TotalExecutedCycles.ToString("X") + "\ta994\t" + (address - 0xffa994).ToString("X4") + "\t" + value.ToString("X8"));
-                    sw1.Close();
-                }
-                if (address >= 0xffca14 && address < 0xffcad4)
-                {
-                    StreamWriter sw1 = new StreamWriter("1.txt", true);
-                    sw1.WriteLine(Video.screenstate.frame_number.ToString() + "\t" + MC68000.m1.TotalExecutedCycles.ToString("X") + "\tca14\t" + (address - 0xffca14).ToString("X4") + "\t" + value.ToString("X8"));
-                    sw1.Close();
-                }*/
                 Memory.mainram[(address & 0xffff)] = (byte)(value >> 24);
                 Memory.mainram[(address & 0xffff) + 1] = (byte)(value >> 16);
                 Memory.mainram[(address & 0xffff) + 2] = (byte)(value >> 8);
@@ -938,10 +882,6 @@ namespace mame
                 gfxram[(address & 0x3ffff) + 3] = (byte)(value);
                 cps1_gfxram_w((address & 0x3ffff) / 2);
                 cps1_gfxram_w(((address + 2) & 0x3ffff) / 2);
-                if (address == 0x00914000 && value != 0)
-                {
-                    //int i11 = 1;
-                }
             }
             else if (address >= 0xf18000 && address + 3 <= 0xf19fff)
             {

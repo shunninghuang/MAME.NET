@@ -426,24 +426,7 @@ namespace mame
         private static void cps1_render_sprites()
         {
             int i,match;
-            string[] ss1;
-            int[] iiRender;
-            int i9,n1;
             int baseoffset,baseadd;
-            Color c1 = new Color();
-            int iSprite = 0, nSprite, iOffset, iRatio=1,iFlip, iXCount, iYCount;
-            int width1=512, height1=512;
-            int[] iiX = new int[256], iiY = new int[256], iiCode = new int[256], iiColor = new int[256], iiIndex = new int[256];
-            List<int> lX = new List<int>(), lY = new List<int>(), lY2 = new List<int>(), lCode = new List<int>(), lColor = new List<int>();
-            List<int> lFlip = new List<int>();
-            List<int> lIndex = new List<int>(), lXCount = new List<int>(), lYCount = new List<int>();
-            /*ss1 = CPS1.c1.FORM.tbInput.Text.Split(sde2, StringSplitOptions.RemoveEmptyEntries);
-            n1 = ss1.Length;
-            iiRender=new int[n1];
-            for (i9 = 0; i9 < n1; i9++)
-            {
-                iiRender[i9] = int.Parse(ss1[i9]);
-            }*/
             /* some sf2 hacks draw the sprites in reverse order */
             if ((bootleg_kludge == 1) || (bootleg_kludge == 2) || (bootleg_kludge == 3))
             {
@@ -463,31 +446,6 @@ namespace mame
                 code = cps1_buffered_obj[baseoffset + 2];
                 colour = cps1_buffered_obj[baseoffset + 3];
                 col = colour & 0x1f;
-                /*if ((colour & 0xff00) == 0xff00)
-                {
-                    break;
-                }*/
-                iiX[iSprite] = x;
-                iiY[iSprite] = y;
-                iiCode[iSprite] = code;
-                iiColor[iSprite] = colour;
-                /*iiIndex[iSprite] = Array.IndexOf(iiRender, iiColor[iSprite] % 32);
-                if (iiIndex[iSprite] >= 0)
-                {
-                    lX.Add(iiX[iSprite]);
-                    lY.Add(iiY[iSprite]);
-                    lCode.Add(iiCode[iSprite]);
-                    lColor.Add(iiColor[iSprite]);
-                    lIndex.Add(iiIndex[iSprite]);
-                    iFlip = ((iiColor[iSprite] & 0x60) >> 5) & 3;
-                    iXCount = iiColor[iSprite] / 256 % 16 + 1;
-                    iYCount = iiColor[iSprite] / 256 / 16 + 1;
-                    lXCount.Add(iXCount);
-                    lYCount.Add(iYCount);
-                    lY2.Add(iiY[iSprite] + iYCount * 16);
-                    lFlip.Add(iFlip);
-                    iSprite++;
-                }*/
                 if (x == 0 && y == 0 && code == 0 && colour == 0)
                 {
                     baseoffset += baseadd;
@@ -579,164 +537,6 @@ namespace mame
                 }
                 baseoffset += baseadd;
             }
-            return;
-            nSprite = lX.Count;
-            if (nSprite == 0)
-            {
-                return;
-            }
-            int i1, i2, i3, i4, i5, i6, i7, i8, rows, cols, minX, minY, maxX, maxY, maxY2, nX, nY, maxXCount, maxYCount;
-            minX = lX.Min();
-            minY = lY.Min();
-            maxX = lX.Max();
-            maxY = lY.Max();
-            maxY2 = lY2.Max();
-            maxXCount = lXCount.Max();
-            maxYCount = lYCount.Max();
-            string sHash = "";
-            Bitmap bm1, bm2;
-            nX = (maxX - minX) / 16 + 1;
-            nY = (maxY - minY) / 16 + 1;
-            if (maxXCount == 1 && maxYCount == 1)
-            {
-                if (nX % 2 == 1)
-                {
-                    nX += 1;
-                }
-                if (nY <= 8)
-                {
-                    nY = 8;
-                }
-                else if (nY > 8 && nY % 2 == 1)
-                {
-                    nY += 1;
-                }
-            }
-            else
-            {
-                if ((nX + maxXCount - 1) % 2 == 0)
-                {
-                    nX = nX + maxXCount - 1;
-                }
-                else if ((nX + maxXCount - 1) % 2 == 1)
-                {
-                    nX = nX + maxXCount;
-                }
-                if (nY + maxYCount - 1 <= 8)
-                {
-                    nY = 8;
-                }
-                else if (nY + maxYCount - 1 > 8 && (nY + maxYCount - 1) % 2 == 1)
-                {
-                    nY = nY + maxYCount;
-                }
-            }
-            bm1 = new Bitmap(16 * nX, 16 * nY);
-            Graphics g = Graphics.FromImage(bm1);
-            g.Clear(Color.Magenta);
-            for (iSprite = nSprite - 1; iSprite >= 0; iSprite--)
-            {
-                bm2 = new Bitmap(16 * lXCount[iSprite], 16 * lYCount[iSprite]);
-                cols = lColor[iSprite] / 256 % 16 + 1;
-                rows = lColor[iSprite] / 256 / 16 + 1;
-                /*for (i5 = 0; i5 < lYCount[iSprite]; i5++)
-                {
-                    for (i6 = 0; i6 < lXCount[iSprite]; i6++)
-                    {
-                        iOffset = (lCode[iSprite] + i5 * 16 + i6) * 16 * 16 / 2;
-                        sHash += lCode[iSprite].ToString("X4");// +lbXFlip[iSprite] + lbYFlip[iSprite];             
-                        for (i1 = 0; i1 < 16; i1++)
-                        {
-                            for (i2 = 0; i2 < 16; i2++)
-                            {
-                                int iByte;
-                                iByte = CPS1.gfxrom[iOffset + (i1 * 16 + i2) / 2];
-                                if (i2 % 2 == 0)
-                                {
-                                    if (iByte % 16 == 0x0f)
-                                    {
-                                        c1 = Color.Magenta;
-                                    }
-                                    else
-                                    {
-                                        c1 = Color.FromArgb((int)Palette.entry_color[iiRender[lIndex[iSprite]] * 16 + iByte % 16]);
-                                    }
-                                }
-                                else if (i2 % 2 == 1)
-                                {
-                                    if (iByte / 16 == 0x0f)
-                                    {
-                                        c1 = Color.Magenta;
-                                    }
-                                    else
-                                    {
-                                        c1 = Color.FromArgb((int)Palette.entry_color[iiRender[lIndex[iSprite]] * 16 + iByte / 16]);
-                                    }
-                                }
-                                for (i7 = 0; i7 < iRatio; i7++)
-                                {
-                                    for (i8 = 0; i8 < iRatio; i8++)
-                                    {
-                                        bm2.SetPixel((i6 * 16 + i2) * iRatio + i8, (i5 * 16 + i1) * iRatio + i7, c1);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }*/
-                if (lFlip[iSprite] == 0)
-                {
-                    g.DrawImage(bm2, new Rectangle(lX[iSprite] - minX, 16 * nY - maxY2 + lY[iSprite], 16 * lXCount[iSprite], 16 * lYCount[iSprite]), new Rectangle(0, 0, 16 * lXCount[iSprite], 16 * lYCount[iSprite]), GraphicsUnit.Pixel);
-                }
-                else if (lFlip[iSprite] == 1)
-                {
-                    //bm2.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                    g.DrawImage(bm2, new Rectangle(maxX - lX[iSprite], 16 * nY - maxY2 - (lYCount[iSprite] - 1) * 16 + lY[iSprite], 16 * lXCount[iSprite], 16 * lYCount[iSprite]), new Rectangle(0, 0, 16 * lXCount[iSprite], 16 * lYCount[iSprite]), GraphicsUnit.Pixel);
-                }
-                else if (lFlip[iSprite] == 2)
-                {
-                    bm2.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                    g.DrawImage(bm2, new Rectangle(lX[iSprite] - minX, 16 * (nY - 1) - maxY - (lYCount[iSprite] - 1) * 16 + lY[iSprite], 16 * lXCount[iSprite], 16 * lYCount[iSprite]), new Rectangle(0, 0, 16 * lXCount[iSprite], 16 * lYCount[iSprite]), GraphicsUnit.Pixel);
-                }
-                else if (lFlip[iSprite] == 3)
-                {
-                    //bm2.RotateFlip(RotateFlipType.RotateNoneFlipXY);
-                    g.DrawImage(bm2, new Rectangle(lX[iSprite] - minX, 16 * (nY - 1) - maxY - (lYCount[iSprite] - 1) * 16 + lY[iSprite], 16 * lXCount[iSprite], 16 * lYCount[iSprite]), new Rectangle(0, 0, 16 * lXCount[iSprite], 16 * lYCount[iSprite]), GraphicsUnit.Pixel);
-                }
-            }
-            g.Dispose();
-            if (bRecord && lBitmapHash.IndexOf(sHash) < 0)
-            {
-                lBitmapHash.Add(sHash);
-                Machine.FORM.cpsform.tbResult.AppendText(sHash + "\r\n");
-                int iYRow = 128;
-                if (iXAll + bm1.Width <= width1 && iYAll + bm1.Height <= height1)
-                {
-
-                }
-                else if (iXAll + bm1.Width > width1 && iYAll + iYRow + bm1.Height <= height1)
-                {
-                    iXAll = 0;
-                    iYAll = iYAll + iYRow;
-                }
-                else if (iXAll + bm1.Width > width1 && iYAll + iYRow + bm1.Height > height1)
-                {
-                    bmAll.Save(nBitmap.ToString("00") + ".png", ImageFormat.Png);
-                    nBitmap++;
-                    bmAll = new Bitmap(512, 512);
-                    Graphics g2 = Graphics.FromImage(bmAll);
-                    g2.Clear(Color.Magenta);
-                    g2.Dispose();
-                    iXAll = 0;
-                    iYAll = 0;
-                }
-                Graphics gAll = Graphics.FromImage(bmAll);
-                gAll.DrawImage(bm1, new Rectangle(iXAll, iYAll, bm1.Width, bm1.Height), new Rectangle(0, 0, bm1.Width, bm1.Height), GraphicsUnit.Pixel);
-                gAll.Dispose();
-                iXAll += bm1.Width;
-                Machine.FORM.cpsform.pictureBox1.Image = bmAll;
-            }
-            //CPS1.c1.FORM.cps1form.pictureBox1.Image = bm1;
         }
         private static void cps2_render_sprites()
         {
@@ -946,7 +746,6 @@ namespace mame
             ttmap[2].tilemap_set_scrollx(0, scroll3x);
             ttmap[2].tilemap_set_scrolly(0, scroll3y);
             Array.Copy(uuBFF, Video.bitmapbase[Video.curbitmap], 0x40000);
-            //Array.Copy(uuBFF, 0, Video.bitmapbase[Video.curbitmap], 0x200 * Video.new_clip.min_y, 0x200 * (Video.new_clip.max_y - Video.new_clip.min_y));
             cps1_render_stars();
             l0 = (layercontrol >> 0x06) & 03;
             l1 = (layercontrol >> 0x08) & 03;

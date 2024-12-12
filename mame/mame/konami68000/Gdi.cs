@@ -400,7 +400,7 @@ namespace mame
             bm1 = new Bitmap(512, 256);
             BitmapData bmData;
             bmData = bm1.LockBits(new Rectangle(0, 0, bm1.Width, bm1.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            int offs, pri_code, i;
+            int offs, pri_code, i, transparency;
             int[] sortedlist = new int[128];
             int flipscreenX, flipscreenY, spriteoffsX, spriteoffsY;
             flipscreenX = K053244_regs[0][5] & 0x01;
@@ -433,8 +433,8 @@ namespace mame
                         }
                     }
                 }
-                for(pri_code=0;pri_code<128;pri_code++)
-                //for(pri_code=127;pri_code>=0;pri_code--)
+                //for(pri_code=0;pri_code<128;pri_code++)
+                for(pri_code=127;pri_code>=0;pri_code--)
                 {
                     int ox, oy, color, color2, code,code2, size, w, h, x, y, flipx, flipy, mirrorx, mirrory, shadow, zoomx, zoomy, pri, pri2;
                     offs = sortedlist[pri_code];
@@ -594,6 +594,7 @@ namespace mame
                             {
                                 //common_drawgfx_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, (uint)(pri2 | (1 << 31)));
                                 int xdir, ydir, offx, offy;
+                                int eax = 0x80;
                                 if (fy != 0)
                                 {
                                     ydir = -1;
@@ -619,24 +620,70 @@ namespace mame
                                     for (x1 = 0; x1 < 0x10; x1++)
                                     {
                                         col = gfx22rom[c * 0x100 + 0x10 * y1 + x1];
-                                        if (col == 0)
+                                        if (col != 0)
                                         {
-                                            c1 = Color.Transparent;
-                                        }
-                                        else
-                                        {
-                                            c1 = Color.FromArgb((int)Palette.entry_color[color2 * 0x10 + col]);
-                                            ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
-                                            *ptr2 = c1.B;
-                                            *(ptr2 + 1) = c1.G;
-                                            *(ptr2 + 2) = c1.R;
-                                            *(ptr2 + 3) = c1.A;
+                                            if (sy + offy + y1 * ydir >= 0 && sy + offy + y1 * ydir < 0x100 && sx + offx + x1 * xdir >= 0 && sx + offx + x1 * xdir < 0x200)
+                                            {
+                                                if (shadow != 0)
+                                                {
+                                                    switch (Drawgfx.gfx_drawmode_table[col])
+                                                    {
+                                                        case 1:
+                                                            c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]);
+                                                            ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
+                                                            *ptr2 = c1.B;
+                                                            *(ptr2 + 1) = c1.G;
+                                                            *(ptr2 + 2) = c1.R;
+                                                            *(ptr2 + 3) = c1.A;
+                                                            break;
+                                                        case 4:
+                                                            Drawgfx.afterdrawmask = eax;
+                                                            if ((Tilemap.priority_bitmap[sy + offy + y1 * ydir, sx + offx + x1 * xdir] & 0x80) != 0)
+                                                            {
+                                                                c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]]);
+                                                                ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
+                                                                *ptr2 = c1.B;
+                                                                *(ptr2 + 1) = c1.G;
+                                                                *(ptr2 + 2) = c1.R;
+                                                                *(ptr2 + 3) = c1.A;
+                                                            }
+                                                            else
+                                                            {
+                                                                c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]);
+                                                                ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
+                                                                *ptr2 = c1.B;
+                                                                *(ptr2 + 1) = c1.G;
+                                                                *(ptr2 + 2) = c1.R;
+                                                                *(ptr2 + 3) = c1.A;
+                                                            }
+                                                            Drawgfx.afterdrawmask = 31;
+                                                            break;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    c1 = Color.FromArgb((int)Palette.entry_color2[color2 * 0x10 + col]);
+                                                    ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
+                                                    *ptr2 = c1.B;
+                                                    *(ptr2 + 1) = c1.G;
+                                                    *(ptr2 + 2) = c1.R;
+                                                    *(ptr2 + 3) = c1.A;
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
                             else
                             {
+                                if (shadow != 0)
+                                {
+                                    transparency = 4;
+                                }
+                                else
+                                {
+                                    transparency = 1;
+                                }
                                 int scalex, scaley, x2, y2;
                                 scalex = (zw << 16) / 16;
                                 scaley = (zh << 16) / 16;
@@ -653,7 +700,7 @@ namespace mame
                                     int ey = sy + sprite_screen_height;
                                     int x_index_base;
                                     int y_index;
-                                    if (flipx != 0)
+                                    if (fx != 0)
                                     {
                                         x_index_base = (sprite_screen_width - 1) * dx;
                                         dx = -dx;
@@ -662,7 +709,7 @@ namespace mame
                                     {
                                         x_index_base = 0;
                                     }
-                                    if (flipy != 0)
+                                    if (fy != 0)
                                     {
                                         y_index = (sprite_screen_height - 1) * dy;
                                         dy = -dy;
@@ -673,27 +720,50 @@ namespace mame
                                     }
                                     countx = ex - sx;
                                     county = ey - sy;
-                                    for (y2 = 0; y2 < county; y2++)
+                                    if (transparency == 1)
                                     {
-                                        for (x2 = 0; x2 < countx; x2++)
+                                        for (y2 = 0; y2 < county; y2++)
                                         {
-                                            srcoffset = ((y_index + dy * y2) >> 16) * 0x10 + ((x_index_base + dx * x2) >> 16);
-                                            dstoffset = (sy + y2) * 0x200 + sx + x2;
-                                            col = gfx22rom[source_baseoffset + srcoffset];
-                                            if (col == 0)
+                                            for (x2 = 0; x2 < countx; x2++)
                                             {
-                                                c1 = Color.Transparent;
-                                            }
-                                            else
-                                            {
-                                                c1 = Color.FromArgb((int)Palette.entry_color[color2 * 0x10 + col]);
-                                                if (sy + y2 >= 0 && sy + y2 < 0x100 && sx + x2 >= 0 && sx + x2 < 0x200)
+                                                srcoffset = ((y_index + dy * y2) >> 16) * 0x10 + ((x_index_base + dx * x2) >> 16);
+                                                dstoffset = (sy + y2) * 0x200 + sx + x2;
+                                                col = gfx22rom[source_baseoffset + srcoffset];
+                                                if (col != 0)
                                                 {
-                                                    ptr2 = ptr + ((sy + y2) * 0x200 + (sx + x2)) * 4;
-                                                    *ptr2 = c1.B;
-                                                    *(ptr2 + 1) = c1.G;
-                                                    *(ptr2 + 2) = c1.R;
-                                                    *(ptr2 + 3) = c1.A;
+                                                    c1 = Color.FromArgb((int)Palette.entry_color2[color2 * 0x10 + col]);
+                                                    if (sy + y2 >= 0 && sy + y2 < 0x100 && sx + x2 >= 0 && sx + x2 < 0x200)
+                                                    {
+                                                        ptr2 = ptr + ((sy + y2) * 0x200 + (sx + x2)) * 4;
+                                                        *ptr2 = c1.B;
+                                                        *(ptr2 + 1) = c1.G;
+                                                        *(ptr2 + 2) = c1.R;
+                                                        *(ptr2 + 3) = c1.A;
+                                                    }                                                    
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (transparency == 4)
+                                    {
+                                        for (y2 = 0; y2 < county; y2++)
+                                        {
+                                            for (x2 = 0; x2 < countx; x2++)
+                                            {
+                                                srcoffset = ((y_index + dy * y2) >> 16) * 0x10 + ((x_index_base + dx * x2) >> 16);
+                                                dstoffset = (sy + y2) * 0x200 + sx + x2;
+                                                col = gfx22rom[source_baseoffset + srcoffset];
+                                                if (col != 0)
+                                                {
+                                                    c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]);
+                                                    if (sy + y2 >= 0 && sy + y2 < 0x100 && sx + x2 >= 0 && sx + x2 < 0x200)
+                                                    {
+                                                        ptr2 = ptr + ((sy + y2) * 0x200 + (sx + x2)) * 4;
+                                                        *ptr2 = c1.B;
+                                                        *(ptr2 + 1) = c1.G;
+                                                        *(ptr2 + 2) = c1.R;
+                                                        *(ptr2 + 3) = c1.A;
+                                                    }
                                                 }
                                             }
                                         }

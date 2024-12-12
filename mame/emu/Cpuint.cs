@@ -47,7 +47,7 @@ namespace mame
         INPUT_LINE_NMI = MAX_INPUT_LINES - 3,
         INPUT_LINE_RESET = MAX_INPUT_LINES - 2,
         INPUT_LINE_HALT = MAX_INPUT_LINES - 1,
-    }           
+    }
     public class irq
     {
         public int cpunum;

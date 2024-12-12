@@ -14,8 +14,8 @@ namespace mame
         {
             //pixel_scroll
             int i;
-            writer.Write(dswa);
-            writer.Write(dswb);
+            writer.Write(Taito.dswa);
+            writer.Write(Taito.dswb);
             writer.Write(basebanksnd);
             writer.Write(eep_latch);
             writer.Write(coin_word);
@@ -103,8 +103,8 @@ namespace mame
         public static void LoadStateBinary(BinaryReader reader)
         {
             int i;
-            dswa = reader.ReadByte();
-            dswb = reader.ReadByte();
+            Taito.dswa = reader.ReadByte();
+            Taito.dswb = reader.ReadByte();
             basebanksnd = reader.ReadInt32();
             eep_latch = reader.ReadUInt16();
             coin_word = reader.ReadUInt16();

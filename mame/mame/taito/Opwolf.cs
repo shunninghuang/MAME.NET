@@ -14,7 +14,7 @@ namespace mame
         public static byte[] adpcm_b = new byte[0x08];
         public static byte[] adpcm_c = new byte[0x08];
         public static int opwolf_gun_xoffs, opwolf_gun_yoffs;
-        public static byte dswa, dswb, p1x, p1y;
+        public static byte p1x, p1y;
         public static int[] adpcm_pos = new int[2], adpcm_end = new int[2];
         public static int[] adpcm_data = new int[2];
         public static ushort m_sprite_ctrl;
@@ -443,11 +443,11 @@ namespace mame
             ushort result = 0;
             if (offset == 0)
             {
-                result = (ushort)((sbyte2<<8) | opwolf_gun_x_r());
+                result = (ushort)((sbyte2 << 8) | opwolf_gun_x_r());
             }
             else if (offset == 1)
             {
-                result = (ushort)((sbyte3<<8) | opwolf_gun_y_r());
+                result = (ushort)((sbyte3 << 8) | opwolf_gun_y_r());
             }
             return result;
         }

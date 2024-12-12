@@ -51,7 +51,7 @@ namespace mame
             public write8handler portBwrite;
         }
         public delegate byte read8handler(int offset);
-        public delegate void write8handler(int offset,byte value);
+        public delegate void write8handler(int offset, byte value);
         public static _ay_ym_param ay_ym_param, ay_ym_param_env;
         public ay8910_context ay8910info;
         public static AY8910[] AA8910 = new AY8910[3];

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Drawgfx
     {
-        public static void common_drawgfxzoom_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int transparent_color, int scalex, int scaley)
+        public static void common_drawgfxzoom_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, int transparent_color, int scalex, int scaley)
         {
             if ((scalex == 0) || (scaley == 0))
             {
@@ -15,7 +15,7 @@ namespace mame
             }
             if (scalex == 0x10000 && scaley == 0x10000)
             {
-                common_drawgfx_konami68000(bb1, code, color, flipx, flipy, sx, sy, clip, 0);
+                common_drawgfx_konami68000(bb1, code, color, flipx, flipy, sx, sy, clip, shadow, 0);
                 return;
             }
             RECT myclip;
@@ -32,7 +32,7 @@ namespace mame
             if (myclip.max_y >= 0x100)
                 myclip.max_y = 0x100 - 1;
             int colorbase = 0x10 * (color % 0x80);
-            int source_baseoffset = (code % sprite_totel_element) * 0x100;
+            int source_baseoffset = (code % Konami68000.sprite_totel_element) * 0x100;
             int sprite_screen_height = (scaley * 0x10 + 0x8000) >> 16;
             int sprite_screen_width = (scalex * 0x10 + 0x8000) >> 16;
             int countx, county, i, j, srcoffset, dstoffset;
@@ -105,7 +105,7 @@ namespace mame
                 }
             }
         }
-        public static void common_drawgfxzoom_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int transparent_color, int scalex, int scaley,uint pri_mask)
+        public static void common_drawgfxzoom_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, int transparent_color, int scalex, int scaley, uint pri_mask)
         {
             if ((scalex == 0) || (scaley == 0))
             {
@@ -113,8 +113,18 @@ namespace mame
             }
             if (scalex == 0x10000 && scaley == 0x10000)
             {
-                common_drawgfx_konami68000(bb1, code, color, flipx, flipy, sx, sy, clip, pri_mask);
+                common_drawgfx_konami68000(bb1, code, color, flipx, flipy, sx, sy, clip, shadow, pri_mask);
                 return;
+            }
+            int transparency;
+            byte al;
+            if (shadow != 0)
+            {
+                transparency = 4;
+            }
+            else
+            {
+                transparency = 1;
             }
             RECT myclip;
             myclip.min_x = clip.min_x;
@@ -130,7 +140,7 @@ namespace mame
             if (myclip.max_y >= 0x100)
                 myclip.max_y = 0x100 - 1;
             int colorbase = 0x10 * (color % 0x80);
-            int source_baseoffset = (code % sprite_totel_element) * 0x100;
+            int source_baseoffset = (code % Konami68000.sprite_totel_element) * 0x100;
             int sprite_screen_height = (scaley * 0x10 + 0x8000) >> 16;
             int sprite_screen_width = (scalex * 0x10 + 0x8000) >> 16;
             int countx, county, i, j, srcoffset, dstoffset;
@@ -186,28 +196,53 @@ namespace mame
                 {
                     countx = ex - sx;
                     county = ey - sy;
-                    for (i = 0; i < county; i++)
+                    if (transparency == 1)
                     {
-                        for (j = 0; j < countx; j++)
+                        for (i = 0; i < county; i++)
                         {
-                            int c;
-                            srcoffset = ((y_index + dy * i) >> 16) * 0x10 + ((x_index_base + dx * j) >> 16);
-                            dstoffset = (sy + i) * 0x200 + sx + j;
-                            c = bb1[source_baseoffset + srcoffset];
-                            if (c != transparent_color)
+                            for (j = 0; j < countx; j++)
                             {
-                                if (((1 << Tilemap.priority_bitmap[sy + i, sx + j]) & pri_mask) == 0)
+                                int c;
+                                srcoffset = ((y_index + dy * i) >> 16) * 0x10 + ((x_index_base + dx * j) >> 16);
+                                dstoffset = (sy + i) * 0x200 + sx + j;
+                                c = bb1[source_baseoffset + srcoffset];
+                                if (c != transparent_color)
                                 {
-                                    Video.bitmapbase[Video.curbitmap][(sy + i) * 0x200 + sx + j] = (ushort)(colorbase + c);
+                                    if (((1 << Tilemap.priority_bitmap[sy + i, sx + j]) & pri_mask) == 0)
+                                    {
+                                        Video.bitmapbase[Video.curbitmap][(sy + i) * 0x200 + sx + j] = (ushort)(colorbase + c);
+                                    }
+                                    Tilemap.priority_bitmap[sy + i, sx + j] = 0x1f;
                                 }
-                                Tilemap.priority_bitmap[sy + i, sx + j] = 0x1f;
+                            }
+                        }
+                    }
+                    else if (transparency == 4)
+                    {
+                        al = 0x80;
+                        for (i = 0; i < county; i++)
+                        {
+                            for (j = 0; j < countx; j++)
+                            {
+                                int c;
+                                srcoffset = ((y_index + dy * i) >> 16) * 0x10 + ((x_index_base + dx * j) >> 16);
+                                dstoffset = (sy + i) * 0x200 + sx + j;
+                                c = bb1[source_baseoffset + srcoffset];
+                                if (c != transparent_color)
+                                {
+                                    if (((1 << Tilemap.priority_bitmap[sy + i, sx + j]) & pri_mask) == 0)
+                                    {
+                                        Video.bitmapbase[Video.curbitmap][(sy + i) * 0x200 + sx + j] = (ushort)shadow_table[Drawgfx.imode][Video.bitmapbase[Video.curbitmap][(sy + i) * 0x200 + sx + j]];
+                                    }
+                                    Tilemap.priority_bitmap[sy + i, sx + j] |= al;
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        public static void common_drawgfx_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, uint pri_mask)
+        public static void common_drawgfx_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip,int shadow, uint pri_mask)
         {
             int ox;
             int oy;
@@ -268,7 +303,89 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = color * 0x10;
-            blockmove_8toN_transpen_pri16_konami68000(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, pri_mask, sx, sy);
+            if (shadow != 0)
+            {
+                blockmove_8toN_pen_table_pri16_konami68000(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, pri_mask, sx, sy);
+            }
+            else
+            {
+                blockmove_8toN_transpen_pri16_konami68000(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, pri_mask, sx, sy);
+            }
+        }
+        public static void blockmove_8toN_pen_table_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo,
+                int leftskip, int topskip, int flipx, int flipy,
+                int dstwidth, int dstheight, int colorbase, uint pmask, int sx, int sy)
+        {
+            int ydir, xdir, col, i, j, offsetx, offsety;
+            int srcdata_offset = code * 0x100;
+            int eax = 0x80;
+            offsetx = sx;
+            offsety = sy;
+            if (flipy != 0)
+            {
+                offsety += (dstheight - 1);
+                srcdata_offset += (srcheight - dstheight - topskip) * srcmodulo;
+                ydir = -1;
+            }
+            else
+            {
+                srcdata_offset += topskip * srcmodulo;
+                ydir = 1;
+            }
+            if (flipx != 0)
+            {
+                offsetx += (dstwidth - 1);
+                srcdata_offset += (srcwidth - dstwidth - leftskip);
+                xdir = -1;
+            }
+            else
+            {
+                srcdata_offset += leftskip;
+                xdir = 1;
+            }
+            for (i = 0; i < dstheight; i++)
+            {
+                for (j = 0; j < dstwidth; j++)
+                {
+                    col = bb1[srcdata_offset + srcmodulo * i + j];
+                    if (col != 0)
+                    {
+                        switch (gfx_drawmode_table[col])
+                        {
+                            case 1:
+                                if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
+                                {
+                                    if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
+                                    {
+                                        Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)shadow_table[imode][colorbase + col];
+                                    }
+                                    else
+                                    {
+                                        Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);
+                                    }
+                                }
+                                Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | afterdrawmask);
+                                break;
+                            case 2:
+                                afterdrawmask = eax;
+                                if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
+                                {
+                                    if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
+                                    {
+                                        Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)shadow_table[imode][shadow_table[imode][Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j]]];
+                                    }
+                                    else
+                                    {
+                                        Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)shadow_table[imode][Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j]];
+                                    }
+                                }
+                                Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | afterdrawmask);
+                                afterdrawmask = 31;
+                                break;
+                        }
+                    }
+                }
+            }
         }
         public static void blockmove_8toN_transpen_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo,
                 int leftskip, int topskip, int flipx, int flipy,
@@ -311,7 +428,7 @@ namespace mame
                         {
                             if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80)!=0)
                             {
-                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);//palette_shadow_table[paldata[col]];
+                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)shadow_table[imode][colorbase + col];
                             }
                             else
                             {

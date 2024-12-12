@@ -11,7 +11,6 @@ namespace mame
         public static ushort eep_latch;
         public static ushort coin_word;
         public static int basebanksnd;
-        public static byte dswa, dswb, dswb_old;
         public static void TaitobInit()
         {
             int i, n;
@@ -33,7 +32,7 @@ namespace mame
             TC0640FIO_regs = new byte[8];
             Machine.bRom = true;
             Taitosnd.taitosnd_start();
-            basebanksnd = 0x10000;
+            basebanksnd = 0x4000;
             eep_latch = 0;
             video_control = 0;
             coin_word = 0;
@@ -59,7 +58,7 @@ namespace mame
             }
             FM.ymsndrom = Machine.GetRom("ymsnd.rom");
             YMDeltat.ymsnddeltatrom = Machine.GetRom("ymsnddeltat.rom");
-            if (Memory.mainrom == null || gfxrom == null || Memory.audiorom == null || FM.ymsndrom == null)
+            if (Memory.mainrom == null || gfxrom == null || Memory.audiorom == null)
             {
                 Machine.bRom = false;
             }
@@ -67,15 +66,28 @@ namespace mame
             {
                 switch (Machine.sName)
                 {
+                    case "masterw":
+                    case "masterwu":
+                    case "masterwj":
+                    case "yukiwo":
+                    case "nastarw":
+                        Taito.dswa = 0xfe;
+                        Taito.dswb = 0xff;
+                        break;
+                    case "nastar":
+                    case "rastsag2":
+                    case "rambo3":
+                    case "rambo3u":
+                    case "rambo3p":
                     case "pbobble":
-                        dswa = 0xff;
-                        dswb = 0xff;
+                        Taito.dswa = 0xff;
+                        Taito.dswb = 0xff;
                         break;
                     case "silentd":
                     case "silentdj":
                     case "silentdu":
-                        dswa = 0xff;
-                        dswb = 0xbf;
+                        Taito.dswa = 0xff;
+                        Taito.dswb = 0xbf;
                         break;
                 }
             }
@@ -84,9 +96,9 @@ namespace mame
         {
             Cpuint.cpunum_set_input_line(1, 0, irq != 0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
         }
-        public static void bankswitch_w(byte data)
+        public static void bankswitch_w(int offset, byte data)
         {
-            basebanksnd = 0x10000 + 0x4000 * ((data - 1) & 3);
+            basebanksnd = 0x4000 + 0x4000 * ((data - 1) & 3);
         }
         public static void rsaga2_interrupt2()
         {
@@ -188,6 +200,38 @@ namespace mame
             Timer.timer_adjust_periodic(timer, new Atime(0, (long)(10000 * Cpuexec.cpu[0].attoseconds_per_cycle)), Attotime.ATTOTIME_NEVER);
             Cpuint.cpunum_set_input_line(0, 4, LineState.HOLD_LINE);
         }
+        public static ushort tracky1_hi_r()
+        {
+            return 0;
+        }
+        public static ushort tracky1_lo_r()
+        {
+            return 0;
+        }
+        public static ushort trackx1_hi_r()
+        {
+            return 0;
+        }
+        public static ushort trackx1_lo_r()
+        {
+            return 0;
+        }
+        public static ushort tracky2_hi_r()
+        {
+            return 0;
+        }
+        public static ushort tracky2_lo_r()
+        {
+            return 0;
+        }
+        public static ushort trackx2_hi_r()
+        {
+            return 0;
+        }
+        public static ushort trackx2_lo_r()
+        {
+            return 0;
+        }
         public static void mb87078_gain_changed(int channel, int percent)
         {
             if (channel == 1)
@@ -237,7 +281,7 @@ namespace mame
         {
             ushort res;
             res = (ushort)(Eeprom.eeprom_read_bit() & 0x01);
-            res |= (ushort)(dswb & 0xfe);
+            res |= (ushort)(Taito.dswb & 0xfe);
             return res;
         }
         public static ushort eep_latch_r()
@@ -280,7 +324,7 @@ namespace mame
                     result = (ushort)(eeprom_r() << 8);
                     break;
                 default:
-                    result = (ushort)(TC0640FIO_r(offset) << 8);
+                    result = (ushort)(Taito.TC0640FIO_r(offset) << 8);
                     break;
             }
             return result;

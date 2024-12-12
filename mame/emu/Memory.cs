@@ -131,12 +131,20 @@ namespace mame
                     }
                     break;
                 case "Taito B":
-                    Taitob.sbyte0 = -1;
-                    Taitob.sbyte1 = -1;
-                    Taitob.sbyte2 = -1;
-                    Taitob.sbyte3 = -1;
-                    Taitob.sbyte4 = -1;
-                    Taitob.sbyte5 = -1;
+                    Taito.sbyte0 = -1;
+                    Taito.sbyte1 = -1;
+                    Taito.sbyte2 = -1;
+                    Taito.sbyte3 = -1;
+                    Taito.sbyte4 = -1;
+                    Taito.sbyte5 = -1;
+                    switch (Machine.sName)
+                    {
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
+                            Taito.sbyte1 = unchecked((sbyte)0xcf);
+                            break;
+                    }
                     break;
                 case "Konami 68000":
                     Konami68000.sbyte0 = -1;
@@ -272,13 +280,13 @@ namespace mame
                     Taito.sbyte3_old = 0;
                     break;
                 case "Taito B":
-                    Taitob.dswb_old = 0;
-                    Taitob.sbyte0_old = 0;
-                    Taitob.sbyte1_old = 0;
-                    Taitob.sbyte2_old = 0;
-                    Taitob.sbyte3_old = 0;
-                    Taitob.sbyte4_old = 0;
-                    Taitob.sbyte5_old = 0;
+                    Taito.dswb_old = 0;
+                    Taito.sbyte0_old = 0;
+                    Taito.sbyte1_old = 0;
+                    Taito.sbyte2_old = 0;
+                    Taito.sbyte3_old = 0;
+                    Taito.sbyte4_old = 0;
+                    Taito.sbyte5_old = 0;
                     break;
                 case "Konami 68000":
                     Konami68000.sbyte0_old = 0;

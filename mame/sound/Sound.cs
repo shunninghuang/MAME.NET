@@ -28,6 +28,13 @@ namespace mame
             sound_muted = 0;
             buf2.Play(0, BufferPlayFlags.Looping);
             last_update_second = 0;
+            AY8910.ay8910_interface generic_2203 = new AY8910.ay8910_interface();
+            generic_2203.flags = 1;
+            generic_2203.res_load = new int[3] { 1000, 1000, 1000 };
+            generic_2203.portAread = null;
+            generic_2203.portBread = null;
+            generic_2203.portAwrite = null;
+            generic_2203.portBwrite = null;
             //WavWrite.CreateSoundFile(@"\VS2008\compare1\compare1\bin\Debug\2.wav");
             Atime update_frequency = new Atime(0, Attotime.ATTOSECONDS_PER_SECOND / 50);
             switch (Machine.sBoard)
@@ -56,7 +63,7 @@ namespace mame
                     utempdata = new ushort[1];
                     sound_update = sound_update_dataeast_pcktgal;
                     sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
-                    YM2203.ym2203_start(0, 1500000);
+                    YM2203.ym2203_start(0, 1500000, generic_2203);
                     YM3812.ym3812_start(3000000);
                     MSM5205.msm5205_start(0, 384000, Dataeast.pcktgal_adpcm_int, 5);
                     ym3812stream = new sound_stream(41666, 0, 1, FMOpl.ym3812_update_one);
@@ -266,7 +273,7 @@ namespace mame
                             utempdata = new ushort[2];
                             sound_update = sound_update_taito_tokio;
                             sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
-                            YM2203.ym2203_start(0,3000000);
+                            YM2203.ym2203_start(0, 3000000, generic_2203);
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                         case "bublbobl":
@@ -291,7 +298,7 @@ namespace mame
                             utempdata = new ushort[2];
                             sound_update = sound_update_taito_bublbobl;
                             sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
-                            YM2203.ym2203_start(0, 3000000);
+                            YM2203.ym2203_start(0, 3000000, generic_2203);
                             YM3812.ym3526_start(3000000);
                             ym3526stream = new sound_stream(41666, 0, 1, FMOpl.ym3526_update_one);
                             mixerstream = new sound_stream(48000, 5, 0, null);
@@ -317,22 +324,50 @@ namespace mame
                 case "Taito B":
                     latched_value = new ushort[2];
                     utempdata = new ushort[2];
-                    YM2610.ym2610_start(8000000);
                     switch (Machine.sName)
                     {
-                        case "pbobble":
-                            ym2610stream = new sound_stream(111111, 0, 2, YM2610.F2610.ym2610b_update_one);
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                            AY8910.ay8910_interface masterw_ay8910_interface = new AY8910.ay8910_interface();
+                            masterw_ay8910_interface.flags = 1;
+                            masterw_ay8910_interface.res_load = new int[3] { 1000, 1000, 1000 };
+                            masterw_ay8910_interface.portAread = null;
+                            masterw_ay8910_interface.portBread = null;
+                            masterw_ay8910_interface.portAwrite = Taitob.bankswitch_w;
+                            masterw_ay8910_interface.portBwrite = null;
+                            YM2203.ym2203_start(0, 3000000, masterw_ay8910_interface);
+                            sound_update = sound_update_taitob_masterw;
+                            AY8910.AA8910[0].stream.gain = 0x100;
+                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
+                            mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
+                        case "pbobble":
+                            YM2610.ym2610_start(8000000);
+                            ym2610stream = new sound_stream(111111, 0, 2, YM2610.F2610.ym2610b_update_one);
+                            sound_update = sound_update_taitob_pbobble;
+                            AY8910.AA8910[0].stream.gain = 0x100;
+                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
+                            mixerstream = new sound_stream(48000, 3, 0, null);
+                            break;
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
+                            YM2610.ym2610_start(8000000);
                             ym2610stream = new sound_stream(111111, 0, 2, YM2610.F2610.ym2610_update_one);
+                            sound_update = sound_update_taitob_pbobble;
+                            AY8910.AA8910[0].stream.gain = 0x100;
+                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
+                            mixerstream = new sound_stream(48000, 3, 0, null);
                             break;
-                    }
-                    AY8910.AA8910[0].stream.gain = 0x100;
-                    sound_update = sound_update_taitob;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
-                    mixerstream = new sound_stream(48000, 3, 0, null);
+                    }                    
                     break;
                 case "Konami 68000":
                     switch (Machine.sName)
@@ -477,8 +512,8 @@ namespace mame
                         case "diamond":
                             latched_value = new ushort[2];
                             utempdata = new ushort[2];
-                            YM2203.ym2203_start(0, 1500000);
-                            YM2203.ym2203_start(1, 1500000);
+                            YM2203.ym2203_start(0, 1500000, generic_2203);
+                            YM2203.ym2203_start(1, 1500000, generic_2203);
                             sound_update = sound_update_capcom_gng;
                             mixerstream = new sound_stream(48000, 8, 0, null);
                             break;
@@ -614,7 +649,21 @@ namespace mame
                     }
                     break;
                 case "Taito B":
-                    YM2610.F2610.ym2610_reset_chip();
+                    switch (Machine.sName)
+                    {
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                            YM2203.FF2203[0].ym2203_reset_chip();
+                            break;
+                        case "pbobble":
+                        case "silentd":
+                        case "silentdj":
+                        case "silentdu":
+                            YM2610.F2610.ym2610_reset_chip();
+                            break;
+                    }                    
                     break;
                 case "Konami 68000":
                     switch (Machine.sName)
@@ -1339,7 +1388,35 @@ namespace mame
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_capcom_sf();
         }
-        public static void sound_update_taitob()
+        public static void sound_update_taitob_masterw()
+        {
+            int sampindex;
+            AY8910.AA8910[0].stream.stream_update();
+            YM2203.FF2203[0].stream.stream_update();
+            generate_resampled_data_ay8910_3(0, 0x40, 0);
+            generate_resampled_data_ym2203(0, 0xcc, 3);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_taito_tokio();
+        }
+        public static void sound_update_taitob_pbobble()
         {
             int sampindex;
             AY8910.AA8910[0].stream.stream_update();
@@ -1350,13 +1427,6 @@ namespace mame
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
                 int samp;
-                if (iCount == 379 && sampindex == 0x386)
-                {
-                    int i1 = mixerstream.streaminput[0][sampindex];
-                    int i2 = mixerstream.streaminput[1][sampindex];
-                    int i3 = mixerstream.streaminput[2][sampindex];
-                    int i4 = 1;
-                }
                 samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex];
                 if (samp < -32768)
                 {

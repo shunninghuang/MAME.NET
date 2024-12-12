@@ -28,7 +28,7 @@ namespace mame
             ui_update_callback();
             ui_handler_callback();
         }
-        public static void ui_updateC()
+        public static void ui_update_cps()
         {
             int i;
             int red, green, blue;
@@ -51,7 +51,7 @@ namespace mame
                 }
             }
         }
-        public static void ui_updateTehkan()
+        public static void ui_update_tehkan()
         {
             int i;
             int red, green, blue;
@@ -88,7 +88,7 @@ namespace mame
                 }
             }
         }
-        public static void ui_updateN()
+        public static void ui_update_neogeo()
         {
             int i;
             int red, green, blue;
@@ -111,7 +111,7 @@ namespace mame
                 }
             }
         }
-        public static void ui_updateNa()
+        public static void ui_update_konami68000()
         {
             int i;
             int red, green, blue;
@@ -120,9 +120,9 @@ namespace mame
                 byte bright = 0xa7;
                 for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
                 {
-                    red = (int)(((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff0000) >> 16) * bright / 0xff);
-                    green = (int)(((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff00) >> 8) * bright / 0xff);
-                    blue = (int)((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff) * bright / 0xff);
+                    red = (int)(((Palette.entry_color2[Video.bitmapbase[Video.curbitmap][i]] & 0xff0000) >> 16) * bright / 0xff);
+                    green = (int)(((Palette.entry_color2[Video.bitmapbase[Video.curbitmap][i]] & 0xff00) >> 8) * bright / 0xff);
+                    blue = (int)((Palette.entry_color2[Video.bitmapbase[Video.curbitmap][i]] & 0xff) * bright / 0xff);
                     Video.bitmapcolor[i] = (int)Palette.make_argb(0xff, red, green, blue);
                 }
             }
@@ -130,53 +130,7 @@ namespace mame
             {
                 for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
                 {
-                    Video.bitmapcolor[i] = (int)Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]];
-                }
-            }
-        }
-        public static void ui_updateIGS011()
-        {
-            int i;
-            int red, green, blue;
-            if (single_step || Mame.paused)
-            {
-                byte bright = 0xa7;
-                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
-                {
-                    red = (int)(((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff0000) >> 16) * bright / 0xff);
-                    green = (int)(((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff00) >> 8) * bright / 0xff);
-                    blue = (int)((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff) * bright / 0xff);
-                    Video.bitmapcolor[i] = (int)Palette.make_argb(0xff, red, green, blue);
-                }
-            }
-            else
-            {
-                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
-                {
-                    Video.bitmapcolor[i] = (int)Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]];
-                }
-            }
-        }
-        public static void ui_updatePGM()
-        {
-            int i;
-            int red, green, blue;
-            if (single_step || Mame.paused)
-            {
-                byte bright = 0xa7;
-                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
-                {
-                    red = (int)(((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff0000) >> 16) * bright / 0xff);
-                    green = (int)(((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff00) >> 8) * bright / 0xff);
-                    blue = (int)((Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]] & 0xff) * bright / 0xff);
-                    Video.bitmapcolor[i] = (int)Palette.make_argb(0xff, red, green, blue);
-                }
-            }
-            else
-            {
-                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
-                {
-                    Video.bitmapcolor[i] = (int)Palette.entry_color[Video.bitmapbase[Video.curbitmap][i]];
+                    Video.bitmapcolor[i] = (int)Palette.entry_color2[Video.bitmapbase[Video.curbitmap][i]];
                 }
             }
         }

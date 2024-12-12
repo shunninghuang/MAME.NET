@@ -959,6 +959,7 @@ namespace mame
             writer.Write(Timer.global_basetime.seconds);
             writer.Write(Timer.global_basetime.attoseconds);
             Video.SaveStateBinary(writer);
+            Drawgfx.SaveStateBinary(writer);
             writer.Write(Sound.last_update_second);
             Cpuexec.SaveStateBinary(writer);
             Timer.SaveStateBinary(writer);
@@ -1011,6 +1012,7 @@ namespace mame
             Timer.global_basetime.seconds = reader.ReadInt32();
             Timer.global_basetime.attoseconds = reader.ReadInt64();
             Video.LoadStateBinary(reader);
+            Drawgfx.LoadStateBinary(reader);
             Sound.last_update_second = reader.ReadInt32();
             Cpuexec.LoadStateBinary(reader);
             Timer.LoadStateBinary(reader);

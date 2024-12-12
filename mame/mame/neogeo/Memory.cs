@@ -198,10 +198,6 @@ namespace mame
             }
             else if (address >= 0x000080 && address + 1 <= 0x0fffff)
             {
-                if (address >= 0x142B9 && address <= 0x142C9)
-                {
-                    //m68000Form.iStatus = 1;
-                }
                 result = (short)(Memory.mainrom[address] * 0x100 + Memory.mainrom[address + 1]);
             }
             else if (address >= 0x100000 && address + 1 <= 0x1fffff)
@@ -239,18 +235,10 @@ namespace mame
             }
             else if (address >= 0x000080 && address + 1 <= 0x0fffff)
             {
-                if (address >= 0x142B9 && address <= 0x142C9)
-                {
-                    //m68000Form.iStatus = 1;
-                }
                 result = (short)(Memory.mainrom[address] * 0x100 + Memory.mainrom[address + 1]);
             }
             else if (address >= 0x100000 && address + 1 <= 0x1fffff)
             {
-                if (address == 0x101410)
-                {
-                    int i1 = 1;
-                }
                 result = (short)(Memory.mainram[address & 0xffff] * 0x100 + Memory.mainram[(address & 0xffff) + 1]);
             }
             else if (address >= 0x200000 && address <= 0x2fffff)
@@ -328,10 +316,6 @@ namespace mame
             }
             else if (address >= 0x000080 && address + 3 <= 0x0fffff)
             {
-                if (address >= 0x1387a && address <= 0x1387a)
-                {
-                    //m68000Form.iStatus = 1;
-                }
                 result = Memory.mainrom[address] * 0x1000000 + Memory.mainrom[address + 1] * 0x10000 + Memory.mainrom[address + 2] * 0x100 + Memory.mainrom[address + 3];
             }
             else if (address >= 0x100000 && address + 3 <= 0x1fffff)
@@ -369,10 +353,6 @@ namespace mame
             }
             else if (address >= 0x000080 && address + 3 <= 0x0fffff)
             {
-                if (address >= 0x1387a && address <= 0x1387a)
-                {
-                    //m68000Form.iStatus = 1;
-                }
                 result = Memory.mainrom[address] * 0x1000000 + Memory.mainrom[address + 1] * 0x10000 + Memory.mainrom[address + 2] * 0x100 + Memory.mainrom[address + 3];
             }
             else if (address >= 0x100000 && address + 3 <= 0x1fffff)
@@ -425,16 +405,8 @@ namespace mame
         public static void MWriteByte(int address, sbyte value)
         {
             address &= 0xffffff;
-            m68000Form.iWAddress = address;
-            m68000Form.iWOp = 0x01;
             if (address >= 0x100000 && address <= 0x1fffff)
             {
-                if (address == 0x100d0b&&value==0x06)//&&MC68000.m1.TotalExecutedCycles>0x3F6FC8C)
-                {
-                    ulong l1 = MC68000.m1.TotalExecutedCycles;
-                    int i2 = 1;
-                    //m68000Form.iStatus = 1;
-                }
                 Memory.mainram[address & 0xffff] = (byte)value;
             }
             else if (address >= 0x2ffff0 && address <= 0x2fffff)
@@ -502,14 +474,8 @@ namespace mame
         public static void MWriteWord(int address, short value)
         {
             address &= 0xffffff;
-            m68000Form.iWAddress = address;
-            m68000Form.iWOp = 0x02;
             if (address >= 0x100000 && address + 1 <= 0x1fffff)
             {
-                if (address == 0x1007c4 && value == unchecked((short)0xb102))
-                {
-                    int i1 = 1;
-                }
                 Memory.mainram[address & 0xffff] = (byte)(value >> 8);
                 Memory.mainram[(address & 0xffff) + 1] = (byte)value;
             }
@@ -555,14 +521,8 @@ namespace mame
         public static void MWriteLong(int address, int value)
         {
             address &= 0xffffff;
-            m68000Form.iWAddress = address;
-            m68000Form.iWOp = 0x03;
             if (address >= 0x100000 && address + 3 <= 0x1fffff)
             {
-                if (address == 0x1051e4 && value == 0x00130070)
-                {
-                    int i1 = 1;
-                }
                 Memory.mainram[address & 0xffff] = (byte)(value >> 24);
                 Memory.mainram[(address & 0xffff) + 1] = (byte)(value >> 16);
                 Memory.mainram[(address & 0xffff) + 2] = (byte)(value >> 8);

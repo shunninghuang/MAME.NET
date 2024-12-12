@@ -197,6 +197,18 @@ namespace mame
         }
         public static void video_start_lgtnfght()
         {
+            int i;
+            for (i = 0; i < 0x2000; i++)
+            {
+                if (i < 0x800)
+                {
+                    Drawgfx.shadow_table[0][i] = 0x800 + i;
+                }
+                else
+                {
+                    Drawgfx.shadow_table[0][i] = i;
+                }
+            }
             K053251_vh_start();
             K052109_vh_start();
             K053245_vh_start();
@@ -671,26 +683,26 @@ namespace mame
                 lasten = newen;
                 cb = layer_colorbase[sorted_layer[2]] << 4;
                 ce = cb + 128;
-                /*for (i = 0; i < cb; i++)
+                for (i = 0; i < cb; i++)
                 {
-                    palette_set_brightness(screen->machine, i, brt);
+                    Palette.palette_set_brightness(i, brt);
                 }
                 for (i = cb; i < ce; i++)
                 {
-                    palette_set_brightness(screen->machine, i, 1.0);
+                    Palette.palette_set_brightness(i, 1.0);
                 }
                 for (i = ce; i < 2048; i++)
                 {
-                    palette_set_brightness(screen->machine, i, brt);
+                    Palette.palette_set_brightness(i, brt);
                 }
                 if ((~dim_c & 0x10)!=0)
                 {
-                    palette_set_shadow_mode(screen->machine, 1);
+                    Palette.palette_set_shadow_mode(1);
                 }
                 else
                 {
-                    palette_set_shadow_mode(screen->machine, 0);
-                }*/
+                    Palette.palette_set_shadow_mode(0);
+                }
             }
             video_update_lgtnfght();
         }

@@ -61,11 +61,16 @@ namespace ui
                 case "CPS2":
                 case "Neo Geo":
                 case "Taito B":
-                case "Konami 68000":
                     nRam = 0x10000;
                     tbRamRange.Text = "0000-10000";
                     CheatReadByte = (int i1) => { return Memory.mainram[i1]; };
                     CheatWriteByte = (int i1, byte b1) => { Memory.mainram[i1]= b1; };
+                    break;
+                case "Konami 68000":
+                    nRam = 0x4000;
+                    tbRamRange.Text = "0000-4000";
+                    CheatReadByte = (int i1) => { return Memory.mainram[i1]; };
+                    CheatWriteByte = (int i1, byte b1) => { Memory.mainram[i1] = b1; };
                     break;
                 case "Data East":
                     nRam = 0x800;

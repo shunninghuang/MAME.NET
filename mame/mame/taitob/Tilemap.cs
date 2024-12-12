@@ -11,6 +11,7 @@ namespace mame
         public static void tilemap_init()
         {
             int i;
+            Taito.taitoic_init();
             framebuffer = new ushort[2][];
             for (i = 0; i < 2; i++)
             {

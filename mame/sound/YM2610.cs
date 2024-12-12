@@ -124,6 +124,12 @@ namespace mame
                 case "Taito B":
                     switch (Machine.sName)
                     {
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
                         case "pbobble":
                         case "silentd":
                         case "silentdj":

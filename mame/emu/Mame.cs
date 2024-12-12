@@ -171,7 +171,6 @@ namespace mame
             //cps1_gfx_decode();
 
             //device_list_start();
-            Machine.driver_init();
 
             Video.video_init();
 
@@ -594,6 +593,12 @@ namespace mame
                     Konami68000.K052109_tilemap[0].all_tiles_dirty = true;
                     Konami68000.K052109_tilemap[1].all_tiles_dirty = true;
                     Konami68000.K052109_tilemap[2].all_tiles_dirty = true;
+                    for (i = 0; i < 0x800; i++)
+                    {
+                        Palette.update_adjusted_color(0, i);
+                        Palette.update_adjusted_color(1, i);
+                        Palette.update_adjusted_color(2, i);
+                    }
                     break;
                 case "Capcom":
                     switch (Machine.sName)

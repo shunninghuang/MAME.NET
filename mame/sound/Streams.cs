@@ -957,12 +957,6 @@ namespace mame
                     int remainder = smallstep;
                     int tpos = 0;
                     int scale;
-                    if (iCount == 1317 && sampindex == 122)
-                    {
-                        int i2 = MSM5205.mm1[1].voice.stream.streamoutput[0][0x20ff];
-                        int i3 = MSM5205.mm1[1].voice.stream.streamoutput[0][0x2100];
-                        int i1 = 1;
-                    }
                     scale = (int)((0x400000 - basefrac) >> 14);
                     sample = MSM5205.mm1[1].voice.stream.streamoutput[0][offset + tpos] * scale;
                     tpos++;

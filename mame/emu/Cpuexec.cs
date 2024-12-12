@@ -704,6 +704,25 @@ namespace mame
                     vblank_interrupts_per_frame = 1;
                     switch (Machine.sName)
                     {
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                            vblank_interrupt = Taitob.masterw_interrupt;
+                            vblank_interrupt2 = Taitob.masterw_interrupt4;
+                            break;
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                            vblank_interrupt = Taitob.rastansaga2_interrupt;
+                            vblank_interrupt2 = Taitob.rsaga2_interrupt2;
+                            break;
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
+                            vblank_interrupt = Taitob.rambo3_interrupt;
+                            vblank_interrupt2 = Taitob.rambo3_interrupt1;
+                            break;
                         case "pbobble":
                             vblank_interrupt = Taitob.pbobble_interrupt;
                             vblank_interrupt2 = Taitob.pbobble_interrupt5;
@@ -921,7 +940,7 @@ namespace mame
                     Z80A.zz1[0].ReadMemory = CPS.ZCReadMemory;
                     Z80A.zz1[0].WriteMemory = CPS.ZCWriteMemory;
                     Z80A.zz1[0].ReadHardware = CPS.ZCReadHardware;
-                    Z80A.zz1[0].WriteHardware = CPS.ZCWriteHardware;                    
+                    Z80A.zz1[0].WriteHardware = CPS.ZCWriteHardware;
                     switch (Machine.sName)
                     {
                         case "forgottn":
@@ -1002,7 +1021,7 @@ namespace mame
                     Z80A.zz1[0].ReadMemory = CPS.ZQReadMemory;
                     Z80A.zz1[0].WriteMemory = CPS.ZQWriteMemory;
                     Z80A.zz1[0].ReadHardware = CPS.ZCReadHardware;
-                    Z80A.zz1[0].WriteHardware = CPS.ZCWriteHardware;                    
+                    Z80A.zz1[0].WriteHardware = CPS.ZCWriteHardware;
                     break;
                 case "CPS2":
                     MC68000.m1.ReadOpByte = CPS.MC2ReadOpByte;
@@ -1079,7 +1098,7 @@ namespace mame
                     Z80A.zz1[0].ReadMemory = CPS.ZQReadMemory;
                     Z80A.zz1[0].WriteMemory = CPS.ZQWriteMemory;
                     Z80A.zz1[0].ReadHardware = CPS.ZCReadHardware;
-                    Z80A.zz1[0].WriteHardware = CPS.ZCWriteHardware;                    
+                    Z80A.zz1[0].WriteHardware = CPS.ZCWriteHardware;
                     break;
                 case "Data East":
                     M6502.mm1[0].ReadOp = Dataeast.D0ReadOp;
@@ -1109,7 +1128,7 @@ namespace mame
                     Z80A.zz1[0].ReadMemory = Tehkan.Z0ReadMemory;
                     Z80A.zz1[0].WriteMemory = Tehkan.Z0WriteMemory;
                     Z80A.zz1[0].ReadHardware = Tehkan.Z0ReadHardware;
-                    Z80A.zz1[0].WriteHardware = Tehkan.Z0WriteHardware;                    
+                    Z80A.zz1[0].WriteHardware = Tehkan.Z0WriteHardware;
                     switch (Machine.sName)
                     {
                         case "pbaction3":
@@ -1127,7 +1146,7 @@ namespace mame
                     Z80A.zz1[1].ReadMemory = Tehkan.Z1ReadMemory;
                     Z80A.zz1[1].WriteMemory = Tehkan.Z1WriteMemory;
                     Z80A.zz1[1].ReadHardware = Tehkan.Z1ReadHardware;
-                    Z80A.zz1[1].WriteHardware = Tehkan.Z1WriteHardware;                                     
+                    Z80A.zz1[1].WriteHardware = Tehkan.Z1WriteHardware;
                     break;
                 case "Neo Geo":
                     MC68000.m1.ReadOpByte = Neogeo.MReadOpByte;
@@ -1144,7 +1163,7 @@ namespace mame
                     Z80A.zz1[0].ReadMemory = Neogeo.ZReadMemory;
                     Z80A.zz1[0].WriteMemory = Neogeo.ZWriteMemory;
                     Z80A.zz1[0].ReadHardware = Neogeo.ZReadHardware;
-                    Z80A.zz1[0].WriteHardware = Neogeo.ZWriteHardware;                    
+                    Z80A.zz1[0].WriteHardware = Neogeo.ZWriteHardware;
                     switch (Machine.sName)
                     {
                         case "fatfury2":
@@ -1410,13 +1429,13 @@ namespace mame
                             Z80A.zz1[0].ReadMemory = SunA8.Z0ReadMemory_starfigh;
                             Z80A.zz1[0].WriteMemory = SunA8.Z0WriteMemory_starfigh;
                             Z80A.zz1[0].ReadHardware = SunA8.Z0ReadHardware;
-                            Z80A.zz1[0].WriteHardware = SunA8.Z0WriteHardware;                            
+                            Z80A.zz1[0].WriteHardware = SunA8.Z0WriteHardware;
                             Z80A.zz1[1].ReadOp = SunA8.Z1ReadOp_hardhead;
                             Z80A.zz1[1].ReadOpArg = SunA8.Z1ReadMemory_hardhead;
                             Z80A.zz1[1].ReadMemory = SunA8.Z1ReadMemory_hardhead;
                             Z80A.zz1[1].WriteMemory = SunA8.Z1Write_Memory_hardhead;
                             Z80A.zz1[1].ReadHardware = SunA8.Z1ReadHardware;
-                            Z80A.zz1[1].WriteHardware = SunA8.Z1WriteHardware;                            
+                            Z80A.zz1[1].WriteHardware = SunA8.Z1WriteHardware;
                             break;
                     }
                     break;
@@ -1602,7 +1621,7 @@ namespace mame
                     Z80A.zz1[0].ReadMemory = PGM.ZReadMemory;
                     Z80A.zz1[0].WriteMemory = PGM.ZWriteMemory;
                     Z80A.zz1[0].ReadHardware = PGM.ZReadHardware;
-                    Z80A.zz1[0].WriteHardware = PGM.ZWriteHardware;                    
+                    Z80A.zz1[0].WriteHardware = PGM.ZWriteHardware;
                     switch (Machine.sName)
                     {
                         case "orlegend":
@@ -1785,19 +1804,19 @@ namespace mame
                             Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tokio;
                             Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tokio;
                             Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
-                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;                            
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
                             Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tokio;
                             Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tokio;
                             Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_tokio;
                             Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_tokio;
                             Z80A.zz1[1].ReadHardware = Taito.Z1ReadHardware;
-                            Z80A.zz1[1].WriteHardware = Taito.Z1WriteHardware;                            
+                            Z80A.zz1[1].WriteHardware = Taito.Z1WriteHardware;
                             Z80A.zz1[2].ReadOp = Taito.Z2ReadOp_bublbobl;
                             Z80A.zz1[2].ReadOpArg = Taito.Z2ReadOp_bublbobl;
                             Z80A.zz1[2].ReadMemory = Taito.Z2ReadMemory_tokio;
                             Z80A.zz1[2].WriteMemory = Taito.Z2WriteMemory_tokio;
                             Z80A.zz1[2].ReadHardware = Taito.Z2ReadHardware;
-                            Z80A.zz1[2].WriteHardware = Taito.Z2WriteHardware;                            
+                            Z80A.zz1[2].WriteHardware = Taito.Z2WriteHardware;
                             break;
                         case "tokiob":
                             Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_bublbobl;
@@ -1922,7 +1941,7 @@ namespace mame
                             Z80A.zz1[0].ReadMemory = Taito.ZReadMemory_opwolf;
                             Z80A.zz1[0].WriteMemory = Taito.ZWriteMemory_opwolf;
                             Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
-                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;                            
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
                             break;
                         case "opwolfb":
                             MC68000.m1.ReadOpByte = Taito.MReadOpByte_opwolf;
@@ -1939,13 +1958,13 @@ namespace mame
                             Z80A.zz1[0].ReadMemory = Taito.ZReadMemory_opwolf;
                             Z80A.zz1[0].WriteMemory = Taito.ZWriteMemory_opwolf;
                             Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
-                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;                            
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
                             Z80A.zz1[1].ReadOp = Taito.ZReadOp_opwolf_sub;
                             Z80A.zz1[1].ReadOpArg = Taito.ZReadOp_opwolf_sub;
                             Z80A.zz1[1].ReadMemory = Taito.ZReadMemory_opwolf_sub;
                             Z80A.zz1[1].WriteMemory = Taito.ZWriteMemory_opwolf_sub;
                             Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
-                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;                            
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
                             break;
                         case "opwolfp":
                             MC68000.m1.ReadOpByte = Taito.MReadOpByte_opwolf;
@@ -1967,14 +1986,66 @@ namespace mame
                     }
                     break;
                 case "Taito B":
-                    Z80A.zz1[0].ReadOp = Taitob.ZReadOp;
-                    Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp;
-                    Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory;
-                    Z80A.zz1[0].WriteMemory = Taitob.ZWriteMemory;
-                    Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
-                    Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;                    
                     switch (Machine.sName)
                     {
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_masterw;
+                            MC68000.m1.ReadByte = Taitob.MReadByte_masterw;
+                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_masterw;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_masterw;
+                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_masterw;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_masterw;
+                            MC68000.m1.WriteByte = Taitob.MWriteByte_masterw;
+                            MC68000.m1.WriteWord = Taitob.MWriteWord_masterw;
+                            MC68000.m1.WriteLong = Taitob.MWriteLong_masterw;
+                            Z80A.zz1[0].ReadOp = Taitob.ZReadOp_masterw;
+                            Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_masterw;
+                            Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_masterw;
+                            Z80A.zz1[0].WriteMemory = Taitob.ZWriteMemory_masterw;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware; 
+                            break;
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_rastsag2;
+                            MC68000.m1.ReadByte = Taitob.MReadByte_rastsag2;
+                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_rastsag2;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_rastsag2;
+                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_rastsag2;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_rastsag2;
+                            MC68000.m1.WriteByte = Taitob.MWriteByte_rastsag2;
+                            MC68000.m1.WriteWord = Taitob.MWriteWord_rastsag2;
+                            MC68000.m1.WriteLong = Taitob.MWriteLong_rastsag2;
+                            Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
+                            Z80A.zz1[0].WriteMemory = Taitob.ZWriteMemory_pbobble;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
+                            break;
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
+                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_rambo3;
+                            MC68000.m1.ReadByte = Taitob.MReadByte_rambo3;
+                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_rambo3;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_rambo3;
+                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_rambo3;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_rambo3;
+                            MC68000.m1.WriteByte = Taitob.MWriteByte_rambo3;
+                            MC68000.m1.WriteWord = Taitob.MWriteWord_rambo3;
+                            MC68000.m1.WriteLong = Taitob.MWriteLong_rambo3;
+                            Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
+                            Z80A.zz1[0].WriteMemory = Taitob.ZWriteMemory_pbobble;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
+                            break;
                         case "pbobble":
                             MC68000.m1.ReadOpByte = Taitob.MReadOpByte_pbobble;
                             MC68000.m1.ReadByte = Taitob.MReadByte_pbobble;
@@ -1985,6 +2056,12 @@ namespace mame
                             MC68000.m1.WriteByte = Taitob.MWriteByte_pbobble;
                             MC68000.m1.WriteWord = Taitob.MWriteWord_pbobble;
                             MC68000.m1.WriteLong = Taitob.MWriteLong_pbobble;
+                            Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
+                            Z80A.zz1[0].WriteMemory = Taitob.ZWriteMemory_pbobble;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware; 
                             break;
                         case "silentd":
                         case "silentdj":
@@ -1998,12 +2075,18 @@ namespace mame
                             MC68000.m1.WriteByte = Taitob.MWriteByte_silentd;
                             MC68000.m1.WriteWord = Taitob.MWriteWord_silentd;
                             MC68000.m1.WriteLong = Taitob.MWriteLong_silentd;
+                            Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
+                            Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
+                            Z80A.zz1[0].WriteMemory = Taitob.ZWriteMemory_pbobble;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware; 
                             break;
                     }
                     break;
                 case "Konami 68000":
                     Z80A.zz1[0].ReadHardware = Konami68000.ZReadHardware;
-                    Z80A.zz1[0].WriteHardware = Konami68000.ZWriteHardware;                    
+                    Z80A.zz1[0].WriteHardware = Konami68000.ZWriteHardware;
                     switch (Machine.sName)
                     {
                         case "cuebrick":
@@ -2232,7 +2315,7 @@ namespace mame
                             Z80A.zz1[0].ReadMemory = Capcom.ZReadMemory_gng;
                             Z80A.zz1[0].WriteMemory = Capcom.ZWriteMemory_gng;
                             Z80A.zz1[0].ReadHardware = Capcom.Z0ReadHardware;
-                            Z80A.zz1[0].WriteHardware = Capcom.Z0WriteHardware;                            
+                            Z80A.zz1[0].WriteHardware = Capcom.Z0WriteHardware;
                             break;
                         case "diamond":
                             M6809.mm1[0].ReadOp = Capcom.MReadOpByte_gng;
@@ -2261,13 +2344,13 @@ namespace mame
                             Z80A.zz1[0].ReadMemory = Capcom.Z0ReadMemory_sf;
                             Z80A.zz1[0].WriteMemory = Capcom.Z0WriteMemory_sf;
                             Z80A.zz1[0].ReadHardware = Capcom.Z0ReadHardware;
-                            Z80A.zz1[0].WriteHardware = Capcom.Z0WriteHardware;                            
+                            Z80A.zz1[0].WriteHardware = Capcom.Z0WriteHardware;
                             Z80A.zz1[1].ReadOp = Capcom.Z1ReadOp_sf;
                             Z80A.zz1[1].ReadOpArg = Capcom.Z1ReadOp_sf;
                             Z80A.zz1[1].ReadMemory = Capcom.Z1ReadMemory_sf;
                             Z80A.zz1[1].WriteMemory = Capcom.Z1WriteMemory_sf;
                             Z80A.zz1[1].ReadHardware = Capcom.Z1ReadHardware;
-                            Z80A.zz1[1].WriteHardware = Capcom.Z1WriteHardware;                            
+                            Z80A.zz1[1].WriteHardware = Capcom.Z1WriteHardware;
                             break;
                         case "sfua":
                         case "sfj":

@@ -49,8 +49,8 @@ namespace mame
             }
             if ((offset & 0x7800) == tx_rambank)
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                row = (offset & 0x07ff) / 64;
+                col = (offset & 0x07ff) % 64;
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
             }
         }
@@ -74,8 +74,8 @@ namespace mame
             }
             if ((offset & 0x7800) == tx_rambank)
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                row = (offset & 0x07ff) / 64;
+                col = (offset & 0x07ff) % 64;
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
                 //tilemap_mark_tile_dirty(tx_tilemap, offset2 & 0x7ff);
             }
@@ -98,8 +98,8 @@ namespace mame
             }
             if ((offset & 0x7800) == tx_rambank)
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                row = (offset & 0x07ff) / 64;
+                col = (offset & 0x07ff) % 64;
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
             }
         }
@@ -125,6 +125,14 @@ namespace mame
             bg_tilemap.tilemap_set_scrolldx(0, 24 * 8);
             fg_tilemap.tilemap_set_scrolldx(0, 24 * 8);
             tx_tilemap.tilemap_set_scrolldx(0, 24 * 8);
+        }
+        public static void video_start_taitob_color_order0()
+        {
+            b_bg_color_base = 0xc0;
+            b_fg_color_base = 0x80;
+            b_sp_color_base = 0x40 * 16;
+            b_tx_color_base = 0x00;
+            video_start_taitob_core();
         }
         public static void video_start_taitob_color_order1()
         {
@@ -166,66 +174,8 @@ namespace mame
             int sx = 2 * (offset & 0xff);
             framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] = data;
         }
-        public static byte TC0220IOC_r(int offset)
-        {
-            byte result = 0;
-            switch (offset)
-            {
-                case 0x00:	/* IN00-07 (DSA) */
-                    result = dswa;
-                    break;
-                case 0x01:	/* IN08-15 (DSB) */
-                    result = dswb;
-                    break;
-                case 0x02:	/* IN16-23 (1P) */
-                    result = (byte)sbyte0;
-                    break;
-                case 0x03:	/* IN24-31 (2P) */
-                    result = (byte)sbyte1;
-                    break;
-                case 0x04:	/* coin counters and lockout */
-                    result= TC0220IOC_regs[4];
-                    break;
-                case 0x07:	/* INB0-7 (coin) */
-                    result = (byte)sbyte2;
-                    break;
-                default:
-                    result= 0xff;
-                    break;
-            }
-            return result;
-        }
-        public static void TC0220IOC_w(int offset, byte data)
-        {
-            TC0220IOC_regs[offset] = data;
-            switch (offset)
-            {
-                case 0x00:
-                    Watchdog.watchdog_reset();
-                    break;
 
-                case 0x04:
-                    //coin_lockout_w(0,~data & 0x01);
-                    //coin_lockout_w(1,~data & 0x02);
-                    //coin_counter_w(0,data & 0x04);
-                    //coin_counter_w(1,data & 0x08);
-                    break;
-                default:
-                    break;
-            }
-        }
-        public static ushort TC0220IOC_halfword_r(int offset)
-        {
-            return TC0220IOC_r(offset);
-        }
-        public static void TC0220IOC_halfword_w1(int offset, byte data)
-        {
-            TC0220IOC_w(offset, data);
-        }
-        public static void TC0220IOC_halfword_w(int offset, ushort data)
-        {
-            TC0220IOC_w(offset, (byte)data);
-        }
+        
         public static ushort taitob_v_control_r(int offset)
         {
             return TC0180VCU_ctrl[offset];
@@ -326,65 +276,8 @@ namespace mame
             int sx = offset & 0x1ff;
             taitob_pixelram[offset] = data;
         }
-        public static byte TC0640FIO_r(int offset)
-        {
-            byte result = 0;
-            switch (offset)
-            {
-                case 0x00:	/* DSA */
-                    result = dswa;
-                    break;
-                case 0x01:	/* DSB */
-                    result = dswb;
-                    break;
-                case 0x02:	/* 1P */
-                    result = (byte)sbyte0;
-                    break;
-                case 0x03:	/* 2P */
-                    result = (byte)sbyte1;
-                    break;
-                case 0x04:	/* coin counters and lockout */
-                    result = TC0640FIO_regs[4];
-                    break;
-                case 0x07:	/* coin */
-                    result = (byte)sbyte2;
-                    break;
-                default:
-                    result = 0xff;
-                    break;
-            }
-            return result;
-        }
-        public static void TC0640FIO_w(int offset,byte data)
-        {
-            TC0640FIO_regs[offset] = data;
-            switch (offset)
-            {
-                case 0x00:
-                    Watchdog.watchdog_reset();
-                    break;
-                case 0x04:
-                    //coin_lockout_w(0,~data & 0x01);
-                    //coin_lockout_w(1,~data & 0x02);
-                    //coin_counter_w(0,data & 0x04);
-                    //coin_counter_w(1,data & 0x08);
-                    break;
-                default:
-                    break;
-            }
-        }
-        public static ushort TC0640FIO_halfword_r(int offset)
-        {
-            return TC0640FIO_r(offset);
-        }
-        public static void TC0640FIO_halfword_byteswap_w1(int offset, byte data)
-        {
-            TC0640FIO_w(offset, data);
-        }
-        public static void TC0640FIO_halfword_byteswap_w(int offset,ushort data)
-        {
-            TC0640FIO_w(offset,(byte)((data >> 8) & 0xff));
-        }
+        
+        
         public static RECT sect_rect(RECT dst, RECT src)
         {
             RECT dst2 = dst;

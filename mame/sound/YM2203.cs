@@ -105,6 +105,21 @@ namespace mame
                             break;
                     }
                     break;
+                case "Taito B":
+                    switch (Machine.sName)
+                    {
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                            FF2203[sndindex].OPN.ST.IRQ_Handler = Taitob.irqhandler;
+                            FF2203[sndindex].OPN.ST.SSG.set_clock = AY8910.AA8910[sndindex].ay8910_set_clock_ym;
+                            FF2203[sndindex].OPN.ST.SSG.write = AY8910.AA8910[sndindex].ay8910_write_ym;
+                            FF2203[sndindex].OPN.ST.SSG.read = AY8910.AA8910[sndindex].ay8910_read_ym;
+                            FF2203[sndindex].OPN.ST.SSG.reset = AY8910.AA8910[sndindex].ay8910_reset_ym;
+                            break;
+                    }
+                    break;
                 case "Capcom":
                     switch (Machine.sName)
                     {
@@ -130,20 +145,13 @@ namespace mame
             }
             YM2203.FF2203[sndindex].ym2203_reset_chip();
         }
-        public static void ym2203_start(int sndindex, int clock)
+        public static void ym2203_start(int sndindex, int clock, AY8910.ay8910_interface config)
         {
-            FF2203[sndindex] = new YM2203();
-            AY8910.ay8910_interface generic_2203 = new AY8910.ay8910_interface();
-            generic_2203.flags = 1;
-            generic_2203.res_load = new int[3] { 1000, 1000, 1000 };
-            generic_2203.portAread = null;
-            generic_2203.portBread = null;
-            generic_2203.portAwrite = null;
-            generic_2203.portBwrite = null;
+            FF2203[sndindex] = new YM2203();            
             FMOpl.tl_tab = new int[0x1800];
             FMOpl.sin_tab = new uint[0x1000];
             int rate = clock / 72;
-            AY8910.ay8910_start_ym(14, sndindex, clock, generic_2203);
+            AY8910.ay8910_start_ym(14, sndindex, clock, config);
             FF2203[sndindex].timer = new Timer.emu_timer[2];
             if (sndindex == 0)
             {

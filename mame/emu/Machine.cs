@@ -16,39 +16,18 @@ namespace mame
         public static bool bRom;
         public delegate void machine_delegate();
         public static machine_delegate machine_reset_callback;
-        public static void driver_init()
-        {
-            switch (Machine.sBoard)
-            {
-                case "Taito":
-                    switch (Machine.sName)
-                    {
-                        case "opwolf":
-                        case "opwolfa":
-                        case "opwolfj":
-                        case "opwolfu":
-                            Taito.driver_init_opwolf();
-                            break;
-                        case "opwolfb":
-                            Taito.driver_init_opwolfb();
-                            break;
-                        case "opwolfp":
-                            Taito.driver_init_opwolfp();
-                            break;
-                    }
-                    break;
-                case "CPS2":
-                    CPS.driver_init_cps2_video();
-                    break;
-            }
-        }
         public static void machine_start()
         {
             switch (Machine.sBoard)
             {
                 case "CPS-1":
                 case "CPS-1(QSound)":
+                    Eeprom.eeprom_init();
+                    CPS.video_start_cps();
+                    machine_reset_callback = CPS.machine_reset_cps;
+                    break;
                 case "CPS2":
+                    CPS.driver_init_cps2_video();
                     Eeprom.eeprom_init();
                     CPS.video_start_cps();
                     machine_reset_callback = CPS.machine_reset_cps;
@@ -114,6 +93,7 @@ namespace mame
                     machine_reset_callback = M92.machine_reset_m92;
                     break;
                 case "Taito":
+                    Taito.driver_init();
                     switch (Machine.sName)
                     {
                         case "tokio":
@@ -159,10 +139,23 @@ namespace mame
                     Eeprom.eeprom_init();
                     switch (Machine.sName)
                     {
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                        case "rambo3p":
+                            Taitob.video_start_taitob_color_order0();
+                            machine_reset_callback = Taito.machine_reset_null;
+                            break;
                         case "pbobble":
                             Taitob.video_start_taitob_color_order1();
                             machine_reset_callback = Taitob.machine_reset_mb87078;
                             break;
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                        case "rambo3":
+                        case "rambo3u":
                         case "silentd":
                         case "silentdj":
                         case "silentdu":

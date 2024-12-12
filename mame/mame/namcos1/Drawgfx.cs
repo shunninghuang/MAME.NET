@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class Drawgfx
     {
-        public static void common_drawgfx_na(int sizex, int sizey, int tx, int ty, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip)
+        public static void common_drawgfx_na(int sizex, int sizey, int tx, int ty, int code, int color, int flipx, int flipy, int sx, int sy, int pri_mask, RECT clip)
         {
             int ox;
             int oy;
@@ -64,7 +64,14 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = 0x10 * color;
-            blockmove_8toN_transpen_pri16(tx, ty, code, sw, sh, ls, ts, flipx, flipy, dw, dh, colorbase, sy, sx);
+            if (color != 0x7f)
+            {
+                blockmove_8toN_transpen_pri16(tx, ty, code, sw, sh, ls, ts, flipx, flipy, dw, dh, colorbase, sx, sy);
+            }
+            else
+            {
+                blockmove_8toN_pen_table_pri16(tx, ty, code, sw, sh, ls, ts, flipx, flipy, dw, dh, colorbase, pri_mask, sx, sy);
+            }
         }
         private static void setpixelcolorNa(int offsety, int offsetx, int n)
         {
@@ -74,7 +81,7 @@ namespace mame
             }
             Tilemap.priority_bitmap[offsety, offsetx] = 0x1f;
         }
-        public static void blockmove_8toN_transpen_pri16(int tx, int ty, int code, int srcwidth, int srcheight, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int offsety, int offsetx)
+        public static void blockmove_8toN_transpen_pri16(int tx, int ty, int code, int srcwidth, int srcheight, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int offsetx, int offsety)
         {
             int xdir, ydir;
             int src_offset;
@@ -114,6 +121,61 @@ namespace mame
                     }
                 }
             }
-        }        
+        }
+        public static void blockmove_8toN_pen_table_pri16(int tx, int ty, int code, int srcwidth, int srcheight, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase,int pmask, int offsetx, int offsety)
+        {
+            int xdir, ydir;
+            int src_offset;
+            int i, j;
+            int col;
+            int eax = 0x80;	
+            src_offset = code * 0x400 + tx + ty * 0x20;
+            if (flipy != 0)
+            {
+                offsety += dstheight - 1;
+                src_offset += (srcheight - dstheight - topskip) * 0x20;
+                ydir = -1;
+            }
+            else
+            {
+                src_offset += topskip * 0x20;
+                ydir = 1;
+            }
+            if (flipx != 0)
+            {
+                offsetx += dstwidth - 1;
+                src_offset += (srcwidth - dstwidth - leftskip);
+                xdir = -1;
+            }
+            else
+            {
+                src_offset += leftskip;
+                xdir = 1;
+            }
+            for (i = 0; i < dstheight; i++)
+            {
+                for (j = 0; j < dstwidth; j++)
+                {
+                    col = Namcos1.gfx3rom[src_offset + i * 0x20 + j];
+                    if (col != 0x0f)
+                    {
+                        afterdrawmask = eax;
+                        if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
+                        {
+                            if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
+                            {
+                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)shadow_table[0][shadow_table[0][Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j]]];
+                            }
+                            else
+                            {
+                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)shadow_table[0][Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j]];
+                            }
+                        }
+                        Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | afterdrawmask);
+                        afterdrawmask = 31;
+                    }
+                }
+            }
+        }
     }
 }

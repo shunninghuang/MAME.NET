@@ -9,6 +9,7 @@ namespace mame
     public partial class Taito
     {
         public static int basebankmain, basebanksnd;
+        public static byte dswa, dswb, dswb_old;
         public static byte[] bb1, bublbobl_mcu_sharedram, videoram, bublbobl_objectram, slaverom, mcurom, mcuram, mainram2, mainram3, subrom;
         public static void TaitoInit()
         {
@@ -285,6 +286,24 @@ namespace mame
         public static void irqhandler(int irq)
         {
             Cpuint.cpunum_set_input_line(2, 0, irq != 0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
+        }
+        public static void driver_init()
+        {
+            switch (Machine.sName)
+            {
+                case "opwolf":
+                case "opwolfa":
+                case "opwolfj":
+                case "opwolfu":
+                    driver_init_opwolf();
+                    break;
+                case "opwolfb":
+                    driver_init_opwolfb();
+                    break;
+                case "opwolfp":
+                    driver_init_opwolfp();
+                    break;
+            }
         }
         public static void driver_init_opwolf()
         {

@@ -19,6 +19,8 @@ namespace mame
         public static ushort PC090OJ_sprite_ctrl;
         public static ushort[] PC090OJ_ram,PC090OJ_ram_buffered;
         public static int PC090OJ_xoffs, PC090OJ_yoffs;
+        public static byte[] TC0220IOC_regs,TC0640FIO_regs;
+        public static byte TC0220IOC_port;
         public static void taitoic_init()
         {
             int i;
@@ -29,6 +31,8 @@ namespace mame
             PC080SN_bgscrollx = new int[2][];
             PC080SN_bgscrolly = new int[2][];
             PC080SN_tilemap = new Tmap[2][];
+            TC0220IOC_regs = new byte[8];
+            TC0640FIO_regs = new byte[8];
             for (i = 0; i < 2; i++)
             {
                 PC080SN_ctrl[i] = new ushort[8];
@@ -662,6 +666,178 @@ namespace mame
                 y += PC090OJ_yoffs;
                 Drawgfx.common_drawgfx_opwolf(gfx2rom, code, color, flipx, flipy, x, y, cliprect,(uint)((priority != 0 ? 0xfc : 0xf0) | (1 << 31)));
             }
+        }
+        public static byte TC0220IOC_r(int offset)
+        {
+            byte result = 0;
+            switch (offset)
+            {
+                case 0x00:	/* IN00-07 (DSA) */
+                    result = dswa;
+                    break;
+                case 0x01:	/* IN08-15 (DSB) */
+                    result = dswb;
+                    break;
+                case 0x02:	/* IN16-23 (1P) */
+                    result = (byte)sbyte0;
+                    break;
+                case 0x03:	/* IN24-31 (2P) */
+                    result = (byte)sbyte1;
+                    break;
+                case 0x04:	/* coin counters and lockout */
+                    result = TC0220IOC_regs[4];
+                    break;
+                case 0x07:	/* INB0-7 (coin) */
+                    result = (byte)sbyte2;
+                    break;
+                default:
+                    result = 0xff;
+                    break;
+            }
+            return result;
+        }
+        public static void TC0220IOC_w(int offset, byte data)
+        {
+            TC0220IOC_regs[offset] = data;
+            switch (offset)
+            {
+                case 0x00:
+                    Watchdog.watchdog_reset();
+                    break;
+                case 0x04:
+                    //coin_lockout_w(0,~data & 0x01);
+                    //coin_lockout_w(1,~data & 0x02);
+                    //coin_counter_w(0,data & 0x04);
+                    //coin_counter_w(1,data & 0x08);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public static byte TC0220IOC_port_r()
+        {
+            return TC0220IOC_port;
+        }
+        public static void TC0220IOC_port_w(byte data)
+        {
+            TC0220IOC_port = data;
+        }
+        public static byte TC0220IOC_portreg_r()
+        {
+            return TC0220IOC_r(TC0220IOC_port);
+        }
+        public static void TC0220IOC_portreg_w(byte data)
+        {
+            TC0220IOC_w((int)TC0220IOC_port, data);
+        }
+        public static ushort TC0220IOC_halfword_byteswap_port_r()
+        {
+            return (ushort)(TC0220IOC_port_r() << 8);
+        }
+        public static void TC0220IOC_halfword_byteswap_port_w(ushort data)
+        {
+            //if (ACCESSING_BITS_8_15)
+                TC0220IOC_port_w((byte)((data >> 8) & 0xff));
+        }
+        public static void TC0220IOC_halfword_byteswap_port_w1(byte data)
+        {            
+            TC0220IOC_port_w(data);
+        }
+        public static ushort TC0220IOC_halfword_byteswap_portreg_r()
+        {
+            return (ushort)(TC0220IOC_portreg_r() << 8);
+        }        
+        public static void TC0220IOC_halfword_byteswap_portreg_w(ushort data)
+        {
+            //if (ACCESSING_BITS_8_15)
+                TC0220IOC_portreg_w((byte)((data >> 8) & 0xff));
+        }
+        public static void TC0220IOC_halfword_byteswap_portreg_w1(byte data)
+        {
+            TC0220IOC_portreg_w(data);
+        }
+        public static ushort TC0220IOC_halfword_r(int offset)
+        {
+            return TC0220IOC_r(offset);
+        }        
+        public static void TC0220IOC_halfword_w(int offset, ushort data)
+        {
+            TC0220IOC_w(offset, (byte)data);
+        }
+        public static void TC0220IOC_halfword_w1(int offset, byte data)
+        {
+            TC0220IOC_w(offset, data);
+        }
+        public static ushort TC0220IOC_halfword_byteswap_r(int offset)
+        {
+            return (ushort)(TC0220IOC_halfword_r(offset) << 8);
+        }
+        public static void TC0220IOC_halfword_byteswap_w(int offset, ushort data)
+        {
+            TC0220IOC_w(offset, (byte)((data >> 8) & 0xff));
+        }
+        public static void TC0220IOC_halfword_byteswap_w1(int offset, byte data)
+        {
+            TC0220IOC_w(offset, data);
+        }
+        public static byte TC0640FIO_r(int offset)
+        {
+            byte result = 0;
+            switch (offset)
+            {
+                case 0x00:	/* DSA */
+                    result = dswa;
+                    break;
+                case 0x01:	/* DSB */
+                    result = dswb;
+                    break;
+                case 0x02:	/* 1P */
+                    result = (byte)sbyte0;
+                    break;
+                case 0x03:	/* 2P */
+                    result = (byte)sbyte1;
+                    break;
+                case 0x04:	/* coin counters and lockout */
+                    result = TC0640FIO_regs[4];
+                    break;
+                case 0x07:	/* coin */
+                    result = (byte)sbyte2;
+                    break;
+                default:
+                    result = 0xff;
+                    break;
+            }
+            return result;
+        }
+        public static void TC0640FIO_w(int offset, byte data)
+        {
+            TC0640FIO_regs[offset] = data;
+            switch (offset)
+            {
+                case 0x00:
+                    Watchdog.watchdog_reset();
+                    break;
+                case 0x04:
+                    //coin_lockout_w(0,~data & 0x01);
+                    //coin_lockout_w(1,~data & 0x02);
+                    //coin_counter_w(0,data & 0x04);
+                    //coin_counter_w(1,data & 0x08);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public static ushort TC0640FIO_halfword_r(int offset)
+        {
+            return TC0640FIO_r(offset);
+        }
+        public static void TC0640FIO_halfword_byteswap_w1(int offset, byte data)
+        {
+            TC0640FIO_w(offset, data);
+        }
+        public static void TC0640FIO_halfword_byteswap_w(int offset, ushort data)
+        {
+            TC0640FIO_w(offset, (byte)((data >> 8) & 0xff));
         }
     }
 }

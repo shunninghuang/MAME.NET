@@ -57,7 +57,6 @@
             this.m68000ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.z80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m6809ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.spriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -128,8 +127,7 @@
             this.boardToolStripMenuItem,
             this.m68000ToolStripMenuItem,
             this.z80ToolStripMenuItem,
-            this.m6809ToolStripMenuItem,
-            this.spriteToolStripMenuItem});
+            this.m6809ToolStripMenuItem});
             this.gameStripMenuItem.Name = "gameStripMenuItem";
             this.gameStripMenuItem.Size = new System.Drawing.Size(54, 21);
             this.gameStripMenuItem.Text = "&Game";
@@ -373,7 +371,6 @@
         private System.Windows.Forms.ToolStripMenuItem cheatsearchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m68000ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem z80ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem spriteToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         public System.Windows.Forms.ToolStripStatusLabel tsslStatus;

@@ -70,8 +70,30 @@ namespace mame
                         case "ddragonua":
                         case "ddragonub":
                         case "ddragonb2":
+                        case "ddragonb":
+                        case "ddragonba":
                             savestate_callback = Technos.SaveStateBinary_ddragon;
                             loadstate_callback = Technos.LoadStateBinary_ddragon;
+                            break;
+                        case "ddragon2":
+                        case "ddragon2u":
+                        case "ddragon2b":
+                            savestate_callback = Technos.SaveStateBinary_ddragon2;
+                            loadstate_callback = Technos.LoadStateBinary_ddragon2;
+                            break;
+                        case "tstrike":
+                        case "tstrikea":
+                        case "ddungeon":
+                        case "ddungeone":
+                        case "darktowr":
+                            savestate_callback = Technos.SaveStateBinary_darktowr;
+                            loadstate_callback = Technos.LoadStateBinary_darktowr;
+                            break;
+                        case "toffy":
+                        case "stoffy":
+                        case "stoffyu":
+                            savestate_callback = Technos.SaveStateBinary_toffy;
+                            loadstate_callback = Technos.LoadStateBinary_toffy;
                             break;
                     }
                     break;

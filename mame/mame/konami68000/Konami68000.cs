@@ -15,7 +15,7 @@ namespace mame
         public static short[] sampledata;
         public static ushort[] cuebrick_nvram, tmnt2_1c0800;
         private static int init_eeprom_count;
-        private static int toggle, sprite_totel_element;
+        public static int toggle, sprite_totel_element;
         private static int tmnt_soundlatch, cuebrick_snd_irqlatch, cuebrick_nvram_bank;
         public static int basebanksnd;
         public static void Konami68000Init()
