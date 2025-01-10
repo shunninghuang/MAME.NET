@@ -2093,6 +2093,48 @@
 		<year>2023</year>
 		<manufacturer>Capcom</manufacturer>
 	</game>
+  <game name="sf2mix120" board="CPS-1">
+    <parent></parent>
+    <direction></direction>
+    <description>Street Fighter II': Champion Edition (MIX Ver. 1.2, bootleg)</description>
+    <year>2022</year>
+    <manufacturer>Capcom</manufacturer>
+  </game>
+  <game name="sf2mix110" board="CPS-1">
+    <parent></parent>
+    <direction></direction>
+    <description>Street Fighter II': Champion Edition (MIX Ver. 1.1, bootleg)</description>
+    <year>2022</year>
+    <manufacturer>Capcom</manufacturer>
+  </game>
+  <game name="sf2mix100" board="CPS-1">
+    <parent></parent>
+    <direction></direction>
+    <description>Street Fighter II': Champion Edition (MIX Ver. 1.0, bootleg)</description>
+    <year>2021</year>
+    <manufacturer>Capcom</manufacturer>
+  </game>
+  <game name="sf2mix099a" board="CPS-1">
+    <parent></parent>
+    <direction></direction>
+    <description>Street Fighter II': Champion Edition (MIX Ver. 0.99a, bootleg)</description>
+    <year>2020</year>
+    <manufacturer>Capcom</manufacturer>
+  </game>
+  <game name="sf2mix098c" board="CPS-1">
+    <parent></parent>
+    <direction></direction>
+    <description>Street Fighter II': Champion Edition (MIX Ver. 0.98c, bootleg)</description>
+    <year>2020</year>
+    <manufacturer>Capcom</manufacturer>
+  </game>
+  <game name="sf2mix097" board="CPS-1">
+    <parent></parent>
+    <direction></direction>
+    <description>Street Fighter II': Champion Edition (MIX Ver. 0.97, bootleg)</description>
+    <year>2020</year>
+    <manufacturer>Capcom</manufacturer>
+  </game>
 	<game name="cworld2j" board="CPS-1">
 		<parent></parent>
 		<direction></direction>

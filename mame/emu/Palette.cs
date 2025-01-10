@@ -139,7 +139,7 @@ namespace mame
                     trans_color = Color.Magenta;
                     trans_uint = (uint)trans_color.ToArgb();
                     numcolors = 0x1000;
-                    palette_set_callback = palette_entry_set_color3;
+                    palette_set_callback = palette_entry_set_color2;
                     break;
                 case "Konami 68000":
                     trans_color = Color.Black;
@@ -200,7 +200,7 @@ namespace mame
                             trans_color = Color.Black;
                             trans_uint = (uint)trans_color.ToArgb();
                             numcolors = 0x400;
-                            palette_set_callback = palette_entry_set_color3;
+                            palette_set_callback = palette_entry_set_color2;
                             break;
                     }
                     break;
@@ -319,16 +319,7 @@ namespace mame
         }
         public static void palette_entry_set_color2(int index, uint rgb)
         {
-            int groupnum;
             if (index >= numcolors || entry_color[index] == rgb)
-            {
-                return;
-            }
-            entry_color[index] = 0xff000000 | rgb;
-        }
-        public static void palette_entry_set_color3(int index, uint rgb)
-        {
-            if (index >= numcolors || entry_color[index] == rgb || index == 0)
             {
                 return;
             }

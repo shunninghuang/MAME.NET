@@ -91,14 +91,14 @@ namespace mame
         }
         public void updatesamplerate()
         {
-            int i;
+            int i, old_rate;            
             if (new_sample_rate != 0)
             {
-                int old_rate = sample_rate;
+                old_rate = sample_rate;
                 sample_rate = new_sample_rate;
                 new_sample_rate = 0;
                 attoseconds_per_sample = (long)1e18 / sample_rate;
-                max_samples_per_update = (int)((Sound.update_attoseconds + attoseconds_per_sample - 1) /attoseconds_per_sample);
+                max_samples_per_update = (int)((Sound.update_attoseconds + attoseconds_per_sample - 1) / attoseconds_per_sample);
                 output_sampindex = (int)((long)output_sampindex * (long)sample_rate / old_rate);
                 output_base_sampindex = output_sampindex - max_samples_per_update;
                 for (i = 0; i < outputs; i++)
@@ -106,6 +106,16 @@ namespace mame
                     Array.Clear(streamoutput[i], 0, max_samples_per_update);
                 }
             }
+        }
+        public void updatesamplerate2()
+        {
+            if (new_sample_rate != 0)
+            {
+                sample_rate = new_sample_rate;
+            }
+            new_sample_rate = 0;
+            attoseconds_per_sample = (long)1e18 / sample_rate;
+            max_samples_per_update = (int)((Sound.update_attoseconds + attoseconds_per_sample - 1) / attoseconds_per_sample);
         }
     };
     public partial class Sound

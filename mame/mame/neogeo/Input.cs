@@ -74,6 +74,14 @@ namespace mame
             {
                 short0 |= 0x0100;
             }
+            if (((ushort)short0 & 0x0c00) == 0)
+            {
+                short0 |= 0x0c00;
+            }
+            if (((ushort)short0 & 0x0300) == 0)
+            {
+                short0 |= 0x0300;
+            }
             if (Keyboard.IsPressed(Key.J))
             {
                 short0 &= ~0x1000;
@@ -153,6 +161,14 @@ namespace mame
             else
             {
                 short1 |= 0x0100;
+            }
+            if (((ushort)short1 & 0x0c00) == 0)
+            {
+                short1 |= 0x0c00;
+            }
+            if (((ushort)short1 & 0x0300) == 0)
+            {
+                short1 |= 0x0300;
             }
             if (Keyboard.IsPressed(Key.NumPad1))
             {

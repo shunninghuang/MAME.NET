@@ -1211,8 +1211,11 @@ namespace mame
                             MC68000.m1.WriteLong = Neogeo.MWriteLong_garouh;
                             break;
                         case "mslug3":
+                            MC68000.m1.ReadOpByte = Neogeo.MReadByte_mslug3;
                             MC68000.m1.ReadByte = Neogeo.MReadByte_mslug3;
+                            MC68000.m1.ReadOpWord = Neogeo.MReadWord_mslug3;
                             MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_mslug3;
+                            MC68000.m1.ReadOpLong = Neogeo.MReadLong_mslug3;
                             MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_mslug3;
                             MC68000.m1.WriteByte = Neogeo.MWriteByte_mslug3;
                             MC68000.m1.WriteWord = Neogeo.MWriteWord_mslug3;

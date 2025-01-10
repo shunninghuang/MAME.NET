@@ -15,7 +15,7 @@ namespace mame
         public static uint key_quotient, key_reminder, key_numerator_high_word;
         public static byte[] key;
         public static int mcu_patch_data;
-        public static int namcos1_reset = 0;
+        public static int namcos1_reset;
         public static int wdog;
         public static int[,] cus117_offset;
         public static int[,] user1rom_offset;
@@ -78,20 +78,30 @@ namespace mame
                     r = 0x00;
                 }
                 if (offset == 0)
+                {
                     return (byte)r;
+                }
                 if (offset == 1)
+                {
                     return (byte)(q >> 8);
+                }
                 if (offset == 2)
+                {
                     return (byte)(q & 0xff);
+                }
             }
             else if (offset == 3)
+            {
                 return (byte)key_id;
+            }
             return 0;
         }
         public static void key_type1_w(int offset, byte data)
         {
             if (offset < 4)
+            {
                 key[offset] = data;
+            }
         }
         public static byte key_type2_r(int offset)
         {
@@ -99,16 +109,26 @@ namespace mame
             if (offset < 4)
             {
                 if (offset == 0)
+                {
                     return (byte)(key_reminder >> 8);
+                }
                 if (offset == 1)
+                {
                     return (byte)(key_reminder & 0xff);
+                }
                 if (offset == 2)
+                {
                     return (byte)(key_quotient >> 8);
+                }
                 if (offset == 3)
+                {
                     return (byte)(key_quotient & 0xff);
+                }
             }
             else if (offset == 4)
+            {
                 return (byte)key_id;
+            }
             return 0;
         }
         public static void key_type2_w(int offset, byte data)
@@ -139,15 +159,25 @@ namespace mame
             int op;
             op = (offset & 0x70) >> 4;
             if (op == key_reg)
+            {
                 return (byte)key_id;
+            }
             if (op == key_rng)
+            {
                 return 0;// (byte)mame_rand(machine);
+            }
             if (op == key_swap4)
+            {
                 return (byte)((key[key_swap4_arg] << 4) | (key[key_swap4_arg] >> 4));
+            }
             if (op == key_bottom4)
+            {
                 return (byte)((offset << 4) | (key[key_swap4_arg] & 0x0f));
+            }
             if (op == key_top4)
+            {
                 return (byte)((offset << 4) | (key[key_swap4_arg] >> 4));
+            }
             return 0;
         }
         public static void key_type3_w(int offset, byte data)
@@ -293,7 +323,9 @@ namespace mame
         public static void namcos1_mcu_patch_w(byte data)
         {
             if (mcu_patch_data == 0xa6)
+            {
                 return;
+            }
             mcu_patch_data = data;
             namcos1_triram[0] = data;
         }

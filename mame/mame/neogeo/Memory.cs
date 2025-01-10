@@ -241,7 +241,7 @@ namespace mame
             {
                 result = (short)(Memory.mainram[address & 0xffff] * 0x100 + Memory.mainram[(address & 0xffff) + 1]);
             }
-            else if (address >= 0x200000 && address <= 0x2fffff)
+            else if (address >= 0x200000 && address + 1 <= 0x2fffff)
             {
                 result = (short)(Memory.mainrom[main_cpu_bank_address + (address & 0xfffff)] * 0x100 + Memory.mainrom[main_cpu_bank_address + (address & 0xfffff) + 1]);
             }
@@ -253,7 +253,7 @@ namespace mame
             {
                 result = short4;
             }*/
-            else if (address >= 0x300000 && address <= 0x31ffff)
+            else if (address >= 0x300000 && address + 1 <= 0x31ffff)
             {
                 int add = address & 0x81;
                 if (add >= 0x00 && add + 1 <= 0x01)
@@ -265,7 +265,7 @@ namespace mame
                     result = short4;
                 }
             }
-            else if (address >= 0x320000 && address <= 0x33ffff)
+            else if (address >= 0x320000 && address + 1 <= 0x33ffff)
             {
                 result = (short)((ushort)short3 | (ushort)((get_calendar_status() & 0x03) << 6) | (get_audio_result() << 8));
             }
@@ -273,7 +273,7 @@ namespace mame
             {
                 result = short1;
             }
-            else if (address >= 0x380000 && address <= 0x39ffff)
+            else if (address >= 0x380000 && address + 1 <= 0x39ffff)
             {
                 result = short2;
             }
@@ -363,19 +363,19 @@ namespace mame
             {
                 result = Memory.mainrom[main_cpu_bank_address + (address & 0xfffff)] * 0x1000000 + Memory.mainrom[main_cpu_bank_address + (address & 0xfffff) + 1] * 0x10000 + Memory.mainrom[main_cpu_bank_address + (address & 0xfffff) + 2] * 0x100 + Memory.mainrom[main_cpu_bank_address + (address & 0xfffff) + 3];
             }
-            else if (address >= 0x300000 && address <= 0x31ffff)
+            else if (address >= 0x300000 && address + 3 <= 0x31ffff)
             {                
                 result = 0;
             }
-            else if (address >= 0x320000 && address <= 0x33ffff)
+            else if (address >= 0x320000 && address + 3 <= 0x33ffff)
             {
                 result = 0;
             }
-            else if (address >= 0x340000 && address <= 0x35ffff)
+            else if (address >= 0x340000 && address + 3 <= 0x35ffff)
             {
                 result = 0;
             }
-            else if (address >= 0x380000 && address <= 0x39ffff)
+            else if (address >= 0x380000 && address + 3 <= 0x39ffff)
             {
                 result = 0;
             }
@@ -479,32 +479,32 @@ namespace mame
                 Memory.mainram[address & 0xffff] = (byte)(value >> 8);
                 Memory.mainram[(address & 0xffff) + 1] = (byte)value;
             }
-            else if (address >= 0x2ffff0 && address <= 0x2fffff)
+            else if (address >= 0x2ffff0 && address + 1 <= 0x2fffff)
             {
                 main_cpu_bank_select_w(value);
             }
-            else if (address >= 0x300000 && address <= 0x31ffff)
+            else if (address >= 0x300000 && address + 1 <= 0x31ffff)
             {
                 int i1 = 1;
                 //watchdog_w();
             }
-            else if (address >= 0x320000 && address <= 0x33ffff)
+            else if (address >= 0x320000 && address + 1 <= 0x33ffff)
             {
                 audio_command_w((byte)(value >> 8));
             }
-            else if (address >= 0x380000 && address <= 0x39ffff)
+            else if (address >= 0x380000 && address + 1 <= 0x39ffff)
             {
                 io_control_w((address & 0x7f) >> 1, (byte)value);
             }
-            else if (address >= 0x3a0000 && address <= 0x3bffff)
+            else if (address >= 0x3a0000 && address + 1 <= 0x3bffff)
             {
                 system_control_w((address & 0x1f) >> 1);
             }
-            else if (address >= 0x3c0000 && address <= 0x3dffff)
+            else if (address >= 0x3c0000 && address + 1 <= 0x3dffff)
             {
                 neogeo_video_register_w((address & 0x0f) >> 1, (ushort)value);
             }
-            else if (address >= 0x400000 && address <= 0x7fffff)
+            else if (address >= 0x400000 && address + 1 <= 0x7fffff)
             {
                 neogeo_paletteram_w((address & 0x1fff) >> 1, (ushort)value);
             }
@@ -528,26 +528,26 @@ namespace mame
                 Memory.mainram[(address & 0xffff) + 2] = (byte)(value >> 8);
                 Memory.mainram[(address & 0xffff) + 3] = (byte)value;
             }
-            else if (address >= 0x2ffff0 && address <= 0x2fffff)
+            else if (address >= 0x2ffff0 && address + 3 <= 0x2fffff)
             {
                 main_cpu_bank_select_w(value);
             }
-            else if (address >= 0x300000 && address <= 0x31ffff)
+            else if (address >= 0x300000 && address + 3 <= 0x31ffff)
             {
                 int i1 = 1;
                 //watchdog_w();
             }
-            else if (address >= 0x320000 && address <= 0x33ffff)
+            else if (address >= 0x320000 && address + 3 <= 0x33ffff)
             {
                 int i1 = 1;
                 //audio_command_w
             }
-            else if (address >= 0x380000 && address <= 0x39ffff)
+            else if (address >= 0x380000 && address + 3 <= 0x39ffff)
             {
                 int i1 = 1;
                 //io_control_w((address & 0x7f) >> 1, value);
             }
-            else if (address >= 0x3a0000 && address <= 0x3bffff)
+            else if (address >= 0x3a0000 && address + 3 <= 0x3bffff)
             {
                 //system_control_w((address &0x1f) >> 1, mem_mask);
                 int i1 = 1;
@@ -955,7 +955,7 @@ namespace mame
         {
             address &= 0xffffff;
             int result = 0;
-            if (address >= 0x2fe446 && address <= 0x2fe447)
+            if (address >= 0x2fe446 && address + 3 <= 0x2fe447)
             {
                 result = 0;
             }

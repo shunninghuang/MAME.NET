@@ -46,10 +46,14 @@ namespace mame
             YM2203.FF2203[1].SaveStateBinary(writer);
             writer.Write(Sound.latched_value[0]);
             writer.Write(Sound.utempdata[0]);
-            writer.Write(AY8910.AA8910[0].stream.output_sampindex);
-            writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
-            writer.Write(AY8910.AA8910[1].stream.output_sampindex);
-            writer.Write(AY8910.AA8910[1].stream.output_base_sampindex);
+            for (i = 0; i < 2; i++)
+            {
+                writer.Write(AY8910.AA8910[i].stream.sample_rate);
+                writer.Write(AY8910.AA8910[i].stream.new_sample_rate);
+                writer.Write(AY8910.AA8910[i].stream.gain);
+                writer.Write(AY8910.AA8910[i].stream.output_sampindex);
+                writer.Write(AY8910.AA8910[i].stream.output_base_sampindex);
+            }
             writer.Write(YM2203.FF2203[0].stream.output_sampindex);
             writer.Write(YM2203.FF2203[0].stream.output_base_sampindex);
             writer.Write(YM2203.FF2203[1].stream.output_sampindex);
@@ -92,10 +96,14 @@ namespace mame
             YM2203.FF2203[1].LoadStateBinary(reader);
             Sound.latched_value[0] = reader.ReadUInt16();
             Sound.utempdata[0] = reader.ReadUInt16();
-            AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
-            AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
-            AY8910.AA8910[1].stream.output_sampindex = reader.ReadInt32();
-            AY8910.AA8910[1].stream.output_base_sampindex = reader.ReadInt32();
+            for (i = 0; i < 2; i++)
+            {
+                AY8910.AA8910[i].stream.sample_rate = reader.ReadInt32();
+                AY8910.AA8910[i].stream.new_sample_rate = reader.ReadInt32();
+                AY8910.AA8910[i].stream.gain = reader.ReadInt32();
+                AY8910.AA8910[i].stream.output_sampindex = reader.ReadInt32();
+                AY8910.AA8910[i].stream.output_base_sampindex = reader.ReadInt32();
+            }
             YM2203.FF2203[0].stream.output_sampindex = reader.ReadInt32();
             YM2203.FF2203[0].stream.output_base_sampindex = reader.ReadInt32();            
             YM2203.FF2203[1].stream.output_sampindex = reader.ReadInt32();

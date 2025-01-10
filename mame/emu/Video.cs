@@ -258,9 +258,8 @@ namespace mame
                     bitmapbase = new ushort[2][];
                     bitmapbase[0] = new ushort[0x200 * 0x200];
                     bitmapbase[1] = new ushort[0x200 * 0x200];
-                    bbmp = new Bitmap[2];
-                    bbmp[0] = new Bitmap(512, 512);
-                    bbmp[1] = new Bitmap(288, 224);
+                    bbmp = new Bitmap[1];
+                    bbmp[0] = new Bitmap(288, 224);
                     video_update_callback = Namcos1.video_update_namcos1;
                     video_eof_callback = Namcos1.video_eof_namcos1;
                     break;

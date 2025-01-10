@@ -48,11 +48,11 @@ namespace mame
                 ttmap[i].scrollcols = 1;
                 ttmap[i].rowscroll = new int[ttmap[i].scrollrows];
                 ttmap[i].colscroll = new int[ttmap[i].scrollcols];
-                ttmap[i].pixmap = new ushort[0x200 * 0x200];
-                ttmap[i].flagsmap = new byte[0x200, 0x200];
-                ttmap[i].tileflags = new byte[0x40, 0x40];
-                ttmap[i].tile_update3 = ttmap[i].tile_updateNa;
-                ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instanceNa;
+                ttmap[i].pixmap = new ushort[ttmap[i].width * ttmap[i].height];
+                ttmap[i].flagsmap = new byte[ttmap[i].height, ttmap[i].width];
+                ttmap[i].tileflags = new byte[ttmap[i].rows, ttmap[i].cols];
+                ttmap[i].tile_update3 = ttmap[i].tile_update_namcos1;
+                ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instance_namcos1;
             }
         }
         public static void tilemap_set_flip(byte attributes)
@@ -68,13 +68,13 @@ namespace mame
     }
     public partial class Tmap
     {
-        public void tile_updateNa(int col, int row)
+        public void tile_update_namcos1(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int code, tile_index,col2,row2;
+            int code, tile_index, col2, row2;
             byte flags;
-            if ((attributes & Tilemap.TILEMAP_FLIPX)!=0)
+            if ((attributes & Tilemap.TILEMAP_FLIPX) != 0)
             {
                 col2 = (cols - 1) - col;
             }
@@ -82,7 +82,7 @@ namespace mame
             {
                 col2 = col;
             }
-            if ((attributes & Tilemap.TILEMAP_FLIPY)!=0)
+            if ((attributes & Tilemap.TILEMAP_FLIPY) != 0)
             {
                 row2 = (rows - 1) - row;
             }
@@ -93,48 +93,48 @@ namespace mame
             tile_index = (row2 * cols + col2) << 1;
             code = Namcos1.namcos1_videoram[videoram_offset + tile_index + 1] + ((Namcos1.namcos1_videoram[videoram_offset + tile_index] & 0x3f) << 8);
             flags = (byte)(attributes & 0x03);
-            tileflags[row, col] = tile_drawNa(code * 0x40, x0, y0, 0x800,flags);
-            tileflags[row, col] = tile_apply_bitmaskNa(code << 3, x0, y0,flags);
+            tileflags[row, col] = tile_draw_namcos1(code * 0x40, x0, y0, 0x800, flags);
+            tileflags[row, col] = tile_apply_bitmask_namcos1(code << 3, x0, y0, flags);
         }
-        public byte tile_drawNa(int pendata_offset, int x0, int y0, int palette_base,byte flags)
+        public byte tile_draw_namcos1(int pendata_offset, int x0, int y0, int palette_base,byte flags)
         {
-            int height = tileheight;
-            int width = tilewidth;
+            int height1 = tileheight;
+            int width1 = tilewidth;            
             int dx0 = 1, dy0 = 1;
             int tx, ty;
             int offset1 = pendata_offset;
             int offsety1;
             if ((flags & Tilemap.TILE_FLIPY)!=0)
             {
-                y0 += height - 1;
+                y0 += height1 - 1;
                 dy0 = -1;
             }
             if ((flags & Tilemap.TILE_FLIPX)!=0)
             {
-                x0 += width - 1;
+                x0 += width1 - 1;
                 dx0 = -1;
             }
-            for (ty = 0; ty < height; ty++)
+            for (ty = 0; ty < height1; ty++)
             {
                 int xoffs = 0;
                 offsety1 = y0;
                 y0 += dy0;
-                for (tx = 0; tx < width; tx++)
+                for (tx = 0; tx < width1; tx++)
                 {
                     byte pen;
                     pen = Namcos1.gfx2rom[offset1];
                     offset1++;
-                    pixmap[offsety1 * 0x200 + x0 + xoffs] = (ushort)(0x800 + pen);
+                    pixmap[offsety1 * width + x0 + xoffs] = (ushort)(0x800 + pen);
                     flagsmap[offsety1, x0 + xoffs] = Tilemap.TILEMAP_PIXEL_LAYER0;
                     xoffs += dx0;
                 }
             }
             return 0;
         }
-        public byte tile_apply_bitmaskNa(int maskdata_offset, int x0, int y0, byte flags)
+        public byte tile_apply_bitmask_namcos1(int maskdata_offset, int x0, int y0, byte flags)
         {
-            int height = tileheight;
-            int width = tilewidth;
+            int height1 = tileheight;
+            int width1 = tilewidth;
             byte andmask = 0xff, ormask = 0;
             int dx0 = 1, dy0 = 1;
             int bitoffs = 0;
@@ -142,20 +142,20 @@ namespace mame
             int offsety1;
             if ((flags & Tilemap.TILE_FLIPY) != 0)
             {
-                y0 += height - 1;
+                y0 += height1 - 1;
                 dy0 = -1;
             }
             if ((flags & Tilemap.TILE_FLIPX)!=0)
             {
-                x0 += width - 1;
+                x0 += width1 - 1;
                 dx0 = -1;
             }
-            for (ty = 0; ty < height; ty++)
+            for (ty = 0; ty < height1; ty++)
             {
                 int xoffs = 0;
                 offsety1 = y0;
                 y0 += dy0;
-                for (tx = 0; tx < width; tx++)
+                for (tx = 0; tx < width1; tx++)
                 {
                     byte map = flagsmap[offsety1, x0 + xoffs];
                     if ((Namcos1.gfx1rom[maskdata_offset + bitoffs / 8] & (0x80 >> (bitoffs & 7))) == 0)
@@ -170,7 +170,7 @@ namespace mame
             }
             return (byte)(andmask ^ ormask);
         }
-        public void tilemap_draw_instanceNa(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_namcos1(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;
@@ -209,7 +209,7 @@ namespace mame
                     {
                         if (tileflags[row, column] == Tilemap.TILE_FLAG_DIRTY)
                         {
-                            tile_updateNa(column, row);
+                            tile_update3(column, row);
                         }
                         if ((tileflags[row, column] & mask) != 0)
                         {
@@ -235,8 +235,8 @@ namespace mame
                             {
                                 for (i = xpos + x_start; i < xpos + x_end; i++)
                                 {
-                                    Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * 0x200 + i] = (ushort)(pixmap[offsety2 * 0x200 + i - xpos] + palette_offset);
-                                    Tilemap.priority_bitmap[offsety2 + ypos, i] = priority;
+                                    Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * 0x200 + i] = (ushort)(pixmap[offsety2 * width + i - xpos] + palette_offset);
+                                    Tilemap.priority_bitmap[offsety2 + ypos, i] = (byte)(Tilemap.priority_bitmap[offsety2 + ypos, i]| priority);
                                 }
                                 offsety2++;
                             }
@@ -249,8 +249,8 @@ namespace mame
                                 {
                                     if ((flagsmap[offsety2, i - xpos] & mask) == value)
                                     {
-                                        Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * 0x200 + i] = (ushort)(pixmap[offsety2 * 0x200 + i - xpos] + palette_offset);
-                                        Tilemap.priority_bitmap[offsety2 + ypos, i] = priority;
+                                        Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * 0x200 + i] = (ushort)(pixmap[offsety2 * width + i - xpos] + palette_offset);
+                                        Tilemap.priority_bitmap[offsety2 + ypos, i] = (byte)(Tilemap.priority_bitmap[offsety2 + ypos, i] | priority);
                                     }
                                 }
                                 offsety2++;

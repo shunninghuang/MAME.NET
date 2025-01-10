@@ -242,7 +242,7 @@ namespace mame
                 }
             }
         }
-        public static void common_drawgfx_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip,int shadow, uint pri_mask)
+        public static void common_drawgfx_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, uint pri_mask)
         {
             int ox;
             int oy;

@@ -32,7 +32,7 @@ namespace mame
             TC0640FIO_regs = new byte[8];
             Machine.bRom = true;
             Taitosnd.taitosnd_start();
-            basebanksnd = 0x4000;
+            basebanksnd = 0;
             eep_latch = 0;
             video_control = 0;
             coin_word = 0;
@@ -98,7 +98,7 @@ namespace mame
         }
         public static void bankswitch_w(int offset, byte data)
         {
-            basebanksnd = 0x4000 + 0x4000 * ((data - 1) & 3);
+            basebanksnd = 0x4000 * ((data) & 3);
         }
         public static void rsaga2_interrupt2()
         {

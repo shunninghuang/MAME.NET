@@ -657,10 +657,19 @@ namespace mame
                         case "yukiwo":
                             YM2203.FF2203[0].ym2203_reset_chip();
                             break;
-                        case "pbobble":
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
+                        case "crimec":
+                        case "crimecu":
+                        case "crimecj":
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
+                        case "pbobble":
                             YM2610.F2610.ym2610_reset_chip();
                             break;
                     }                    
@@ -1346,7 +1355,7 @@ namespace mame
                 finalmixb[sampindex * 4 + 2] = (byte)samp;
                 finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
             }
-            osd_update_audio_stream(finalmixb, 0x3c0);            
+            osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_taito_bublbobl();
         }
         public static void sound_update_taito_opwolf()

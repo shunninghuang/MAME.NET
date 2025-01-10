@@ -389,8 +389,6 @@ namespace mame
             }
             return result;
         }
-
-
         public static void K053245_scattered_word_w(int offset, ushort data)
         {
             Generic.spriteram16[offset] = data;

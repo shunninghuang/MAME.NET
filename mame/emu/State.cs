@@ -166,8 +166,32 @@ namespace mame
                     }
                     break;
                 case "Taito B":
-                    savestate_callback = Taitob.SaveStateBinary;
-                    loadstate_callback = Taitob.LoadStateBinary;
+                    switch (Machine.sName)
+                    {
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                            savestate_callback = Taitob.SaveStateBinary_masterw;
+                            loadstate_callback = Taitob.LoadStateBinary_masterw;
+                            break;
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
+                            savestate_callback = Taitob.SaveStateBinary_nastar;
+                            loadstate_callback = Taitob.LoadStateBinary_nastar;
+                            break;
+                        case "silentd":
+                        case "silentdj":
+                        case "silentdu":
+                        case "pbobble":
+                            savestate_callback = Taitob.SaveStateBinary_silentd;
+                            loadstate_callback = Taitob.LoadStateBinary_silentd;
+                            break;
+                    }
                     break;
                 case "Konami 68000":
                     switch (Machine.sName)

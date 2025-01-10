@@ -11,7 +11,6 @@ namespace mame
         public static int dac0_value, dac1_value, dac0_gain, dac1_gain;
         public static byte[] gfx1rom, gfx2rom, gfx3rom, user1rom,mcurom;
         public static byte[] audiorom, voicerom, bank_ram20, bank_ram30;
-        public static int namcos1_pri;
         public static byte dipsw;
         public static byte[] ByteTo2byte(byte[] bb1)
         {

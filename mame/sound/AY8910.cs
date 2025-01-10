@@ -56,7 +56,6 @@ namespace mame
         public ay8910_context ay8910info;
         public static AY8910[] AA8910 = new AY8910[3];
         public static ay8910_interface ay8910_intf;
-
         public sound_stream stream;
         private int NOISE_ENABLEQ(int chan)
         {
@@ -270,6 +269,10 @@ namespace mame
                     ii[j] = (int)(0x7fff * temp[j]);
                 }
             }
+        }
+        public void ay8910_postload()
+        {
+            stream.updatesamplerate2();
         }
         private int mix_3D()
         {

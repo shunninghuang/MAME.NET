@@ -32,6 +32,9 @@ namespace mame
             writer.Write(audiocpurom_offset);
             writer.Write(mcu_patch_data);
             writer.Write(mcurom_offset);
+            writer.Write(key_quotient);
+            writer.Write(key_reminder);
+            writer.Write(key_numerator_high_word);
             writer.Write(namcos1_reset);
             writer.Write(wdog);
             writer.Write(dac0_value);
@@ -99,6 +102,9 @@ namespace mame
             audiocpurom_offset = reader.ReadInt32();
             mcu_patch_data = reader.ReadInt32();
             mcurom_offset = reader.ReadInt32();
+            key_quotient = reader.ReadUInt32();
+            key_reminder = reader.ReadUInt32();
+            key_numerator_high_word = reader.ReadUInt32();
             namcos1_reset = reader.ReadInt32();
             wdog = reader.ReadInt32();
             dac0_value = reader.ReadInt32();

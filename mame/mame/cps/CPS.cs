@@ -1428,6 +1428,12 @@ namespace mame
                     case "sf2hf":
                     case "sf2hfu":
                     case "sf2mix":
+                    case "sf2mix120":
+                    case "sf2mix110":
+                    case "sf2mix100":
+                    case "sf2mix099a":
+                    case "sf2mix098c":
+                    case "sf2mix097":
                         cpsb_addr = 0x32;
                         cpsb_value = -1;
                         mult_factor1 = 0x00;

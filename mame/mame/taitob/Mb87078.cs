@@ -111,5 +111,30 @@ namespace mame
             }
             gain_recalc(which);
         }
+        public static void SaveStateBinary_MB87078(BinaryWriter writer)
+        {
+            int i;
+            for (i = 0; i < 4; i++)
+            {
+                writer.Write(c[0].gain[i]);
+            }
+            writer.Write(c[0].channel_latch);
+            for (i = 0; i < 8; i++)
+            {
+                writer.Write(c[0].latch[i]);
+            }
+            writer.Write(c[0].reset_comp);
+        }
+        public static void LoadStateBinary_MB87078(BinaryReader reader)
+        {
+            int i;
+            for (i = 0; i < 4; i++)
+            {
+                c[0].gain[i] = reader.ReadInt32();
+            }
+            c[0].channel_latch = reader.ReadInt32();
+            c[0].latch = reader.ReadBytes(8);
+            c[0].reset_comp = reader.ReadByte();
+        }
     }
 }

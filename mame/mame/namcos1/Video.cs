@@ -34,6 +34,11 @@ namespace mame
             ttmap[5].tilemap_set_scrolldx(73, 512 - 73);
             ttmap[4].tilemap_set_scrolldy(0x10, 0x110);
             ttmap[5].tilemap_set_scrolldy(0x10, 0x110);
+            for (i = 0; i < 15; i++)
+            {
+                Drawgfx.gfx_drawmode_table[i] = 2;
+            }
+            Drawgfx.gfx_drawmode_table[15] = 0;
             for (i = 0; i < 0x2000; i++)
             {
                 Palette.palette_entry_set_color1(i, Palette.make_rgb(0, 0, 0));
@@ -136,7 +141,7 @@ namespace mame
                 namcos1_playfield_control[offset & 0x1f] = data;
             }
         }
-        public static void draw_sprites(int iBitmap, RECT cliprect)
+        public static void draw_sprites(RECT cliprect)
         {
             int source_offset;
             int sprite_xoffs = namcos1_spriteram[0x800 + 0x07f5] + ((namcos1_spriteram[0x800 + 0x07f4] & 1) << 8);
@@ -159,7 +164,6 @@ namespace mame
                 int sprite_bank = attr1 & 7;
                 int priority = (namcos1_spriteram[source_offset + 14] & 0xe0) >> 5;
                 int pri_mask = (0xff << (priority + 1)) & 0xff;
-                namcos1_pri = priority;
                 sprite += sprite_bank * 256;
                 color = color >> 1;
                 sx += sprite_xoffs;
@@ -172,12 +176,13 @@ namespace mame
                     flipy ^= 1;
                 }
                 sy++;
-                Drawgfx.common_drawgfx_na(sizex, sizey, tx, ty, sprite, color, flipx, flipy, sx & 0x1ff, ((sy + 16) & 0xff) - 16, pri_mask, cliprect);
+                Drawgfx.common_drawgfx_namcos1(sizex, sizey, tx, ty, sprite, color, flipx, flipy, sx & 0x1ff, ((sy + 16) & 0xff) - 16, pri_mask | (1 << 31), cliprect);
             }
         }
         public static void video_update_namcos1()
         {
             int i, j, scrollx, scrolly;
+            int[] disp_x = new int[] { 25, 27, 28, 29 };
             byte priority;
             RECT new_clip = new RECT();
             new_clip.min_x = 0x49;
@@ -189,25 +194,34 @@ namespace mame
             Array.Copy(uu2000, Video.bitmapbase[Video.curbitmap], 0x40000);
             i = ((namcos1_cus116[0] << 8) | namcos1_cus116[1]) - 1;
             if (new_clip.min_x < i)
+            {
                 new_clip.min_x = i;
+            }
             i = ((namcos1_cus116[2] << 8) | namcos1_cus116[3]) - 1 - 1;
             if (new_clip.max_x > i)
+            {
                 new_clip.max_x = i;
+            }
             i = ((namcos1_cus116[4] << 8) | namcos1_cus116[5]) - 0x11;
             if (new_clip.min_y < i)
+            {
                 new_clip.min_y = i;
+            }
             i = ((namcos1_cus116[6] << 8) | namcos1_cus116[7]) - 0x11 - 1;
             if (new_clip.max_y > i)
+            {
                 new_clip.max_y = i;
+            }
             if (new_clip.max_x < new_clip.min_x || new_clip.max_y < new_clip.min_y)
+            {
                 return;
+            }
             for (i = 0; i < 6; i++)
             {
                 ttmap[i].tilemap_set_palette_offset((namcos1_playfield_control[i + 24] & 7) * 256);
             }
             for (i = 0; i < 4; i++)
-            {
-                int[] disp_x = new int[] { 25, 27, 28, 29 };
+            {                
                 j = i << 2;
                 scrollx = (namcos1_playfield_control[j + 1] + (namcos1_playfield_control[j + 0] << 8)) - disp_x[i];
                 scrolly = (namcos1_playfield_control[j + 3] + (namcos1_playfield_control[j + 2] << 8)) + 8;
@@ -220,13 +234,6 @@ namespace mame
                 ttmap[i].tilemap_set_scrolly(0, scrolly);
             }
             Array.Clear(Tilemap.priority_bitmap, 0, 0x40000);
-            for (i = 0; i < 0x200; i++)
-            {
-                for (j = 0; j < 0x200; j++)
-                {
-                    Tilemap.priority_bitmap[i, j] = 0;
-                }
-            }
             for (priority = 0; priority < 8; priority++)
             {
                 for (i = 0; i < 6; i++)
@@ -237,7 +244,7 @@ namespace mame
                     }
                 }
             }
-            draw_sprites(Video.curbitmap, new_clip);
+            draw_sprites(new_clip);            
         }
         public static void video_eof_namcos1()
         {

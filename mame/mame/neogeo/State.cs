@@ -73,6 +73,9 @@ namespace mame
             {
                 writer.Write(Sound.utempdata[i]);
             }
+            writer.Write(AY8910.AA8910[0].stream.sample_rate);
+            writer.Write(AY8910.AA8910[0].stream.new_sample_rate);
+            writer.Write(AY8910.AA8910[0].stream.gain);
             writer.Write(AY8910.AA8910[0].stream.output_sampindex);
             writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
             writer.Write(Sound.ym2610stream.output_sampindex);
@@ -144,6 +147,9 @@ namespace mame
             {
                 Sound.utempdata[i] = reader.ReadUInt16();
             }
+            AY8910.AA8910[0].stream.sample_rate = reader.ReadInt32();
+            AY8910.AA8910[0].stream.new_sample_rate = reader.ReadInt32();
+            AY8910.AA8910[0].stream.gain = reader.ReadInt32();
             AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
             AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
             Sound.ym2610stream.output_sampindex = reader.ReadInt32();

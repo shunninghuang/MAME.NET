@@ -41,6 +41,9 @@ namespace mame
             MSM5205.mm1[0].SaveStateBinary(writer);
             writer.Write(Sound.latched_value[0]);
             writer.Write(Sound.utempdata[0]);
+            writer.Write(AY8910.AA8910[0].stream.sample_rate);
+            writer.Write(AY8910.AA8910[0].stream.new_sample_rate);
+            writer.Write(AY8910.AA8910[0].stream.gain);
             writer.Write(AY8910.AA8910[0].stream.output_sampindex);
             writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
             writer.Write(YM2203.FF2203[0].stream.output_sampindex);
@@ -84,6 +87,9 @@ namespace mame
             MSM5205.mm1[0].LoadStateBinary(reader);
             Sound.latched_value[0] = reader.ReadUInt16();
             Sound.utempdata[0] = reader.ReadUInt16();
+            AY8910.AA8910[0].stream.sample_rate = reader.ReadInt32();
+            AY8910.AA8910[0].stream.new_sample_rate = reader.ReadInt32();
+            AY8910.AA8910[0].stream.gain = reader.ReadInt32();
             AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
             AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
             YM2203.FF2203[0].stream.output_sampindex = reader.ReadInt32();

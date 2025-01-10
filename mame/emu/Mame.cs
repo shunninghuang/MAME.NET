@@ -506,6 +506,7 @@ namespace mame
                     break;
                 case "Data East":
                     Dataeast.bg_tilemap.all_tiles_dirty = true;
+                    AY8910.AA8910[0].ay8910_postload();
                     YM2203.FF2203[0].ym2203_postload();
                     break;
                 case "Tehkan":
@@ -514,11 +515,16 @@ namespace mame
                     break;
                 case "Neo Geo":
                     Neogeo.regenerate_pens();
+                    AY8910.AA8910[0].ay8910_postload();
                     YM2610.F2610.ym2610_postload();
                     break;
                 case "Technos":
                     Technos.bg_tilemap.all_tiles_dirty = true;
                     Technos.fg_tilemap.all_tiles_dirty = true;
+                    for (i = 0; i < 3; i++)
+                    {
+                        AY8910.AA8910[0].ay8910_postload();
+                    }
                     YM2151.ym2151_postload();
                     break;
                 case "Namco System 1":
@@ -570,6 +576,7 @@ namespace mame
                         case "boblcave":
                         case "bublcave11":
                         case "bublcave10":
+                            AY8910.AA8910[0].ay8910_postload();
                             YM2203.FF2203[0].ym2203_postload();
                             break;
                         case "opwolf":
@@ -587,7 +594,31 @@ namespace mame
                     Taitob.bg_tilemap.all_tiles_dirty = true;
                     Taitob.fg_tilemap.all_tiles_dirty = true;
                     Taitob.tx_tilemap.all_tiles_dirty = true;
-                    YM2610.F2610.ym2610_postload();
+                    AY8910.AA8910[0].ay8910_postload();
+                    switch (Machine.sName)
+                    {
+                        case "masterw":
+                        case "masterwu":
+                        case "masterwj":
+                        case "yukiwo":
+                            YM2203.FF2203[0].ym2203_postload();
+                            break;
+                        case "nastar":
+                        case "nastarw":
+                        case "rastsag2":
+                        case "rambo3":
+                        case "rambo3u":
+                        case "rambo3p":
+                        case "crimec":
+                        case "crimecu":
+                        case "crimecj":
+                        case "silentd":
+                        case "silentdj":
+                        case "silentdu":
+                        case "pbobble":
+                            YM2610.F2610.ym2610_postload();
+                            break;
+                    }
                     break;
                 case "Konami 68000":
                     Konami68000.K052109_tilemap[0].all_tiles_dirty = true;
@@ -618,6 +649,8 @@ namespace mame
                             Capcom.fg_tilemap.all_tiles_dirty = true;
                             Capcom.bg_tilemap.tilemap_set_scrollx(0, Capcom.scrollx[0] + 256 * Capcom.scrollx[1]);
                             Capcom.fg_tilemap.tilemap_set_scrollx(0, Capcom.scrolly[0] + 256 * Capcom.scrolly[1]);
+                            AY8910.AA8910[0].ay8910_postload();
+                            AY8910.AA8910[1].ay8910_postload();
                             YM2203.FF2203[0].ym2203_postload();
                             YM2203.FF2203[1].ym2203_postload();
                             break;

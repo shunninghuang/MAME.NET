@@ -156,6 +156,9 @@ namespace mame
                         case "yukiwo":
                         case "rambo3":
                         case "rambo3u":
+                            Taitob.video_start_taitob_color_order2();
+                            machine_reset_callback = Taito.machine_reset_null;
+                            break;
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
