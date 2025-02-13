@@ -15,7 +15,7 @@ namespace mame
     }
     public partial class Tmap
     {
-        public void tilemap_draw_instanceKonami68000(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_konami68000(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;
@@ -120,18 +120,18 @@ namespace mame
                 nexty = Math.Min(nexty, y2);
             }
         }
-        public void tile_updateKonami68000_0(int col, int row)
+        public void tile_update_konami68000_0(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             int tile_index;
             int code, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             int flipy = 0;
             tile_index = row * cols + col;
             code = Konami68000.K052109_ram[Konami68000.K052109_videoram_F_offset + tile_index] + 256 * Konami68000.K052109_ram[Konami68000.K052109_videoram2_F_offset + tile_index];
             color = Konami68000.K052109_ram[Konami68000.K052109_colorram_F_offset + tile_index];
-            int flags = 0;
+            byte flags = 0;
             int priority = 0;
             int bank = Konami68000.K052109_charrombank[(color & 0x0c) >> 2];
             if (Konami68000.has_extra_video_ram != 0)
@@ -141,14 +141,15 @@ namespace mame
             color = (color & 0xf3) | ((bank & 0x03) << 2);
             bank >>= 2;
             flipy = color & 0x02;
-            int code2, color2,flags2;
+            int code2, color2;
+            int flags2;
             Konami68000.K052109_callback(0, bank, code, color, flags, priority, out code2, out color2,out flags2);
             code = code2;
             color = color2;
-            flags = flags2;
+            flags = (byte)flags2;
             if ((Konami68000.K052109_tileflip_enable & 1) == 0)
             {
-                flags &= ~0x01;
+                flags &= unchecked((byte)(~0x01));
             }
             if (flipy != 0 && (Konami68000.K052109_tileflip_enable & 2) != 0)
             {
@@ -157,22 +158,21 @@ namespace mame
             code = code % Konami68000.K052109_tilemap[0].total_elements;
             pen_data_offset = code * 0x40;
             palette_base = 0x10 * color;
-            group = 0;
-            flags = flags ^ (attributes & 0x03);
-            tileflags[row, col] = tile_drawKonami68000(Konami68000.gfx12rom, pen_data_offset, x0, y0, palette_base, group, flags);
+            flags = (byte)(flags ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(Konami68000.gfx12rom, pen_data_offset, x0, y0, palette_base,0,0, flags);
         }
-        public void tile_updateKonami68000_1(int col, int row)
+        public void tile_update_konami68000_1(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             int tile_index;
             int code, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             int flipy = 0;
             tile_index = row * cols + col;
             code = Konami68000.K052109_ram[Konami68000.K052109_videoram_A_offset + tile_index] + 256 * Konami68000.K052109_ram[Konami68000.K052109_videoram2_A_offset + tile_index];
             color = Konami68000.K052109_ram[Konami68000.K052109_colorram_A_offset + tile_index];
-            int flags = 0;
+            byte flags = 0;
             int priority = 0;
             int bank = Konami68000.K052109_charrombank[(color & 0x0c) >> 2];
             if (Konami68000.has_extra_video_ram != 0)
@@ -186,10 +186,10 @@ namespace mame
             Konami68000.K052109_callback(1, bank, code, color, flags, priority, out code2, out color2,out flags2);
             code = code2;
             color = color2;
-            flags = flags2;
+            flags = (byte)flags2;
             if ((Konami68000.K052109_tileflip_enable & 1) == 0)
             {
-                flags &= ~0x01;
+                flags &= unchecked((byte)~0x01);
             }
             if (flipy != 0 && (Konami68000.K052109_tileflip_enable & 2) != 0)
             {
@@ -198,22 +198,21 @@ namespace mame
             code = code % Konami68000.K052109_tilemap[1].total_elements;
             pen_data_offset = code * 0x40;
             palette_base = 0x10 * color;
-            group = 0;
-            flags = flags ^ (attributes & 0x03);
-            tileflags[row, col] = tile_drawKonami68000(Konami68000.gfx12rom, pen_data_offset, x0, y0, palette_base, group, flags);
+            flags = (byte)(flags ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(Konami68000.gfx12rom, pen_data_offset, x0, y0, palette_base, 0,0, flags);
         }
-        public void tile_updateKonami68000_2(int col, int row)
+        public void tile_update_konami68000_2(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             int tile_index;
             int code, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             int flipy = 0;
             tile_index = row * cols + col;
             code = Konami68000.K052109_ram[Konami68000.K052109_videoram_B_offset + tile_index] + 256 * Konami68000.K052109_ram[Konami68000.K052109_videoram2_B_offset + tile_index];
             color = Konami68000.K052109_ram[Konami68000.K052109_colorram_B_offset + tile_index];
-            int flags = 0;
+            byte flags = 0;
             int priority = 0;
             int bank = Konami68000.K052109_charrombank[(color & 0x0c) >> 2];
             if (Konami68000.has_extra_video_ram != 0)
@@ -227,10 +226,10 @@ namespace mame
             Konami68000.K052109_callback(2, bank, code, color, flags, priority, out code2, out color2,out flags2);
             code = code2;
             color = color2;
-            flags = flags2;
+            flags = (byte)flags2;
             if ((Konami68000.K052109_tileflip_enable & 1) == 0)
             {
-                flags &= ~0x01;
+                flags &= unchecked((byte)~0x01);
             }
             if (flipy != 0 && (Konami68000.K052109_tileflip_enable & 2) != 0)
             {
@@ -239,48 +238,8 @@ namespace mame
             code = code % Konami68000.K052109_tilemap[2].total_elements;
             pen_data_offset = code * 0x40;
             palette_base = 0x10 * color;
-            group = 0;
-            flags = flags ^ (attributes & 0x03);
-            tileflags[row, col] = tile_drawKonami68000(Konami68000.gfx12rom, pen_data_offset, x0, y0, palette_base, group, flags);
-        }
-        public byte tile_drawKonami68000(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, 0x40);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += tileheight - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += tilewidth - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < tileheight; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < tilewidth; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;
-                    pixmap[(offsety1 % width) * width + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1 % width, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
+            flags = (byte)(flags ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(Konami68000.gfx12rom, pen_data_offset, x0, y0, palette_base, 0,0, flags);
         }
     }
 }

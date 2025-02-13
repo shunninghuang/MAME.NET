@@ -104,7 +104,7 @@ namespace mame
         {
             palette_offset = offset;
         }
-        public static void tilemap_set_flip(Tmap tmap,byte _attributes)
+        public static void tilemap_set_flip(Tmap tmap, byte _attributes)
         {
             if (tmap == null)
             {
@@ -113,6 +113,7 @@ namespace mame
                     if (t1.attributes != _attributes)
                     {
                         t1.attributes = _attributes;
+                        t1.mappings_update();
                     }
                 }
             }
@@ -143,7 +144,22 @@ namespace mame
         }
         public void tilemap_mark_tile_dirty(int row, int col)
         {
-            tileflags[row, col] = Tilemap.TILE_FLAG_DIRTY;
+            if (attributes == 0)
+            {
+                tileflags[row, col] = Tilemap.TILE_FLAG_DIRTY;
+            }
+            else if (attributes == 1)
+            {
+                int i1 = 1;
+            }
+            else if (attributes == 2)
+            {
+                int i1 = 1;
+            }
+            else if (attributes == 3)
+            {
+                tileflags[rows - 1 - row, cols - 1 - col] = Tilemap.TILE_FLAG_DIRTY;
+            }
         }
         public void tilemap_set_scroll_rows(int scroll_rows)
         {
@@ -264,6 +280,82 @@ namespace mame
         {
             all_tiles_dirty = true;
         }
+        public byte tile_draw(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base,byte category, byte group, byte flags)
+        {
+            byte andmask = 0xff, ormask = 0;
+            int dx0 = 1, dy0 = 1;
+            int tx, ty;
+            byte pen, map;
+            int offset1 = 0;
+            int offsety1;
+            int xoffs;
+            Array.Copy(bb1, pen_data_offset, pen_data, 0, tilewidth * tileheight);
+            if ((flags & Tilemap.TILE_FLIPY) != 0)
+            {
+                y0 += tileheight - 1;
+                dy0 = -1;
+            }
+            if ((flags & Tilemap.TILE_FLIPX) != 0)
+            {
+                x0 += tilewidth - 1;
+                dx0 = -1;
+            }
+            for (ty = 0; ty < tileheight; ty++)
+            {
+                xoffs = 0;
+                offsety1 = y0;
+                y0 += dy0;
+                for (tx = 0; tx < tilewidth; tx++)
+                {
+                    pen = pen_data[offset1];
+                    map = pen_to_flags[group, pen];
+                    offset1++;
+                    pixmap[offsety1 * width + x0 + xoffs] = (ushort)(palette_base + pen);
+                    flagsmap[offsety1, x0 + xoffs] = (byte)(map | category);
+                    andmask &= map;
+                    ormask |= map;
+                    xoffs += dx0;
+                }
+            }
+            return (byte)(andmask ^ ormask);
+        }
+        public byte tile_apply_bitmask(byte[] bb1, int maskdata_offset, int x0, int y0, byte category, byte flags)
+        {
+            byte andmask = 0xff, ormask = 0;
+            int dx0 = 1, dy0 = 1;
+            int bitoffs = 0;
+            int tx, ty;
+            int offsety1;
+            if ((flags & Tilemap.TILE_FLIPY) != 0)
+            {
+                y0 += tileheight - 1;
+                dy0 = -1;
+            }
+            if ((flags & Tilemap.TILE_FLIPX) != 0)
+            {
+                x0 += tilewidth - 1;
+                dx0 = -1;
+            }
+            for (ty = 0; ty < tileheight; ty++)
+            {
+                int xoffs = 0;
+                offsety1 = y0;
+                y0 += dy0;
+                for (tx = 0; tx < tilewidth; tx++)
+                {
+                    byte map = flagsmap[offsety1, x0 + xoffs];
+                    if ((bb1[maskdata_offset + bitoffs / 8] & (0x80 >> (bitoffs & 7))) == 0)
+                    {
+                        map = flagsmap[offsety1, x0 + xoffs] = category;
+                    }
+                    andmask &= map;
+                    ormask |= map;
+                    xoffs += dx0;
+                    bitoffs++;
+                }
+            }
+            return (byte)(andmask ^ ormask);
+        }
     }
     public class Tilemap
     {
@@ -289,6 +381,7 @@ namespace mame
                 case "CPS-1":
                 case "CPS-1(QSound)":
                 case "CPS2":
+                case "CPS2turbo":
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
@@ -341,8 +434,8 @@ namespace mame
                     break;
                 case "Taito B":
                     screen_width = 0x200;
-                    screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
+                    screen_height = 0x100;
+                    priority_bitmap = new byte[0x100, 0x200];
                     Taitob.tilemap_init();
                     break;
                 case "Konami 68000":
@@ -363,6 +456,7 @@ namespace mame
                 case "CPS-1":
                 case "CPS-1(QSound)":
                 case "CPS2":
+                case "CPS2turbo":
                 case "Data East":
                 case "Tehkan":
                 case "Technos":

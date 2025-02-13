@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace mame
 {
@@ -23,7 +24,7 @@ namespace mame
             taitob_scroll = new ushort[0x400];
             Memory.mainram = new byte[0x10000];
             mainram2 = new byte[0x1e80];
-            mainram3 = new byte[0x2000];
+            mainram3 = new byte[0x20000];
             Memory.audioram = new byte[0x2000];
             bg_rambank = new ushort[2];
             fg_rambank = new ushort[2];
@@ -44,6 +45,7 @@ namespace mame
             Memory.mainrom = Machine.GetRom("maincpu.rom");
             Memory.audiorom = Machine.GetRom("audiocpu.rom");
             gfxrom = Machine.GetRom("gfx1.rom");
+            OKI6295.okirom = Machine.GetRom("oki.rom");
             n = gfxrom.Length;
             gfx0rom = new byte[n * 2];
             gfx1rom = new byte[n * 2];
@@ -56,6 +58,9 @@ namespace mame
             {
                 gfx0rom[((i / 0x10) % 8 + (i / 0x80 * 0x10) + ((i / 8) % 2) * 8) * 8 + (i % 8)] = gfx1rom[i];
             }
+            /*BinaryWriter bw1 = new BinaryWriter(new FileStream("gfx1.dmp", FileMode.Create));
+            bw1.Write(gfx1rom, 0, n * 2);
+            bw1.Close();*/
             FM.ymsndrom = Machine.GetRom("ymsnd.rom");
             YMDeltat.ymsnddeltatrom = Machine.GetRom("ymsnddeltat.rom");
             if (Memory.mainrom == null || gfxrom == null || Memory.audiorom == null)
@@ -71,6 +76,10 @@ namespace mame
                     case "masterwj":
                     case "yukiwo":
                     case "nastarw":
+                    case "ashura":
+                    case "ashuraj":
+                    case "ashurau":
+                    case "spacedxo":
                         Taito.dswa = 0xfe;
                         Taito.dswb = 0xff;
                         break;
@@ -79,7 +88,25 @@ namespace mame
                     case "rambo3":
                     case "rambo3u":
                     case "rambo3p":
+                    case "crimec":
+                    case "crimecu":
+                    case "crimecj":
+                    case "tetrist":
+                    case "tetrista":
+                    case "viofight":
+                    case "viofightu":
+                    case "viofightj":
+                    case "hitice":
+                    case "hiticerb":
+                    case "hiticej":
+                    case "selfeena":
+                    case "ryujin":
+                    case "qzshowby":
                     case "pbobble":
+                    case "spacedx":
+                    case "spacedxj":
+                    case "sbm":
+                    case "realpunc":
                         Taito.dswa = 0xff;
                         Taito.dswb = 0xff;
                         break;
@@ -200,6 +227,16 @@ namespace mame
             Timer.timer_adjust_periodic(timer, new Atime(0, (long)(10000 * Cpuexec.cpu[0].attoseconds_per_cycle)), Attotime.ATTOTIME_NEVER);
             Cpuint.cpunum_set_input_line(0, 4, LineState.HOLD_LINE);
         }
+        public static void realpunc_interrupt3()
+        {
+            Cpuint.cpunum_set_input_line(0, 3, LineState.HOLD_LINE);
+        }
+        public static void realpunc_interrupt()
+        {
+            Timer.emu_timer timer = Timer.timer_alloc_common(realpunc_interrupt3, "vblank_interrupt2", true);
+            Timer.timer_adjust_periodic(timer, new Atime(0, (long)(10000 * Cpuexec.cpu[0].attoseconds_per_cycle)), Attotime.ATTOTIME_NEVER);
+            Cpuint.cpunum_set_input_line(0, 2, LineState.HOLD_LINE);
+        }
         public static ushort tracky1_hi_r()
         {
             return 0;
@@ -242,6 +279,10 @@ namespace mame
                 //sndti_set_output_gain(type, 1, 0, percent / 100.0);
                 //sndti_set_output_gain(type, 2, 0, percent / 100.0);
             }
+        }
+        public static void machine_reset_hitice()
+        {
+            video_reset_hitice();
         }
         public static void machine_reset_mb87078()
         {
@@ -307,6 +348,18 @@ namespace mame
             Eeprom.eeprom_set_clock_line(((data & 0x08) != 0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
             Eeprom.eeprom_set_cs_line(((data & 0x10) != 0) ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
         }
+        public static ushort player_34_coin_ctrl_r()
+        {
+            return coin_word;
+        }
+        public static void player_34_coin_ctrl_w1(byte data)
+        {
+            coin_word = (ushort)((data << 8) | (coin_word & 0xff));
+        }
+        public static void player_34_coin_ctrl_w2(byte data)
+        {
+            coin_word = (ushort)((coin_word & 0xff00) | data);
+        }
         public static void player_34_coin_ctrl_w(ushort data)
         {
             coin_word = data;
@@ -328,6 +381,10 @@ namespace mame
                     break;
             }
             return result;
+        }
+        public static void realpunc_output_w()
+        {
+
         }
     }
 }

@@ -128,6 +128,34 @@ namespace mame
                     bbmp[1] = new Bitmap(384, 224);
                     video_update_callback = CPS.video_update_cps2;
                     video_eof_callback = CPS.video_eof_cps1;
+                    switch (Machine.sName)
+                    {
+                        case "sfz3mix13":
+                            video_update_callback = CPS.video_update_cps2turbo;
+                            break;
+                    }
+                    break;
+                case "CPS2turbo":
+                    screenstate.width = 0x200;
+                    screenstate.height = 0x100;
+                    screenstate.visarea.min_x = 0x30;
+                    screenstate.visarea.max_x = 0x1cf;
+                    screenstate.visarea.min_y = 0x0c;
+                    screenstate.visarea.max_y = 0xf5;
+                    fullwidth = 0x200;
+                    fullheight = 0x200;
+                    frame_update_time = new Atime(0, (long)(1e18 / 8000000) * 512 * 262);//59.637404580152669Hz
+                    screenstate.vblank_period = 0;
+                    bitmapGDI = new Bitmap(Video.fullwidth, Video.fullheight);
+                    UI.ui_update_callback = UI.ui_update_cps;
+                    bitmapbase = new ushort[2][];
+                    bitmapbase[0] = new ushort[0x200 * 0x200];
+                    bitmapbase[1] = new ushort[0x200 * 0x200];
+                    bbmp = new Bitmap[3];
+                    bbmp[0] = new Bitmap(512, 256);
+                    bbmp[1] = new Bitmap(416, 234);
+                    video_update_callback = CPS.video_update_cps2turbo;
+                    video_eof_callback = CPS.video_eof_cps1;
                     break;
                 case "Data East":
                     screenstate.width = 0x100;
@@ -637,7 +665,7 @@ namespace mame
             vblank_begin_timer = Timer.timer_alloc_common(vblank_begin_callback, "vblank_begin_callback", false);
             Timer.timer_adjust_periodic(vblank_begin_timer, video_screen_get_time_until_vblank_start(), Attotime.ATTOTIME_NEVER);
             scanline0_timer = Timer.timer_alloc_common(scanline0_callback, "scanline0_callback", false);
-            Timer.timer_adjust_periodic(scanline0_timer, video_screen_get_time_until_pos(0, 0), Attotime.ATTOTIME_NEVER);
+            video_screen_configure(width, height, Video.screenstate.visarea, Video.screenstate.frame_period);
             vblank_end_timer = Timer.timer_alloc_common(vblank_end_callback, "vblank_end_callback", false);
             switch (Machine.sBoard)
             {
@@ -648,6 +676,7 @@ namespace mame
                 case "Taito B":                
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 262);
                     Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
                     break;

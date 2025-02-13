@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class Tmap
     {
-        public void tilemap_draw_instanceTaito_opwolf(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_taito_opwolf(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;
@@ -110,14 +110,14 @@ namespace mame
                 nexty = Math.Min(nexty, y2);
             }
         }
-        public void tile_updateTaitobg_opwolf(int col, int row)
+        public void tile_update_taito_bg_opwolf(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
+            byte flags;
             int tile_index;
-            int code, color,attr;
-            int pen_data_offset, palette_base, group;
+            int code, color, attr;
+            int pen_data_offset, palette_base;
             tile_index = row * cols + col;
             if (Taito.PC080SN_dblwidth == 0)
             {
@@ -133,18 +133,17 @@ namespace mame
             code = code % Taito.PC080SN_tilemap[0][0].total_elements;
             pen_data_offset = code * 0x40;
             palette_base = 0x10 * color;
-            group = 0;
-            flags = (((attr & 0xc000) >> 14) & 3) ^ (attributes & 0x03);
-            tileflags[row, col] = tile_drawTaitobg_opwolf(Taito.gfx1rom, pen_data_offset, x0, y0, palette_base, group, flags);
+            flags = (byte)((((attr & 0xc000) >> 14) & 3) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(Taito.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
-        public void tile_updateTaitofg_opwolf(int col, int row)
+        public void tile_update_taito_fg_opwolf(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
+            byte flags;
             int tile_index;
             int code, color, attr;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             tile_index = row * cols + col;
             if (Taito.PC080SN_dblwidth == 0)
             {
@@ -160,48 +159,8 @@ namespace mame
             code = code % Taito.PC080SN_tilemap[0][1].total_elements;
             pen_data_offset = code * 0x40;
             palette_base = 0x10 * color;
-            group = 0;
-            flags = (((attr & 0xc000) >> 14) & 3) ^ (attributes & 0x03);
-            tileflags[row, col] = tile_drawTaitobg_opwolf(Taito.gfx1rom, pen_data_offset, x0, y0, palette_base, group, flags);
-        }
-        public byte tile_drawTaitobg_opwolf(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, 0x40);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += tileheight - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += tilewidth - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < tileheight; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < tilewidth; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;
-                    pixmap[(offsety1 % width) * width + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1 % width, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
+            flags = (byte)((((attr & 0xc000) >> 14) & 3) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(Taito.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
     }
 }

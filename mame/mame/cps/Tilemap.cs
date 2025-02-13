@@ -58,18 +58,19 @@ namespace mame
                         ttmap[i].scrollcols = 1;
                         ttmap[i].rowscroll = new int[ttmap[i].scrollrows];
                         ttmap[i].colscroll = new int[ttmap[i].scrollcols];
-                        ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instanceC;
+                        ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instance_cps;
                         ttmap[i].tilemap_set_scrolldx(0, 0);
                         ttmap[i].tilemap_set_scrolldy(0x100, 0);
                     }
-                    ttmap[0].tile_update3 = ttmap[0].tile_updateC0;
-                    ttmap[1].tile_update3 = ttmap[1].tile_updateC1;
-                    ttmap[2].tile_update3 = ttmap[2].tile_updateC2;
+                    ttmap[0].tile_update3 = ttmap[0].tile_update_c0;
+                    ttmap[1].tile_update3 = ttmap[1].tile_update_c1;
+                    ttmap[2].tile_update3 = ttmap[2].tile_update_c2;
                     ttmap[0].total_elements = CPS.gfxrom.Length / 0x40;
                     ttmap[1].total_elements = CPS.gfxrom.Length / 0x80;
                     ttmap[2].total_elements = CPS.gfxrom.Length / 0x200;
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     ttmap = new Tmap[3];
                     ttmap[0] = new Tmap();
                     ttmap[0].tilewidth = 8;
@@ -113,13 +114,13 @@ namespace mame
                         ttmap[i].scrollcols = 1;
                         ttmap[i].rowscroll = new int[ttmap[i].scrollrows];
                         ttmap[i].colscroll = new int[ttmap[i].scrollcols];
-                        ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instanceC;
+                        ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instance_cps;
                         ttmap[i].tilemap_set_scrolldx(0, 0);
                         ttmap[i].tilemap_set_scrolldy(0, 0);
                     }
-                    ttmap[0].tile_update3 = ttmap[0].tile_updateC0;
-                    ttmap[1].tile_update3 = ttmap[1].tile_updateC1;
-                    ttmap[2].tile_update3 = ttmap[2].tile_updateC2;
+                    ttmap[0].tile_update3 = ttmap[0].tile_update_c0;
+                    ttmap[1].tile_update3 = ttmap[1].tile_update_c1;
+                    ttmap[2].tile_update3 = ttmap[2].tile_update_c2;
                     ttmap[0].total_elements = CPS.gfxrom.Length / 0x40;
                     ttmap[1].total_elements = CPS.gfxrom.Length / 0x80;
                     ttmap[2].total_elements = CPS.gfxrom.Length / 0x200;
@@ -129,7 +130,7 @@ namespace mame
     }
     public partial class Tmap
     {
-        public void tile_updateC0(int col, int row)
+        public void tile_update_c0(int col, int row)
         {
             byte group0, flags0;
             int x0 = 0x08 * col;
@@ -173,44 +174,9 @@ namespace mame
                 }
                 group0 = (byte)((attr & 0x0180) >> 7);
             }
-            {
-                int offset = 0;
-                byte andmask = 0xff, ormask = 0;
-                int dx0 = 1, dy0 = 1;
-                int tx, ty;
-                if ((flags0 & Tilemap.TILE_FLIPY) != 0)
-                {
-                    y0 += 0x07;
-                    dy0 = -1;
-                }
-                if ((flags0 & Tilemap.TILE_FLIPX) != 0)
-                {
-                    x0 += 0x07;
-                    dx0 = -1;
-                }
-                for (ty = 0; ty < 0x08; ty++)
-                {
-                    int offsetx1 = x0;
-                    int offsety1 = y0;
-                    int xoffs = 0;
-                    y0 += dy0;
-                    for (tx = 0; tx < 0x08; tx++)
-                    {
-                        byte pen, map;
-                        pen = pen_data[offset];
-                        map = pen_to_flags[group0, pen];
-                        pixmap[offsety1 * 0x200 + offsetx1 + xoffs] = (ushort)(palette_base0 + pen);
-                        flagsmap[offsety1, offsetx1 + xoffs] = map;
-                        andmask &= map;
-                        ormask |= map;
-                        xoffs += dx0;
-                        offset++;
-                    }
-                }
-                tileflags[row, col] = (byte)(andmask ^ ormask);
-            }
+            tileflags[row, col] = tile_draw(pen_data, 0, x0, y0, palette_base0, 0, group0, flags0);
         }
-        public void tile_updateC1(int col, int row)
+        public void tile_update_c1(int col, int row)
         {
             byte group1, flags1;
             int x0 = 0x10 * col;
@@ -246,44 +212,9 @@ namespace mame
                 flags1 = (byte)(((attr & 0x60) >> 5) & 3);
                 group1 = (byte)((attr & 0x0180) >> 7);
             }
-            {
-                int offset = 0;
-                byte andmask = 0xff, ormask = 0;
-                int dx0 = 1, dy0 = 1;
-                int tx, ty;
-                if ((flags1 & Tilemap.TILE_FLIPY) != 0)
-                {
-                    y0 += 0x0f;
-                    dy0 = -1;
-                }
-                if ((flags1 & Tilemap.TILE_FLIPX) != 0)
-                {
-                    x0 += 0x0f;
-                    dx0 = -1;
-                }
-                for (ty = 0; ty < 0x10; ty++)
-                {
-                    int offsetx1 = x0;
-                    int offsety1 = y0;
-                    int xoffs = 0;
-                    y0 += dy0;
-                    for (tx = 0; tx < 0x10; tx++)
-                    {
-                        byte pen, map;
-                        pen = pen_data[offset];
-                        map = pen_to_flags[group1, pen];
-                        pixmap[offsety1 * 0x400 + offsetx1 + xoffs] = (ushort)(palette_base1 + pen);
-                        flagsmap[offsety1, offsetx1 + xoffs] = map;
-                        andmask &= map;
-                        ormask |= map;
-                        xoffs += dx0;
-                        offset++;
-                    }
-                }
-                tileflags[row, col] = (byte)(andmask ^ ormask);
-            }
+            tileflags[row, col] = tile_draw(pen_data, 0, x0, y0, palette_base1, 0, group1, flags1);
         }
-        public void tile_updateC2(int col, int row)
+        public void tile_update_c2(int col, int row)
         {
             byte group2, flags2;
             int x0 = 0x20 * col;
@@ -319,44 +250,9 @@ namespace mame
                 flags2 = (byte)(((attr & 0x60) >> 5) & 3);
                 group2 = (byte)((attr & 0x0180) >> 7);
             }
-            {
-                int offset = 0;
-                byte andmask = 0xff, ormask = 0;
-                int dx0 = 1, dy0 = 1;
-                int tx, ty;
-                if ((flags2 & Tilemap.TILE_FLIPY) != 0)
-                {
-                    y0 += 0x1f;
-                    dy0 = -1;
-                }
-                if ((flags2 & Tilemap.TILE_FLIPX) != 0)
-                {
-                    x0 += 0x1f;
-                    dx0 = -1;
-                }
-                for (ty = 0; ty < 0x20; ty++)
-                {
-                    int offsetx1 = x0;
-                    int offsety1 = y0;
-                    int xoffs = 0;
-                    y0 += dy0;
-                    for (tx = 0; tx < 0x20; tx++)
-                    {
-                        byte pen, map;
-                        pen = pen_data[offset];
-                        map = pen_to_flags[group2, pen];
-                        pixmap[offsety1 * 0x800 + offsetx1 + xoffs] = (ushort)(palette_base2 + pen);
-                        flagsmap[offsety1, offsetx1 + xoffs] = map;
-                        andmask &= map;
-                        ormask |= map;
-                        xoffs += dx0;
-                        offset++;
-                    }
-                }
-                tileflags[row, col] = (byte)(andmask ^ ormask);
-            }
+            tileflags[row, col] = tile_draw(pen_data, 0, x0, y0, palette_base2, 0, group2, flags2);
         }
-        public void tilemap_draw_instanceC(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_cps(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;

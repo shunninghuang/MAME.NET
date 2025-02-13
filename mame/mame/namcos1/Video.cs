@@ -190,7 +190,7 @@ namespace mame
             new_clip.min_y = 0x10;
             new_clip.max_y = 0xef;
             Video.flip_screen_set_no_update((namcos1_spriteram[0x800 + 0x07f6] & 1) != 0);
-            tilemap_set_flip(Video.flip_screen_get() ? (byte)(Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : (byte)0);
+            Tmap.tilemap_set_flip(null, Video.flip_screen_get() ? (byte)(Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : (byte)0);
             Array.Copy(uu2000, Video.bitmapbase[Video.curbitmap], 0x40000);
             i = ((namcos1_cus116[0] << 8) | namcos1_cus116[1]) - 1;
             if (new_clip.min_x < i)

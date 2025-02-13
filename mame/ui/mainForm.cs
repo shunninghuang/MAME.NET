@@ -170,6 +170,26 @@ namespace ui
                     CPS.CPSInit();
                     CPS.GDIInit();
                     break;
+                case "CPS2turbo":
+                    Video.nMode = 2;
+                    itemSize = new ToolStripMenuItem[Video.nMode];
+                    for (i = 0; i < Video.nMode; i++)
+                    {
+                        itemSize[i] = new ToolStripMenuItem();
+                        itemSize[i].Size = new Size(152, 22);
+                        itemSize[i].Click += new EventHandler(itemsizeToolStripMenuItem_Click);
+                    }
+                    itemSize[0].Text = "512x256";
+                    itemSize[1].Text = "416x234";
+                    resetToolStripMenuItem.DropDownItems.Clear();
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
+                    itemSelect();
+                    cpsToolStripMenuItem.Enabled = true;
+                    CPS.CPSInit();
+                    CPS.GDIInit();
+                    break;
+                    break;
                 case "Data East":
                     Video.nMode = 1;
                     itemSize = new ToolStripMenuItem[Video.nMode];
@@ -946,6 +966,22 @@ namespace ui
                         Video.offsety = 16;
                         Video.width = 384;
                         Video.height = 224;
+                    }
+                    break;
+                case "CPS2turbo":
+                    if (Video.iMode == 0)
+                    {
+                        Video.offsetx = 0;
+                        Video.offsety = 0;
+                        Video.width = 512;
+                        Video.height = 256;
+                    }
+                    else if (Video.iMode == 1)
+                    {
+                        Video.offsetx = 48;
+                        Video.offsety = 12;
+                        Video.width = 416;
+                        Video.height = 234;
                     }
                     break;
                 case "Data East":

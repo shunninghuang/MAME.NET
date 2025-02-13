@@ -75,10 +75,10 @@ namespace mame
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
+            byte flags;
             int tile_index=0;
             int code, attr, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             if (attributes == 0)
             {
                 tile_index = Technos.background_scan(col, row);
@@ -98,20 +98,18 @@ namespace mame
             attr = Technos.ddragon_bgvideoram[2 * tile_index];
             code = (Technos.ddragon_bgvideoram[2 * tile_index + 1] + ((attr & 0x07) << 8)) % total_elements;
             color = (attr >> 3) & 0x07;
-            flags = ((attr & 0xc0) >> 6) & 3;
+            flags = (byte)(((attr & 0xc0) >> 6) & 3);
             pen_data_offset = code * 0x100;
             palette_base = 0x100 + 0x10 * color;
-            group = 0;
-            tileflags[row, col] = tile_draw_ddragon(Technos.gfx3rom, pen_data_offset, x0, y0, palette_base, group, flags);
+            tileflags[row, col] = tile_draw(Technos.gfx3rom, pen_data_offset, x0, y0, palette_base, 0,0, flags);
         }
         public void tile_update_ddragon_fg(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
             int tile_index = 0;
             int code, attr, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             if (attributes == 0)
             {
                 tile_index = row * 0x20 + col;
@@ -131,50 +129,9 @@ namespace mame
             attr = Technos.ddragon_fgvideoram[2 * tile_index];
             code = (Technos.ddragon_fgvideoram[2 * tile_index + 1] + ((attr & 0x07) << 8)) % total_elements;
             color = attr >> 5;
-            flags = 0;
             pen_data_offset = code * 0x40;
             palette_base = 0x10 * color;
-            group = 0;
-            tileflags[row, col] = tile_draw_ddragon(Technos.gfx1rom, pen_data_offset, x0, y0, palette_base, group, flags);
-        }
-        public byte tile_draw_ddragon(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, tilewidth * tileheight);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += tileheight - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += tilewidth - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < tileheight; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < tilewidth; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;
-                    pixmap[(offsety1 % width) * width + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1 % width, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
+            tileflags[row, col] = tile_draw(Technos.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, 0);
         }
         public void tilemap_draw_instance_technos_ddragon(RECT cliprect, int xpos, int ypos)
         {

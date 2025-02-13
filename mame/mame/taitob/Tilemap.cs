@@ -2,26 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace mame
 {
     public partial class Taitob
-    {        
+    {
         public static Tmap bg_tilemap, fg_tilemap, tx_tilemap;
         public static void tilemap_init()
         {
             int i;
             Taito.taitoic_init();
-            framebuffer = new ushort[2][];
-            for (i = 0; i < 2; i++)
-            {
-                framebuffer[i] = new ushort[0x200 * 0x100];
-            }
             bg_tilemap = new Tmap();
             bg_tilemap.cols = 64;
             bg_tilemap.rows = 64;
             bg_tilemap.tilewidth = 16;
-            bg_tilemap.tileheight = 16;            
+            bg_tilemap.tileheight = 16;
             bg_tilemap.width = 0x400;
             bg_tilemap.height = 0x400;
             bg_tilemap.enable = true;
@@ -31,7 +27,7 @@ namespace mame
             bg_tilemap.flagsmap = new byte[0x400, 0x400];
             bg_tilemap.tileflags = new byte[64, 64];
             bg_tilemap.pen_data = new byte[0x100];
-            bg_tilemap.pen_to_flags = new byte[1, 16];
+            bg_tilemap.pen_to_flags = new byte[1, 0x10];
             for (i = 0; i < 16; i++)
             {
                 bg_tilemap.pen_to_flags[0, i] = 0x10;
@@ -40,9 +36,9 @@ namespace mame
             bg_tilemap.scrollcols = 1;
             bg_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
             bg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instanceTaitob;
-            bg_tilemap.tile_update3 = bg_tilemap.tile_updateTaitobbg;
-            
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_taitob;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_taitob_bg;
+
             fg_tilemap = new Tmap();
             fg_tilemap.cols = 64;
             fg_tilemap.rows = 64;
@@ -58,18 +54,17 @@ namespace mame
             fg_tilemap.tileflags = new byte[64, 64];
             fg_tilemap.pen_data = new byte[0x100];
             fg_tilemap.pen_to_flags = new byte[1, 16];
+            fg_tilemap.pen_to_flags[0, 0] = 0;
             for (i = 1; i < 16; i++)
             {
                 fg_tilemap.pen_to_flags[0, i] = 0x10;
             }
-            fg_tilemap.pen_to_flags[0, 0] = 0;
             fg_tilemap.scrollrows = 1;
             fg_tilemap.scrollcols = 1;
             fg_tilemap.rowscroll = new int[fg_tilemap.scrollrows];
             fg_tilemap.colscroll = new int[fg_tilemap.scrollcols];
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instanceTaitob;
-            fg_tilemap.tile_update3 = fg_tilemap.tile_updateTaitobfg;
-            
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_taitob;
+            fg_tilemap.tile_update3 = fg_tilemap.tile_update_taitob_fg;
 
             tx_tilemap = new Tmap();
             tx_tilemap.cols = 64;
@@ -86,22 +81,26 @@ namespace mame
             tx_tilemap.tileflags = new byte[32, 64];
             tx_tilemap.pen_data = new byte[0x40];
             tx_tilemap.pen_to_flags = new byte[1, 16];
+            tx_tilemap.pen_to_flags[0, 0] = 0;
             for (i = 1; i < 16; i++)
             {
                 tx_tilemap.pen_to_flags[0, i] = 0x10;
             }
-            tx_tilemap.pen_to_flags[0, 0] = 0;
             tx_tilemap.scrollrows = 1;
             tx_tilemap.scrollcols = 1;
             tx_tilemap.rowscroll = new int[tx_tilemap.scrollrows];
             tx_tilemap.colscroll = new int[tx_tilemap.scrollcols];
-            tx_tilemap.tilemap_draw_instance3 = tx_tilemap.tilemap_draw_instanceTaitob;
-            tx_tilemap.tile_update3 = tx_tilemap.tile_updateTaitobtx;            
+            tx_tilemap.tilemap_draw_instance3 = tx_tilemap.tilemap_draw_instance_taitob;
+            tx_tilemap.tile_update3 = tx_tilemap.tile_update_taitob_tx;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
+            Tilemap.lsTmap.Add(tx_tilemap);
         }
     }
     public partial class Tmap
     {
-        public void tilemap_draw_instanceTaitob(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_taitob(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;
@@ -140,6 +139,12 @@ namespace mame
                     }
                     else
                     {
+                        if (Video.screenstate.frame_number == 0x71 && tilewidth == 8)
+                        {
+                            /*StreamWriter sw1 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\tx2.txt", true);
+                            sw1.WriteLine(Video.screenstate.frame_number.ToString("x") + "\t" + row.ToString("x") + "\t" + column.ToString("x") + "\t" + tileflags[row, column].ToString("x") + "\t" + attributes.ToString("x"));
+                            sw1.Close();*/
+                        }
                         if (tileflags[row, column] == Tilemap.TILE_FLAG_DIRTY)
                         {
                             tile_update3(column, row);
@@ -166,6 +171,10 @@ namespace mame
                         {
                             for (cury = y; cury < nexty; cury++)
                             {
+                                if (Video.screenstate.frame_number>=0x2c6&&offsety2 + ypos == 0x78)
+                                {
+                                    int i1 = 1;
+                                }
                                 Array.Copy(pixmap, offsety2 * width + x_start, Video.bitmapbase[Video.curbitmap], (offsety2 + ypos) * 0x200 + xpos + x_start, x_end - x_start);
                                 if (priority != 0)
                                 {
@@ -204,137 +213,92 @@ namespace mame
                 nexty = Math.Min(nexty, y2);
             }
         }
-        public void tile_updateTaitobbg(int col, int row)
+        public void tile_update_taitob_bg(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
-            int tile_index;
+            byte flags;
+            int tile_index = 0;
             int tile, code, color;
-            int pen_data_offset, palette_base, group;
-            tile_index = row * cols + col;
+            int pen_data_offset, palette_base;
+            if (attributes == 0)
+            {
+                tile_index = row * cols + col;
+            }
+            else if (attributes == 3)
+            {
+                tile_index = 0xfff - (row * cols + col);
+            }
+            else
+            {
+                int i1 = 1;
+            }
+            if (Video.screenstate.frame_number >= 0x2c5 && Video.screenstate.frame_number <= 0x30c)
+            {
+                int i1 = 1;
+                /*StreamWriter sw1 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\bg2.txt", true);
+                sw1.WriteLine(Video.screenstate.frame_number.ToString("x") + "\t" + row.ToString("x") + "\t" + col.ToString("x") + "\t" + tile_index.ToString("x") + "\t" + attributes.ToString("x"));
+                sw1.Close();*/
+            }
             tile = Taitob.TC0180VCU_ram[tile_index + Taitob.bg_rambank[0]];
             code = tile % total_elements;
             color = Taitob.TC0180VCU_ram[tile_index + Taitob.bg_rambank[1]];
             pen_data_offset = code * 0x100;
             palette_base = 0x10 * (Taitob.b_bg_color_base + (color & 0x3f));
-            group = 0;
-            flags = (((color & 0x00c0) >> 6) & 0x03)^(attributes&0x03);
-            tileflags[row, col] = tile_drawTaitob(Taitob.gfx1rom, pen_data_offset, x0, y0, palette_base, group, flags);
+            flags = (byte)((((color & 0x00c0) >> 6) & 0x03) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(Taitob.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
-        public void tile_updateTaitobfg(int col, int row)
+        public void tile_update_taitob_fg(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
-            int tile_index;
+            byte flags;
+            int tile_index = 0;
             int tile, code, color;
-            int pen_data_offset, palette_base, group;
-            tile_index = row * cols + col;
+            int pen_data_offset, palette_base;
+            if (attributes == 0)
+            {
+                tile_index = row * cols + col;
+            }
+            else if (attributes == 3)
+            {
+                tile_index = 0xfff - (row * cols + col);
+            }
             tile = Taitob.TC0180VCU_ram[tile_index + Taitob.fg_rambank[0]];
             code = tile % total_elements;
             color = Taitob.TC0180VCU_ram[tile_index + Taitob.fg_rambank[1]];
             pen_data_offset = code * 0x100;
             palette_base = 0x10 * (Taitob.b_fg_color_base + (color & 0x3f));
-            group = 0;
-            flags = (((color & 0x00c0)>>6)&0x03)^(attributes & 0x03);
-            tileflags[row, col] = tile_drawTaitob(Taitob.gfx1rom, pen_data_offset, x0, y0, palette_base, group, flags);
+            flags = (byte)((((color & 0x00c0) >> 6) & 0x03) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(Taitob.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
-        public void tile_updateTaitobtx(int col, int row)
+        public void tile_update_taitob_tx(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
-            int tile_index;
+            byte flags;
+            int tile_index = 0, row2, col2;
             int tile, code, color;
-            int pen_data_offset, palette_base, group;
-            tile_index = row * cols + col;
+            int pen_data_offset, palette_base;
+            if (attributes == 0)
+            {
+                tile_index = row * cols + col;
+            }
+            else if (attributes == 3)
+            {
+                tile_index = 0x7ff - (row * cols + col);
+            }
+            else
+            {
+                int i1 = 1;
+            }
             tile = Taitob.TC0180VCU_ram[tile_index + Taitob.tx_rambank];
             code = ((tile & 0x07ff) | ((Taitob.TC0180VCU_ctrl[4 + ((tile & 0x800) >> 11)] >> 8) << 11)) % total_elements;
             color = Taitob.b_tx_color_base + ((tile >> 12) & 0x0f);
             pen_data_offset = code * 0x40;
             palette_base = 0x10 * color;
-            group = 0;
-            flags = attributes & 0x03;
-            tileflags[row, col] = tile_drawTaitobtx(Taitob.gfx0rom, pen_data_offset, x0, y0, palette_base, group, flags);
-        }
-        public byte tile_drawTaitob(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, 0x100);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += tileheight - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += tilewidth - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < tileheight; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < tilewidth; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;                    
-                    pixmap[(offsety1 % width) * width + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1 % width, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
-        }
-        public byte tile_drawTaitobtx(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, 0x40);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += tileheight - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += tilewidth - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < tileheight; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < tilewidth; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;
-                    pixmap[(offsety1 % width) * width + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1 % width, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
+            flags = (byte)(attributes & 0x03);
+            tileflags[row, col] = tile_draw(Taitob.gfx0rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
     }
 }

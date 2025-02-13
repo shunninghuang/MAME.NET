@@ -238,14 +238,14 @@ namespace mame
             long period = Video.screenstate.frame_period;
             RECT visarea = Video.screenstate.visarea;
             Tmap.tilemap_set_flip(null, (byte)((Tilemap.TILEMAP_FLIPX & flip_screen_x) | (Tilemap.TILEMAP_FLIPY & flip_screen_y)));
-            if (flip_screen_x!=0)
+            if (flip_screen_x != 0)
             {
                 int temp;
                 temp = width - visarea.min_x - 1;
                 visarea.min_x = width - visarea.max_x - 1;
                 visarea.max_x = temp;
             }
-            if (flip_screen_y!=0)
+            if (flip_screen_y != 0)
             {
                 int temp;
                 temp = height - visarea.min_y - 1;

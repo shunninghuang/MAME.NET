@@ -27,6 +27,7 @@ namespace mame
                     machine_reset_callback = CPS.machine_reset_cps;
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     CPS.driver_init_cps2_video();
                     Eeprom.eeprom_init();
                     CPS.video_start_cps();
@@ -143,28 +144,60 @@ namespace mame
                         case "nastarw":
                         case "rastsag2":
                         case "rambo3p":
+                        case "tetrist":
+                        case "ashura":
+                        case "ashuraj":
+                        case "ashurau":
+                        case "sbm":
                             Taitob.video_start_taitob_color_order0();
                             machine_reset_callback = Taito.machine_reset_null;
-                            break;
-                        case "pbobble":
-                            Taitob.video_start_taitob_color_order1();
-                            machine_reset_callback = Taitob.machine_reset_mb87078;
-                            break;
+                            break;                        
                         case "masterw":
                         case "masterwu":
                         case "masterwj":
                         case "yukiwo":
                         case "rambo3":
                         case "rambo3u":
+                        case "tetrista":
+                        case "viofight":
+                        case "viofightu":
+                        case "viofightj":
+                        case "selfeena":
+                        case "ryujin":
+                        case "spacedxo":
                             Taitob.video_start_taitob_color_order2();
                             machine_reset_callback = Taito.machine_reset_null;
+                            break;
+                        case "crimec":
+                        case "crimecu":
+                        case "crimecj":                        
+                            Taitob.video_start_taitob_color_order1();
+                            machine_reset_callback = Taito.machine_reset_null;
+                            break;
+                        case "hitice":
+                        case "hiticerb":
+                        case "hiticej":
+                            Taitob.video_start_hitice();
+                            machine_reset_callback = Taitob.machine_reset_hitice;
                             break;
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
                             Taitob.video_start_taitob_color_order2();
+                            machine_reset_callback = Taitob.machine_reset_mb87078;//null
+                            break;
+                        case "qzshowby":
+                        case "pbobble":
+                        case "spacedx":
+                        case "spacedxj":
+                            Taitob.video_start_taitob_color_order1();
                             machine_reset_callback = Taitob.machine_reset_mb87078;
                             break;
+                        case "realpunc":
+                            Hd63484.HD63484_start();
+                            Taitob.video_start_taitob_color_order0();
+                            machine_reset_callback = Taito.machine_reset_null;
+                            break;                        
                     }
                     break;
                 case "Konami 68000":

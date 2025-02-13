@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class CPS
     {
-        public static ushort[] cps_a_regs, cps_b_regs, cps2_objram1, cps2_objram2, cps2_output;
+        public static ushort[] cps_a_regs, cps_b_regs, cps2_objram1, cps2_objram2, cps2_output, cps2_output2;
         public static byte[] mainromop, gfxrom, gfx1rom, audioromop, starsrom, user1rom;
         public static byte[] gfxram;
         public static byte[] qsound_sharedram1, qsound_sharedram2;
@@ -17,7 +17,6 @@ namespace mame
         public static int basebanksnd;
         public static int sf2ceblp_prot;
         public static int dial0, dial1;
-        
         public static int cps2networkpresent, cps2_objram_bank;
         public static int scancount, cps1_scanline1, cps1_scanline2, cps1_scancalls;
         public static List<gfx_range> lsRange0, lsRange1, lsRange2, lsRangeS;
@@ -68,7 +67,7 @@ namespace mame
             switch (Machine.sBoard)
             {
                 case "CPS-1":
-                    cps_version = 1;                    
+                    cps_version = 1;
                     starsrom = Machine.GetRom("stars.rom");
                     OKI6295.okirom = Machine.GetRom("oki.rom");
                     if (Memory.mainrom == null || gfxrom == null || Memory.audiorom == null || OKI6295.okirom == null)
@@ -77,7 +76,7 @@ namespace mame
                     }
                     break;
                 case "CPS-1(QSound)":
-                    cps_version = 1;                    
+                    cps_version = 1;
                     qsound_sharedram1 = new byte[0x1000];
                     qsound_sharedram2 = new byte[0x1000];
                     audioromop = Machine.GetRom("audiocpuop.rom");
@@ -89,10 +88,12 @@ namespace mame
                     }
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     cps_version = 2;
                     cps2_objram1 = new ushort[0x1000];
                     cps2_objram2 = new ushort[0x1000];
                     cps2_output = new ushort[0x06];
+                    cps2_output2 = new ushort[0x06];
                     cps2networkpresent = 0;
                     cps2_objram_bank = 0;
                     scancount = 0;
@@ -114,7 +115,7 @@ namespace mame
                     break;
             }
             if (Machine.bRom)
-            {                
+            {
                 switch (Machine.sName)
                 {
                     case "forgottn":
@@ -1431,9 +1432,9 @@ namespace mame
                     case "sf2mix120":
                     case "sf2mix110":
                     case "sf2mix100":
-                    case "sf2mix099a":
-                    case "sf2mix098c":
-                    case "sf2mix097":
+                    case "sf2mix99a":
+                    case "sf2mix98c":
+                    case "sf2mix97":
                         cpsb_addr = 0x32;
                         cpsb_value = -1;
                         mult_factor1 = 0x00;
@@ -2350,6 +2351,16 @@ namespace mame
         {
             qsound_sharedram2[offset] = (byte)(data);
         }
+        public static void qsound_sharedram1_samples_w2(int offset, byte data)
+        {
+            //if (ACCESSING_BITS_0_7)
+            qsound_sharedram1[offset] = data;
+        }
+        public static void qsound_sharedram1_samples_w(int offset, ushort data)
+        {
+            //if (ACCESSING_BITS_0_7)
+            qsound_sharedram1[offset] = (byte)data;
+        }
         public static void cps1_interrupt()
         {
             Cpuint.cpunum_set_input_line(0, 2, LineState.HOLD_LINE);
@@ -2391,6 +2402,28 @@ namespace mame
                 return (short)cps2_objram2[offset];
             }
         }
+        public static void cps2_objram1_w1(int offset, byte data)
+        {
+            if ((cps2_objram_bank & 1) != 0)
+            {
+                cps2_objram2[offset] = (ushort)((data << 8) | (cps2_objram2[offset] & 0xff));
+            }
+            else
+            {
+                cps2_objram1[offset] = (ushort)((data << 8) | (cps2_objram1[offset] & 0xff));
+            }
+        }
+        public static void cps2_objram1_w2(int offset, byte data)
+        {
+            if ((cps2_objram_bank & 1) != 0)
+            {
+                cps2_objram2[offset] = (ushort)((cps2_objram2[offset] & 0xff00) | data);
+            }
+            else
+            {
+                cps2_objram1[offset] = (ushort)((cps2_objram1[offset] & 0xff00) | data);
+            }
+        }
         public static void cps2_objram1_w(int offset, ushort data)
         {
             if ((cps2_objram_bank & 1) != 0)
@@ -2400,6 +2433,28 @@ namespace mame
             else
             {
                 cps2_objram1[offset] = data;
+            }
+        }
+        public static void cps2_objram2_w1(int offset, byte data)
+        {
+            if ((cps2_objram_bank & 1) != 0)
+            {
+                cps2_objram1[offset] = (ushort)((data << 8) | (cps2_objram1[offset] & 0xff));
+            }
+            else
+            {
+                cps2_objram2[offset] = (ushort)((data << 8) | (cps2_objram2[offset] & 0xff));
+            }
+        }
+        public static void cps2_objram2_w2(int offset, byte data)
+        {
+            if ((cps2_objram_bank & 1) != 0)
+            {
+                cps2_objram1[offset] = (ushort)((cps2_objram1[offset] & 0xff00) | data);
+            }
+            else
+            {
+                cps2_objram2[offset] = (ushort)((cps2_objram2[offset] & 0xff00) | data);
             }
         }
         public static void cps2_objram2_w(int offset, ushort data)
@@ -2460,8 +2515,8 @@ namespace mame
 
                 /* EEPROM */
                 Eeprom.eeprom_write_bit(data & 0x1000);
-                Eeprom.eeprom_set_clock_line(((data & 0x2000)!=0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
-                Eeprom.eeprom_set_cs_line(((data & 0x4000)!=0) ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
+                Eeprom.eeprom_set_clock_line(((data & 0x2000) != 0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
+                Eeprom.eeprom_set_cs_line(((data & 0x4000) != 0) ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
             }
             //low 8 bits
             {
@@ -2476,15 +2531,12 @@ namespace mame
 
                 /* Z80 Reset */
                 Cpuint.cpunum_set_input_line(1, (int)LineState.INPUT_LINE_RESET, ((data & 0x0008) != 0) ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
-
-                Generic.coin_counter_w(0, data & 0x0001);                
+                Generic.coin_counter_w(0, data & 0x0001);
                 Generic.coin_counter_w(1, data & 0x0002);
-                
                 Generic.coin_lockout_w(0, ~data & 0x0010);
                 Generic.coin_lockout_w(1, ~data & 0x0020);
                 Generic.coin_lockout_w(2, ~data & 0x0040);
                 Generic.coin_lockout_w(3, ~data & 0x0080);
-
                 /*
                 set_led_status(0,data & 0x01);
                 set_led_status(1,data & 0x10);

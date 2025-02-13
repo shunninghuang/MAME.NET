@@ -60,8 +60,8 @@ namespace mame
                 case "CPS-1":
                 case "CPS-1(QSound)":
                     loop_inputports_callback = CPS.loop_inputports_cps1_6b;
-                    record_port_callback = CPS.record_portC;
-                    replay_port_callback = CPS.replay_portC;
+                    record_port_callback = CPS.record_port_cps1;
+                    replay_port_callback = CPS.replay_port_cps1;
                     analog_p0 = new analog_field_state();
                     analog_p1 = new analog_field_state();
                     analog_p0.adjdefvalue = 0;
@@ -90,9 +90,10 @@ namespace mame
                     analog_p1.interpolate = true;
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     loop_inputports_callback = CPS.loop_inputports_cps2_2p6b;
-                    record_port_callback = CPS.record_portC2;
-                    replay_port_callback = CPS.replay_portC2;
+                    record_port_callback = CPS.record_port_cps2;
+                    replay_port_callback = CPS.replay_port_cps2;
                     analog_p0 = new analog_field_state();
                     analog_p1 = new analog_field_state();
                     analog_p0.adjdefvalue = 0;
@@ -119,7 +120,7 @@ namespace mame
                     analog_p1.absolute = false;
                     analog_p1.wraps = true;
                     analog_p1.interpolate = true;
-                    break;
+                    break;                
                 case "Data East":
                     loop_inputports_callback = Dataeast.loop_inputports_dataeast_pcktgal;
                     record_port_callback = Dataeast.record_port_pcktgal;
@@ -421,22 +422,52 @@ namespace mame
                 case "nastar":
                 case "nastarw":
                 case "rastsag2":
+                case "rambo3p":
+                case "crimec":
+                case "crimecu":
+                case "crimecj":
+                case "tetrist":
+                case "tetrista":
+                case "ashura":
+                case "ashuraj":
+                case "ashurau":
                     loop_inputports_callback = Taitob.loop_inputports_taitob_masterw;
                     break;
+                case "viofight":
+                case "viofightu":
+                case "viofightj":
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_viofight;
+                    break;                
+                case "rambo3":
+                case "rambo3u":                
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_rambo3;
+                    break;
+                case "hitice":
+                case "hiticerb":
+                case "hiticej":
+                case "selfeena":
+                case "silentd":
+                case "silentdj":
+                case "silentdu":
+                case "ryujin":
+                case "spacedxo":
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_silentd;
+                    break;
+                case "qzshowby":
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_qzshowby;
+                    break;
                 case "pbobble":
+                case "spacedx":
+                case "spacedxj":
                     loop_inputports_callback = Taitob.loop_inputports_taitob_pbobble;
                     record_port_callback = Taitob.record_port_pbobble;
                     replay_port_callback = Taitob.replay_port_pbobble;
                     break;
-                case "rambo3":
-                case "rambo3u":
-                case "rambo3p":
-                    loop_inputports_callback = Taitob.loop_inputports_taitob_rambo3;
+                case "sbm":
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_sbm;
                     break;
-                case "silentd":
-                case "silentdj":
-                case "silentdu":
-                    loop_inputports_callback = Taitob.loop_inputports_taitob_silentd;
+                case "realpunc":
+                    loop_inputports_callback = Taitob.loop_inputports_taitob_realpunc;
                     break;
                 case "cuebrick":
                 case "mia":

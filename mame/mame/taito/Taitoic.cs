@@ -19,7 +19,7 @@ namespace mame
         public static ushort PC090OJ_sprite_ctrl;
         public static ushort[] PC090OJ_ram,PC090OJ_ram_buffered;
         public static int PC090OJ_xoffs, PC090OJ_yoffs;
-        public static byte[] TC0220IOC_regs,TC0640FIO_regs;
+        public static byte[] TC0220IOC_regs, TC0510NIO_regs, TC0640FIO_regs;
         public static byte TC0220IOC_port;
         public static void taitoic_init()
         {
@@ -32,6 +32,7 @@ namespace mame
             PC080SN_bgscrolly = new int[2][];
             PC080SN_tilemap = new Tmap[2][];
             TC0220IOC_regs = new byte[8];
+            TC0510NIO_regs = new byte[8];
             TC0640FIO_regs = new byte[8];
             for (i = 0; i < 2; i++)
             {
@@ -96,7 +97,7 @@ namespace mame
                         PC080SN_tilemap[i][j].scrollcols = 1;
                         PC080SN_tilemap[i][j].rowscroll = new int[PC080SN_tilemap[i][j].scrollrows];
                         PC080SN_tilemap[i][j].colscroll = new int[PC080SN_tilemap[i][j].scrollcols];
-                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instanceTaito_opwolf;
+                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_taito_opwolf;
                     }
                     else	/* double width tilemaps */
                     {
@@ -123,11 +124,11 @@ namespace mame
                         PC080SN_tilemap[i][j].scrollcols = 1;
                         PC080SN_tilemap[i][j].rowscroll = new int[PC080SN_tilemap[i][j].scrollrows];
                         PC080SN_tilemap[i][j].colscroll = new int[PC080SN_tilemap[i][j].scrollcols];
-                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instanceTaito_opwolf;
+                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_taito_opwolf;
                     }
                 }
-                PC080SN_tilemap[i][0].tile_update3 = PC080SN_tilemap[i][0].tile_updateTaitobg_opwolf;
-                PC080SN_tilemap[i][1].tile_update3 = PC080SN_tilemap[i][1].tile_updateTaitofg_opwolf;
+                PC080SN_tilemap[i][0].tile_update3 = PC080SN_tilemap[i][0].tile_update_taito_bg_opwolf;
+                PC080SN_tilemap[i][1].tile_update3 = PC080SN_tilemap[i][1].tile_update_taito_fg_opwolf;
                 PC080SN_ram[i] = new ushort[0x8000];
                 PC080SN_bg_ram_offset[i][0] = 0x0000 / 2;
                 PC080SN_bg_ram_offset[i][1] = 0x8000 / 2;
@@ -779,6 +780,77 @@ namespace mame
         public static void TC0220IOC_halfword_byteswap_w1(int offset, byte data)
         {
             TC0220IOC_w(offset, data);
+        }
+        public static byte TC0510NIO_r(int offset)
+        {
+            byte result = 0;
+            switch (offset)
+            {
+                case 0x00:	/* DSA */
+                    result = dswa;
+                    break;
+                case 0x01:	/* DSB */
+                    result = dswb;
+                    break;
+                case 0x02:	/* 1P */
+                    result = (byte)sbyte0;
+                    break;
+                case 0x03:	/* 2P */
+                    result = (byte)sbyte1;
+                    break;
+                case 0x04:	/* coin counters and lockout */
+                    result = TC0510NIO_regs[4];
+                    break;
+                case 0x07:	/* coin */
+                    result = (byte)sbyte2;
+                    break;
+                default:
+                    result = 0xff;
+                    break;
+            }
+            return result;
+        }
+        public static void TC0510NIO_w(int offset, byte data)
+        {
+            TC0510NIO_regs[offset] = data;
+            switch (offset)
+            {
+                case 0x00:
+                    Watchdog.watchdog_reset();
+                    break;
+                case 0x04:	/* coin counters and lockout */
+                    //coin_lockout_w(0,~data & 0x01);
+                    //coin_lockout_w(1,~data & 0x02);
+                    //coin_counter_w(0,data & 0x04);
+                    //coin_counter_w(1,data & 0x08);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public static ushort TC0510NIO_halfword_r(int offset)
+        {
+            return TC0510NIO_r(offset);
+        }
+        public static void TC0510NIO_halfword_w1(int offset, byte data)
+        {
+            TC0510NIO_w(offset, (byte)data);
+        }
+        public static void TC0510NIO_halfword_w(int offset, ushort data)
+        {
+            TC0510NIO_w(offset,(byte)(data & 0xff));
+        }
+        public static ushort TC0510NIO_halfword_wordswap_r(int offset)
+        {
+            return TC0510NIO_halfword_r(offset ^ 1);
+        }
+        public static void TC0510NIO_halfword_wordswap_w1(int offset, byte data)
+        {
+            TC0510NIO_halfword_w1(offset ^ 1, data);
+        }
+        public static void TC0510NIO_halfword_wordswap_w(int offset, ushort data)
+        {
+            TC0510NIO_halfword_w(offset ^ 1, data);
         }
         public static byte TC0640FIO_r(int offset)
         {

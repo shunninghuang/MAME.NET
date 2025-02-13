@@ -20,6 +20,7 @@ namespace mame
                     CPS.sbyte3 = -1;
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     CPS.short0 = -1;
                     CPS.short1 = -1;
                     CPS.short2 = -1;
@@ -144,6 +145,9 @@ namespace mame
                         case "rambo3p":
                             Taito.sbyte1 = unchecked((sbyte)0xcf);
                             break;
+                        case "sbm":
+                            Taito.sbyte2 = unchecked((sbyte)0x9f);
+                            break;
                     }
                     break;
                 case "Konami 68000":
@@ -221,6 +225,7 @@ namespace mame
                     CPS.sbyte3_old = 0;
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     CPS.short0_old = 0;
                     CPS.short1_old = 0;
                     CPS.short2_old = 0;

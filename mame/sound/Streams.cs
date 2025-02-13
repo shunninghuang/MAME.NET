@@ -1242,6 +1242,21 @@ namespace mame
             last_update_second = curtime.seconds;
             AY8910.AA8910[0].stream.updatesamplerate();
         }
+        private static void streams_update_taitob_viofight()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            AY8910.AA8910[0].stream.adjuststream(second_tick);
+            YM2203.FF2203[0].stream.adjuststream(second_tick);
+            okistream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+            AY8910.AA8910[0].stream.updatesamplerate();
+        }
         private static void streams_update_konami68000_cuebrick()
         {
             Atime curtime = Timer.global_basetime;

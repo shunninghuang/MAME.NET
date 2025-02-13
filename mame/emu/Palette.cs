@@ -8,7 +8,7 @@ namespace mame
 {
     public partial class Palette
     {
-        public static uint[] entry_color,entry_color2;
+        public static uint[] entry_color, entry_color2;
         public static float[] group_bright, group_contrast, entry_contrast;
         private static uint trans_uint;
         private static int numcolors, numgroups;
@@ -35,6 +35,7 @@ namespace mame
                 case "CPS-1":
                 case "CPS-1(QSound)":
                 case "CPS2":
+                case "CPS2turbo":
                     trans_color = Color.Magenta;
                     trans_uint = (uint)trans_color.ToArgb();
                     numcolors = 0xc00;

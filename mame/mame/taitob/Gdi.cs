@@ -60,7 +60,7 @@ namespace mame
                         }
                         else if (iFlag == 1)
                         {
-                            x0 = tilewidth * i3 + tilewidth - 1;
+                            x0 = tilewidth * (cols - 1 - i3) + tilewidth - 1;
                             y0 = tileheight * i4;
                             dx0 = -1;
                             dy0 = 1;
@@ -68,14 +68,14 @@ namespace mame
                         else if (iFlag == 2)
                         {
                             x0 = tilewidth * i3;
-                            y0 = tileheight * i4 + tileheight - 1;
+                            y0 = tileheight * (rows - 1 - i4) + tileheight - 1;
                             dx0 = 1;
                             dy0 = -1;
                         }
                         else if (iFlag == 3)
                         {
-                            x0 = tilewidth * i3 + tilewidth - 1;
-                            y0 = tileheight * i4 + tileheight - 1;
+                            x0 = tilewidth * (cols - 1 - i3) + tilewidth - 1;
+                            y0 = tileheight * (rows - 1 - i4) + tileheight - 1;
                             dx0 = -1;
                             dy0 = -1;
                         }
@@ -152,7 +152,7 @@ namespace mame
                         }
                         else if (iFlag == 1)
                         {
-                            x0 = tilewidth * i3 + tilewidth - 1;
+                            x0 = tilewidth * (cols - 1 - i3) + tilewidth - 1;
                             y0 = tileheight * i4;
                             dx0 = -1;
                             dy0 = 1;
@@ -160,14 +160,14 @@ namespace mame
                         else if (iFlag == 2)
                         {
                             x0 = tilewidth * i3;
-                            y0 = tileheight * i4 + tileheight - 1;
+                            y0 = tileheight * (rows - 1 - i4) + tileheight - 1;
                             dx0 = 1;
                             dy0 = -1;
                         }
                         else if (iFlag == 3)
                         {
-                            x0 = tilewidth * i3 + tilewidth - 1;
-                            y0 = tileheight * i4 + tileheight - 1;
+                            x0 = tilewidth * (cols - 1 - i3) + tilewidth - 1;
+                            y0 = tileheight * (rows - 1 - i4) + tileheight - 1;
                             dx0 = -1;
                             dy0 = -1;
                         }
@@ -244,7 +244,7 @@ namespace mame
                         }
                         else if (iFlag == 1)
                         {
-                            x0 = tilewidth * i3 + tilewidth - 1;
+                            x0 = tilewidth * (cols - 1 - i3) + tilewidth - 1;
                             y0 = tileheight * i4;
                             dx0 = -1;
                             dy0 = 1;
@@ -252,14 +252,14 @@ namespace mame
                         else if (iFlag == 2)
                         {
                             x0 = tilewidth * i3;
-                            y0 = tileheight * i4 + tileheight - 1;
+                            y0 = tileheight * (rows - 1 - i4) + tileheight - 1;
                             dx0 = 1;
                             dy0 = -1;
                         }
                         else if (iFlag == 3)
                         {
-                            x0 = tilewidth * i3 + tilewidth - 1;
-                            y0 = tileheight * i4 + tileheight - 1;
+                            x0 = tilewidth * (cols - 1 - i3) + tilewidth - 1;
+                            y0 = tileheight * (rows - 1 - i4) + tileheight - 1;
                             dx0 = -1;
                             dy0 = -1;
                         }
@@ -328,7 +328,7 @@ namespace mame
         }
         public static Bitmap GetAllGDI()
         {
-            Bitmap bm1 = new Bitmap(0x200, 0x100), bm2;
+            Bitmap bm1 = new Bitmap(0x200, 0x200), bm2;
             Graphics g = Graphics.FromImage(bm1);
             g.Clear(Color.Transparent);
             if (bBg)
@@ -337,7 +337,8 @@ namespace mame
                 short scrollx, scrolly;
                 scrollx = (short)taitob_scroll[0x200];
                 scrolly = (short)taitob_scroll[0x201];
-                g.DrawImage(bm2, 0, 0x10);
+                g.DrawImage(bm2, scrollx, scrolly);
+                g.DrawImage(bm2, scrollx - 0x400, scrolly - 0x400);
             }
             if (bFg)
             {

@@ -1396,7 +1396,7 @@ namespace mame
                 short2 |= 0x0002;
             }
         }
-        public static void record_portC()
+        public static void record_port_cps1()
         {
             if (sbyte0 != sbyte0_old || short1 != short1_old || short2 != short2_old || sbyte3 != sbyte3_old)
             {
@@ -1411,7 +1411,7 @@ namespace mame
                 Mame.bwRecord.Write(sbyte3);
             }
         }
-        public static void record_portC2()
+        public static void record_port_cps2()
         {
             if (short0 != short0_old || short1 != short1_old || short2 != short2_old)
             {
@@ -1424,7 +1424,7 @@ namespace mame
                 Mame.bwRecord.Write(short2);
             }
         }
-        public static void replay_portC()
+        public static void replay_port_cps1()
         {
             if (Inptport.bReplayRead)
             {
@@ -1455,7 +1455,7 @@ namespace mame
                 Inptport.bReplayRead = false;
             }
         }
-        public static void replay_portC2()
+        public static void replay_port_cps2()
         {
             if (Inptport.bReplayRead)
             {

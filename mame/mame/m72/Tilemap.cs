@@ -22,7 +22,7 @@ namespace mame
             bg_tilemap.all_tiles_dirty = true;
             bg_tilemap.pixmap = new ushort[0x200 * 0x200];
             bg_tilemap.flagsmap = new byte[0x200, 0x200];
-            bg_tilemap.tileflags = new byte[0x40, 0x40];            
+            bg_tilemap.tileflags = new byte[0x40, 0x40];
             bg_tilemap.total_elements = M72.gfx21rom.Length / 0x40;
             bg_tilemap.pen_data = new byte[0x40];
             bg_tilemap.pen_to_flags = new byte[3, 16];
@@ -47,7 +47,7 @@ namespace mame
             bg_tilemap.scrollcols = 1;
             bg_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
             bg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instanceM72;
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_m72;
             fg_tilemap = new Tmap();
             fg_tilemap.cols = 64;
             fg_tilemap.rows = 64;
@@ -59,7 +59,7 @@ namespace mame
             fg_tilemap.all_tiles_dirty = true;
             fg_tilemap.pixmap = new ushort[0x200 * 0x200];
             fg_tilemap.flagsmap = new byte[0x200, 0x200];
-            fg_tilemap.tileflags = new byte[0x40, 0x40];            
+            fg_tilemap.tileflags = new byte[0x40, 0x40];
             fg_tilemap.total_elements = M72.gfx21rom.Length / 0x40;
             fg_tilemap.pen_data = new byte[0x400];
             fg_tilemap.pen_to_flags = new byte[3, 32];
@@ -86,19 +86,19 @@ namespace mame
             fg_tilemap.scrollcols = 1;
             fg_tilemap.rowscroll = new int[fg_tilemap.scrollrows];
             fg_tilemap.colscroll = new int[fg_tilemap.scrollcols];
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instanceM72;
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_m72;
             switch (Machine.sName)
             {
                 case "airduel":
                 case "airduelm72":
-                    bg_tilemap.tile_update3 = bg_tilemap.tile_updateM72_bg_m72;
-                    fg_tilemap.tile_update3 = fg_tilemap.tile_updateM72_fg_m72;                    
+                    bg_tilemap.tile_update3 = bg_tilemap.tile_update_m72_bg;
+                    fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg;
                     break;
                 case "ltswords":
                 case "kengo":
                 case "kengoa":
-                    bg_tilemap.tile_update3 = bg_tilemap.tile_updateM72_bg_rtype2;
-                    fg_tilemap.tile_update3 = fg_tilemap.tile_updateM72_fg_rtype2;
+                    bg_tilemap.tile_update3 = bg_tilemap.tile_update_m72_bg_rtype2;
+                    fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg_rtype2;
                     break;
             }
         }
@@ -141,7 +141,7 @@ namespace mame
             bg_tilemap.scrollcols = 1;
             bg_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
             bg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instanceM72;
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_m72;
             fg_tilemap = new Tmap();
             fg_tilemap.cols = 64;
             fg_tilemap.rows = 64;
@@ -180,7 +180,7 @@ namespace mame
             fg_tilemap.scrollcols = 1;
             fg_tilemap.rowscroll = new int[fg_tilemap.scrollrows];
             fg_tilemap.colscroll = new int[fg_tilemap.scrollcols];
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instanceM72;
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_m72;
             bg_tilemap_large = new Tmap();
             bg_tilemap_large.rows = 0x40;
             bg_tilemap_large.cols = 0x80;
@@ -217,15 +217,15 @@ namespace mame
             bg_tilemap_large.scrollcols = 1;
             bg_tilemap_large.rowscroll = new int[bg_tilemap.scrollrows];
             bg_tilemap_large.colscroll = new int[bg_tilemap.scrollcols];
-            bg_tilemap_large.tilemap_draw_instance3 = bg_tilemap_large.tilemap_draw_instanceM72;
-            bg_tilemap.tile_update3 = bg_tilemap.tile_updateM72_bg_m72;
-            fg_tilemap.tile_update3 = fg_tilemap.tile_updateM72_fg_m72;
-            bg_tilemap_large.tile_update3 = bg_tilemap.tile_updateM72_bg_m72;
+            bg_tilemap_large.tilemap_draw_instance3 = bg_tilemap_large.tilemap_draw_instance_m72;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_m72_bg;
+            fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg;
+            bg_tilemap_large.tile_update3 = bg_tilemap.tile_update_m72_bg;
         }
     }
     public partial class Tmap
     {
-        public void tilemap_draw_instanceM72(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_m72(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;
@@ -323,12 +323,13 @@ namespace mame
                 nexty = Math.Min(nexty, y2);
             }
         }
-        public void tile_updateM72_bg_m72(int col, int row)
+        public void tile_update_m72_bg(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int code, code1, attr, color, pri, tile_index;
-            int pen_data_offset;
+            int code, code1, attr, color, tile_index;
+            byte pri, flags;
+            int pen_data_offset, palette_base;
             tile_index = (0x40 * row + col) * 2;
             code = M72.m72_videoram2[tile_index * 2] + M72.m72_videoram2[tile_index * 2 + 1] * 0x100;
             color = M72.m72_videoram2[(tile_index + 1) * 2];
@@ -347,14 +348,17 @@ namespace mame
             }
             code1 = (code + ((attr & 0x3f) << 8)) % M72.bg_tilemap.total_elements;
             pen_data_offset = code1 * 0x40;
-            tileflags[row, col] = tile_drawM72(M72.gfx31rom, pen_data_offset, x0, y0, 0x100 + 0x10 * (color & 0x0f), pri, (((color & 0xc0) >> 6) & 3) ^ (attributes & 0x03));
+            palette_base = 0x100 + 0x10 * (color & 0x0f);
+            flags = (byte)((((color & 0xc0) >> 6) & 3) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(M72.gfx31rom, pen_data_offset, x0, y0, palette_base, 0, pri, flags);
         }
-        public void tile_updateM72_bg_rtype2(int col, int row)
+        public void tile_update_m72_bg_rtype2(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int code, code1, attr, color, pri, tile_index;
-            int pen_data_offset;
+            int code, code1, attr, color, tile_index;
+            byte pri, flags;
+            int pen_data_offset, palette_base;
             tile_index = (0x40 * row + col) * 2;
             code = M72.m72_videoram2[tile_index * 2] + M72.m72_videoram2[tile_index * 2 + 1] * 0x100;
             color = M72.m72_videoram2[(tile_index + 1) * 2];
@@ -373,55 +377,17 @@ namespace mame
             }
             code1 = code % M72.bg_tilemap.total_elements;
             pen_data_offset = code1 * 0x40;
-            tileflags[row, col] = tile_drawM72(M72.gfx21rom,pen_data_offset, x0, y0, 0x100 + 0x10 * (color & 0x0f), pri, (((color & 0x60) >> 5) & 3) ^ (attributes & 0x03));
+            palette_base = 0x100 + 0x10 * (color & 0x0f);
+            flags = (byte)((((color & 0x60) >> 5) & 3) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(M72.gfx21rom, pen_data_offset, x0, y0, palette_base, 0, pri, flags);
         }
-        public byte tile_drawM72(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            int height = tileheight;
-            int width = tilewidth;
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, 0x40);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += height - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += width - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < height; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < width; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;
-                    pixmap[(offsety1%0x200) * 0x200 + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1%0x200, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
-        }
-        public void tile_updateM72_fg_m72(int col, int row)
+        public void tile_update_m72_fg(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int code, code1, attr, color, pri, tile_index;
-            int pen_data_offset;
+            int code, code1, attr, color, tile_index;
+            byte pri, flags;
+            int pen_data_offset, palette_base;
             tile_index = (0x40 * row + col) * 2;
             code = M72.m72_videoram1[tile_index * 2] + M72.m72_videoram1[tile_index * 2 + 1] * 0x100;
             color = M72.m72_videoram1[(tile_index + 1) * 2];
@@ -440,15 +406,17 @@ namespace mame
             }
             code1 = code % M72.fg_tilemap.total_elements;
             pen_data_offset = code1 * 0x40;
-            tileflags[row, col] = tile_drawM72(M72.gfx21rom, pen_data_offset, x0, y0, 0x100 + 0x10 * (color & 0x0f), pri, (((color & 0x60) >> 5) & 3) ^ (attributes & 0x03));
+            palette_base = 0x100 + 0x10 * (color & 0x0f);
+            flags = (byte)((((color & 0x60) >> 5) & 3) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(M72.gfx21rom, pen_data_offset, x0, y0, palette_base, 0, pri, flags);
         }
-        public void tile_updateM72_fg_rtype2(int col, int row)
+        public void tile_update_m72_fg_rtype2(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int y0offset;
-            int code, code1, attr, color, pri, tile_index;
-            int pen_data_offset;
+            int code, code1, attr, color, tile_index;
+            byte pri, flags;
+            int pen_data_offset, palette_base;
             tile_index = (0x40 * row + col) * 2;
             code = M72.m72_videoram1[tile_index * 2] + M72.m72_videoram1[tile_index * 2 + 1] * 0x100;
             color = M72.m72_videoram1[(tile_index + 1) * 2];
@@ -465,17 +433,11 @@ namespace mame
             {
                 pri = 0;
             }
-            if (pri == 0)
-            {
-                y0offset = 0x90;
-            }
-            else
-            {
-                y0offset = 0;
-            }
             code1 = code % M72.fg_tilemap.total_elements;
             pen_data_offset = code1 * 0x40;
-            tileflags[row, col] = tile_drawM72(M72.gfx21rom, pen_data_offset, x0, y0, 0x100 + 0x10 * (color & 0x0f), pri, (((color & 0x60) >> 5) & 3) ^ (attributes & 0x03));
+            palette_base = 0x100 + 0x10 * (color & 0x0f);
+            flags = (byte)((((color & 0x60) >> 5) & 3) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(M72.gfx21rom, pen_data_offset, x0, y0, palette_base, 0, pri, flags);
         }
     }
 }

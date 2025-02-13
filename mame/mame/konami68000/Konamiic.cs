@@ -87,7 +87,7 @@ namespace mame
             {
                 K052109_tilemap[i].rowscroll = new int[K052109_tilemap[i].scrollrows];
                 K052109_tilemap[i].colscroll = new int[K052109_tilemap[1].scrollcols];
-                K052109_tilemap[i].tilemap_draw_instance3 = K052109_tilemap[i].tilemap_draw_instanceKonami68000;
+                K052109_tilemap[i].tilemap_draw_instance3 = K052109_tilemap[i].tilemap_draw_instance_konami68000;
                 K052109_tilemap[i].pixmap = new ushort[0x100 * 0x200];
                 K052109_tilemap[i].flagsmap = new byte[0x100, 0x200];
                 K052109_tilemap[i].tileflags = new byte[0x20, 0x40];
@@ -100,9 +100,9 @@ namespace mame
                 }                
                 K052109_tilemap[i].total_elements = gfx12rom.Length / 0x40;
             }
-            K052109_tilemap[0].tile_update3 = K052109_tilemap[0].tile_updateKonami68000_0;
-            K052109_tilemap[1].tile_update3 = K052109_tilemap[1].tile_updateKonami68000_1;
-            K052109_tilemap[2].tile_update3 = K052109_tilemap[2].tile_updateKonami68000_2;
+            K052109_tilemap[0].tile_update3 = K052109_tilemap[0].tile_update_konami68000_0;
+            K052109_tilemap[1].tile_update3 = K052109_tilemap[1].tile_update_konami68000_1;
+            K052109_tilemap[2].tile_update3 = K052109_tilemap[2].tile_update_konami68000_2;
             for (i = 0; i < 3; i++)
             {
                 K052109_dx[i] = K052109_dy[i] = 0;

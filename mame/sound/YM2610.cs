@@ -130,10 +130,25 @@ namespace mame
                         case "rambo3":
                         case "rambo3u":
                         case "rambo3p":
-                        case "pbobble":
+                        case "crimec":
+                        case "crimecu":
+                        case "crimecj":
+                        case "tetrist":
+                        case "ashura":
+                        case "ashuraj":
+                        case "ashurau":
+                        case "selfeena":
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
+                        case "ryujin":
+                        case "qzshowby":
+                        case "pbobble":
+                        case "spacedx":
+                        case "spacedxj":
+                        case "spacedxo":
+                        case "sbm":
+                        case "realpunc":
                             F2610.OPN.ST.IRQ_Handler = Taitob.irqhandler;
                             F2610.OPN.ST.SSG.set_clock = AY8910.AA8910[0].ay8910_set_clock_ym;
                             F2610.OPN.ST.SSG.write = AY8910.AA8910[0].ay8910_write_ym;

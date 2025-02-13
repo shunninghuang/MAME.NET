@@ -318,49 +318,9 @@ namespace mame
                 Taito.sbyte1 |= 0x02;
             }
         }
-        public static void loop_inputports_taitob_pbobble()
+        public static void loop_inputports_taitob_viofight()
         {
             if (Keyboard.IsPressed(Key.D5))
-            {
-                Taito.dswb &= unchecked((byte)~0x10);
-            }
-            else
-            {
-                Taito.dswb |= 0x10;
-            }
-            if (Keyboard.IsPressed(Key.D6))
-            {
-                Taito.dswb &= unchecked((byte)~0x20);
-            }
-            else
-            {
-                Taito.dswb |= 0x20;
-            }
-            if (Keyboard.IsPressed(Key.D1))
-            {
-                Taito.sbyte0 &= ~0x10;
-            }
-            else
-            {
-                Taito.sbyte0 |= 0x10;
-            }
-            if (Keyboard.IsPressed(Key.D2))
-            {
-                Taito.sbyte0 &= ~0x20;
-            }
-            else
-            {
-                Taito.sbyte0 |= 0x20;
-            }
-            if (Keyboard.IsPressed(Key.D))
-            {
-                Taito.sbyte2 &= ~0x08;
-            }
-            else
-            {
-                Taito.sbyte2 |= 0x08;
-            }
-            if (Keyboard.IsPressed(Key.A))
             {
                 Taito.sbyte2 &= ~0x04;
             }
@@ -368,55 +328,15 @@ namespace mame
             {
                 Taito.sbyte2 |= 0x04;
             }
-            if (Keyboard.IsPressed(Key.S))
+            if (Keyboard.IsPressed(Key.D6))
             {
-                Taito.sbyte2 &= ~0x02;
+                Taito.sbyte2 &= ~0x08;
             }
             else
             {
-                Taito.sbyte2 |= 0x02;
+                Taito.sbyte2 |= 0x08;
             }
-            if (Keyboard.IsPressed(Key.W))
-            {
-                Taito.sbyte2 &= ~0x01;
-            }
-            else
-            {
-                Taito.sbyte2 |= 0x01;
-            }
-            if (Keyboard.IsPressed(Key.J))
-            {
-                Taito.sbyte1 &= ~0x01;
-            }
-            else
-            {
-                Taito.sbyte1 |= 0x01;
-            }
-            if (Keyboard.IsPressed(Key.K))
-            {
-                Taito.sbyte1 &= ~0x02;
-            }
-            else
-            {
-                Taito.sbyte1 |= 0x02;
-            }
-            if (Keyboard.IsPressed(Key.L))
-            {
-                Taito.sbyte1 &= ~0x04;
-            }
-            else
-            {
-                Taito.sbyte1 |= 0x04;
-            }
-            if (Keyboard.IsPressed(Key.Right))
-            {
-                Taito.sbyte2 &= unchecked((sbyte)~0x80);
-            }
-            else
-            {
-                Taito.sbyte2 |= unchecked((sbyte)0x80);
-            }
-            if (Keyboard.IsPressed(Key.Left))
+            if (Keyboard.IsPressed(Key.D1))
             {
                 Taito.sbyte2 &= ~0x40;
             }
@@ -424,21 +344,101 @@ namespace mame
             {
                 Taito.sbyte2 |= 0x40;
             }
-            if (Keyboard.IsPressed(Key.Down))
+            if (Keyboard.IsPressed(Key.D2))
             {
-                Taito.sbyte2 &= ~0x20;
+                Taito.sbyte2 &= unchecked((sbyte)~0x80);
             }
             else
             {
-                Taito.sbyte2 |= 0x20;
+                Taito.sbyte2 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.D))
+            {
+                Taito.sbyte0 &= ~0x08;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.A))
+            {
+                Taito.sbyte0 &= ~0x04;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.S))
+            {
+                Taito.sbyte0 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.W))
+            {
+                Taito.sbyte0 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.J))
+            {
+                Taito.sbyte0 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.K))
+            {
+                Taito.sbyte0 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.L))
+            {
+                Taito.sbyte0 &= ~0x40;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.Right))
+            {
+                Taito.sbyte1 &= unchecked((sbyte)~0x08);
+            }
+            else
+            {
+                Taito.sbyte1 |= unchecked((sbyte)0x08);
+            }
+            if (Keyboard.IsPressed(Key.Left))
+            {
+                Taito.sbyte1 &= ~0x04;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.Down))
+            {
+                Taito.sbyte1 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x02;
             }
             if (Keyboard.IsPressed(Key.Up))
             {
-                Taito.sbyte2 &= ~0x10;
+                Taito.sbyte1 &= ~0x01;
             }
             else
             {
-                Taito.sbyte2 |= 0x10;
+                Taito.sbyte1 |= 0x01;
             }
             if (Keyboard.IsPressed(Key.NumPad1))
             {
@@ -466,19 +466,19 @@ namespace mame
             }
             if (Keyboard.IsPressed(Key.R))
             {
-                Taito.sbyte0 &= ~0x01;
+                Taito.sbyte2 &= ~0x02;
             }
             else
             {
-                Taito.sbyte0 |= 0x01;
+                Taito.sbyte2 |= 0x02;
             }
             if (Keyboard.IsPressed(Key.T))
             {
-                Taito.sbyte0 &= ~0x02;
+                Taito.sbyte2 &= ~0x01;
             }
             else
             {
-                Taito.sbyte0 |= 0x02;
+                Taito.sbyte2 |= 0x01;
             }
         }
         public static void loop_inputports_taitob_silentd()
@@ -642,6 +642,514 @@ namespace mame
             else
             {
                 Taito.sbyte1 |= 0x02;
+            }
+        }
+        public static void loop_inputports_taitob_qzshowby()
+        {
+            if (Keyboard.IsPressed(Key.D5))
+            {
+                Taito.dswb &= unchecked((byte)~0x10);
+            }
+            else
+            {
+                Taito.dswb |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.D6))
+            {
+                Taito.dswb &= unchecked((byte)~0x20);
+            }
+            else
+            {
+                Taito.dswb |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.D1))
+            {
+                Taito.sbyte0 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.D2))
+            {
+                Taito.sbyte0 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.J))
+            {
+                Taito.sbyte2 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.K))
+            {
+                Taito.sbyte2 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.L))
+            {
+                Taito.sbyte2 &= ~0x04;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.U))
+            {
+                Taito.sbyte2 &= ~0x08;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.NumPad1))
+            {
+                Taito.sbyte2 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.NumPad2))
+            {
+                Taito.sbyte2 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.NumPad3))
+            {
+                Taito.sbyte2 &= ~0x40;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.NumPad4))
+            {
+                Taito.sbyte2 &= unchecked((sbyte)~0x80);
+            }
+            else
+            {
+                Taito.sbyte2 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.R))
+            {
+                Taito.sbyte0 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.T))
+            {
+                Taito.sbyte0 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x02;
+            }
+        }
+        public static void loop_inputports_taitob_pbobble()
+        {
+            if (Keyboard.IsPressed(Key.D5))
+            {
+                Taito.dswb &= unchecked((byte)~0x10);
+            }
+            else
+            {
+                Taito.dswb |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.D6))
+            {
+                Taito.dswb &= unchecked((byte)~0x20);
+            }
+            else
+            {
+                Taito.dswb |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.D1))
+            {
+                Taito.sbyte0 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.D2))
+            {
+                Taito.sbyte0 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.D))
+            {
+                Taito.sbyte2 &= ~0x08;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.A))
+            {
+                Taito.sbyte2 &= ~0x04;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.S))
+            {
+                Taito.sbyte2 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.W))
+            {
+                Taito.sbyte2 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.J))
+            {
+                Taito.sbyte1 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.K))
+            {
+                Taito.sbyte1 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.L))
+            {
+                Taito.sbyte1 &= ~0x04;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.Right))
+            {
+                Taito.sbyte2 &= unchecked((sbyte)~0x80);
+            }
+            else
+            {
+                Taito.sbyte2 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.Left))
+            {
+                Taito.sbyte2 &= ~0x40;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.Down))
+            {
+                Taito.sbyte2 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.Up))
+            {
+                Taito.sbyte2 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.NumPad1))
+            {
+                Taito.sbyte1 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.NumPad2))
+            {
+                Taito.sbyte1 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.NumPad3))
+            {
+                Taito.sbyte1 &= ~0x40;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.R))
+            {
+                Taito.sbyte0 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.T))
+            {
+                Taito.sbyte0 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x02;
+            }
+        }
+        public static void loop_inputports_taitob_sbm()
+        {
+            if (Keyboard.IsPressed(Key.D5))
+            {
+                Taito.sbyte2 &= ~0x04;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.D6))
+            {
+                Taito.sbyte2 &= ~0x08;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.D1))
+            {
+                Taito.sbyte1 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.D2))
+            {
+                Taito.sbyte1 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte1 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.D))
+            {
+                Taito.sbyte0 &= ~0x08;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.A))
+            {
+                Taito.sbyte0 &= ~0x04;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.S))
+            {
+                Taito.sbyte0 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.W))
+            {
+                Taito.sbyte0 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.J))
+            {
+                Taito.sbyte2 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.K))
+            {
+                Taito.sbyte2 |= 0x20;
+            }
+            else
+            {
+                Taito.sbyte2 &= ~0x20;
+            }
+            if (Keyboard.IsPressed(Key.L))
+            {
+                Taito.sbyte2 |= 0x40;                
+            }
+            else
+            {
+                Taito.sbyte2 &= ~0x40;
+            }
+            if (Keyboard.IsPressed(Key.U))
+            {
+                Taito.sbyte2 &= unchecked((sbyte)~0x80);
+            }
+            else
+            {
+                Taito.sbyte2 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.Right))
+            {
+                Taito.sbyte1 &= unchecked((sbyte)~0x80);
+            }
+            else
+            {
+                Taito.sbyte1 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.Left))
+            {
+                Taito.sbyte0 &= ~0x40;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.Down))
+            {
+                Taito.sbyte0 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.Up))
+            {
+                Taito.sbyte0 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.R))
+            {
+                Taito.sbyte2 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.T))
+            {
+                Taito.sbyte2 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x01;
+            }
+        }
+        public static void loop_inputports_taitob_realpunc()
+        {
+            if (Keyboard.IsPressed(Key.D5))
+            {
+                Taito.sbyte0 &= ~0x40;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.D6))
+            {
+                Taito.sbyte0 &= unchecked((sbyte)~0x80);
+            }
+            else
+            {
+                Taito.sbyte0 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.D1))
+            {
+                Taito.sbyte0 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.D2))
+            {
+                Taito.sbyte0 &= ~0x02;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.J))
+            {
+                Taito.sbyte2 &= ~0x01;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.K))
+            {
+                Taito.sbyte2 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.L))
+            {
+                Taito.sbyte2 &= ~0x20;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.U))
+            {
+                Taito.sbyte2 &= ~0x40;
+            }
+            else
+            {
+                Taito.sbyte2 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.R))
+            {
+                Taito.sbyte0 &= ~0x08;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.T))
+            {
+                Taito.sbyte0 &= ~0x10;
+            }
+            else
+            {
+                Taito.sbyte0 |= 0x10;
             }
         }
         public static void record_port()

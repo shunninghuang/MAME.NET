@@ -9,12 +9,12 @@ using System.IO;
 namespace mame
 {
     public partial class CPS
-    {        
+    {
         private static int iXAll, iYAll, nBitmap;
-        private static Bitmap bmAll=new Bitmap(512,512);
+        private static Bitmap bmAll = new Bitmap(512, 512);
         private static List<string> lBitmapHash = new List<string>();
         private static int cpsb_addr, cpsb_value, mult_factor1, mult_factor2, mult_result_lo, mult_result_hi;
-        public static int layercontrol, layer_control, palette_control, in2_addr, in3_addr, out2_addr, bootleg_kludge;        
+        public static int layercontrol, layer_control, palette_control, in2_addr, in3_addr, out2_addr, bootleg_kludge;
         public static int[] priority, layer_enable_mask;
         public static int total_elements;
         public static uint[] primasks;
@@ -40,7 +40,7 @@ namespace mame
         public static int scroll1xoff = 0, scroll2xoff = 0, scroll3xoff = 0;
         public static int obj, other;
         private static ushort[] cps1_buffered_obj, cps2_buffered_obj, uuBFF;
-        private static int cps1_last_sprite_offset;
+        private static int cps1_last_sprite_offset, cps2_last_sprite_offset;
         private static int[] cps1_stars_enabled;
         private static byte TILEMAP_PIXEL_TRANSPARENT = 0x00;		/* transparent if in none of the layers below */
         private static byte TILEMAP_PIXEL_LAYER0 = 0x10;		/* pixel is opaque in layer 0 */
@@ -49,11 +49,9 @@ namespace mame
         public static int scroll1x, scroll1y;
         public static int scroll2x, scroll2y;
         public static int scroll3x, scroll3y;
-        private static int stars1x, stars1y, stars2x, stars2y;        
+        private static int stars1x, stars1y, stars2x, stars2y;
         public static int pri_ctrl;
-        
         public static bool bRecord;
-
         private static int cps1_base(int offset, int boundary)
         {
             int base1 = cps_a_regs[offset] * 256;
@@ -78,9 +76,25 @@ namespace mame
                 cps1_build_palette(cps1_base(CPS1_PALETTE_BASE, 0x0400));
             }
         }
+        private static void cps1_cps_a_w1(int offset, byte data)
+        {
+            cps_a_regs[offset] = (ushort)((data << 8) | (cps_a_regs[offset] & 0xff));
+            if (offset == CPS1_PALETTE_BASE)
+            {
+                cps1_build_palette(cps1_base(CPS1_PALETTE_BASE, 0x0400));
+            }
+        }
+        private static void cps1_cps_a_w2(int offset, byte data)
+        {
+            cps_a_regs[offset] = (ushort)((cps_a_regs[offset] & 0xff00) | data);
+            if (offset == CPS1_PALETTE_BASE)
+            {
+                cps1_build_palette(cps1_base(CPS1_PALETTE_BASE, 0x0400));
+            }
+        }
         private static void cps1_cps_a_w(int offset, ushort data)
         {
-            cps_a_regs[offset] =data;
+            cps_a_regs[offset] = data;
             if (offset == CPS1_PALETTE_BASE)
             {
                 cps1_build_palette(cps1_base(CPS1_PALETTE_BASE, 0x0400));
@@ -114,6 +128,58 @@ namespace mame
                 }
             }
             return 0xffff;
+        }
+        private static void cps1_cps_b_w1(int offset, byte data)
+        {
+            cps_b_regs[offset] = (ushort)((data << 8) | (cps_b_regs[offset] & 0xff));
+            if (cps_version == 2)
+            {
+                if (offset == 0x0e / 2)
+                {
+                    return;
+                }
+                if (offset == 0x10 / 2)
+                {
+                    cps1_scanline1 = (data & 0x1ff);
+                    return;
+                }
+                if (offset == 0x12 / 2)
+                {
+                    cps1_scanline2 = (data & 0x1ff);
+                    return;
+                }
+            }
+            if (offset == out2_addr / 2)
+            {
+                Generic.coin_lockout_w(2, ~data & 0x02);
+                Generic.coin_lockout_w(3, ~data & 0x08);
+            }
+        }
+        private static void cps1_cps_b_w2(int offset, byte data)
+        {
+            cps_b_regs[offset] = (ushort)((cps_b_regs[offset] & 0xff) | data);
+            if (cps_version == 2)
+            {
+                if (offset == 0x0e / 2)
+                {
+                    return;
+                }
+                if (offset == 0x10 / 2)
+                {
+                    cps1_scanline1 = (data & 0x1ff);
+                    return;
+                }
+                if (offset == 0x12 / 2)
+                {
+                    cps1_scanline2 = (data & 0x1ff);
+                    return;
+                }
+            }
+            if (offset == out2_addr / 2)
+            {
+                Generic.coin_lockout_w(2, ~data & 0x02);
+                Generic.coin_lockout_w(3, ~data & 0x08);
+            }
         }
         private static void cps1_cps_b_w(int offset, ushort data)
         {
@@ -308,9 +374,8 @@ namespace mame
             cps1_stars_enabled = new int[2];
             cps1_buffered_obj = new ushort[0x400];
             cps2_buffered_obj = new ushort[0x1000];
-            cps2_objram1=new ushort[0x1000];
-            cps2_objram2=new ushort[0x1000];
-            
+            cps2_objram1 = new ushort[0x1000];
+            cps2_objram2 = new ushort[0x1000];
             uuBFF = new ushort[0x200 * 0x200];
             for (i = 0; i < 0x40000; i++)
             {
@@ -423,6 +488,38 @@ namespace mame
             /* Sprites must use full sprite RAM */
             cps1_last_sprite_offset = 0x400 - 4;
         }
+        private static void cps2_find_last_sprite()
+        {
+            int offset = 0;
+            while (offset < 0x2000 / 2)
+            {
+                if (cps2_buffered_obj[offset + 1] >= 0x8000 || cps2_buffered_obj[offset + 3] >= 0xff00)
+                {
+                    cps2_last_sprite_offset = offset - 4;
+                    return;
+                }
+                offset += 4;
+            }
+            cps2_last_sprite_offset = 0x2000 / 2 - 4;
+        }
+        private static void cps2turbo_find_last_sprite()
+        {
+            int offset = 0;
+            while (offset < 0x2000 / 2)
+            {
+                if (cps2_buffered_obj[offset + 1] >= 0x8000 || cps2_buffered_obj[offset + 3] >= 0xff00)
+                {
+                    cps2_last_sprite_offset = offset - 4;
+                    return;
+                }
+                if ((cps2_buffered_obj[offset + 1] & 0x1000) != 0)
+                {
+                    cps2_buffered_obj[offset + 1] = (ushort)(cps2_buffered_obj[offset + 1] + 0x8000);
+                }
+                offset += 4;
+            }
+            cps2_last_sprite_offset = 0x2000 / 2 - 4;
+        }
         private static void cps1_render_sprites()
         {
             int i,match;
@@ -486,7 +583,7 @@ namespace mame
                                 {
                                     sx = (x + nxs * 16) & 0x1ff;
                                     sy = (y + nys * 16) & 0x1ff;
-                                    Drawgfx.common_drawgfx_c(CPS.gfx1rom,(code & ~0xf) + ((code + (nx - 1) - nxs) & 0xf) + 0x10 * (ny - 1 - nys), col, 1, 1, sx, sy, 0x80000002,Video.screenstate.visarea);
+                                    Drawgfx.common_drawgfx_c(CPS.gfx1rom, (code & ~0xf) + ((code + (nx - 1) - nxs) & 0xf) + 0x10 * (ny - 1 - nys), col, 1, 1, sx, sy, 0x80000002, Video.screenstate.visarea);
                                 }
                             }
                         }
@@ -554,20 +651,20 @@ namespace mame
                     break;
                 }
             }
-            for (i = cps2_last_sprite_offset; i >= 0; i--)
+            for (i = cps2_last_sprite_offset; i >= 0; i-= 4)
             {
-                x = cps2_buffered_obj[i * 4];
-                y = cps2_buffered_obj[i * 4 + 1];
+                x = cps2_buffered_obj[i];
+                y = cps2_buffered_obj[i + 1];
                 priority = (x >> 13) & 0x07;
-                code = cps2_buffered_obj[i * 4 + 2] + ((y & 0x6000) << 3);
-                colour = cps2_buffered_obj[i * 4 + 3];
+                code = cps2_buffered_obj[i + 2] + ((y & 0x6000) << 3);
+                colour = cps2_buffered_obj[i + 3];
                 col = colour & 0x1f;
-                if ((colour & 0x80)!=0)
+                if ((colour & 0x80) != 0)
                 {
                     x += cps2_port(0x08);  /* fix the offset of some games */
                     y += cps2_port(0x0a);  /* like Marvel vs. Capcom ending credits */
                 }
-                if ((colour & 0xff00)!=0)
+                if ((colour & 0xff00) != 0)
                 {
                     /* handle blocked sprites */
                     int nx = (colour & 0x0f00) >> 8;
@@ -575,10 +672,10 @@ namespace mame
                     int nxs, nys, sx, sy;
                     nx++;
                     ny++;
-                    if ((colour & 0x40)!=0)
+                    if ((colour & 0x40) != 0)
                     {
                         /* Y flip */
-                        if ((colour & 0x20)!=0)
+                        if ((colour & 0x20) != 0)
                         {
                             for (nys = 0; nys < ny; nys++)
                             {
@@ -605,7 +702,7 @@ namespace mame
                     }
                     else
                     {
-                        if ((colour & 0x20)!=0)
+                        if ((colour & 0x20) != 0)
                         {
                             for (nys = 0; nys < ny; nys++)
                             {
@@ -638,11 +735,99 @@ namespace mame
                 }
             }
         }
+        private static void cps2turbo_render_sprites()
+        {
+            int i, x, y, priority, code, colour, col;
+            int xoffs = -cps2_port(0x08);
+            int yoffs = -cps2_port(0x0a);
+            for (i = cps2_last_sprite_offset; i >= 0; i -= 4)
+            {
+                x = cps2_buffered_obj[i];
+                y = cps2_buffered_obj[i + 1];
+                priority = (x >> 13) & 0x07;
+                code = cps2_buffered_obj[i + 2] + ((y & 0xe000) << 3);
+                colour = cps2_buffered_obj[i + 3];
+                col = colour & 0x1f;
+                if ((colour & 0x80) != 0)
+                {
+                    x += cps2_port(0x08);  /* fix the offset of some games */
+                    y += cps2_port(0x0a);  /* like Marvel vs. Capcom ending credits */
+                }
+                if ((colour & 0xff00) != 0)
+                {
+                    /* handle blocked sprites */
+                    int nx = (colour & 0x0f00) >> 8;
+                    int ny = (colour & 0xf000) >> 12;
+                    int nxs, nys, sx, sy;
+                    nx++;
+                    ny++;
+                    if ((colour & 0x40) != 0)
+                    {
+                        /* Y flip */
+                        if ((colour & 0x20) != 0)
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    Drawgfx.common_drawgfx_c(CPS.gfx1rom, code + (nx - 1) - nxs + 0x10 * (ny - 1 - nys), (col & 0x1f), 1, 1, sx, sy, (uint)(primasks[priority] | 0x80000000), Video.screenstate.visarea);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    Drawgfx.common_drawgfx_c(CPS.gfx1rom, code + nxs + 0x10 * (ny - 1 - nys), (col & 0x1f), 0, 1, sx, sy, (uint)(primasks[priority] | 0x80000000), Video.screenstate.visarea);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ((colour & 0x20) != 0)
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    Drawgfx.common_drawgfx_c(CPS.gfx1rom, code + (nx - 1) - nxs + 0x10 * nys, (col & 0x1f), 1, 0, sx, sy, (uint)(primasks[priority] | 0x80000000), Video.screenstate.visarea);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    Drawgfx.common_drawgfx_c(CPS.gfx1rom, (code & ~0xf) + ((code + nxs) & 0xf) + 0x10 * nys, (col & 0x1f), 0, 0, sx, sy, (uint)(primasks[priority] | 0x80000000), Video.screenstate.visarea);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Drawgfx.common_drawgfx_c(CPS.gfx1rom, code, (col & 0x1f), colour & 0x20, colour & 0x40, (x + xoffs) & 0x3ff, (y + yoffs) & 0x3ff, (uint)(primasks[priority] | 0x80000000), Video.screenstate.visarea);
+                }
+            }
+        }
         private static void cps1_render_stars()
         {
             int offs;
             if (starsrom == null && (cps1_stars_enabled[0] != 0 || cps1_stars_enabled[1] != 0))
-            {                
+            {
                 return;//stars enabled but no stars ROM
             }
             if (cps1_stars_enabled[0] != 0)
@@ -781,6 +966,7 @@ namespace mame
             layercontrol = cps_b_regs[layer_control / 2];
             cps1_get_video_base();
             cps1_find_last_sprite();
+            cps2_find_last_sprite();
             cps1_update_transmasks();
             ttmap[0].tilemap_set_scrollx(0, scroll1x);
             ttmap[0].tilemap_set_scrolly(0, scroll1y);
@@ -870,6 +1056,104 @@ namespace mame
             cps1_render_layer(Video.new_clip, l2, 4);
             cps2_render_sprites();
         }
+        public static void video_update_cps2turbo()
+        {
+            int i;
+            int l0, l1, l2, l3;
+            int videocontrol = cps_a_regs[CPS1_VIDEOCONTROL];
+            layercontrol = cps_b_regs[layer_control / 2];
+            cps1_get_video_base();
+            cps1_find_last_sprite();
+            cps2turbo_find_last_sprite();
+            cps1_update_transmasks();
+            ttmap[0].tilemap_set_scrollx(0, scroll1x);
+            ttmap[0].tilemap_set_scrolly(0, scroll1y);
+            if ((videocontrol & 0x01) != 0)	/* linescroll enable */
+            {
+                int scrly = -scroll2y;
+                int otheroffs;
+                ttmap[1].scrollrows = 1024;
+                otheroffs = cps_a_regs[CPS1_ROWSCROLL_OFFS];
+                for (i = 0; i < 0x400; i++)
+                {
+                    ttmap[1].tilemap_set_scrollx((i - scrly) & 0x3ff, scroll2x + gfxram[(other + ((otheroffs + i) & 0x3ff)) * 2] * 0x100 + gfxram[(other + ((otheroffs + i) & 0x3ff)) * 2 + 1]);
+                }
+            }
+            else
+            {
+                ttmap[1].scrollrows = 1;
+                ttmap[1].tilemap_set_scrollx(0, scroll2x);
+            }
+            ttmap[1].tilemap_set_scrolly(0, scroll2y);
+            ttmap[2].tilemap_set_scrollx(0, scroll3x);
+            ttmap[2].tilemap_set_scrolly(0, scroll3y);
+            Array.Copy(uuBFF, 0, Video.bitmapbase[Video.curbitmap], 0x200 * Video.new_clip.min_y, 0x200 * (Video.new_clip.max_y - Video.new_clip.min_y));
+            cps1_render_stars();
+            l0 = (layercontrol >> 0x06) & 03;
+            l1 = (layercontrol >> 0x08) & 03;
+            l2 = (layercontrol >> 0x0a) & 03;
+            l3 = (layercontrol >> 0x0c) & 03;
+            Array.Clear(Tilemap.priority_bitmap, 0, 0x40000);
+            int l0pri, l1pri, l2pri, l3pri;
+            l0pri = (pri_ctrl >> 4 * l0) & 0x0f;
+            l1pri = (pri_ctrl >> 4 * l1) & 0x0f;
+            l2pri = (pri_ctrl >> 4 * l2) & 0x0f;
+            l3pri = (pri_ctrl >> 4 * l3) & 0x0f;
+            if (l0 == 0)
+            {
+                l0 = l1; l1 = 0; l0pri = l1pri;
+            }
+            if (l1 == 0)
+            {
+                l1 = l2; l2 = 0; l1pri = l2pri;
+            }
+            if (l2 == 0)
+            {
+                l2 = l3; l3 = 0; l2pri = l3pri;
+            }
+            {
+                int mask0 = 0xaa;
+                int mask1 = 0xcc;
+                if (l0pri > l1pri)
+                {
+                    mask0 &= ~0x88;
+                }
+                if (l0pri > l2pri)
+                {
+                    mask0 &= ~0xa0;
+                }
+                if (l1pri > l2pri)
+                {
+                    mask1 &= ~0xc0;
+                }
+                primasks[0] = 0xff;
+                for (i = 1; i < 8; i++)
+                {
+                    if (i <= l0pri && i <= l1pri && i <= l2pri)
+                    {
+                        primasks[i] = 0xfe;
+                        continue;
+                    }
+                    primasks[i] = 0;
+                    if (i <= l0pri)
+                    {
+                        primasks[i] |= (uint)mask0;
+                    }
+                    if (i <= l1pri)
+                    {
+                        primasks[i] |= (uint)mask1;
+                    }
+                    if (i <= l2pri)
+                    {
+                        primasks[i] |= 0xf0;
+                    }
+                }
+            }
+            cps1_render_layer(Video.new_clip, l0, 1);
+            cps1_render_layer(Video.new_clip, l1, 2);
+            cps1_render_layer(Video.new_clip, l2, 4);
+            cps2turbo_render_sprites();
+        }
         public static void video_eof_cps1()
         {
             int i;
@@ -895,7 +1179,7 @@ namespace mame
             cps2_set_sprite_priorities();
             int baseptr;
             baseptr = 0x7000;
-            if ((cps2_objram_bank & 1)!=0)
+            if ((cps2_objram_bank & 1) != 0)
             {
                 baseptr ^= 0x0080;
             }
@@ -907,6 +1191,6 @@ namespace mame
             {
                 Array.Copy(cps2_objram2, cps2_buffered_obj, 0x1000);
             }
-        } 
+        }
     }
 }

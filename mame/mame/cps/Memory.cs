@@ -16,7 +16,7 @@ namespace mame
         public static short short0_old, short1_old, short2_old;
         public static sbyte sbyte0_old, sbyte3_old;
         public static int iMStatus = 0;
-        public static sbyte MCReadOpByte(int address)
+        public static sbyte MReadOpByte_cps1(int address)
         {
             address &= 0xffffff;
             sbyte result = 0;
@@ -41,7 +41,7 @@ namespace mame
             }*/
             return result;
         }
-        public static sbyte MCReadByte(int address)
+        public static sbyte MReadByte_cps1(int address)
         {
             address &= 0xffffff;
             sbyte result = 0;
@@ -102,7 +102,7 @@ namespace mame
             }
             return result;
         }
-        public static short MCReadOpWord(int address)
+        public static short MReadOpWord_cps1(int address)
         {
             address &= 0xffffff;
             short result = 0;
@@ -127,7 +127,7 @@ namespace mame
             }
             return result;
         }
-        public static short MCReadWord(int address)
+        public static short MReadWord_cps1(int address)
         {
             address &= 0xffffff;
             short result = 0;
@@ -170,74 +170,19 @@ namespace mame
             }
             return result;
         }
-        public static int MCReadOpLong(int address)
+        public static int MReadOpLong_cps1(int address)
         {
-            address &= 0xffffff;
             int result = 0;
-            if (address <= 0x3fffff)
-            {
-                if (address + 3 < Memory.mainrom.Length)
-                {
-                    result = (int)(Memory.mainrom[address] * 0x1000000 + Memory.mainrom[address + 1] * 0x10000 + Memory.mainrom[address + 2] * 0x100 + Memory.mainrom[address + 3]);
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
-            {
-                result = (int)(gfxram[(address & 0x3ffff)] * 0x1000000 + gfxram[(address & 0x3ffff) + 1] * 0x10000 + gfxram[(address & 0x3ffff) + 2] * 0x100 + gfxram[(address & 0x3ffff) + 3]);
-            }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
-            {
-                result = (int)(Memory.mainram[(address & 0xffff)] * 0x1000000 + Memory.mainram[(address & 0xffff) + 1] * 0x10000 + Memory.mainram[(address & 0xffff) + 2] * 0x100 + Memory.mainram[(address & 0xffff) + 3]);
-            }
+            result = (int)((ushort)MReadOpWord_cps1(address) * 0x10000 + (ushort)MReadOpWord_cps1(address + 2));
             return result;
         }
-        public static int MCReadLong(int address)
+        public static int MReadLong_cps1(int address)
         {
-            address &= 0xffffff;
             int result = 0;
-            if (address <= 0x3fffff)
-            {
-                if (address + 3 < Memory.mainrom.Length)
-                {
-                    result = (int)(Memory.mainrom[address] * 0x1000000 + Memory.mainrom[address + 1] * 0x10000 + Memory.mainrom[address + 2] * 0x100 + Memory.mainrom[address + 3]);
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            else if (address >= 0x800000 && address + 3 <= 0x800007)
-            {
-                result = 0;
-            }
-            else if (address >= 0x800018 && address + 3 <= 0x80001f)
-            {
-                result = 0;
-            }
-            else if (address >= 0x800020 && address + 3 <= 0x800021)
-            {
-                result = 0;
-            }
-            else if (address >= 0x800140 && address + 3 <= 0x80017f)
-            {
-                int offset = (address - 0x800140) / 2;
-                result = cps1_cps_b_r(offset) * 0x10000 + cps1_cps_b_r(offset + 1);
-            }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
-            {
-                result = (int)(gfxram[(address & 0x3ffff)] * 0x1000000 + gfxram[(address & 0x3ffff) + 1] * 0x10000 + gfxram[(address & 0x3ffff) + 2] * 0x100 + gfxram[(address & 0x3ffff) + 3]);
-            }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
-            {
-                result = (int)(Memory.mainram[(address & 0xffff)] * 0x1000000 + Memory.mainram[(address & 0xffff) + 1] * 0x10000 + Memory.mainram[(address & 0xffff) + 2] * 0x100 + Memory.mainram[(address & 0xffff) + 3]);
-            }
+            result = (int)((ushort)MReadWord_cps1(address) * 0x10000 + (ushort)MReadWord_cps1(address + 2));
             return result;
         }
-        public static void MCWriteByte(int address, sbyte value)
+        public static void MWriteByte_cps1(int address, sbyte value)
         {
             address &= 0xffffff;
             if (address >= 0x800030 && address <= 0x800037)
@@ -281,7 +226,7 @@ namespace mame
                 int i1 = 1;
             }
         }
-        public static void MCWriteWord(int address, short value)
+        public static void MWriteWord_cps1(int address, short value)
         {
             address &= 0xffffff;
             if (address >= 0x800030 && address + 1 <= 0x800037)
@@ -290,11 +235,13 @@ namespace mame
             }
             else if (address >= 0x800100 && address + 1 <= 0x80013f)
             {
-                cps1_cps_a_w((address & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x800100) / 2;
+                cps1_cps_a_w(offset, (ushort)value);
             }
             else if (address >= 0x800140 && address + 1 <= 0x80017f)
             {
-                cps1_cps_b_w((address & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x800140) / 2;
+                cps1_cps_b_w(offset, (ushort)value);
             }
             else if (address >= 0x800180 && address + 1 <= 0x800187)
             {
@@ -320,53 +267,12 @@ namespace mame
                 int i1 = 1;
             }
         }
-        public static void MCWriteLong(int address, int value)
+        public static void MWriteLong_cps1(int address, int value)
         {
-            address &= 0xffffff;
-            if (address >= 0x800030 && address + 3 <= 0x800037)
-            {
-                return;
-            }
-            else if (address >= 0x800100 && address + 3 <= 0x80013f)
-            {
-                cps1_cps_a_w((address & 0x3f) / 2, (ushort)(value >> 16));
-                cps1_cps_a_w(((address + 2) & 0x3f) / 2, (ushort)value);
-            }
-            else if (address >= 0x800140 && address + 3 <= 0x80017f)
-            {
-                cps1_cps_b_w((address & 0x3f) / 2, (ushort)(value >> 16));
-                cps1_cps_b_w(((address + 2) & 0x3f) / 2, (ushort)value);
-            }
-            else if (address >= 0x800180 && address + 3 <= 0x800187)
-            {
-                return;
-            }
-            else if (address >= 0x800188 && address + 3 <= 0x80018f)
-            {
-                return;
-            }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
-            {
-                gfxram[(address & 0x3ffff)] = (byte)(value >> 24);
-                gfxram[(address & 0x3ffff) + 1] = (byte)(value >> 16);
-                gfxram[(address & 0x3ffff) + 2] = (byte)(value >> 8);
-                gfxram[(address & 0x3ffff) + 3] = (byte)(value);
-                cps1_gfxram_w((address & 0x3ffff) / 2);
-                cps1_gfxram_w(((address + 2) & 0x3ffff) / 2);
-            }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
-            {
-                Memory.mainram[(address & 0xffff)] = (byte)(value >> 24);
-                Memory.mainram[(address & 0xffff) + 1] = (byte)(value >> 16);
-                Memory.mainram[(address & 0xffff) + 2] = (byte)(value >> 8);
-                Memory.mainram[(address & 0xffff) + 3] = (byte)(value);
-            }
-            else
-            {
-                int i1 = 1;
-            }
+            MWriteWord_cps1(address, (short)(value >> 16));
+            MWriteWord_cps1(address + 2, (short)value);
         }
-        public static byte ZCReadOp(ushort address)
+        public static byte ZReadOp_cps1(ushort address)
         {
             byte result = 0;
             if (address <= 0x7fff)
@@ -379,7 +285,7 @@ namespace mame
             }
             return result;
         }
-        public static byte ZCReadMemory(ushort address)
+        public static byte ZReadMemory_cps1(ushort address)
         {
             byte result = 0;
             if (address < 0x8000)
@@ -416,7 +322,7 @@ namespace mame
             }
             return result;
         }
-        public static void ZCWriteMemory(ushort address, byte value)
+        public static void ZWriteMemory_cps1(ushort address, byte value)
         {
             if (address >= 0xd000 && address <= 0xd7ff)
             {
@@ -447,7 +353,7 @@ namespace mame
 
             }
         }
-        public static sbyte MQReadOpByte(int address)
+        public static sbyte MReadOpByte_qsound(int address)
         {
             address &= 0xffffff;
             sbyte result = 0;
@@ -468,7 +374,7 @@ namespace mame
             }
             return result;
         }
-        public static sbyte MQReadByte(int address)
+        public static sbyte MReadByte_qsound(int address)
         {
             address &= 0xffffff;
             sbyte result = 0;
@@ -510,7 +416,8 @@ namespace mame
             }
             else if (address >= 0x900000 && address <= 0x92ffff)
             {
-                result = (sbyte)gfxram[(address & 0x3ffff)];
+                int offset = address - 0x900000;
+                result = (sbyte)gfxram[offset];
             }
             else if (address >= 0xf00000 && address <= 0xf0ffff)
             {
@@ -527,7 +434,14 @@ namespace mame
             else if (address >= 0xf18000 && address <= 0xf19fff)
             {
                 int offset = (address - 0xf18000) / 2;
-                result = (sbyte)qsound_sharedram1_r(offset);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(qsound_sharedram1_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)qsound_sharedram1_r(offset);
+                }
             }
             else if (address >= 0xf1c000 && address <= 0xf1c001)
             {
@@ -544,15 +458,23 @@ namespace mame
             else if (address >= 0xf1e000 && address <= 0xf1ffff)
             {
                 int offset = (address - 0xf1e000) / 2;
-                result = (sbyte)qsound_sharedram2_r(offset);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(qsound_sharedram2_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)qsound_sharedram2_r(offset);
+                }
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
             {
-                result = (sbyte)Memory.mainram[address & 0xffff];
+                int offset = address - 0xff0000;
+                result = (sbyte)Memory.mainram[offset];
             }
             return result;
         }
-        public static short MQReadOpWord(int address)
+        public static short MReadOpWord_qsound(int address)
         {
             address &= 0xffffff;
             short result = 0;
@@ -569,15 +491,17 @@ namespace mame
             }
             else if (address >= 0x900000 && address + 1 <= 0x92ffff)
             {
-                result = (short)(gfxram[(address & 0x3ffff)] * 0x100 + gfxram[(address & 0x3ffff) + 1]);
+                int offset = address - 0x900000;
+                result = (short)(gfxram[offset] * 0x100 + gfxram[offset + 1]);
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
-                result = (short)(Memory.mainram[(address & 0xffff)] * 0x100 + Memory.mainram[(address & 0xffff) + 1]);
+                int offset = address - 0xff0000;
+                result = (short)(Memory.mainram[offset] * 0x100 + Memory.mainram[offset + 1]);
             }
             return result;
         }
-        public static short MQReadWord(int address)
+        public static short MReadWord_qsound(int address)
         {
             address &= 0xffffff;
             short result = 0;
@@ -608,7 +532,8 @@ namespace mame
             }
             else if (address >= 0x900000 && address + 1 <= 0x92ffff)
             {
-                result = (short)(gfxram[(address & 0x3ffff)] * 0x100 + gfxram[(address & 0x3ffff) + 1]);
+                int offset = address - 0x900000;
+                result = (short)(gfxram[offset] * 0x100 + gfxram[offset + 1]);
             }
             else if (address >= 0xf00000 && address + 1 <= 0xf0ffff)
             {
@@ -639,97 +564,24 @@ namespace mame
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
-                result = (short)(Memory.mainram[(address & 0xffff)] * 0x100 + Memory.mainram[(address & 0xffff) + 1]);
+                int offset = address - 0xff0000;
+                result = (short)(Memory.mainram[offset] * 0x100 + Memory.mainram[offset + 1]);
             }
             return result;
         }
-        public static int MQReadOpLong(int address)
+        public static int MReadOpLong_qsound(int address)
         {
-            address &= 0xffffff;
             int result = 0;
-            if (address <= 0x3fffff)
-            {
-                if (address + 3 < Memory.mainrom.Length)
-                {
-                    result = (int)(Memory.mainrom[address] * 0x1000000 + Memory.mainrom[address + 1] * 0x10000 + Memory.mainrom[address + 2] * 0x100 + Memory.mainrom[address + 3]);
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
-            {
-                result = (int)(gfxram[(address & 0x3ffff)] * 0x1000000 + gfxram[(address & 0x3ffff) + 1] * 0x10000 + gfxram[(address & 0x3ffff) + 2] * 0x100 + gfxram[(address & 0x3ffff) + 3]);
-            }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
-            {
-                result = (int)(Memory.mainram[(address & 0xffff)] * 0x1000000 + Memory.mainram[(address & 0xffff) + 1] * 0x10000 + Memory.mainram[(address & 0xffff) + 2] * 0x100 + Memory.mainram[(address & 0xffff) + 3]);
-            }
+            result = (int)((ushort)MReadOpWord_qsound(address) * 0x10000 + (ushort)MReadOpWord_qsound(address + 2));
             return result;
         }
-        public static int MQReadLong(int address)
+        public static int MReadLong_qsound(int address)
         {
-            address &= 0xffffff;
             int result = 0;
-            if (address <= 0x3fffff)
-            {
-                if (address + 3 < Memory.mainrom.Length)
-                {
-                    result = (int)(Memory.mainrom[address] * 0x1000000 + Memory.mainrom[address + 1] * 0x10000 + Memory.mainrom[address + 2] * 0x100 + Memory.mainrom[address + 3]);
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            else if (address >= 0x800000 && address + 3 <= 0x800007)
-            {
-                result = -1;//short1
-            }
-            else if (address >= 0x800018 && address + 3 <= 0x80001f)
-            {
-                result = 0;//cps1_dsw_r
-            }
-            else if (address >= 0x800140 && address + 3 <= 0x80017f)
-            {
-                result = 0;//cps1_cps_b_r
-            }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
-            {
-                result = (int)(gfxram[(address & 0x3ffff)] * 0x1000000 + gfxram[(address & 0x3ffff) + 1] * 0x10000 + gfxram[(address & 0x3ffff) + 2] * 0x100 + gfxram[(address & 0x3ffff) + 3]);
-            }
-            else if (address >= 0xf00000 && address + 3 <= 0xf0ffff)
-            {
-                result = 0;//qsound_rom_r
-            }
-            else if (address >= 0xf18000 && address + 3 <= 0xf19fff)
-            {
-                result = 0;//qsound_sharedram1_r
-            }
-            else if (address >= 0xf1c000 && address + 3 <= 0xf1c001)
-            {
-                result = (int)short2 & 0xff;
-            }
-            else if (address >= 0xf1c002 && address + 3 <= 0xf1c003)
-            {
-                result = (int)sbyte3 & 0xff;
-            }
-            else if (address >= 0xf1c006 && address + 3 <= 0xf1c007)
-            {
-                result = 0;//cps1_eeprom_port_r();
-            }
-            else if (address >= 0xf1e000 && address + 3 <= 0xf1ffff)
-            {
-                result = 0;//qsound_sharedram2_r
-            }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
-            {
-                result = (int)(Memory.mainram[(address & 0xffff)] * 0x1000000 + Memory.mainram[(address & 0xffff) + 1] * 0x10000 + Memory.mainram[(address & 0xffff) + 2] * 0x100 + Memory.mainram[(address & 0xffff) + 3]);
-            }
+            result = (int)((ushort)MReadWord_qsound(address) * 0x10000 + (ushort)MReadWord_qsound(address + 2));
             return result;
         }
-        public static void MQWriteByte(int address, sbyte value)
+        public static void MWriteByte_qsound(int address, sbyte value)
         {
             address &= 0xffffff;
             if (address >= 0x800030 && address <= 0x800037)
@@ -753,8 +605,9 @@ namespace mame
             }
             else if (address >= 0x900000 && address <= 0x92ffff)
             {
-                gfxram[(address & 0x3ffff)] = (byte)(value);
-                cps1_gfxram_w((address & 0x3ffff) / 2);
+                int offset = address - 0x900000;
+                gfxram[offset] = (byte)(value);
+                cps1_gfxram_w(offset / 2);
             }
             else if (address >= 0xf18000 && address <= 0xf19fff)
             {
@@ -793,14 +646,15 @@ namespace mame
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
             {
-                Memory.mainram[(address & 0xffff)] = (byte)(value);
+                int offset = address - 0xff0000;
+                Memory.mainram[offset] = (byte)(value);
             }
             else
             {
                 int i11 = 1;
             }
         }
-        public static void MQWriteWord(int address, short value)
+        public static void MWriteWord_qsound(int address, short value)
         {
             address &= 0xffffff;
             if (address >= 0x800030 && address + 1 <= 0x800037)
@@ -854,64 +708,12 @@ namespace mame
                 int i11 = 1;
             }
         }
-        public static void MQWriteLong(int address, int value)
+        public static void MWriteLong_qsound(int address, int value)
         {
-            address &= 0xffffff;
-            if (address >= 0x800030 && address + 3 <= 0x800037)
-            {
-                return;
-            }
-            else if (address >= 0x800100 && address + 3 <= 0x80013f)
-            {
-                cps1_cps_a_w((address & 0x3f) / 2, (ushort)(value >> 16));
-                cps1_cps_a_w(((address + 2) & 0x3f) / 2, (ushort)value);
-            }
-            else if (address >= 0x800140 && address + 3 <= 0x80017f)
-            {
-                return;//cps1_cps_b_w
-            }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
-            {
-                if (address == 0x904000)
-                {
-                    int i11 = 1;
-                }
-                gfxram[(address & 0x3ffff)] = (byte)(value >> 24);
-                gfxram[(address & 0x3ffff) + 1] = (byte)(value >> 16);
-                gfxram[(address & 0x3ffff) + 2] = (byte)(value >> 8);
-                gfxram[(address & 0x3ffff) + 3] = (byte)(value);
-                cps1_gfxram_w((address & 0x3ffff) / 2);
-                cps1_gfxram_w(((address + 2) & 0x3ffff) / 2);
-            }
-            else if (address >= 0xf18000 && address + 3 <= 0xf19fff)
-            {
-                int i11 = 1;//qsound_sharedram1_w
-            }
-            else if (address >= 0xf1c004 && address + 3 <= 0xf1c005)
-            {
-                int i11 = 1;//cpsq_coinctrl2_w
-            }
-            else if (address >= 0xf1c006 && address + 3 <= 0xf1c007)
-            {
-                int i11 = 1;//cps1_eeprom_port_w
-            }
-            else if (address >= 0xf1e000 && address + 3 <= 0xf1ffff)
-            {
-                int i11 = 1;//qsound_sharedram2_w
-            }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
-            {
-                Memory.mainram[(address & 0xffff)] = (byte)(value >> 24);
-                Memory.mainram[(address & 0xffff) + 1] = (byte)(value >> 16);
-                Memory.mainram[(address & 0xffff) + 2] = (byte)(value >> 8);
-                Memory.mainram[(address & 0xffff) + 3] = (byte)(value);
-            }
-            else
-            {
-                int i11 = 1;
-            }
+            MWriteWord_qsound(address, (short)(value >> 16));
+            MWriteWord_qsound(address + 2, (short)value);
         }
-        public static sbyte MC2ReadOpByte(int address)
+        public static sbyte MReadOpByte_cps2(int address)
         {
             address &= 0xffffff;
             sbyte result = 0;
@@ -928,7 +730,7 @@ namespace mame
             }
             return result;
         }
-        public static sbyte MC2ReadPcrelByte(int address)
+        public static sbyte MReadPcrelByte_cps2(int address)
         {
             address &= 0xffffff;
             sbyte result = 0;
@@ -941,16 +743,15 @@ namespace mame
                 else
                 {
                     result = 0;
-             
                 }
             }
             else
             {
-                result = MC2ReadByte(address);
+                result = MReadByte_cps2(address);
             }
             return result;
         }
-        public static sbyte MC2ReadByte(int address)
+        public static sbyte MReadByte_cps2(int address)
         {
             address &= 0xffffff;
             sbyte result = 0;
@@ -973,7 +774,14 @@ namespace mame
             else if (address >= 0x618000 && address <= 0x619fff)
             {
                 int offset = (address - 0x618000) / 2;
-                result = (sbyte)qsound_sharedram1_r(offset);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(qsound_sharedram1_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)qsound_sharedram1_r(offset);
+                }
             }
             else if (address >= 0x662000 && address <= 0x662001)
             {
@@ -1022,53 +830,75 @@ namespace mame
             }
             else if (address >= 0x804000 && address <= 0x804001)
             {
-                result = (sbyte)short0;
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(short0 >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)short0;
+                }
             }
             else if (address >= 0x804010 && address <= 0x804011)
             {
-                if (address == 0x804010)
+                if (address % 2 == 0)
                 {
                     result = (sbyte)(short1 >> 8);
                 }
-                else if (address == 0x804011)
+                else if (address % 2 == 1)
                 {
                     result = (sbyte)short1;
                 }
             }
             else if (address >= 0x804020 && address <= 0x804021)
             {
-                if (address == 0x804020)
+                if (address % 2 == 0)
                 {
                     result = (sbyte)(short2 >> 8);
                 }
-                else if (address == 0x804021)
+                else if (address % 2 == 1)
                 {
                     result = (sbyte)(short2 & (Eeprom.eeprom_bit_r() - 2));
                 }
             }
             else if (address >= 0x804030 && address <= 0x804031)
             {
-                if (address == 0x804030)
+                if (address % 2 == 0)
                 {
                     result = (sbyte)(cps2_qsound_volume_r() >> 8);
                 }
-                else
+                else if (address % 2 == 1)
                 {
                     result = (sbyte)cps2_qsound_volume_r();
                 }
             }
             else if (address >= 0x8040b0 && address <= 0x8040b3)
             {
-                result = (sbyte)kludge_r();
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(kludge_r() >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)kludge_r();
+                }
             }
             else if (address >= 0x804140 && address <= 0x80417f)
             {
                 int offset = (address - 0x804140) / 2;
-                result = (sbyte)cps1_cps_b_r(offset);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps1_cps_b_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps1_cps_b_r(offset);
+                }
             }
             else if (address >= 0x900000 && address <= 0x92ffff)
             {
-                result = (sbyte)gfxram[(address & 0x3ffff)];
+                int offset = address - 0x900000;
+                result = (sbyte)gfxram[offset];
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
             {
@@ -1076,7 +906,7 @@ namespace mame
             }
             return result;
         }
-        public static short MC2ReadOpWord(int address)
+        public static short MReadOpWord_cps2(int address)
         {
             address &= 0xffffff;
             short result = 0;
@@ -1093,7 +923,7 @@ namespace mame
             }
             return result;
         }
-        public static short MC2ReadPcrelWord(int address)
+        public static short MReadPcrelWord_cps2(int address)
         {
             address &= 0xffffff;
             short result = 0;
@@ -1110,11 +940,11 @@ namespace mame
             }
             else
             {
-                result = MC2ReadWord(address);
+                result = MReadWord_cps2(address);
             }
             return result;
         }
-        public static short MC2ReadWord(int address)
+        public static short MReadWord_cps2(int address)
         {
             address &= 0xffffff;
             short result = 0;
@@ -1211,166 +1041,35 @@ namespace mame
             }
             else if (address >= 0x900000 && address + 1 <= 0x92ffff)
             {
-                result = (short)(gfxram[(address & 0x3ffff)] * 0x100 + gfxram[(address & 0x3ffff) + 1]);
+                int offset = address - 0x900000;
+                result = (short)(gfxram[offset] * 0x100 + gfxram[offset + 1]);
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
-                result = (short)(Memory.mainram[(address & 0xffff)] * 0x100 + Memory.mainram[(address & 0xffff) + 1]);
+                int offset = address - 0xff0000;
+                result = (short)(Memory.mainram[offset] * 0x100 + Memory.mainram[offset + 1]);
             }
             return result;
         }
-        public static int MC2ReadOpLong(int address)
+        public static int MReadOpLong_cps2(int address)
         {
-            address &= 0xffffff;
             int result = 0;
-            if (address <= 0x3fffff)
-            {
-                if (address + 3 < mainromop.Length)
-                {
-                    result = (int)(mainromop[address] * 0x1000000 + mainromop[address + 1] * 0x10000 + mainromop[address + 2] * 0x100 + mainromop[address + 3]);
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
+            result = (int)((ushort)MReadOpWord_cps2(address) * 0x10000 + (ushort)MReadOpWord_cps2(address + 2));
             return result;
         }
-        public static int MC2ReadPcrelLong(int address)
+        public static int MReadPcrelLong_cps2(int address)
         {
-            address &= 0xffffff;
             int result = 0;
-            if (address <= 0x3fffff)
-            {
-                if (address + 3 < mainromop.Length)
-                {
-                    result = (int)(mainromop[address] * 0x1000000 + mainromop[address + 1] * 0x10000 + mainromop[address + 2] * 0x100 + mainromop[address + 3]);
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            else
-            {
-                result = MC2ReadLong(address);
-            }
+            result = (int)((ushort)MReadPcrelWord_cps2(address) * 0x10000 + (ushort)MReadPcrelWord_cps2(address + 2));
             return result;
         }
-        public static int MC2ReadLong(int address)
+        public static int MReadLong_cps2(int address)
         {
-            address &= 0xffffff;
             int result = 0;
-            if (address <= 0x3fffff)
-            {
-                if (address + 3 < Memory.mainrom.Length)
-                {
-                    result = (int)(Memory.mainrom[address] * 0x1000000 + Memory.mainrom[address + 1] * 0x10000 + Memory.mainrom[address + 2] * 0x100 + Memory.mainrom[address + 3]);
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            else if (address >= 0x400000 && address <= 0x40000b)
-            {
-                result = 0;
-                //int offset = (add - 0x400000) / 2;
-                //return (short)CPS1.cps2_output[offset];
-            }
-            else if (address >= 0x618000 && address <= 0x619fff)
-            {
-                result = 0;
-                //int offset = (add - 0x618000) / 2;
-                //return CPS1.qsound_sharedram1_r(offset);
-            }
-            else if (address >= 0x662000 && address <= 0x662001)
-            {
-                result = 0;
-            }
-            else if (address >= 0x662008 && address <= 0x662009)
-            {
-                result = 0;
-            }
-            else if (address >= 0x662020 && address <= 0x662021)
-            {
-                result = 0;
-            }
-            else if (address >= 0x660000 && address <= 0x663fff)
-            {
-                result = 0;
-            }
-            else if (address >= 0x664000 && address <= 0x664001)
-            {
-                result = 0;
-            }
-            else if (address >= 0x708000 && address <= 0x709fff)
-            {
-                int offset = (address - 0x708000) / 2;
-                result = (int)((ushort)cps2_objram2_r(offset) * 0x10000 + (ushort)cps2_objram2_r(offset + 1));
-            }
-            else if (address >= 0x70a000 && address <= 0x70bfff)
-            {
-                int offset = (address - 0x70a000) / 2;
-                result = (int)((ushort)cps2_objram2_r(offset) * 0x10000 + (ushort)cps2_objram2_r(offset + 1));
-            }
-            else if (address >= 0x70c000 && address <= 0x70dfff)
-            {
-                int offset = (address - 0x70c000) / 2;
-                result = (int)((ushort)cps2_objram2_r(offset) * 0x10000 + (ushort)cps2_objram2_r(offset + 1));
-            }
-            else if (address >= 0x70e000 && address <= 0x70ffff)
-            {
-                int offset = (address - 0x70e000) / 2;
-                result = (int)((ushort)cps2_objram2_r(offset) * 0x10000 + (ushort)cps2_objram2_r(offset + 1));
-            }
-            else if (address >= 0x800140 && address <= 0x80017f)
-            {
-                result = 0;
-                //int offset = (add - 0x800140) / 2;
-                //return (short)cps1_cps_b_r(offset);
-            }
-            else if (address >= 0x804000 && address <= 0x804001)
-            {
-                result = 0;
-                //return (int)sbyte0 & 0xff;
-            }
-            else if (address >= 0x804010 && address <= 0x804011)
-            {
-                result = -1;
-                //return short1;
-            }
-            else if (address >= 0x804020 && address <= 0x804021)
-            {
-                result = 0;
-                //return (int)sbyte2 & 0xff;
-            }
-            else if (address >= 0x804030 && address <= 0x804031)
-            {
-                result = 0;
-                //return CPS1.cps2_qsound_volume_r();
-            }
-            else if (address >= 0x8040b0 && address <= 0x8040b3)
-            {
-                result = kludge_r();
-            }
-            else if (address >= 0x804140 && address <= 0x80417f)
-            {
-                result = 0;
-                //int offset = (add - 0x804140) / 2;
-                //return (short)CPS1.cps1_cps_b_r(offset);
-            }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
-            {
-                result = (int)(gfxram[(address & 0x3ffff)] * 0x1000000 + gfxram[(address & 0x3ffff) + 1] * 0x10000 + gfxram[(address & 0x3ffff) + 2] * 0x100 + gfxram[(address & 0x3ffff) + 3]);
-            }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
-            {
-                result = (int)(Memory.mainram[(address & 0xffff)] * 0x1000000 + Memory.mainram[(address & 0xffff) + 1] * 0x10000 + Memory.mainram[(address & 0xffff) + 2] * 0x100 + Memory.mainram[(address & 0xffff) + 3]);
-            }
+            result = (int)((ushort)MReadWord_cps2(address) * 0x10000 + (ushort)MReadWord_cps2(address + 2));
             return result;
         }
-        public static void MC2WriteByte(int address, sbyte value)
+        public static void MWriteByte_cps2(int address, sbyte value)
         {
             address &= 0xffffff;
             if (address <= 0x3fffff)
@@ -1472,19 +1171,21 @@ namespace mame
             }
             else if (address >= 0x900000 && address <= 0x92ffff)
             {
-                gfxram[(address & 0x3ffff)] = (byte)(value);
-                cps1_gfxram_w((address & 0x3ffff) / 2);
+                int offset = address - 0x900000;
+                gfxram[offset] = (byte)(value);
+                cps1_gfxram_w(offset / 2);
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
             {
-                Memory.mainram[(address & 0xffff)] = (byte)(value);
+                int offset = address - 0xff0000;
+                Memory.mainram[offset] = (byte)(value);
             }
             else
             {
                 int i11 = 1;
             }
         }
-        public static void MC2WriteWord(int address, short value)
+        public static void MWriteWord_cps2(int address, short value)
         {
             address &= 0xffffff;
             if (address <= 0x3fffff)
@@ -1548,11 +1249,13 @@ namespace mame
             }
             else if (address >= 0x800100 && address <= 0x80013f)
             {
-                cps1_cps_a_w((address & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x800100) / 2;
+                cps1_cps_a_w(offset, (ushort)value);
             }
             else if (address >= 0x800140 && address + 1 <= 0x80017f)
             {
-                cps1_cps_b_w((address & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x800140) / 2;
+                cps1_cps_b_w(offset, (ushort)value);
             }
             else if (address >= 0x804040 && address <= 0x804041)
             {
@@ -1568,112 +1271,630 @@ namespace mame
             }
             else if (address >= 0x804100 && address + 1 <= 0x80413f)
             {
-                cps1_cps_a_w((address & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x804100) / 2;
+                cps1_cps_a_w(offset, (ushort)value);
             }
             else if (address >= 0x804140 && address <= 0x80417f)
             {
-                cps1_cps_b_w((address & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x804140) / 2;
+                cps1_cps_b_w(offset, (ushort)value);
             }
             else if (address >= 0x900000 && address + 1 <= 0x92ffff)
             {
-                gfxram[address & 0x3ffff] = (byte)(value >> 8);
-                gfxram[(address & 0x3ffff) + 1] = (byte)value;
-                cps1_gfxram_w((address & 0x3ffff) / 2);
+                int offset = address - 0x900000;
+                gfxram[offset] = (byte)(value >> 8);
+                gfxram[offset + 1] = (byte)value;
+                cps1_gfxram_w(offset / 2);
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
-                Memory.mainram[address & 0xffff] = (byte)(value >> 8);
-                Memory.mainram[(address & 0xffff) + 1] = (byte)value;
+                int offset = address - 0xff0000;
+                Memory.mainram[offset] = (byte)(value >> 8);
+                Memory.mainram[offset + 1] = (byte)value;
             }
             else
             {
                 int i11 = 1;
             }
         }
-        public static void MC2WriteLong(int address, int value)
+        public static void MWriteLong_cps2(int address, int value)
+        {
+            MWriteWord_cps2(address, (short)(value >> 16));
+            MWriteWord_cps2(address + 2, (short)value);
+        }
+        public static sbyte MReadOpByte_cps2turbo(int address)
         {
             address &= 0xffffff;
-            if (address <= 0x3fffff)
+            sbyte result = 0;
+            if (address <= 0x5fffff)
             {
-                int i11 = 1;
+                if (address < Memory.mainrom.Length)
+                {
+                    result = (sbyte)(Memory.mainrom[address]);
+                }
+                else
+                {
+                    result = 0;
+                }
             }
-            if (address >= 0x400000 && address + 3 <= 0x40000b)
+            return result;
+        }
+        public static sbyte MReadByte_cps2turbo(int address)
+        {
+            address &= 0xffffff;
+            sbyte result = 0;
+            if (address <= 0x5fffff)
             {
-                int offset = (address - 0x400000) / 2;
-                cps2_output[offset] = (ushort)(value >> 16);
-                cps2_output[offset + 1] = (ushort)value;
+                if (address < Memory.mainrom.Length)
+                {
+                    result = (sbyte)Memory.mainrom[address];
+                }
+                else
+                {
+                    result = 0;
+                }
             }
             else if (address >= 0x618000 && address <= 0x619fff)
             {
                 int offset = (address - 0x618000) / 2;
-                qsound_sharedram1_w(offset, (byte)(value>>16));
-                qsound_sharedram1_w(offset + 1, (byte)value);
-            }
-            else if (address >= 0x662000 && address <= 0x662001)
-            {
-                int i11 = 1;
-            }
-            else if (address >= 0x662008 && address <= 0x662009)
-            {
-                int i11 = 1;
-            }
-            else if (address >= 0x662020 && address <= 0x662021)
-            {
-                int i11 = 1;
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(qsound_sharedram1_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)qsound_sharedram1_r(offset);
+                }
             }
             else if (address >= 0x660000 && address <= 0x663fff)
             {
-                int i11 = 1;
+                result = 0;
             }
             else if (address >= 0x664000 && address <= 0x664001)
             {
-                int i11 = 1;
+                result = 0;
             }
-            else if (address >= 0x700000 && address <= 0x701fff)
+            else if (address >= 0x665000 && address <= 0x66500b)
             {
-                int offset = (address - 0x700000) / 2;
-                cps2_objram1_w(offset, (ushort)(value >> 16));
-                cps2_objram1_w(offset + 1, (ushort)value);
+                int offset = (address - 0x665000) / 2;
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps2_output2[offset] >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps2_output2[offset];
+                }
             }
             else if (address >= 0x708000 && address <= 0x709fff)
             {
                 int offset = (address - 0x708000) / 2;
-                cps2_objram2_w(offset, (ushort)(value >> 16));
-                cps2_objram2_w(offset + 1, (ushort)value);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps2_objram2_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps2_objram2_r(offset);
+                }
             }
             else if (address >= 0x70a000 && address <= 0x70bfff)
             {
                 int offset = (address - 0x70a000) / 2;
-                cps2_objram2_w(offset, (ushort)(value>>16));
-                cps2_objram2_w(offset + 1, (ushort)value);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps2_objram2_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps2_objram2_r(offset);
+                }
             }
             else if (address >= 0x70c000 && address <= 0x70dfff)
             {
                 int offset = (address - 0x70c000) / 2;
-                cps2_objram2_w(offset, (ushort)(value >> 16));
-                cps2_objram2_w(offset + 1, (ushort)value);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps2_objram2_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps2_objram2_r(offset);
+                }
             }
             else if (address >= 0x70e000 && address <= 0x70ffff)
             {
                 int offset = (address - 0x70e000) / 2;
-                cps2_objram2_w(offset, (ushort)(value >> 16));
-                cps2_objram2_w(offset + 1, (ushort)value);
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps2_objram2_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps2_objram2_r(offset);
+                }
             }
-            else if (address >= 0x800100 && address + 3 <= 0x80013f)
+            else if (address >= 0x800140 & address <= 0x80017f)
             {
-                int offset = (address & 0x3f) / 2;
-                cps1_cps_a_w(offset, (ushort)(value >> 16));
-                cps1_cps_a_w(offset + 1, (ushort)value);
+                int offset = (address - 0x800140) / 2;
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps1_cps_b_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps1_cps_b_r(offset);
+                }
+            }
+            else if (address >= 0x804000 && address <= 0x804001)
+            {
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(short0 >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)short0;
+                }
+            }
+            else if (address >= 0x804010 && address <= 0x804011)
+            {
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(short1 >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)short1;
+                }
+            }
+            else if (address >= 0x804020 && address <= 0x804021)
+            {
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(short2 >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)(short2 & (Eeprom.eeprom_bit_r() - 2));
+                }
+            }
+            else if (address >= 0x804030 && address <= 0x804031)
+            {
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps2_qsound_volume_r() >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps2_qsound_volume_r();
+                }
+            }
+            else if (address >= 0x8040b0 && address <= 0x8040b3)
+            {
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(kludge_r() >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)kludge_r();
+                }
+            }
+            else if (address >= 0x804140 && address <= 0x80417f)
+            {
+                int offset = (address - 0x804140) / 2;
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps1_cps_b_r(offset) >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps1_cps_b_r(offset);
+                }
+            }
+            else if (address >= 0x900000 && address <= 0x92ffff)
+            {
+                int offset = address - 0x900000;
+                result = (sbyte)gfxram[offset];
+            }
+            else if (address >= 0xff0000 && address <= 0xffffef)
+            {
+                int offset = address - 0xff0000;
+                result = (sbyte)Memory.mainram[offset];
+            }
+            else if (address >= 0xfffff0 && address <= 0xfffffb)
+            {
+                int offset = (address - 0xfffff0) / 2;
+                if (address % 2 == 0)
+                {
+                    result = (sbyte)(cps2_output[offset] >> 8);
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (sbyte)cps2_output[offset];
+                }
+            }
+            else if (address >= 0xfffffc && address <= 0xffffff)
+            {
+                int offset = address - 0xff0000;
+                result = (sbyte)Memory.mainram[offset];
+            }
+            return result;
+        }
+        public static short MReadOpWord_cps2turbo(int address)
+        {
+            address &= 0xffffff;
+            short result = 0;
+            if (address <= 0x5fffff)
+            {
+                if (address + 1 < Memory.mainrom.Length)
+                {
+                    result = (short)(Memory.mainrom[address] * 0x100 + Memory.mainrom[address + 1]);
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+            return result;
+        }
+        public static short MReadWord_cps2turbo(int address)
+        {
+            address &= 0xffffff;
+            short result = 0;
+            if (address <= 0x5fffff)
+            {
+                if (address + 1 < Memory.mainrom.Length)
+                {
+                    result = (short)(Memory.mainrom[address] * 0x100 + Memory.mainrom[address + 1]);
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+            else if (address >= 0x618000 && address + 1 <= 0x619fff)
+            {
+                int offset = (address - 0x618000) / 2;
+                result = qsound_sharedram1_r(offset);
+            }
+            else if (address >= 0x660000 && address + 1 <= 0x663fff)
+            {
+                result = 0;
+            }
+            else if (address >= 0x664000 && address + 1 <= 0x664001)
+            {
+                result = 0;
+            }
+            else if (address >= 0x665000 && address + 1 <= 0x66500b)
+            {
+                int offset = (address - 0x665000) / 2;
+                result = (short)cps2_output2[offset];
+            }
+            else if (address >= 0x708000 && address <= 0x709fff)
+            {
+                int offset = (address - 0x708000) / 2;
+                result = cps2_objram2_r(offset);
+            }
+            else if (address >= 0x70a000 && address <= 0x70bfff)
+            {
+                int offset = (address - 0x70a000) / 2;
+                result = cps2_objram2_r(offset);
+            }
+            else if (address >= 0x70c000 && address <= 0x70dfff)
+            {
+                int offset = (address - 0x70c000) / 2;
+                result = cps2_objram2_r(offset);
+            }
+            else if (address >= 0x70e000 && address <= 0x70ffff)
+            {
+                int offset = (address - 0x70e000) / 2;
+                result = cps2_objram2_r(offset);
             }
             else if (address >= 0x800140 && address <= 0x80017f)
             {
-                int i11 = 1;
-                //cps1_cps_b_w((add & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x800140) / 2;
+                result = (short)cps1_cps_b_r(offset);
+            }
+            else if (address >= 0x804000 && address <= 0x804001)
+            {
+                result = short0;
+            }
+            else if (address >= 0x804010 && address <= 0x804011)
+            {
+                result = short1;
+            }
+            else if (address >= 0x804020 && address <= 0x804021)
+            {
+                result = (short)(short2 & (Eeprom.eeprom_bit_r() - 2));
+            }
+            else if (address >= 0x804030 && address <= 0x804031)
+            {
+                result = cps2_qsound_volume_r();
+            }
+            else if (address >= 0x8040b0 && address <= 0x8040b3)
+            {
+                result = kludge_r();
+            }
+            else if (address >= 0x804140 && address <= 0x80417f)
+            {
+                int offset = (address - 0x804140) / 2;
+                result = (short)cps1_cps_b_r(offset);
+            }
+            else if (address >= 0x900000 && address + 1 <= 0x92ffff)
+            {
+                int offset = address - 0x900000;
+                result = (short)(gfxram[offset] * 0x100 + gfxram[offset + 1]);
+            }
+            else if (address >= 0xff0000 && address + 1 <= 0xffffef)
+            {
+                int offset = address - 0xff0000;
+                result = (short)(Memory.mainram[offset] * 0x100 + Memory.mainram[offset + 1]);
+            }
+            else if (address >= 0xfffff0 && address + 1 <= 0xfffffb)
+            {
+                int offset = (address - 0xfffff0) / 2;
+                result = (short)cps2_output[offset];
+            }
+            else if (address >= 0xfffffc && address + 1 <= 0xffffff)
+            {
+                int offset = address - 0xff0000;
+                result = (short)(Memory.mainram[offset] * 0x100 + Memory.mainram[offset + 1]);
+            }
+            return result;
+        }
+        public static int MReadOpLong_cps2turbo(int address)
+        {
+            int result = 0;
+            result = (int)((ushort)MReadOpWord_cps2turbo(address) * 0x10000 + (ushort)MReadOpWord_cps2turbo(address + 2));
+            return result;
+        }
+        public static int MReadLong_cps2turbo(int address)
+        {
+            int result = 0;
+            result = (int)((ushort)MReadWord_cps2turbo(address) * 0x10000 + (ushort)MReadWord_cps2turbo(address + 2));
+            return result;
+        }
+        public static void MWriteByte_cps2turbo(int address, sbyte value)
+        {
+            address &= 0xffffff;
+            if (address >= 0x618000 && address <= 0x619fff)
+            {
+                int offset = (address - 0x618000) / 2;
+                if (address % 2 == 1)
+                {
+                    qsound_sharedram1_samples_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x660000 && address <= 0x663fff)
+            {
+                int i1 = 1;
+            }
+            else if (address >= 0x664000 && address <= 0x664001)
+            {
+                int i1 = 1;
+            }
+            else if (address >= 0x665000 && address <= 0x66500b)
+            {
+                int offset = (address - 0x665000) / 2;
+                if (address % 2 == 0)
+                {
+                    cps2_output2[offset] = (ushort)((value << 8) | (cps2_output2[offset] & 0xff));
+                }
+                else if (address % 2 == 1)
+                {
+                    cps2_output2[offset] = (ushort)((cps2_output2[offset] & 0xff00) | value);
+                }
+            }
+            else if (address >= 0x700000 && address <= 0x701fff)
+            {
+                int offset = (address - 0x700000) / 2;
+                if (address % 2 == 0)
+                {
+                    cps2_objram1_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps2_objram1_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x708000 && address <= 0x709fff)
+            {
+                int offset = (address - 0x708000) / 2;
+                if (address % 2 == 0)
+                {
+                    cps2_objram2_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps2_objram2_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x70a000 && address <= 0x70bfff)
+            {
+                int offset = (address - 0x70a000) / 2;
+                if (address % 2 == 0)
+                {
+                    cps2_objram2_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps2_objram2_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x70c000 && address <= 0x70dfff)
+            {
+                int offset = (address - 0x70c000) / 2;
+                if (address % 2 == 0)
+                {
+                    cps2_objram2_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps2_objram2_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x70e000 && address <= 0x70ffff)
+            {
+                int offset = (address - 0x70e000) / 2;
+                if (address % 2 == 0)
+                {
+                    cps2_objram2_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps2_objram2_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x800100 && address <= 0x80013f)
+            {
+                int offset = (address - 0x800100) / 2;
+                if (address % 2 == 0)
+                {
+                    cps1_cps_a_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps1_cps_a_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x800140 && address <= 0x80017f)
+            {
+                int offset = (address - 0x800140) / 2;
+                if (address % 2 == 0)
+                {
+                    cps1_cps_b_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps1_cps_b_w2(offset, (byte)value);
+                }
             }
             else if (address >= 0x804040 && address <= 0x804041)
             {
-                int i11 = 1;
-                //cps2_eeprom_port_w(value);
+                cps2_eeprom_port_w(value);
+            }
+            else if (address >= 0x8040a0 && address <= 0x8040a1)
+            {
+                int i1 = 1;
+            }
+            else if (address >= 0x8040e0 && address <= 0x8040e1)
+            {
+                cps2_objram_bank_w(value);
+            }
+            else if (address >= 0x804100 && address <= 0x80413f)
+            {
+                int offset = (address - 0x804100) / 2;
+                if (address % 2 == 0)
+                {
+                    cps1_cps_a_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps1_cps_a_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x804140 && address <= 0x80417f)
+            {
+                int offset = (address - 0x804140) / 2;
+                if (address % 2 == 0)
+                {
+                    cps1_cps_b_w1(offset, (byte)value);
+                }
+                else if (address % 2 == 1)
+                {
+                    cps1_cps_b_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0x900000 && address <= 0x92ffff)
+            {
+                int offset = address - 0x900000;
+                gfxram[offset] = (byte)(value);
+                cps1_gfxram_w(offset / 2);
+            }
+            else if (address >= 0xff0000 && address <= 0xffffef)
+            {
+                int offset = address - 0xff0000;
+                Memory.mainram[offset] = (byte)value;
+            }
+            else if (address >= 0xfffff0 && address <= 0xfffffb)
+            {
+                int offset = (address - 0xfffff0) / 2;
+                if (address % 2 == 0)
+                {
+                    cps2_output[offset] = (ushort)((value << 8) | (cps2_output[offset] & 0xff));
+                }
+                else if (address % 2 == 1)
+                {
+                    cps2_output[offset] = (ushort)((cps2_output[offset] & 0xff00) | (byte)value);
+                }
+            }
+            else if (address >= 0xfffffc && address <= 0xffffff)
+            {
+                int offset = address - 0xff0000;
+                Memory.mainram[offset] = (byte)value;
+            }
+        }
+        public static void MWriteWord_cps2turbo(int address, short value)
+        {
+            address &= 0xffffff;
+            if (address >= 0x618000 && address + 1 <= 0x619fff)
+            {
+                int offset = (address - 0x618000) / 2;
+                qsound_sharedram1_samples_w(offset, (ushort)value);
+            }
+            else if (address >= 0x660000 && address + 1 <= 0x663fff)
+            {
+
+            }
+            else if (address >= 0x664000 && address + 1 <= 0x664001)
+            {
+
+            }
+            else if (address >= 0x665000 && address + 1 <= 0x66500b)
+            {
+                int offset = (address - 0x665000) / 2;
+                cps2_output2[offset] = (ushort)value;
+            }
+            else if (address >= 0x700000 && address + 1 <= 0x701fff)
+            {
+                int offset = (address - 0x700000) / 2;
+                cps2_objram1_w(offset, (ushort)value);
+            }
+            else if (address >= 0x708000 && address <= 0x709fff)
+            {
+                int offset = (address - 0x708000) / 2;
+                cps2_objram2_w(offset, (ushort)value);
+            }
+            else if (address >= 0x70a000 && address <= 0x70bfff)
+            {
+                int offset = (address - 0x70a000) / 2;
+                cps2_objram2_w(offset, (ushort)value);
+            }
+            else if (address >= 0x70c000 && address <= 0x70dfff)
+            {
+                int offset = (address - 0x70c000) / 2;
+                cps2_objram2_w(offset, (ushort)value);
+            }
+            else if (address >= 0x70e000 && address <= 0x70ffff)
+            {
+                int offset = (address - 0x70e000) / 2;
+                cps2_objram2_w(offset, (ushort)value);
+            }
+            else if (address >= 0x800100 && address <= 0x80013f)
+            {
+                int offset = (address - 0x800100) / 2;
+                cps1_cps_a_w(offset, (ushort)value);
+            }
+            else if (address >= 0x800140 && address + 1 <= 0x80017f)
+            {
+                int offset = (address - 0x800140) / 2;
+                cps1_cps_b_w(offset, (ushort)value);
+            }
+            else if (address >= 0x804040 && address <= 0x804041)
+            {
+                cps2_eeprom_port_w(value);
             }
             else if (address >= 0x8040a0 && address <= 0x8040a1)
             {
@@ -1681,42 +1902,49 @@ namespace mame
             }
             else if (address >= 0x8040e0 && address <= 0x8040e1)
             {
-                int i11 = 1;
-                //cps2_objram_bank_w(value);
+                cps2_objram_bank_w(value);
             }
-            else if (address >= 0x804100 && address <= 0x80413f)
+            else if (address >= 0x804100 && address + 1 <= 0x80413f)
             {
-                int offset = (address & 0x3f) / 2;
-                cps1_cps_a_w(offset, (ushort)(value >> 16));
-                cps1_cps_a_w(offset + 1, (ushort)value);
+                int offset = (address - 0x804100) / 2;
+                cps1_cps_a_w(offset, (ushort)value);
             }
             else if (address >= 0x804140 && address <= 0x80417f)
             {
-                int i11 = 1;
-                //cps1_cps_b_w((add & 0x3f) / 2, (ushort)value);
+                int offset = (address - 0x804140) / 2;
+                cps1_cps_b_w(offset, (ushort)value);
             }
-            else if (address >= 0x900000 && address + 3 <= 0x92ffff)
+            else if (address >= 0x900000 && address + 1 <= 0x92ffff)
             {
-                gfxram[(address & 0x3ffff)] = (byte)(value >> 24);
-                gfxram[(address & 0x3ffff) + 1] = (byte)(value >> 16);
-                gfxram[(address & 0x3ffff) + 2] = (byte)(value >> 8);
-                gfxram[(address & 0x3ffff) + 3] = (byte)(value);
-                cps1_gfxram_w((address & 0x3ffff) / 2);
-                cps1_gfxram_w(((address + 2) & 0x3ffff) / 2);
+                int offset = address - 0x900000;
+                gfxram[offset] = (byte)(value >> 8);
+                gfxram[offset + 1] = (byte)value;
+                cps1_gfxram_w(offset / 2);
             }
-            else if (address >= 0xff0000 && address + 3 <= 0xffffff)
+            else if (address >= 0xff0000 && address + 1 <= 0xffffef)
             {
-                Memory.mainram[(address & 0xffff)] = (byte)(value >> 24);
-                Memory.mainram[(address & 0xffff) + 1] = (byte)(value >> 16);
-                Memory.mainram[(address & 0xffff) + 2] = (byte)(value >> 8);
-                Memory.mainram[(address & 0xffff) + 3] = (byte)(value);
+                int offset = address - 0xff0000;
+                Memory.mainram[offset] = (byte)(value >> 8);
+                Memory.mainram[offset + 1] = (byte)value;
             }
-            else
+            else if (address >= 0xfffff0 && address + 1 <= 0xfffffb)
             {
-                int i11 = 1;
+                int offset = (address - 0xfffff0) / 2;
+                cps2_output[offset] = (ushort)value;
+            }
+            else if (address >= 0xfffffc && address + 1 <= 0xffffff)
+            {
+                int offset = address - 0xff0000;
+                Memory.mainram[offset] = (byte)(value >> 8);
+                Memory.mainram[offset + 1] = (byte)value;
             }
         }
-        public static byte ZQReadOp(ushort address)
+        public static void MWriteLong_cps2turbo(int address, int value)
+        {
+            MWriteWord_cps2turbo(address, (short)(value >> 16));
+            MWriteWord_cps2turbo(address + 2, (short)value);
+        }
+        public static byte ZReadOp_qsound(ushort address)
         {
             byte result = 0;
             if (address <= 0x7fff)
@@ -1729,7 +1957,7 @@ namespace mame
             }
             return result;
         }
-        public static byte ZQReadMemory(ushort address)
+        public static byte ZReadMemory_qsound(ushort address)
         {
             byte result = 0;
             if (address <= 0x7fff)
@@ -1758,7 +1986,7 @@ namespace mame
             }
             return result;
         }
-        public static void ZQWriteMemory(ushort address, byte value)
+        public static void ZWriteMemory_qsound(ushort address, byte value)
         {
             if (address >= 0xc000 && address <= 0xcfff)
             {
@@ -1789,11 +2017,11 @@ namespace mame
 
             }
         }
-        public static byte ZCReadHardware(ushort address)
+        public static byte ZReadHardware(ushort address)
         {
             return 0;
         }
-        public static void ZCWriteHardware(ushort address, byte value)
+        public static void ZWriteHardware(ushort address, byte value)
         {
 
         }

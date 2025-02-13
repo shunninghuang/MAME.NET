@@ -18,16 +18,20 @@ namespace mame
             switch (Machine.sBoard)
             {
                 case "CPS-1":
-                    savestate_callback = CPS.SaveStateBinaryC;
-                    loadstate_callback = CPS.LoadStateBinaryC;
+                    savestate_callback = CPS.SaveStateBinary_cps1;
+                    loadstate_callback = CPS.LoadStateBinary_cps1;
                     break;
                 case "CPS-1(QSound)":
-                    savestate_callback = CPS.SaveStateBinaryQ;
-                    loadstate_callback = CPS.LoadStateBinaryQ;
+                    savestate_callback = CPS.SaveStateBinary_cps1_qsound;
+                    loadstate_callback = CPS.LoadStateBinary_cps1_qsound;
                     break;
                 case "CPS2":
-                    savestate_callback = CPS.SaveStateBinaryC2;
-                    loadstate_callback = CPS.LoadStateBinaryC2;
+                    savestate_callback = CPS.SaveStateBinary_cps2;
+                    loadstate_callback = CPS.LoadStateBinary_cps2;
+                    break;
+                case "CPS2turbo":
+                    savestate_callback = CPS.SaveStateBinary_cps2;
+                    loadstate_callback = CPS.LoadStateBinary_cps2;
                     break;
                 case "Data East":
                     switch (Machine.sName)
@@ -172,6 +176,7 @@ namespace mame
                         case "masterwu":
                         case "masterwj":
                         case "yukiwo":
+                        case "tetrista":
                             savestate_callback = Taitob.SaveStateBinary_masterw;
                             loadstate_callback = Taitob.LoadStateBinary_masterw;
                             break;
@@ -181,13 +186,39 @@ namespace mame
                         case "rambo3":
                         case "rambo3u":
                         case "rambo3p":
+                        case "crimec":
+                        case "crimecu":
+                        case "crimecj":
+                        case "tetrist":
+                        case "ashura":
+                        case "ashuraj":
+                        case "ashurau":
+                        case "selfeena":
                             savestate_callback = Taitob.SaveStateBinary_nastar;
                             loadstate_callback = Taitob.LoadStateBinary_nastar;
+                            break;
+                        case "viofight":
+                        case "viofightu":
+                        case "viofightj":
+                            savestate_callback = Taitob.SaveStateBinary_viofight;
+                            loadstate_callback = Taitob.LoadStateBinary_viofight;
+                            break;
+                        case "hitice":
+                        case "hiticerb":
+                        case "hiticej":
+                            savestate_callback = Taitob.SaveStateBinary_hitice;
+                            loadstate_callback = Taitob.LoadStateBinary_hitice;
                             break;
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
+                            savestate_callback = Taitob.SaveStateBinary_silentd;
+                            loadstate_callback = Taitob.LoadStateBinary_silentd;
+                            break;
+                        case "qzshowby":
                         case "pbobble":
+                        case "spacedx":
+                        case "spacedxj":
                             savestate_callback = Taitob.SaveStateBinary_silentd;
                             loadstate_callback = Taitob.LoadStateBinary_silentd;
                             break;

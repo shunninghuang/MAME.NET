@@ -72,6 +72,7 @@
     <Compile Include="cpu\nec\NecModrm.cs" />
     <Compile Include="emu\Crosshair.cs" />
     <Compile Include="emu\Emupal.cs" />
+    <Compile Include="emu\Hd63484.cs" />
     <Compile Include="emu\Mouse.cs" />
     <Compile Include="emu\Pd4900a.cs" />
     <Compile Include="emu\Machine.cs" />

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace mame
 {
     public partial class Taitob
     {
         public static ushort[][] framebuffer;
-        public static ushort[] taitob_scroll,TC0180VCU_ram, taitob_spriteram, taitob_pixelram;
+        public static ushort[] taitob_scroll, TC0180VCU_ram, taitob_spriteram, taitob_pixelram, pixel_bitmap;
         public static ushort[] bg_rambank, fg_rambank, pixel_scroll, TC0180VCU_ctrl;
-        public static ushort tx_rambank;
+        public static ushort tx_rambank, m_realpunc_video_ctrl;
         public static byte framebuffer_page, video_control;
         public static int b_bg_color_base = 0, b_fg_color_base = 0, b_sp_color_base = 0, b_tx_color_base = 0;
         public static byte[] TC0220IOC_regs, TC0640FIO_regs;
@@ -22,11 +23,10 @@ namespace mame
             video_control = data;
             if ((video_control & 0x80) != 0)
             {
-                framebuffer_page = (byte)((~video_control & 0x40) >> 6);                
+                framebuffer_page = (byte)((~video_control & 0x40) >> 6);
             }
-            //tilemap_set_flip(ALL_TILEMAPS, (video_control & 0x10) ? (TILEMAP_FLIPX | TILEMAP_FLIPY) : 0 );
+            Tmap.tilemap_set_flip(null, (byte)((video_control & 0x10) != 0 ? (Tilemap.TILEMAP_FLIPX | Tilemap.TILEMAP_FLIPY) : 0));
         }
-
         public static ushort TC0180VCU_word_r(int offset)
         {
             return TC0180VCU_ram[offset];
@@ -63,27 +63,24 @@ namespace mame
                 row = (offset & 0x0fff) / 64;
                 col = (offset & 0x0fff) % 64;
                 fg_tilemap.tilemap_mark_tile_dirty(row, col);
-                //tilemap_mark_tile_dirty(fg_tilemap, offset & 0x0fff);
             }
             if ((offset & 0x7000) == bg_rambank[0] || (offset & 0x7000) == bg_rambank[1])
             {
                 row = (offset & 0x0fff) / 64;
                 col = (offset & 0x0fff) % 64;
                 bg_tilemap.tilemap_mark_tile_dirty(row, col);
-                //tilemap_mark_tile_dirty(bg_tilemap, offset2 & 0x0fff);
             }
             if ((offset & 0x7800) == tx_rambank)
             {
                 row = (offset & 0x07ff) / 64;
                 col = (offset & 0x07ff) % 64;
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
-                //tilemap_mark_tile_dirty(tx_tilemap, offset2 & 0x7ff);
             }
         }
         public static void TC0180VCU_word_w(int offset, ushort data)
         {
             int row, col;
-            TC0180VCU_ram[offset]=data;
+            TC0180VCU_ram[offset] = data;
             if ((offset & 0x7000) == fg_rambank[0] || (offset & 0x7000) == fg_rambank[1])
             {
                 row = (offset & 0x0fff) / 64;
@@ -103,6 +100,18 @@ namespace mame
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
             }
         }
+        public static void realpunc_video_ctrl_w1(byte data)
+        {
+            m_realpunc_video_ctrl = (ushort)((data << 8) | (m_realpunc_video_ctrl & 0xff));
+        }
+        public static void realpunc_video_ctrl_w2(byte data)
+        {
+            m_realpunc_video_ctrl = (ushort)((m_realpunc_video_ctrl & 0xff00) | data);
+        }
+        public static void realpunc_video_ctrl_w(ushort data)
+        {
+            m_realpunc_video_ctrl = data;
+        }
         public static void video_start_taitob_core()
         {
             int i;
@@ -116,12 +125,13 @@ namespace mame
             cliprect.max_x = 319;
             cliprect.min_y = 16;
             cliprect.max_y = 239;
-            //framebuffer[0] = auto_bitmap_alloc(512, 256, video_screen_get_format(machine->primary_screen));
-            //framebuffer[1] = auto_bitmap_alloc(512, 256, video_screen_get_format(machine->primary_screen));
-            //pixel_bitmap = NULL;  /* only hitice needs this */
+            framebuffer = new ushort[2][];
+            for (i = 0; i < 2; i++)
+            {
+                framebuffer[i] = new ushort[0x200 * 0x100];
+            }
+            pixel_bitmap = null;  /* only hitice needs this */
 
-            //tilemap_set_transparent_pen(fg_tilemap, 0);
-            //tilemap_set_transparent_pen(tx_tilemap, 0);
             bg_tilemap.tilemap_set_scrolldx(0, 24 * 8);
             fg_tilemap.tilemap_set_scrolldx(0, 24 * 8);
             tx_tilemap.tilemap_set_scrolldx(0, 24 * 8);
@@ -150,32 +160,49 @@ namespace mame
             b_tx_color_base = 0x00;
             video_start_taitob_core();
         }
+        public static void video_start_hitice()
+        {
+            video_start_taitob_color_order0();
+            taitob_pixelram = new ushort[0x40000];
+            pixel_bitmap = new ushort[0x400 * 0x200];
+        }
+        public static void video_reset_hitice()
+        {
+            hitice_clear_pixel_bitmap();
+        }
         public static ushort TC0180VCU_framebuffer_word_r(int offset)
         {
             int sy = offset >> 8;
             int sx = 2 * (offset & 0xff);
-            return framebuffer[sy >> 8][(sy & 0xff) + sx];
+            return (ushort)((framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] << 8) | framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx + 1]);
         }
         public static void TC0180VCU_framebuffer_word_w1(int offset, byte data)
         {
             int sy = offset >> 8;
             int sx = 2 * (offset & 0xff);
-            framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] = (ushort)((ushort)(data << 8) | (framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] & 0xff));
+            if ((sy & 0xff) * 0x200 + sx == 0xf038 && data == 0)
+            {
+                int i1 = 1;
+            }
+            framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] = (ushort)data;
         }
         public static void TC0180VCU_framebuffer_word_w2(int offset, byte data)
         {
             int sy = offset >> 8;
             int sx = 2 * (offset & 0xff);
-            framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] = (ushort)((framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] & 0xff00) | data);
+            framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx + 1] = (ushort)data;
         }
         public static void TC0180VCU_framebuffer_word_w(int offset, ushort data)
         {
             int sy = offset >> 8;
             int sx = 2 * (offset & 0xff);
-            framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] = data;
+            if ((sy & 0xff) * 0x200 + sx == 0xf038 && (data >> 8) == 0)
+            {
+                int i1 = 1;
+            }
+            framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx] = (ushort)(data >> 8);
+            framebuffer[sy >> 8][(sy & 0xff) * 0x200 + sx + 1] = (ushort)(data & 0xff);
         }
-
-        
         public static ushort taitob_v_control_r(int offset)
         {
             return TC0180VCU_ctrl[offset];
@@ -270,14 +297,49 @@ namespace mame
                     break;
             }
         }
+        public static void hitice_pixelram_w1(int offset, byte data)
+        {
+            int sy = offset >> 9;
+            int sx = offset & 0x1ff;
+            taitob_pixelram[offset] = (ushort)((data << 8) | (taitob_pixelram[offset] & 0xff));
+        }
+        public static void hitice_pixelram_w2(int offset, byte data)
+        {
+            int sy = offset >> 9;
+            int sx = offset & 0x1ff;
+            taitob_pixelram[offset] = (ushort)((taitob_pixelram[offset] & 0xff00) | data);
+            pixel_bitmap[sy * 0x400 + 2 * sx + 0] = (ushort)(b_fg_color_base * 16 + data);
+            pixel_bitmap[sy * 0x400 + 2 * sx + 1] = (ushort)(b_fg_color_base * 16 + data);
+        }
         public static void hitice_pixelram_w(int offset, ushort data)
         {
             int sy = offset >> 9;
             int sx = offset & 0x1ff;
             taitob_pixelram[offset] = data;
+            pixel_bitmap[sy * 0x400 + 2 * sx + 0] = (ushort)(b_fg_color_base * 16 + (data & 0xff));
+            pixel_bitmap[sy * 0x400 + 2 * sx + 1] = (ushort)(b_fg_color_base * 16 + (data & 0xff));
         }
-        
-        
+        public static void hitice_pixel_scroll_w1(int offset, byte data)
+        {
+            pixel_scroll[offset] = (ushort)((data << 8) | (pixel_scroll[offset] & 0xff));
+        }
+        public static void hitice_pixel_scroll_w2(int offset, byte data)
+        {
+            pixel_scroll[offset] = (ushort)((pixel_scroll[offset] & 0xff00) | data);
+        }
+        public static void hitice_pixel_scroll_w(int offset, ushort data)
+        {
+            pixel_scroll[offset] = data;
+        }
+        public static void hitice_clear_pixel_bitmap()
+        {
+            int i;
+
+            for (i = 0; i < 0x40000; i++)
+            {
+                hitice_pixelram_w(i, 0);
+            }
+        }
         public static RECT sect_rect(RECT dst, RECT src)
         {
             RECT dst2 = dst;
@@ -403,7 +465,7 @@ namespace mame
                             ushort c = framebuffer[framebuffer_page][y * 512 + x];
                             if (c != 0)
                             {
-                                Video.bitmapbase[Video.curbitmap][(255 - y) * 512 + 319-x] = (ushort)(b_sp_color_base + c);
+                                Video.bitmapbase[Video.curbitmap][(255 - y) * 512 + 319 - x] = (ushort)(b_sp_color_base + c);
                             }
                         }
                     }
@@ -462,16 +524,15 @@ namespace mame
                 Array.Copy(uuB0000, Video.bitmapbase[Video.curbitmap], 0x20000);
                 return;
             }
-            /* Draw playfields */
             TC0180VCU_tilemap_draw(cliprect, bg_tilemap, 1);
             draw_framebuffer(cliprect, 1);
             TC0180VCU_tilemap_draw(cliprect, fg_tilemap, 0);
-            /*if (pixel_bitmap)  // hitice only
+            if (pixel_bitmap != null)
             {
-                int scrollx = -2 * pixel_scroll[0]; //+320;
-                int scrolly = -pixel_scroll[1]; //+240;
-                copyscrollbitmap_trans(bitmap, pixel_bitmap, 1, &scrollx, 1, &scrolly, cliprect, b_fg_color_base * 16);
-            }*/
+                int scrollx = -2 * pixel_scroll[0];
+                int scrolly = -pixel_scroll[1];
+                //copyscrollbitmap_trans(bitmap, pixel_bitmap, 1, &scrollx, 1, &scrolly, cliprect, b_fg_color_base * 16);
+            }
             draw_framebuffer(cliprect, 0);
             tx_tilemap.tilemap_draw_primask(cliprect, 0x10, 0);
         }

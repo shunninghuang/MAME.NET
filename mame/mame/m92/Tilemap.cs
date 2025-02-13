@@ -32,8 +32,8 @@ namespace mame
                 M92.pf_layer[i].tmap.scrollcols = 1;
                 M92.pf_layer[i].tmap.rowscroll = new int[M92.pf_layer[i].tmap.scrollrows];
                 M92.pf_layer[i].tmap.colscroll = new int[M92.pf_layer[i].tmap.scrollcols];
-                M92.pf_layer[i].tmap.tilemap_draw_instance3 = M92.pf_layer[i].tmap.tilemap_draw_instanceM92;
-                M92.pf_layer[i].tmap.tile_update3 = M92.pf_layer[i].tmap.tile_updateM92;
+                M92.pf_layer[i].tmap.tilemap_draw_instance3 = M92.pf_layer[i].tmap.tilemap_draw_instance_m92;
+                M92.pf_layer[i].tmap.tile_update3 = M92.pf_layer[i].tmap.tile_update_m92;
 
                 M92.pf_layer[i].wide_tmap = new Tmap();
                 M92.pf_layer[i].wide_tmap.laynum = i;
@@ -55,8 +55,8 @@ namespace mame
                 M92.pf_layer[i].wide_tmap.scrollcols = 1;
                 M92.pf_layer[i].wide_tmap.rowscroll = new int[M92.pf_layer[i].tmap.scrollrows];
                 M92.pf_layer[i].wide_tmap.colscroll = new int[M92.pf_layer[i].tmap.scrollcols];
-                M92.pf_layer[i].wide_tmap.tilemap_draw_instance3 = M92.pf_layer[i].wide_tmap.tilemap_draw_instanceM92;
-                M92.pf_layer[i].wide_tmap.tile_update3 = M92.pf_layer[i].wide_tmap.tile_updateM92;
+                M92.pf_layer[i].wide_tmap.tilemap_draw_instance3 = M92.pf_layer[i].wide_tmap.tilemap_draw_instance_m92;
+                M92.pf_layer[i].wide_tmap.tile_update3 = M92.pf_layer[i].wide_tmap.tile_update_m92;
             }
             for (i = 0; i < 2; i++)
             {
@@ -112,7 +112,7 @@ namespace mame
     }
     public partial class Tmap
     {
-        public void tilemap_draw_instanceM92(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_m92(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;
@@ -215,14 +215,14 @@ namespace mame
                 nexty = Math.Min(nexty, y2);
             }
         }
-        public void tile_updateM92(int col, int row)
+        public void tile_update_m92(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
             int tile_index;
             int tile, attrib, code;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
+            byte group, flags;
             tile_index = 2 * (row * cols + col) + M92.pf_layer[laynum].vram_base;
             attrib = M92.m92_vram_data[tile_index + 1];
             tile = M92.m92_vram_data[tile_index] + ((attrib & 0x8000) << 1);
@@ -241,47 +241,8 @@ namespace mame
             {
                 group = 0;
             }
-            flags = ((attrib >> 9) & 3) ^ (attributes & 0x03);
-            tileflags[row, col] = tile_drawM92(M92.gfx11rom, pen_data_offset, x0, y0, palette_base, group, flags);
-        }
-        public byte tile_drawM92(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, 0x40);
-            if ((flags & Tilemap.TILE_FLIPY)!=0)
-            {
-                y0 += tileheight - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX)!=0)
-            {
-                x0 += tilewidth - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < tileheight; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < tilewidth; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;
-                    pixmap[(offsety1 % 0x200) * width + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1 % 0x200, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
+            flags = (byte)(((attrib >> 9) & 3) ^ (attributes & 0x03));
+            tileflags[row, col] = tile_draw(M92.gfx11rom, pen_data_offset, x0, y0, palette_base, 0, group, flags);
         }
     }
 }

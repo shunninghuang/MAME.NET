@@ -791,7 +791,7 @@
     <year>1988</year>
     <manufacturer>Taito Corporation</manufacturer>
   </game>
-  <!--<game name="rambo3" board="Taito B">
+  <game name="rambo3" board="Taito B">
     <parent></parent>
     <direction></direction>
     <description>Rambo III (Europe)</description>
@@ -834,14 +834,14 @@
     <manufacturer>Taito Corporation</manufacturer>
   </game>
   <game name="tetrist" board="Taito B">
-    <parent>tetris</parent>
+    <parent></parent>
     <direction></direction>
     <description>Tetris (Japan, Taito B-System, Nastar Conversion Kit)</description>
     <year>1988</year>
     <manufacturer>Sega</manufacturer>
   </game>
   <game name="tetrista" board="Taito B">
-    <parent>tetris</parent>
+    <parent>tetrist</parent>
     <direction></direction>
     <description>Tetris (Japan, Taito B-System, Master of Weapon Conversion Kit)</description>
     <year>1988</year>
@@ -916,7 +916,7 @@
     <description>Sel Feena</description>
     <year>1991</year>
     <manufacturer>East Technology</manufacturer>
-  </game>-->
+  </game>
 	<game name="silentd" board="Taito B">
 		<parent></parent>
 		<direction></direction>
@@ -938,7 +938,7 @@
 		<year>1992</year>
 		<manufacturer>Taito America Corporation</manufacturer>
 	</game>
-	<!--<game name="ryujin" board="Taito B">
+	<game name="ryujin" board="Taito B">
     <parent></parent>
     <direction>270</direction>
     <description>Ryu Jin (Japan)</description>
@@ -951,7 +951,7 @@
     <description>Quiz Sekai wa SHOW by shobai (Japan)</description>
     <year>1993</year>
     <manufacturer>Taito Corporation</manufacturer>
-  </game>-->
+  </game>
 	<game name="pbobble" board="Taito B">
 		<parent></parent>
 		<direction></direction>
@@ -959,7 +959,7 @@
 		<year>1994</year>
 		<manufacturer>Taito Corporation</manufacturer>
 	</game>
-	<!--<game name="spacedx" board="Taito B">
+	<game name="spacedx" board="Taito B">
     <parent></parent>
     <direction></direction>
     <description>Space Invaders DX (US, v2.1)</description>
@@ -993,7 +993,7 @@
     <description>Real Puncher</description>
     <year>1994</year>
     <manufacturer>Taito Corporation Japan</manufacturer>
-  </game>-->
+  </game>
 	<game name="gng" board="Capcom">
 		<parent></parent>
 		<direction></direction>
@@ -2094,42 +2094,42 @@
 		<manufacturer>Capcom</manufacturer>
 	</game>
   <game name="sf2mix120" board="CPS-1">
-    <parent></parent>
+    <parent>sf2mix</parent>
     <direction></direction>
     <description>Street Fighter II': Champion Edition (MIX Ver. 1.2, bootleg)</description>
     <year>2022</year>
     <manufacturer>Capcom</manufacturer>
   </game>
   <game name="sf2mix110" board="CPS-1">
-    <parent></parent>
+    <parent>sf2mix</parent>
     <direction></direction>
     <description>Street Fighter II': Champion Edition (MIX Ver. 1.1, bootleg)</description>
     <year>2022</year>
     <manufacturer>Capcom</manufacturer>
   </game>
   <game name="sf2mix100" board="CPS-1">
-    <parent></parent>
+    <parent>sf2mix</parent>
     <direction></direction>
     <description>Street Fighter II': Champion Edition (MIX Ver. 1.0, bootleg)</description>
     <year>2021</year>
     <manufacturer>Capcom</manufacturer>
   </game>
-  <game name="sf2mix099a" board="CPS-1">
-    <parent></parent>
+  <game name="sf2mix99a" board="CPS-1">
+    <parent>sf2mix</parent>
     <direction></direction>
     <description>Street Fighter II': Champion Edition (MIX Ver. 0.99a, bootleg)</description>
     <year>2020</year>
     <manufacturer>Capcom</manufacturer>
   </game>
-  <game name="sf2mix098c" board="CPS-1">
-    <parent></parent>
+  <game name="sf2mix98c" board="CPS-1">
+    <parent>sf2mix</parent>
     <direction></direction>
     <description>Street Fighter II': Champion Edition (MIX Ver. 0.98c, bootleg)</description>
     <year>2020</year>
     <manufacturer>Capcom</manufacturer>
   </game>
-  <game name="sf2mix097" board="CPS-1">
-    <parent></parent>
+  <game name="sf2mix97" board="CPS-1">
+    <parent>sf2mix</parent>
     <direction></direction>
     <description>Street Fighter II': Champion Edition (MIX Ver. 0.97, bootleg)</description>
     <year>2020</year>
@@ -4067,6 +4067,83 @@
 		<year>1998</year>
 		<manufacturer>Capcom</manufacturer>
 	</game>
+  <game name="sfz3mix" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.31) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix30" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.30) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix29" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.29) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix28" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.28) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix27" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.27) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix26" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.26) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix25" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.25) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix24" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.24) (bootleg)</description>
+    <year>2023</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix23" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.23) (bootleg)</description>
+    <year>2023</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix22" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.22) (bootleg)</description>
+    <year>2023</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sfz3mix13" board="CPS2">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 MIX (Ver. 0.13) (bootleg)</description>
+    <year>2022</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
 	<game name="jyangoku" board="CPS2">
 		<parent></parent>
 		<direction></direction>
@@ -5754,6 +5831,13 @@
 		<year>1998</year>
 		<manufacturer>SNK</manufacturer>
 	</game>
+  <game name="neoshinobi" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Shinobi (Neo Geo unofficial port)</description>
+    <year>2024</year>
+    <manufacturer>TTE</manufacturer>
+  </game>
 	<game name="mslugx" board="Neo Geo">
 		<parent></parent>
 		<direction></direction>

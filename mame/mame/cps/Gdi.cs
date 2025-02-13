@@ -73,6 +73,16 @@ namespace mame
                         new gettileDelegateG(GetTilemapGDI2)
                     };
                     break;
+                case "CPS2turbo":
+                    scrollxoff = 0x00;
+                    scrollyoff = 0x00;
+                    gettileDelegatesG = new gettileDelegateG[]{
+                        new gettileDelegateG(GetSprite2turboGDI),
+                        new gettileDelegateG(GetTilemapGDI0),
+                        new gettileDelegateG(GetTilemapGDI1),
+                        new gettileDelegateG(GetTilemapGDI2)
+                    };
+                    break;
             }
             gethighDelegatesG = new gethighDelegateG[]{
                 null,
@@ -952,6 +962,177 @@ namespace mame
                     }
                     g.DrawImage(bbm2[i], (x + xoffs) & 0x3ff, (y + yoffs) & 0x3ff);
                 }                
+            }
+            g.Dispose();
+            return bm1;
+        }
+        private static Bitmap GetSprite2turboGDI()
+        {
+            Bitmap bm1 = null;
+            bm1 = new Bitmap(512, 256);
+            int i5, i6, iOffset, iColor, iByte, x0, y0, dx0, dy0;
+            Color c1 = new Color();
+            int i, x, y, priority, code, colour, col;
+            int xoffs = -cps2_port(0x08);
+            int yoffs = -cps2_port(0x0a);
+            Bitmap[] bbm2 = new Bitmap[cps2_last_sprite_offset + 1];
+            Graphics g = Graphics.FromImage(bm1);
+            for (i = 0; i <= cps2_last_sprite_offset; i += 4)
+            {
+                x = cps2_buffered_obj[i];
+                y = cps2_buffered_obj[i + 1];
+                priority = (x >> 13) & 0x07;
+                code = cps2_buffered_obj[i + 2] + ((y & 0xe000) << 3);
+                colour = cps2_buffered_obj[i + 3];
+                col = colour & 0x1f;
+                if ((colour & 0x80) != 0)
+                {
+                    x += cps2_port(0x08);
+                    y += cps2_port(0x0a);
+                }
+                if ((colour & 0x20) != 0)
+                {
+                    x0 = 0xf;
+                    dx0 = -1;
+                }
+                else
+                {
+                    x0 = 0;
+                    dx0 = 1;
+                }
+                if ((colour & 0x40) != 0)
+                {
+                    y0 = 0xf;
+                    dy0 = -1;
+                }
+                else
+                {
+                    y0 = 0;
+                    dy0 = 1;
+                }
+                if ((colour & 0xff00) != 0)
+                {
+                    int nx = (colour & 0x0f00) >> 8;
+                    int ny = (colour & 0xf000) >> 12;
+                    int nxs, nys, sx, sy;
+                    nx++;
+                    ny++;
+                    bbm2[i] = new Bitmap(0x10 * nx, 0x10 * ny);
+                    if ((colour & 0x40) != 0)
+                    {
+                        if ((colour & 0x20) != 0)
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    iOffset = (code + (nx - 1) - nxs + 0x10 * (ny - 1 - nys)) * 0x100;
+                                    iColor = col & 0x1f;
+                                    for (i5 = 0; i5 < 0x10; i5++)
+                                    {
+                                        for (i6 = 0; i6 < 0x10; i6++)
+                                        {
+                                            iByte = gfx1rom[iOffset + i5 + i6 * 0x10];
+                                            c1 = cc1G[iColor * 0x10 + iByte];
+                                            bbm2[i].SetPixel(nxs * 16 + x0 + dx0 * i5, nys * 16 + y0 + dy0 * i6, c1);
+                                        }
+                                    }
+                                    g.DrawImage(bbm2[i], (x + xoffs) & 0x3ff, (y + yoffs) & 0x3ff);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    iOffset = (code + nxs + 0x10 * (ny - 1 - nys)) * 0x100;
+                                    iColor = col & 0x1f;
+                                    for (i5 = 0; i5 < 0x10; i5++)
+                                    {
+                                        for (i6 = 0; i6 < 0x10; i6++)
+                                        {
+                                            iByte = gfx1rom[iOffset + i5 + i6 * 0x10];
+                                            c1 = cc1G[iColor * 0x10 + iByte];
+                                            bbm2[i].SetPixel(nxs * 16 + x0 + dx0 * i5, nys * 16 + y0 + dy0 * i6, c1);
+                                        }
+                                    }
+                                    g.DrawImage(bbm2[i], (x + xoffs) & 0x3ff, (y + yoffs) & 0x3ff);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ((colour & 0x20) != 0)
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    iOffset = (code + (nx - 1) - nxs + 0x10 * nys) * 0x100;
+                                    iColor = col & 0x1f;
+                                    for (i5 = 0; i5 < 0x10; i5++)
+                                    {
+                                        for (i6 = 0; i6 < 0x10; i6++)
+                                        {
+                                            iByte = gfx1rom[iOffset + i5 + i6 * 0x10];
+                                            c1 = cc1G[iColor * 0x10 + iByte];
+                                            bbm2[i].SetPixel(nxs * 16 + x0 + dx0 * i5, nys * 16 + y0 + dy0 * i6, c1);
+                                        }
+                                    }
+                                    g.DrawImage(bbm2[i], (x + xoffs) & 0x3ff, (y + yoffs) & 0x3ff);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (nys = 0; nys < ny; nys++)
+                            {
+                                for (nxs = 0; nxs < nx; nxs++)
+                                {
+                                    sx = (x + nxs * 16 + xoffs) & 0x3ff;
+                                    sy = (y + nys * 16 + yoffs) & 0x3ff;
+                                    iOffset = ((code & ~0xf) + ((code + nxs) & 0xf) + 0x10 * nys) * 0x100;
+                                    iColor = col & 0x1f;
+                                    for (i5 = 0; i5 < 0x10; i5++)
+                                    {
+                                        for (i6 = 0; i6 < 0x10; i6++)
+                                        {
+                                            iByte = gfx1rom[iOffset + i5 + i6 * 0x10];
+                                            c1 = cc1G[iColor * 0x10 + iByte];
+                                            bbm2[i].SetPixel(nxs * 16 + x0 + dx0 * i5, nys * 16 + y0 + dy0 * i6, c1);
+                                        }
+                                    }
+                                    g.DrawImage(bbm2[i], (x + xoffs) & 0x3ff, (y + yoffs) & 0x3ff);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    bbm2[i] = new Bitmap(0x10, 0x10);
+                    iOffset = code * 0x100;
+                    iColor = col & 0x1f;
+                    for (i5 = 0; i5 < 0x10; i5++)
+                    {
+                        for (i6 = 0; i6 < 0x10; i6++)
+                        {
+                            iByte = gfx1rom[iOffset + i5 + i6 * 0x10];
+                            c1 = cc1G[iColor * 0x10 + iByte];
+                            bbm2[i].SetPixel(x0 + dx0 * i5, y0 + dy0 * i6, c1);
+                        }
+                    }
+                    g.DrawImage(bbm2[i], (x + xoffs) & 0x3ff, (y + yoffs) & 0x3ff);
+                }
             }
             g.Dispose();
             return bm1;

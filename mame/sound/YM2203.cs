@@ -112,6 +112,13 @@ namespace mame
                         case "masterwu":
                         case "masterwj":
                         case "yukiwo":
+                        case "tetrista":
+                        case "viofight":
+                        case "viofightu":
+                        case "viofightj":
+                        case "hitice":
+                        case "hiticerb":
+                        case "hiticej":
                             FF2203[sndindex].OPN.ST.IRQ_Handler = Taitob.irqhandler;
                             FF2203[sndindex].OPN.ST.SSG.set_clock = AY8910.AA8910[sndindex].ay8910_set_clock_ym;
                             FF2203[sndindex].OPN.ST.SSG.write = AY8910.AA8910[sndindex].ay8910_write_ym;

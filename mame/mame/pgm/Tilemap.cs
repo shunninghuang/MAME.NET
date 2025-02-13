@@ -24,7 +24,7 @@ namespace mame
             pgm_tx_tilemap.pixmap = new ushort[0x100 * 0x200];
             pgm_tx_tilemap.flagsmap = new byte[0x100, 0x200];
             pgm_tx_tilemap.tileflags = new byte[0x20, 0x40];
-            pgm_tx_tilemap.tile_update3 = pgm_tx_tilemap.tile_updatePgmtx;
+            pgm_tx_tilemap.tile_update3 = pgm_tx_tilemap.tile_update_pgm_tx;
             pgm_tx_tilemap.tilemap_draw_instance3 = pgm_tx_tilemap.tilemap_draw_instancePgm;
             pgm_tx_tilemap.total_elements = 0x800000 / 0x20;
             pgm_tx_tilemap.pen_data = new byte[0x40];
@@ -50,7 +50,7 @@ namespace mame
             pgm_bg_tilemap.pixmap = new ushort[0x800 * 0x800];
             pgm_bg_tilemap.flagsmap = new byte[0x800, 0x800];
             pgm_bg_tilemap.tileflags = new byte[0x40, 0x40];
-            pgm_bg_tilemap.tile_update3 = pgm_bg_tilemap.tile_updatePgmbg;
+            pgm_bg_tilemap.tile_update3 = pgm_bg_tilemap.tile_update_pgm_bg;
             pgm_bg_tilemap.tilemap_draw_instance3 = pgm_bg_tilemap.tilemap_draw_instancePgm;
             pgm_bg_tilemap.total_elements = 0x3333;
             pgm_bg_tilemap.pen_data = new byte[0x400];
@@ -68,7 +68,7 @@ namespace mame
     }
     public partial class Tmap
     {
-        public void tile_updatePgmtx(int col, int row)
+        public void tile_update_pgm_tx(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
@@ -87,50 +87,7 @@ namespace mame
             code = tileno % PGM.pgm_tx_tilemap.total_elements;
             flags = (byte)(flipyx & 3);
             palette_base = 0x800 + 0x10 * colour;
-            tileflags[row, col] = tile_drawPgmtx(code * 0x40, x0, y0, palette_base, flags);
-            //tileflags[row, col] = tile_apply_bitmaskPgmtx(code << 3, x0, y0, flags);
-            //tileinfo_set( tileinfo, 0,tileno,colour,flipyx&3)
-        }
-        public byte tile_drawPgmtx(int pendata_offset, int x0, int y0, int palette_base, byte flags)
-        {
-            int height = tileheight;
-            int width = tilewidth;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            byte andmask = 0xff, ormask = 0;
-            byte pen, map;
-            Array.Copy(PGM.tiles1rom, pendata_offset, pen_data, 0, 0x40);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += height - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += width - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < height; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < width; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[0,pen];
-                    offset1++;
-                    pixmap[offsety1 * 0x200 + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
+            tileflags[row, col] = tile_draw(PGM.tiles1rom, code * 0x40, x0, y0, palette_base, 0, 0, flags);
         }
         public void tilemap_draw_instancePgm(RECT cliprect, int xpos, int ypos)
         {
@@ -230,7 +187,7 @@ namespace mame
                 nexty = Math.Min(nexty, y2);
             }
         }
-        public void tile_updatePgmbg(int col, int row)
+        public void tile_update_pgm_bg(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
@@ -248,48 +205,7 @@ namespace mame
             code = tileno % PGM.pgm_bg_tilemap.total_elements;
             flags = (byte)(flipyx & 3);
             palette_base = 0x400 + 0x20 * colour;
-            tileflags[row, col] = tile_drawPgmbg(code * 0x400, x0, y0, palette_base, flags);
-        }
-        public byte tile_drawPgmbg(int pendata_offset, int x0, int y0, int palette_base, byte flags)
-        {
-            int height = tileheight;
-            int width = tilewidth;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            byte andmask = 0xff, ormask = 0;
-            byte pen, map;
-            Array.Copy(PGM.tiles2rom, pendata_offset, pen_data, 0, 0x400);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += height - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += width - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < height; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < width; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[0, pen];
-                    offset1++;
-                    pixmap[offsety1 * 0x800 + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
+            tileflags[row, col] = tile_draw(PGM.tiles2rom, code * 0x400, x0, y0, palette_base, 0, 0, flags);
         }
     }
 }

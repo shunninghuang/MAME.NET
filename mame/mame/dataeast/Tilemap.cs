@@ -34,69 +34,27 @@ namespace mame
             bg_tilemap.scrollcols = 1;
             bg_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
             bg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instanceDataeast_pcktgal;
-            bg_tilemap.tile_update3 = bg_tilemap.tile_updatePcktgalbg;
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_dataeast_pcktgal;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_pcktgal_bg;
         }
     }
     public partial class Tmap
     {
-        public void tile_updatePcktgalbg(int col, int row)
+        public void tile_update_pcktgal_bg(int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
-            int flags;
             int tile_index;
             int code, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             tile_index = row * cols + col;
             code = Generic.videoram[tile_index * 2 + 1] + ((Generic.videoram[tile_index * 2] & 0x0f) << 8);
             color = Generic.videoram[tile_index * 2] >> 4;
-            flags = 0;
             pen_data_offset = code * 0x40;
             palette_base = 0x100 + 0x10 * color;
-            group = 0;
-            tileflags[row, col] = tile_drawPcktgalbg(Dataeast.gfx1rom, pen_data_offset, x0, y0, palette_base, group, flags);
+            tileflags[row, col] = tile_draw(Dataeast.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, 0);
         }
-        public byte tile_drawPcktgalbg(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, int group, int flags)
-        {
-            byte andmask = 0xff, ormask = 0;
-            int dx0 = 1, dy0 = 1;
-            int tx, ty;
-            byte pen, map;
-            int offset1 = 0;
-            int offsety1;
-            int xoffs;
-            Array.Copy(bb1, pen_data_offset, pen_data, 0, 0x40);
-            if ((flags & Tilemap.TILE_FLIPY) != 0)
-            {
-                y0 += tileheight - 1;
-                dy0 = -1;
-            }
-            if ((flags & Tilemap.TILE_FLIPX) != 0)
-            {
-                x0 += tilewidth - 1;
-                dx0 = -1;
-            }
-            for (ty = 0; ty < tileheight; ty++)
-            {
-                xoffs = 0;
-                offsety1 = y0;
-                y0 += dy0;
-                for (tx = 0; tx < tilewidth; tx++)
-                {
-                    pen = pen_data[offset1];
-                    map = pen_to_flags[group, pen];
-                    offset1++;
-                    pixmap[(offsety1 % width) * width + x0 + xoffs] = (ushort)(palette_base + pen);
-                    flagsmap[offsety1 % width, x0 + xoffs] = map;
-                    andmask &= map;
-                    ormask |= map;
-                    xoffs += dx0;
-                }
-            }
-            return (byte)(andmask ^ ormask);
-        }
-        public void tilemap_draw_instanceDataeast_pcktgal(RECT cliprect, int xpos, int ypos)
+        public void tilemap_draw_instance_dataeast_pcktgal(RECT cliprect, int xpos, int ypos)
         {
             int mincol, maxcol;
             int x1, y1, x2, y2;

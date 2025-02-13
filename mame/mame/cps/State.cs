@@ -10,7 +10,7 @@ namespace mame
 {
     public partial class CPS
     {
-        public static void SaveStateBinaryC(BinaryWriter writer)
+        public static void SaveStateBinary_cps1(BinaryWriter writer)
         {
             int i;
             writer.Write(dswa);
@@ -80,7 +80,7 @@ namespace mame
                     break;
             }
         }
-        public static void SaveStateBinaryQ(BinaryWriter writer)
+        public static void SaveStateBinary_cps1_qsound(BinaryWriter writer)
         {
             int i;
             writer.Write(dswa);
@@ -128,7 +128,7 @@ namespace mame
             writer.Write(Sound.mixerstream.output_base_sampindex);
             Eeprom.SaveStateBinary(writer);
         }
-        public static void SaveStateBinaryC2(BinaryWriter writer)
+        public static void SaveStateBinary_cps2(BinaryWriter writer)
         {
             int i;
             writer.Write(basebanksnd);
@@ -191,7 +191,7 @@ namespace mame
             writer.Write(Sound.mixerstream.output_base_sampindex);
             Eeprom.SaveStateBinary(writer);
         }
-        public static void LoadStateBinaryC(BinaryReader reader)
+        public static void LoadStateBinary_cps1(BinaryReader reader)
         {
             int i;
             dswa = reader.ReadByte();
@@ -261,7 +261,7 @@ namespace mame
                     break;
             }
         }
-        public static void LoadStateBinaryQ(BinaryReader reader)
+        public static void LoadStateBinary_cps1_qsound(BinaryReader reader)
         {
             int i;
             dswa = reader.ReadByte();
@@ -309,7 +309,7 @@ namespace mame
             Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
             Eeprom.LoadStateBinary(reader);
         }
-        public static void LoadStateBinaryC2(BinaryReader reader)
+        public static void LoadStateBinary_cps2(BinaryReader reader)
         {
             int i;
             basebanksnd = reader.ReadInt32();

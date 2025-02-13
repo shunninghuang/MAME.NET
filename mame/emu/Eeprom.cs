@@ -134,6 +134,7 @@ namespace mame
                     data_bits = 8;
                     break;
                 case "CPS2":
+                case "CPS2turbo":
                     cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0' };
                     cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'1' };
                     cmd_erase = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'1' };
