@@ -14,19 +14,6 @@ namespace cpu.z80
         public override int ExecuteCycles(int cycles)
         {
             pendingCycles = cycles;
-            StreamWriter sw30 = null, sw31 = null, sw32 = null;
-            if (Cpuexec.bLog0 == 1 && Cpuexec.bLog02)
-            {
-                sw30 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\20.txt", true);
-            }
-            if (Cpuexec.bLog1 == 1 && Cpuexec.bLog12)
-            {
-                sw31 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\21.txt", true);
-            }
-            if (Cpuexec.bLog2 == 1 && Cpuexec.bLog22)
-            {
-                sw32 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\22.txt", true);
-            }
             sbyte Displacement;
 
             bool TBOOL; byte TB; byte TBH; byte TBL; byte TB1; byte TB2; sbyte TSB; ushort TUS; int TI1; int TI2; int TIR;
@@ -103,10 +90,6 @@ namespace cpu.z80
                     PPC = RegPC.Word;
                     OP = ReadOp(PPC);
                     RegPC.Word++;
-                    if (Cpuexec.activecpu == 1 && Cpuexec.bLog1 == 2 && pendingCycles == 0x302)
-                    {
-                        int i1 = 1;
-                    }
 
                     debugger_start_cpu_hook_callback();
                     switch (OP)//ReadMemory(RegPC.Word++))
@@ -11560,38 +11543,8 @@ namespace cpu.z80
                     }
                     debugger_stop_cpu_hook_callback();
                 }
-                if (Cpuexec.bLog0 == 1 && Cpuexec.bLog02)
-                {
-                    sw30.WriteLine(PPC.ToString("x") + "\t" + OP.ToString("x") + "\t" + pendingCycles.ToString("x"));
-                    sw30.WriteLine(RegisterAF.ToString("x") + "\t" + RegisterBC.ToString("x") + "\t" + RegisterDE.ToString("x") + "\t" + RegisterHL.ToString("x") + "\t" + RegisterShadowAF.ToString("x") + "\t" + RegisterShadowBC.ToString("x") + "\t" + RegisterShadowDE.ToString("x") + "\t" + RegisterShadowHL.ToString("x") + "\t" + RegisterI.ToString("x") + "\t" + RegisterR.ToString("x") + "\t" + RegisterIX.ToString("x") + "\t" + RegisterIY.ToString("x") + "\t" + RegisterSP.ToString("x") + "\t" + RegisterPC.ToString("x") + "\t" + RegisterWZ.ToString("x") + "\t" + (IFF1 ? 1 : 0).ToString("x") + "\t" + (IFF2 ? 1 : 0).ToString("x") + "\t" + (Interrupt ? 1 : 0).ToString("x"));
-                }
-                if (Cpuexec.bLog1 == 1 && Cpuexec.bLog12)
-                {
-                    sw31.WriteLine(PPC.ToString("x") + "\t" + OP.ToString("x") + "\t" + pendingCycles.ToString("x"));
-                    sw31.WriteLine(RegisterAF.ToString("x") + "\t" + RegisterBC.ToString("x") + "\t" + RegisterDE.ToString("x") + "\t" + RegisterHL.ToString("x") + "\t" + RegisterShadowAF.ToString("x") + "\t" + RegisterShadowBC.ToString("x") + "\t" + RegisterShadowDE.ToString("x") + "\t" + RegisterShadowHL.ToString("x") + "\t" + RegisterI.ToString("x") + "\t" + RegisterR.ToString("x") + "\t" + RegisterIX.ToString("x") + "\t" + RegisterIY.ToString("x") + "\t" + RegisterSP.ToString("x") + "\t" + RegisterPC.ToString("x") + "\t" + RegisterWZ.ToString("x") + "\t" + (IFF1 ? 1 : 0).ToString("x") + "\t" + (IFF2 ? 1 : 0).ToString("x") + "\t" + (Interrupt ? 1 : 0).ToString("x"));
-                }
-                if (Cpuexec.bLog2 == 1 && Cpuexec.bLog22)
-                {
-                    sw32.WriteLine(PPC.ToString("x") + "\t" + OP.ToString("x") + "\t" + pendingCycles.ToString("x"));
-                    sw32.WriteLine(RegisterAF.ToString("x") + "\t" + RegisterBC.ToString("x") + "\t" + RegisterDE.ToString("x") + "\t" + RegisterHL.ToString("x") + "\t" + RegisterShadowAF.ToString("x") + "\t" + RegisterShadowBC.ToString("x") + "\t" + RegisterShadowDE.ToString("x") + "\t" + RegisterShadowHL.ToString("x") + "\t" + RegisterI.ToString("x") + "\t" + RegisterR.ToString("x") + "\t" + RegisterIX.ToString("x") + "\t" + RegisterIY.ToString("x") + "\t" + RegisterSP.ToString("x") + "\t" + RegisterPC.ToString("x") + "\t" + RegisterWZ.ToString("x") + "\t" + (IFF1 ? 1 : 0).ToString("x") + "\t" + (IFF2 ? 1 : 0).ToString("x") + "\t" + (Interrupt ? 1 : 0).ToString("x"));
-                    //sw3.WriteLine(YMDeltat.DELTAT.portstate.ToString("x"));
-                    //sw3.WriteLine(K053260.ic1.channels[0].play.ToString("x") + "\t" + K053260.ic1.channels[1].play.ToString("x") + "\t" + K053260.ic1.channels[2].play.ToString("x") + "\t" + K053260.ic1.channels[3].play.ToString("x"));
-                    //sw3.WriteLine(mame.Neogeo.audio_cpu_banks[0].ToString("x") + "\t" + mame.Neogeo.audio_cpu_banks[1].ToString("x") + "\t" + mame.Neogeo.audio_cpu_banks[2].ToString("x") + "\t" + mame.Neogeo.audio_cpu_banks[3].ToString("x"));
-                }
             }
             while (pendingCycles > 0);
-            if (Cpuexec.bLog0 == 1 && Cpuexec.bLog02)
-            {
-                sw30.Close();
-            }
-            if (Cpuexec.bLog1 == 1 && Cpuexec.bLog12)
-            {
-                sw31.Close();
-            }
-            if (Cpuexec.bLog2 == 1 && Cpuexec.bLog22)
-            {
-                sw32.Close();
-            }
             return cycles - pendingCycles;
         }
     }

@@ -5838,6 +5838,13 @@
     <year>2024</year>
     <manufacturer>TTE</manufacturer>
   </game>
+  <game name="neoshinobi11" board="Neo Geo">
+    <parent>neoshinobi</parent>
+    <direction></direction>
+    <description>Shinobi (Neo Geo unofficial port, Ver. 1.1)</description>
+    <year>2025</year>
+    <manufacturer>TTE</manufacturer>
+  </game>
 	<game name="mslugx" board="Neo Geo">
 		<parent></parent>
 		<direction></direction>

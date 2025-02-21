@@ -30,8 +30,8 @@ namespace mame
                     loadstate_callback = CPS.LoadStateBinary_cps2;
                     break;
                 case "CPS2turbo":
-                    savestate_callback = CPS.SaveStateBinary_cps2;
-                    loadstate_callback = CPS.LoadStateBinary_cps2;
+                    savestate_callback = CPS.SaveStateBinary_cps2turbo;
+                    loadstate_callback = CPS.LoadStateBinary_cps2turbo;
                     break;
                 case "Data East":
                     switch (Machine.sName)

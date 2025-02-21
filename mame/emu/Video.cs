@@ -665,7 +665,7 @@ namespace mame
             vblank_begin_timer = Timer.timer_alloc_common(vblank_begin_callback, "vblank_begin_callback", false);
             Timer.timer_adjust_periodic(vblank_begin_timer, video_screen_get_time_until_vblank_start(), Attotime.ATTOTIME_NEVER);
             scanline0_timer = Timer.timer_alloc_common(scanline0_callback, "scanline0_callback", false);
-            video_screen_configure(width, height, Video.screenstate.visarea, Video.screenstate.frame_period);
+            video_screen_configure(screenstate.width, screenstate.height, Video.screenstate.visarea, Video.screenstate.frame_period);
             vblank_end_timer = Timer.timer_alloc_common(vblank_end_callback, "vblank_end_callback", false);
             switch (Machine.sBoard)
             {
@@ -764,11 +764,11 @@ namespace mame
         }
         public static void video_screen_configure(int width, int height, RECT visarea, long frame_period)
         {
-            screenstate.width = width;
-            screenstate.height = height;
-            screenstate.visarea = visarea;
+            //screenstate.width = width;
+            //screenstate.height = height;
+            //screenstate.visarea = visarea;
             //realloc_screen_bitmaps(screen);
-            screenstate.frame_period=frame_period;
+            //screenstate.frame_period=frame_period;
             screenstate.scantime = frame_period / height;
             screenstate.pixeltime = frame_period / (height * width);
             /*if (config->vblank == 0 && !config->oldstyle_vblank_supplied)

@@ -499,6 +499,7 @@ namespace mame
                     break;
                 case "CPS-1(QSound)":
                 case "CPS2":
+                case "CPS2turbo":
                     for (i = 0; i < 3; i++)
                     {
                         CPS.ttmap[i].all_tiles_dirty = true;
