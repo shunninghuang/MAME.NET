@@ -738,8 +738,8 @@ namespace mame
         private static void cps2turbo_render_sprites()
         {
             int i, x, y, priority, code, colour, col;
-            int xoffs = -cps2_port(0x08);
-            int yoffs = -cps2_port(0x0a);
+            int xoffs = 64 - cps2_port(0x08);
+            int yoffs = 16 - cps2_port(0x0a);
             for (i = cps2_last_sprite_offset; i >= 0; i -= 4)
             {
                 x = cps2_buffered_obj[i];

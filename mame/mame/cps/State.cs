@@ -396,10 +396,6 @@ namespace mame
             {
                 writer.Write(cps2_output[i]);
             }
-            for (i = 0; i < 6; i++)
-            {
-                writer.Write(cps2_output2[i]);
-            }
             writer.Write(cps2networkpresent);
             writer.Write(cps2_objram_bank);
             writer.Write(scancount);
@@ -462,10 +458,6 @@ namespace mame
             for (i = 0; i < 6; i++)
             {
                 cps2_output[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 6; i++)
-            {
-                cps2_output2[i] = reader.ReadUInt16();
             }
             cps2networkpresent = reader.ReadInt32();
             cps2_objram_bank = reader.ReadInt32();

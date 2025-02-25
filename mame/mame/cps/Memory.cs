@@ -1359,11 +1359,11 @@ namespace mame
                 int offset = (address - 0x665000) / 2;
                 if (address % 2 == 0)
                 {
-                    result = (sbyte)(cps2_output2[offset] >> 8);
+                    result = (sbyte)(cps2_output[offset] >> 8);
                 }
                 else if (address % 2 == 1)
                 {
-                    result = (sbyte)cps2_output2[offset];
+                    result = (sbyte)cps2_output[offset];
                 }
             }
             else if (address >= 0x708000 && address <= 0x709fff)
@@ -1570,7 +1570,7 @@ namespace mame
             else if (address >= 0x665000 && address + 1 <= 0x66500b)
             {
                 int offset = (address - 0x665000) / 2;
-                result = (short)cps2_output2[offset];
+                result = (short)cps2_output[offset];
             }
             else if (address >= 0x708000 && address <= 0x709fff)
             {
@@ -1680,11 +1680,11 @@ namespace mame
                 int offset = (address - 0x665000) / 2;
                 if (address % 2 == 0)
                 {
-                    cps2_output2[offset] = (ushort)((value << 8) | (cps2_output2[offset] & 0xff));
+                    cps2_output[offset] = (ushort)((value << 8) | (cps2_output[offset] & 0xff));
                 }
                 else if (address % 2 == 1)
                 {
-                    cps2_output2[offset] = (ushort)((cps2_output2[offset] & 0xff00) | value);
+                    cps2_output[offset] = (ushort)((cps2_output[offset] & 0xff00) | (byte)value);
                 }
             }
             else if (address >= 0x700000 && address <= 0x701fff)
@@ -1855,7 +1855,7 @@ namespace mame
             else if (address >= 0x665000 && address + 1 <= 0x66500b)
             {
                 int offset = (address - 0x665000) / 2;
-                cps2_output2[offset] = (ushort)value;
+                cps2_output[offset] = (ushort)value;
             }
             else if (address >= 0x700000 && address + 1 <= 0x701fff)
             {

@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class CPS
     {
-        public static ushort[] cps_a_regs, cps_b_regs, cps2_objram1, cps2_objram2, cps2_output, cps2_output2;
+        public static ushort[] cps_a_regs, cps_b_regs, cps2_objram1, cps2_objram2, cps2_output;
         public static byte[] mainromop, gfxrom, gfx1rom, audioromop, starsrom, user1rom;
         public static byte[] gfxram;
         public static byte[] qsound_sharedram1, qsound_sharedram2;
@@ -93,7 +93,6 @@ namespace mame
                     cps2_objram1 = new ushort[0x1000];
                     cps2_objram2 = new ushort[0x1000];
                     cps2_output = new ushort[0x06];
-                    cps2_output2 = new ushort[0x06];
                     cps2networkpresent = 0;
                     cps2_objram_bank = 0;
                     scancount = 0;
