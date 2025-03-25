@@ -37,20 +37,17 @@ namespace mame
             TC0180VCU_ram[offset] = (ushort)((data << 8) | (byte)TC0180VCU_ram[offset]);
             if ((offset & 0x7000) == fg_rambank[0] || (offset & 0x7000) == fg_rambank[1])
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                fg_tilemap.get_row_col(offset & 0x0fff, out row, out col);
                 fg_tilemap.tilemap_mark_tile_dirty(row, col);
             }
             if ((offset & 0x7000) == bg_rambank[0] || (offset & 0x7000) == bg_rambank[1])
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                bg_tilemap.get_row_col(offset & 0x0fff, out row, out col);
                 bg_tilemap.tilemap_mark_tile_dirty(row, col);
             }
             if ((offset & 0x7800) == tx_rambank)
             {
-                row = (offset & 0x07ff) / 64;
-                col = (offset & 0x07ff) % 64;
+                tx_tilemap.get_row_col(offset & 0x07ff, out row, out col);
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
             }
         }
@@ -60,20 +57,17 @@ namespace mame
             TC0180VCU_ram[offset] = (ushort)((TC0180VCU_ram[offset] & 0xff00) | (byte)data);
             if ((offset & 0x7000) == fg_rambank[0] || (offset & 0x7000) == fg_rambank[1])
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                fg_tilemap.get_row_col(offset & 0x0fff, out row, out col);
                 fg_tilemap.tilemap_mark_tile_dirty(row, col);
             }
             if ((offset & 0x7000) == bg_rambank[0] || (offset & 0x7000) == bg_rambank[1])
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                bg_tilemap.get_row_col(offset & 0x0fff, out row, out col);
                 bg_tilemap.tilemap_mark_tile_dirty(row, col);
             }
             if ((offset & 0x7800) == tx_rambank)
             {
-                row = (offset & 0x07ff) / 64;
-                col = (offset & 0x07ff) % 64;
+                tx_tilemap.get_row_col(offset & 0x07ff, out row, out col);
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
             }
         }
@@ -83,20 +77,17 @@ namespace mame
             TC0180VCU_ram[offset] = data;
             if ((offset & 0x7000) == fg_rambank[0] || (offset & 0x7000) == fg_rambank[1])
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                fg_tilemap.get_row_col(offset & 0x0fff, out row, out col);
                 fg_tilemap.tilemap_mark_tile_dirty(row, col);
             }
             if ((offset & 0x7000) == bg_rambank[0] || (offset & 0x7000) == bg_rambank[1])
             {
-                row = (offset & 0x0fff) / 64;
-                col = (offset & 0x0fff) % 64;
+                bg_tilemap.get_row_col(offset & 0x0fff, out row, out col);
                 bg_tilemap.tilemap_mark_tile_dirty(row, col);
             }
             if ((offset & 0x7800) == tx_rambank)
             {
-                row = (offset & 0x07ff) / 64;
-                col = (offset & 0x07ff) % 64;
+                tx_tilemap.get_row_col(offset & 0x07ff, out row, out col);
                 tx_tilemap.tilemap_mark_tile_dirty(row, col);
             }
         }

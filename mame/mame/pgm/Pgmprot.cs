@@ -8,7 +8,7 @@ namespace mame
     public partial class PGM
     {
         public static byte asic3_reg, asic3_x;
-        public static byte[] asic3_latch=new byte[3];
+        public static byte[] asic3_latch = new byte[3];
         public static ushort asic3_hold, asic3_hilo;
         public static int bt(uint v, int bit)
         {
@@ -120,6 +120,21 @@ namespace mame
         {
             //if(ACCESSING_BITS_0_7)
             asic3_reg = (byte)(data & 0xff);
+        }
+        public static ushort dw2_d80000_r()
+        {
+            ushort d = (ushort)(Memory.mainram[0xEECE] * 0x100 + Memory.mainram[0xEECF]);
+            ushort d2 = 0;
+            d = (ushort)((d >> 8) | (d << 8));
+            d2 = (ushort)((d2 & (~(1 << 0))) | (((d >> 7) & 1) << 0));
+            d2 = (ushort)((d2 & (~(1 << 1))) | (((d >> 4) & 1) << 1));
+            d2 = (ushort)((d2 & (~(1 << 2))) | (((d >> 5) & 1) << 2));
+            d2 = (ushort)((d2 & (~(1 << 3))) | (((d >> 2) & 1) << 3));
+            d2 = (ushort)((d2 & (~(1 << 4))) | (((d >> 15) & 1) << 4));
+            d2 = (ushort)((d2 & (~(1 << 5))) | (((d >> 1) & 1) << 5));
+            d2 = (ushort)((d2 & (~(1 << 6))) | (((d >> 10) & 1) << 6));
+            d2 = (ushort)((d2 & (~(1 << 7))) | (((d >> 13) & 1) << 7));
+            return d2;
         }
     }
 }

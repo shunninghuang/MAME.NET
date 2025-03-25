@@ -504,8 +504,28 @@ namespace mame
                     cpu[1].cycles_per_second = 8468000;
                     cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                     cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
-                    vblank_interrupts_per_frame = 2;
-                    vblank_interrupt = PGM.drgw_interrupt;
+                    switch (Machine.sName)
+                    {
+                        case "orlegend":
+                        case "orlegende":
+                        case "orlegendc":
+                        case "orlegendca":
+                        case "orlegend111c":
+                        case "orlegend111t":
+                        case "orlegend111k":
+                        case "orlegend105k":
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Generic.irq_0_6_line_hold;
+                            break;
+                        case "drgw2":
+                        case "dw2v100x":
+                        case "drgw2j":
+                        case "drgw2c":
+                        case "drgw2hk":
+                            vblank_interrupts_per_frame = 2;
+                            vblank_interrupt = PGM.drgw_interrupt;
+                            break;
+                    }
                     break;
                 case "M72":
                     Nec.nn1 = new Nec[1];
@@ -1732,14 +1752,18 @@ namespace mame
                             MC68000.m1.WriteByte = PGM.MPWriteByte_orlegend;
                             MC68000.m1.WriteWord = PGM.MPWriteWord_orlegend;
                             break;
-                        /*case "drgw2":
+                        case "drgw2":
+                        case "dw2v100x":
+                        case "drgw2j":
+                        case "drgw2c":
+                        case "drgw2hk":
                             MC68000.m1.ReadByte = PGM.MPReadByte_drgw2;
                             MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord= PGM.MPReadWord_drgw2;
                             MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong= PGM.MPReadLong_drgw2;
                             MC68000.m1.WriteByte = PGM.MPWriteByte_drgw2;
                             MC68000.m1.WriteWord = PGM.MPWriteWord_drgw2;
                             MC68000.m1.WriteLong = PGM.MPWriteLong_drgw2;
-                            break;*/
+                            break;
                     }
                     break;
                 case "M72":
@@ -3262,7 +3286,28 @@ namespace mame
                     }                    
                     break;
                 case "PGM":
-                    PGM.drgw_interrupt();
+                    switch (Machine.sName)
+                    {
+                        case "orlegend":
+                        case "orlegende":
+                        case "orlegendc":
+                        case "orlegendca":
+                        case "orlegend111c":
+                        case "orlegend111t":
+                        case "orlegend111k":
+                        case "orlegend105k":
+                            vblank_interrupt();
+                            break;
+                        case "drgw2":
+                        case "dw2v100x":
+                        case "drgw2j":
+                        case "drgw2c":
+                        case "drgw2hk":
+                            iloops = 0;
+                            vblank_interrupt();
+                            Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                            break;
+                    }
                     break;
                 case "M72":
                     iloops = 0;
@@ -3417,6 +3462,27 @@ namespace mame
                     if (iloops > 1)
                     {
                         Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                    }
+                    break;
+                case "PGM":
+                    switch (Machine.sName)
+                    {
+                        case "drgw2":
+                        case "dw2v100x":
+                        case "drgw2j":
+                        case "drgw2c":
+                        case "drgw2hk":
+                            if (iloops == 0)
+                            {
+                                iloops = vblank_interrupts_per_frame;
+                            }
+                            iloops--;
+                            vblank_interrupt();
+                            if (iloops > 1)
+                            {
+                                Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                            }
+                            break;
                     }
                     break;
                 case "Tehkan":

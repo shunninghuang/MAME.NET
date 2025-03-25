@@ -144,22 +144,7 @@ namespace mame
         }
         public void tilemap_mark_tile_dirty(int row, int col)
         {
-            if (attributes == 0)
-            {
-                tileflags[row, col] = Tilemap.TILE_FLAG_DIRTY;
-            }
-            else if (attributes == 1)
-            {
-                int i1 = 1;
-            }
-            else if (attributes == 2)
-            {
-                int i1 = 1;
-            }
-            else if (attributes == 3)
-            {
-                tileflags[rows - 1 - row, cols - 1 - col] = Tilemap.TILE_FLAG_DIRTY;
-            }
+            tileflags[row, col] = Tilemap.TILE_FLAG_DIRTY;
         }
         public void tilemap_set_scroll_rows(int scroll_rows)
         {

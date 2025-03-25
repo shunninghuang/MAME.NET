@@ -5845,6 +5845,27 @@
     <year>2025</year>
     <manufacturer>TTE</manufacturer>
   </game>
+  <game name="neogoldenaxe" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Golden Axe (Neo Geo unofficial port)</description>
+    <year>2025</year>
+    <manufacturer>TTE</manufacturer>
+  </game>
+  <game name="neoamazon" board="Neo Geo">
+    <parent></parent>
+    <direction>270</direction>
+    <description>Soldier Girl Amazon (Neo Geo unofficial port)</description>
+    <year>2021</year>
+    <manufacturer>IQ_132</manufacturer>
+  </game>
+  <game name="neocabal" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Cabal (Neo Geo unofficial port)</description>
+    <year>2021</year>
+    <manufacturer>IQ_132</manufacturer>
+  </game>
 	<game name="mslugx" board="Neo Geo">
 		<parent></parent>
 		<direction></direction>
@@ -7553,7 +7574,7 @@
 		<year>1997</year>
 		<manufacturer>IGS</manufacturer>
 	</game>
-	<!--  <game name="drgw2" board="PGM">
+	<game name="drgw2" board="PGM">
     <parent></parent>
     <direction></direction>
     <description>Dragon World II (ver. 110X, Export)</description>
@@ -7588,7 +7609,7 @@
     <year>1997</year>
     <manufacturer>IGS</manufacturer>
   </game>
-  <game name="killbld" board="PGM">
+  <!--<game name="killbld" board="PGM">
     <parent></parent>
     <direction></direction>
     <description>The Killing Blade (ver. 109, Chinese Board)</description>

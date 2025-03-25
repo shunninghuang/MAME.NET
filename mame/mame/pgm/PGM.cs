@@ -20,7 +20,6 @@ namespace mame
             mainbiosrom = Properties.Resources.pgmmainbios;
             videobios = Properties.Resources.pgmvideobios;
             audiobios = Properties.Resources.pgmaudiobios;
-            ICS2115.icsrom = audiobios;
             byte[] bb1,bb2;
             int i3,n1,n2,n3;
             bb1= Machine.GetRom("ics.rom");

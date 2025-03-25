@@ -717,6 +717,19 @@ namespace mame
                             break;
                     }                    
                     break;
+                case "PGM":
+                    switch (Machine.sName)
+                    {
+                        case "drgw2":
+                        case "dw2v100x":
+                        case "drgw2j":
+                        case "drgw2c":
+                        case "drgw2hk":
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            break;
+                    }
+                    break;
                 case "M72":
                     Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 128);
                     Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
