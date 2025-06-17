@@ -528,6 +528,10 @@ namespace mame
                     }
                     YM2151.ym2151_postload();
                     break;
+                case "Gaelco":
+                    Gaelco.gaelco_tilemap[0].all_tiles_dirty = true;
+                    Gaelco.gaelco_tilemap[1].all_tiles_dirty = true;
+                    break;
                 case "Namco System 1":
                     for (i = 0; i < 6; i++)
                     {

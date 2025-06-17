@@ -57,3 +57,4 @@ J:\VS2008\mame_1\mame\bin\Debug\mame.exe
 J:\VS2008\mame_1\mame\bin\Debug\mame.pdb
 E:\VS2008\mame_1\mame\obj\Debug\ui.dataeastForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.tehkanForm.resources
+E:\VS2008\mame_1\mame\obj\Debug\ui.gaelcoForm.resources

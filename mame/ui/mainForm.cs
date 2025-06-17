@@ -32,6 +32,7 @@ namespace ui
         public tehkanForm tehkanform;
         public neogeoForm neogeoform;
         public technosForm technosform;
+        public gaelcoForm gaelcoform;
         public igs011Form igs011form;
         public namcos1Form namcos1form;
         public pgmForm pgmform;
@@ -87,6 +88,7 @@ namespace ui
             InitTehkanForm();
             InitNeogeoForm();
             InitTechnosForm();
+            InitGaelcoForm();
             InitSunA8Form();
             InitNamcos1Form();
             InitIGS011Form();
@@ -118,6 +120,7 @@ namespace ui
             tehkanToolStripMenuItem.Enabled = false;
             neogeoToolStripMenuItem.Enabled = false;
             technosToolStripMenuItem.Enabled = false;
+            gaelcoToolStripMenuItem.Enabled = false;
             suna8ToolStripMenuItem.Enabled = false;
             namcos1ToolStripMenuItem.Enabled = false;
             igs011ToolStripMenuItem.Enabled = false;
@@ -261,6 +264,24 @@ namespace ui
                     technosToolStripMenuItem.Enabled = true;
                     Technos.DdragonInit();
                     Technos.GDIInit();
+                    break;
+                case "Gaelco":
+                    Video.nMode = 1;
+                    itemSize = new ToolStripMenuItem[Video.nMode];
+                    for (i = 0; i < Video.nMode; i++)
+                    {
+                        itemSize[i] = new ToolStripMenuItem();
+                        itemSize[i].Size = new Size(152, 22);
+                        itemSize[i].Click += new EventHandler(itemsizeToolStripMenuItem_Click);
+                    }
+                    itemSize[0].Text = "320x240";
+                    resetToolStripMenuItem.DropDownItems.Clear();
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
+                    itemSelect();
+                    gaelcoToolStripMenuItem.Enabled = true;
+                    Gaelco.GaelcoInit();
+                    Gaelco.GDIInit();
                     break;
                 case "SunA8":
                     Video.nMode = 1;
@@ -577,6 +598,10 @@ namespace ui
         {
             technosform = new technosForm(this);
         }
+        public void InitGaelcoForm()
+        {
+            gaelcoform = new gaelcoForm(this);
+        }
         private void InitSunA8Form()
         {
             
@@ -792,6 +817,10 @@ namespace ui
         private void technosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             technosform.Show();
+        }
+        private void gaelcoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gaelcoform.Show();
         }
         private void suna8ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1017,6 +1046,15 @@ namespace ui
                         Video.offsetx = 0;
                         Video.offsety = 0;
                         Video.width = 256;
+                        Video.height = 240;
+                    }
+                    break;
+                case "Gaelco":
+                    if (Video.iMode == 0)
+                    {
+                        Video.offsetx = 0;
+                        Video.offsety = 16;
+                        Video.width = 320;
                         Video.height = 240;
                     }
                     break;

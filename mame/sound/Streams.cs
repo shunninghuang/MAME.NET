@@ -1097,6 +1097,31 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
+        private static void streams_update_gaelco_bigkarnk()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            ym3812stream.adjuststream(second_tick);
+            okistream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+        }
+        private static void streams_update_gaelco_biomtoy()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            okistream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+        }
         private static void streams_update_suna8()
         {
             Atime curtime = Timer.global_basetime;

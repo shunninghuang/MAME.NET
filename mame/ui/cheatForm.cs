@@ -40,9 +40,12 @@ namespace ui
                 case "CPS-1":
                 case "CPS-1(QSound)":
                 case "CPS2":
+                case "CPS2turbo":
                 case "Data East":
                 case "Tehkan":
                 case "Neo Geo":
+                case "Technos":
+                case "Gaelco":
                 case "Taito B":
                 case "Konami 68000":
                 case "Capcom":

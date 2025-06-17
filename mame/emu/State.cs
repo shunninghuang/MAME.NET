@@ -101,6 +101,27 @@ namespace mame
                             break;
                     }
                     break;
+                case "Gaelco":
+                    switch (Machine.sName)
+                    {
+                        case "bigkarnk":
+                            savestate_callback = Gaelco.SaveStateBinary_bigkarnk;
+                            loadstate_callback = Gaelco.LoadStateBinary_bigkarnk;
+                            break;
+                        case "biomtoy":
+                        case "biomtoya":
+                        case "biomtoyb":
+                        case "biomtoyc":
+                        case "bioplayc":
+                        case "maniacsp":
+                        case "lastkm":
+                        case "squash":
+                        case "thoop":
+                            savestate_callback = Gaelco.SaveStateBinary_maniacsq;
+                            loadstate_callback = Gaelco.LoadStateBinary_maniacsq;
+                            break;
+                    }
+                    break;
                 case "Namco System 1":
                     savestate_callback = Namcos1.SaveStateBinary;
                     loadstate_callback = Namcos1.LoadStateBinary;

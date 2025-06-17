@@ -402,6 +402,41 @@ namespace mame
                     }
                     vblank_interrupts_per_frame = 0;
                     break;
+                case "Gaelco":
+                    switch (Machine.sName)
+                    {
+                        case "bigkarnk":
+                            MC68000.m1 = new MC68000();
+                            M6809.mm1 = new M6809[1];
+                            M6809.mm1[0] = new M6809();
+                            M6809.mm1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.m1;
+                            cpu[1] = M6809.mm1[0];
+                            cpu[0].cycles_per_second = 10000000;
+                            cpu[1].cycles_per_second = 8867000 / 4;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            break;
+                        case "biomtoy":
+                        case "biomtoya":
+                        case "biomtoyb":
+                        case "biomtoyc":
+                        case "bioplayc":
+                        case "maniacsp":
+                        case "lastkm":
+                        case "squash":
+                        case "thoop":
+                            MC68000.m1 = new MC68000();
+                            ncpu = 1;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.m1;
+                            cpu[0].cycles_per_second = 12000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            break;
+                    }                    
+                    break;
                 case "SunA8":
                     Z80A.nZ80 = 2;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
@@ -1532,6 +1567,65 @@ namespace mame
                             M6809.mm1[0].ReadOpArg = Technos.M2ReadOp_ddragon;
                             M6809.mm1[0].RM = Technos.M2ReadByte_ddragon;
                             M6809.mm1[0].WM = Technos.M2WriteByte_ddragon;
+                            break;
+                    }
+                    break;
+                case "Gaelco":
+                    switch (Machine.sName)
+                    {
+                        case "bigkarnk":
+                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_bigkarnk;
+                            MC68000.m1.ReadByte = Gaelco.MReadByte_bigkarnk;
+                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_bigkarnk;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_bigkarnk;
+                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_bigkarnk;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_bigkarnk;
+                            MC68000.m1.WriteByte = Gaelco.MWriteByte_bigkarnk;
+                            MC68000.m1.WriteWord = Gaelco.MWriteWord_bigkarnk;
+                            MC68000.m1.WriteLong = Gaelco.MWriteLong_bigkarnk;
+                            M6809.mm1[0].ReadOp = Gaelco.M6809ReadOp_bigkarnk;
+                            M6809.mm1[0].ReadOpArg = Gaelco.M6809ReadOp_bigkarnk;
+                            M6809.mm1[0].RM = Gaelco.M6809ReadByte_bigkarnk;
+                            M6809.mm1[0].WM = Gaelco.M6809WriteByte_bigkarnk;
+                            break;
+                        case "biomtoy":
+                        case "biomtoya":
+                        case "biomtoyb":
+                        case "biomtoyc":
+                        case "bioplayc":
+                        case "maniacsp":
+                        case "lastkm":
+                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_maniacsq;
+                            MC68000.m1.ReadByte = Gaelco.MReadByte_maniacsq;
+                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_maniacsq;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_maniacsq;
+                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_maniacsq;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_maniacsq;
+                            MC68000.m1.WriteByte = Gaelco.MWriteByte_maniacsq;
+                            MC68000.m1.WriteWord = Gaelco.MWriteWord_maniacsq;
+                            MC68000.m1.WriteLong = Gaelco.MWriteLong_maniacsq;
+                            break;
+                        case "squash":
+                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_maniacsq;
+                            MC68000.m1.ReadByte = Gaelco.MReadByte_maniacsq;
+                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_maniacsq;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_maniacsq;
+                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_maniacsq;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_maniacsq;
+                            MC68000.m1.WriteByte = Gaelco.MWriteByte_squash;
+                            MC68000.m1.WriteWord = Gaelco.MWriteWord_squash;
+                            MC68000.m1.WriteLong = Gaelco.MWriteLong_squash;
+                            break;
+                        case "thoop":
+                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_maniacsq;
+                            MC68000.m1.ReadByte = Gaelco.MReadByte_maniacsq;
+                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_maniacsq;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_maniacsq;
+                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_maniacsq;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_maniacsq;
+                            MC68000.m1.WriteByte = Gaelco.MWriteByte_thoop;
+                            MC68000.m1.WriteWord = Gaelco.MWriteWord_thoop;
+                            MC68000.m1.WriteLong = Gaelco.MWriteLong_thoop;
                             break;
                     }
                     break;
@@ -2791,6 +2885,32 @@ namespace mame
                             break;                        
                     }
                     break;
+                case "Gaelco":
+                    switch (Machine.sName)
+                    {
+                        case "bigkarnk":
+                            m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
+                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            M6809.mm1[0].DisassemblerInit();
+                            M6809.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m6809form.m6809_start_debug;
+                            M6809.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m6809form.m6809_stop_debug;
+                            break;
+                        case "biomtoy":
+                        case "biomtoya":
+                        case "biomtoyb":
+                        case "biomtoyc":
+                        case "bioplayc":
+                        case "maniacsp":
+                        case "lastkm":
+                        case "squash":
+                        case "thoop":
+                            m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
+                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            break;
+                    }
+                    break;
                 case "IGS011":
                     m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
                     MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
@@ -2993,6 +3113,11 @@ namespace mame
                     timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                     Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                     break;
+                case "Gaelco":
+                    timeslice_period = new Atime(0, Video.screenstate.frame_period / 10);
+                    timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                    Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                    break;
                 case "CPS1":
                 case "Namco System 1":
                     break;
@@ -3071,7 +3196,6 @@ namespace mame
                         case "makaimurc":
                         case "makaimurg":
                         case "diamond":
-
                             break;
                         case "sf":
                         case "sfua":
@@ -3243,6 +3367,9 @@ namespace mame
                     break;
                 case "Neo Geo":
                 case "Technos":
+                    break;
+                case "Gaelco":
+                    Generic.irq_0_6_line_hold();
                     break;
                 case "SunA8":
                     iloops = 0;

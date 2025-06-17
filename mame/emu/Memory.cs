@@ -48,6 +48,11 @@ namespace mame
                     Technos.byte2 = 0xff;
                     Technos.bytee = 0xe7;
                     break;
+                case "Gaelco":
+                    Gaelco.sbyte1 = -1;
+                    Gaelco.sbyte2 = -1;
+                    Gaelco.bytes = 0xff;
+                    break;
                 case "Namco System 1":
                     Namcos1.byte0 = 0xff;
                     Namcos1.byte1 = 0xff;
@@ -250,6 +255,10 @@ namespace mame
                     Technos.byte1_old = 0;
                     Technos.byte2_old = 0;
                     Technos.bytee_old = 0;
+                    break;
+                case "Gaelco":
+                    Gaelco.sbyte1_old = 0;
+                    Gaelco.sbyte2_old = 0;
                     break;
                 case "Namco System 1":
                     Namcos1.byte0_old = 0;

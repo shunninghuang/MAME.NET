@@ -7119,6 +7119,76 @@
     <year>1994</year>
     <manufacturer>Midas (Unico license)</manufacturer>
   </game>
+  <game name="bigkarnk" board="Gaelco">
+    <parent></parent>
+    <direction></direction>
+    <description>Big Karnak (ver. 1.0)</description>
+    <year>1991</year>
+    <manufacturer>Gaelco</manufacturer>
+  </game>
+  <game name="biomtoy" board="Gaelco">
+    <parent></parent>
+    <direction></direction>
+    <description>Biomechanical Toy (ver. 1.0.1885)</description>
+    <year>1995</year>
+    <manufacturer>Gaelco / Zeus</manufacturer>
+  </game>
+  <game name="biomtoya" board="Gaelco">
+    <parent>biomtoy</parent>
+    <direction></direction>
+    <description>Biomechanical Toy (ver. 1.0.1884)</description>
+    <year>1995</year>
+    <manufacturer>Gaelco / Zeus</manufacturer>
+  </game>
+  <game name="biomtoyb" board="Gaelco">
+    <parent>biomtoy</parent>
+    <direction></direction>
+    <description>Biomechanical Toy (ver. 1.0.1878)</description>
+    <year>1995</year>
+    <manufacturer>Gaelco / Zeus</manufacturer>
+  </game>
+  <game name="biomtoyc" board="Gaelco">
+    <parent>biomtoy</parent>
+    <direction></direction>
+    <description>Biomechanical Toy (ver. 1.0.1870)</description>
+    <year>1994</year>
+    <manufacturer>Gaelco / Zeus</manufacturer>
+  </game>
+  <game name="bioplayc" board="Gaelco">
+    <parent>biomtoy</parent>
+    <direction></direction>
+    <description>Bioplaything Cop (ver. 1.0.1823)</description>
+    <year>1994</year>
+    <manufacturer>Gaelco / Zeus</manufacturer>
+  </game>
+  <game name="maniacsp" board="Gaelco">
+    <parent></parent>
+    <direction></direction>
+    <description>Maniac Square (prototype)</description>
+    <year>1996</year>
+    <manufacturer>Gaelco</manufacturer>
+  </game>
+  <!--<game name="lastkm" board="Gaelco">
+    <parent></parent>
+    <direction></direction>
+    <description>Last KM (ver 1.0.0275)</description>
+    <year>1995</year>
+    <manufacturer>Gaelco / Zeus</manufacturer>
+  </game>-->
+  <game name="squash" board="Gaelco">
+    <parent></parent>
+    <direction></direction>
+    <description>Squash (Ver. 1.0)</description>
+    <year>1992</year>
+    <manufacturer>Gaelco</manufacturer>
+  </game>
+  <game name="thoop" board="Gaelco">
+    <parent></parent>
+    <direction></direction>
+    <description>Thunder Hoop (Ver. 1)</description>
+    <year>1992</year>
+    <manufacturer>Gaelco</manufacturer>
+  </game>
   <!--<game name="starfigh" board="SunA8">
 		<parent></parent>
 		<direction>90</direction>

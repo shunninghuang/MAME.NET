@@ -463,7 +463,7 @@ namespace mame
             result = (byte)sbyte0;
             return result;
         }
-        public static void sound_bankswitch_w(int offset,byte data)
+        public static void sound_bankswitch_w(int offset, byte data)
         {
             basebanksnd = 0x10000 + 0x4000 * ((data - 1) & 0x03);
         }

@@ -101,6 +101,15 @@
     <Compile Include="mame\dataeast\State.cs" />
     <Compile Include="mame\dataeast\Tilemap.cs" />
     <Compile Include="mame\dataeast\Video.cs" />
+    <Compile Include="mame\gaelco\Drawgfx.cs" />
+    <Compile Include="mame\gaelco\Gaelco.cs" />
+    <Compile Include="mame\gaelco\Gaelcrpt.cs" />
+    <Compile Include="mame\gaelco\Gdi.cs" />
+    <Compile Include="mame\gaelco\Input.cs" />
+    <Compile Include="mame\gaelco\Memory.cs" />
+    <Compile Include="mame\gaelco\State.cs" />
+    <Compile Include="mame\gaelco\Tilemap.cs" />
+    <Compile Include="mame\gaelco\Video.cs" />
     <Compile Include="mame\igs011\Gdi.cs" />
     <Compile Include="mame\igs011\IGS011.cs" />
     <Compile Include="mame\igs011\Input.cs" />
@@ -275,6 +284,12 @@
     <Compile Include="ui\dataeastForm.Designer.cs">
       <DependentUpon>dataeastForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ui\gaelcoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ui\gaelcoForm.Designer.cs">
+      <DependentUpon>gaelcoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ui\technosForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -441,6 +456,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ui\dataeastForm.resx">
       <DependentUpon>dataeastForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\gaelcoForm.resx">
+      <DependentUpon>gaelcoForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\igs011Form.resx">

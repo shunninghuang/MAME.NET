@@ -52,6 +52,9 @@ namespace mame
                     Technos.video_start_ddragon();
                     machine_reset_callback = Technos.machine_reset_ddragon;
                     break;
+                case "Gaelco":
+                    machine_reset_callback = Gaelco.machine_reset_gaelco;
+                    break;
                 case "SunA8":
                     switch (Machine.sName)
                     {

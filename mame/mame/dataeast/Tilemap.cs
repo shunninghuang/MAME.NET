@@ -24,7 +24,7 @@ namespace mame
             bg_tilemap.pixmap = new ushort[0x100 * 0x100];
             bg_tilemap.flagsmap = new byte[0x100, 0x100];
             bg_tilemap.tileflags = new byte[32, 32];
-            bg_tilemap.pen_data = new byte[0x100];
+            bg_tilemap.pen_data = new byte[0x40];
             bg_tilemap.pen_to_flags = new byte[1, 16];
             for (i = 0; i < 16; i++)
             {

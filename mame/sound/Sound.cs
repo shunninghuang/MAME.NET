@@ -148,6 +148,36 @@ namespace mame
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
+                    }
+                    break;
+                case "Gaelco":
+                    switch (Machine.sName)
+                    {
+                        case "bigkarnk":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            sound_update = sound_update_gaelco_bigkarnk;
+                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
+                            YM3812.ym3812_start(3580000);
+                            OKI6295.okim6295_start();
+                            ym3812stream = new sound_stream(49722, 0, 1, FMOpl.ym3812_update_one);
+                            okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);
+                            mixerstream = new sound_stream(48000, 2, 0, null);
+                            break;
+                        case "biomtoy":
+                        case "biomtoya":
+                        case "biomtoyb":
+                        case "biomtoyc":
+                        case "bioplayc":
+                        case "maniacsp":
+                        case "lastkm":
+                        case "squash":
+                        case "thoop":
+                            sound_update = sound_update_gaelco_biomtoy;
+                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
+                            OKI6295.okim6295_start();
+                            okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);
+                            mixerstream = new sound_stream(48000, 1, 0, null);
                             break;
                     }
                     break;
@@ -706,7 +736,14 @@ namespace mame
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
+                        case "ryujin":
+                        case "qzshowby":
                         case "pbobble":
+                        case "spacedx":
+                        case "spacedxj":
+                        case "spacedxo":
+                        case "sbm":
+                        case "realpunc":
                             YM2610.F2610.ym2610_reset_chip();
                             break;
                         case "viofight":
@@ -1076,6 +1113,60 @@ namespace mame
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_technos_toffy();
+        }
+        public static void sound_update_gaelco_bigkarnk()
+        {
+            int sampindex;
+            ym3812stream.stream_update();
+            okistream.stream_update();
+            generate_resampled_data_ym3812(0x100, 0);
+            generate_resampled_data_oki6295(0x100, 1);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_gaelco_bigkarnk();
+        }
+        public static void sound_update_gaelco_biomtoy()
+        {
+            int sampindex;
+            okistream.stream_update();
+            generate_resampled_data_oki6295(0x100, 0);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_gaelco_biomtoy();
         }
         public static void sound_update_suna8()
         {

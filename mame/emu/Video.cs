@@ -250,6 +250,26 @@ namespace mame
                     video_update_callback = Technos.video_update_ddragon;
                     video_eof_callback = Technos.video_eof_ddragon;
                     break;
+                case "Gaelco":
+                    screenstate.width = 0x200;
+                    screenstate.height = 0x200;
+                    screenstate.visarea.min_x = 0;
+                    screenstate.visarea.max_x = 0x13f;
+                    screenstate.visarea.min_y = 0x10;
+                    screenstate.visarea.max_y = 0xff;
+                    fullwidth = 0x200;
+                    fullheight = 0x200;
+                    frame_update_time = new Atime(0, (long)(1e18 / 60));
+                    screenstate.vblank_period = (long)(1e12 * 2500);
+                    UI.ui_update_callback = UI.ui_update_cps;
+                    bitmapbase = new ushort[2][];
+                    bitmapbase[0] = new ushort[0x200 * 0x200];
+                    bitmapbase[1] = new ushort[0x200 * 0x200];
+                    bbmp = new Bitmap[1];
+                    bbmp[0] = new Bitmap(0x200, 0x200);
+                    video_update_callback = Gaelco.video_update_bigkarnk;
+                    video_eof_callback = Gaelco.video_eof_bigkarnk;
+                    break;
                 case "SunA8":
                     screenstate.width = 0x100;
                     screenstate.height = 0x100;

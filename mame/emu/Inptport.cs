@@ -164,6 +164,29 @@ namespace mame
                     record_port_callback = Technos.record_port_ddragon;
                     replay_port_callback = Technos.replay_port_ddragon;
                     break;
+                case "Gaelco":
+                    switch (Machine.sName)
+                    {
+                        case "bigkarnk":
+                        case "biomtoy":
+                        case "biomtoya":
+                        case "biomtoyb":
+                        case "biomtoyc":
+                        case "bioplayc":
+                        case "maniacsp":
+                        case "squash":
+                        case "thoop":
+                            loop_inputports_callback = Gaelco.loop_inputports_gaelco;
+                            record_port_callback = Gaelco.record_port_gaelco;
+                            replay_port_callback = Gaelco.replay_port_gaelco;
+                            break;
+                        case "lastkm":
+                            loop_inputports_callback = Gaelco.loop_inputports_gaelco_lastkm;
+                            record_port_callback = Gaelco.record_port_gaelco;
+                            replay_port_callback = Gaelco.replay_port_gaelco;
+                            break;
+                    }
+                    break;
                 case "SunA8":
                     loop_inputports_callback = SunA8.loop_inputports_suna8_starfigh;
                     record_port_callback = SunA8.record_port_starfigh;
