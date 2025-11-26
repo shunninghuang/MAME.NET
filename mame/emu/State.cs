@@ -101,6 +101,26 @@ namespace mame
                             break;
                     }
                     break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            savestate_callback = Tad.SaveStateBinary_tad_toki;
+                            loadstate_callback = Tad.LoadStateBinary_tad_toki;
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            savestate_callback = Tad.SaveStateBinary_tad_tokib;
+                            loadstate_callback = Tad.LoadStateBinary_tad_tokib;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {

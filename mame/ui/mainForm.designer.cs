@@ -44,7 +44,8 @@
             this.tehkanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.neogeoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.technosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.suna8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gaelcoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.namcos1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.igs011ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pgmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.gaelcoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -162,8 +162,8 @@
             this.tehkanToolStripMenuItem,
             this.neogeoToolStripMenuItem,
             this.technosToolStripMenuItem,
+            this.tadToolStripMenuItem,
             this.gaelcoToolStripMenuItem,
-            this.suna8ToolStripMenuItem,
             this.namcos1ToolStripMenuItem,
             this.igs011ToolStripMenuItem,
             this.pgmToolStripMenuItem,
@@ -212,12 +212,19 @@
             this.technosToolStripMenuItem.Text = "Technos debugger";
             this.technosToolStripMenuItem.Click += new System.EventHandler(this.technosToolStripMenuItem_Click);
             // 
-            // suna8ToolStripMenuItem
+            // tadToolStripMenuItem
             // 
-            this.suna8ToolStripMenuItem.Name = "suna8ToolStripMenuItem";
-            this.suna8ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.suna8ToolStripMenuItem.Text = "SunA8 debugger";
-            this.suna8ToolStripMenuItem.Click += new System.EventHandler(this.suna8ToolStripMenuItem_Click);
+            this.tadToolStripMenuItem.Name = "tadToolStripMenuItem";
+            this.tadToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.tadToolStripMenuItem.Text = "Tad debugger";
+            this.tadToolStripMenuItem.Click += new System.EventHandler(this.tadToolStripMenuItem_Click);
+            // 
+            // gaelcoToolStripMenuItem
+            // 
+            this.gaelcoToolStripMenuItem.Name = "gaelcoToolStripMenuItem";
+            this.gaelcoToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.gaelcoToolStripMenuItem.Text = "Gaelco debugger";
+            this.gaelcoToolStripMenuItem.Click += new System.EventHandler(this.gaelcoToolStripMenuItem_Click);
             // 
             // namcos1ToolStripMenuItem
             // 
@@ -334,13 +341,6 @@
             this.tsslStatus.Size = new System.Drawing.Size(17, 17);
             this.tsslStatus.Text = "...";
             // 
-            // gaelcoToolStripMenuItem
-            // 
-            this.gaelcoToolStripMenuItem.Name = "gaelcoToolStripMenuItem";
-            this.gaelcoToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.gaelcoToolStripMenuItem.Text = "Gaelco debugger";
-            this.gaelcoToolStripMenuItem.Click += new System.EventHandler(this.gaelcoToolStripMenuItem_Click);
-            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -395,11 +395,11 @@
         private System.Windows.Forms.ToolStripMenuItem konami68000ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem capcomToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem taitoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem suna8ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem igs011ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tehkanToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataeastToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem technosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gaelcoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tadToolStripMenuItem;
     }
 }

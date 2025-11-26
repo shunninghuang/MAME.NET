@@ -64,6 +64,9 @@ namespace mame
             pgm_bg_tilemap.scrollcols = 1;
             pgm_bg_tilemap.rowscroll = new int[pgm_bg_tilemap.scrollrows];
             pgm_bg_tilemap.colscroll = new int[pgm_bg_tilemap.scrollcols];
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(pgm_tx_tilemap);
+            Tilemap.lsTmap.Add(pgm_bg_tilemap);
         }
     }
     public partial class Tmap

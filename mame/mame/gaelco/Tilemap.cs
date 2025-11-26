@@ -73,6 +73,9 @@ namespace mame
                     }
                     break;
             }
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(gaelco_tilemap[0]);
+            Tilemap.lsTmap.Add(gaelco_tilemap[1]);
         }
     }
     public partial class Tmap

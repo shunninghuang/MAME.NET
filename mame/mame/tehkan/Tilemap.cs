@@ -63,6 +63,9 @@ namespace mame
             fg_tilemap.colscroll = new int[fg_tilemap.scrollcols];
             fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_tehkan_pbaction;
             fg_tilemap.tile_update3 = fg_tilemap.tile_update_pbaction_fg;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
         }
     }
     public partial class Tmap

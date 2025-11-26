@@ -111,6 +111,10 @@ namespace mame
         {
             Array.Copy(OKI6295.okirom, (data & 0x0f) * 0x10000, OKI6295.okirom, 0x30000, 0x10000);
         }
+        public static void irqack_w()
+        {
+            Cpuint.cpunum_set_input_line(0, 6, LineState.CLEAR_LINE);
+        }
         public static void gaelco_vram_encrypted_w(int offset, ushort data)
         {
             data = gaelco_decrypt(offset, data, 0x0f, 0x4228);

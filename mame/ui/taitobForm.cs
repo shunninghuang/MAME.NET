@@ -35,6 +35,20 @@ namespace ui
             Taitob.bTx = cbTx.Checked;
             Taitob.bSprite = cbSprite.Checked;
             Bitmap bm1 = Taitob.GetAllGDI();
+            switch (Machine.sDirection)
+            {
+                case "":
+                    break;
+                case "90":
+                    bm1.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    break;
+                case "180":
+                    bm1.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    break;
+                case "270":
+                    bm1.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                    break;
+            }
             pictureBox1.Image = bm1;
         }
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)

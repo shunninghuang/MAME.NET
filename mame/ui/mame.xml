@@ -7119,6 +7119,69 @@
     <year>1994</year>
     <manufacturer>Midas (Unico license)</manufacturer>
   </game>
+  <game name="toki" board="Tad">
+    <parent></parent>
+    <direction></direction>
+    <description>Toki (World, set 1)</description>
+    <year>1989</year>
+    <manufacturer>TAD Corporation</manufacturer>
+  </game>
+  <game name="tokiu" board="Tad">
+    <parent>toki</parent>
+    <direction></direction>
+    <description>Toki (US, set 1)</description>
+    <year>1989</year>
+    <manufacturer>TAD Corporation (Fabtek license)</manufacturer>
+  </game>
+  <game name="tokip" board="Tad">
+    <parent>toki</parent>
+    <direction></direction>
+    <description>Toki (US, prototype?)</description>
+    <year>1989</year>
+    <manufacturer>TAD Corporation (Fabtek license)</manufacturer>
+  </game>
+  <game name="tokia" board="Tad">
+    <parent>toki</parent>
+    <direction></direction>
+    <description>Toki (World set 2)</description>
+    <year>1989</year>
+    <manufacturer>TAD Corporation</manufacturer>
+  </game>
+  <game name="tokiua" board="Tad">
+    <parent>toki</parent>
+    <direction></direction>
+    <description>Toki (US, set 2)</description>
+    <year>1989</year>
+    <manufacturer>TAD Corporation (Fabtek license)</manufacturer>
+  </game>
+  <game name="juju" board="Tad">
+    <parent>toki</parent>
+    <direction></direction>
+    <description>JuJu Densetsu (Japan)</description>
+    <year>1989</year>
+    <manufacturer>TAD Corporation</manufacturer>
+  </game>
+  <game name="tokib" board="Tad">
+    <parent>toki</parent>
+    <direction></direction>
+    <description>Toki (Datsu bootleg)</description>
+    <year>1989</year>
+    <manufacturer>bootleg (Datsu)</manufacturer>
+  </game>
+  <game name="jujub" board="Tad">
+    <parent>toki</parent>
+    <direction></direction>
+    <description>JuJu Densetsu (Playmark bootleg)</description>
+    <year>1989</year>
+    <manufacturer>bootleg (Playmark)</manufacturer>
+  </game>
+  <game name="jujuba" board="Tad">
+    <parent>toki</parent>
+    <direction>180</direction>
+    <description>JuJu Densetsu (Japan, bootleg)</description>
+    <year>1989</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
   <game name="bigkarnk" board="Gaelco">
     <parent></parent>
     <direction></direction>

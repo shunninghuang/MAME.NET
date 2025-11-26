@@ -32,6 +32,7 @@ namespace ui
         public tehkanForm tehkanform;
         public neogeoForm neogeoform;
         public technosForm technosform;
+        public tadForm tadform;
         public gaelcoForm gaelcoform;
         public igs011Form igs011form;
         public namcos1Form namcos1form;
@@ -88,6 +89,7 @@ namespace ui
             InitTehkanForm();
             InitNeogeoForm();
             InitTechnosForm();
+            InitTadForm();
             InitGaelcoForm();
             InitSunA8Form();
             InitNamcos1Form();
@@ -121,7 +123,7 @@ namespace ui
             neogeoToolStripMenuItem.Enabled = false;
             technosToolStripMenuItem.Enabled = false;
             gaelcoToolStripMenuItem.Enabled = false;
-            suna8ToolStripMenuItem.Enabled = false;
+            //suna8ToolStripMenuItem.Enabled = false;
             namcos1ToolStripMenuItem.Enabled = false;
             igs011ToolStripMenuItem.Enabled = false;
             pgmToolStripMenuItem.Enabled = false;
@@ -265,6 +267,25 @@ namespace ui
                     Technos.DdragonInit();
                     Technos.GDIInit();
                     break;
+                case "Tad":
+                    Video.nMode = 1;
+                    itemSize = new ToolStripMenuItem[Video.nMode];
+                    for (i = 0; i < Video.nMode; i++)
+                    {
+                        itemSize[i] = new ToolStripMenuItem();
+                        itemSize[i].Size = new Size(152, 22);
+                        itemSize[i].Click += new EventHandler(itemsizeToolStripMenuItem_Click);
+                    }
+                    itemSize[0].Text = "256x224";
+                    resetToolStripMenuItem.DropDownItems.Clear();
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
+                    itemSelect();
+                    tadToolStripMenuItem.Enabled = true;
+                    Tad.TokiInit();
+                    Tad.GDIInit();
+                    Tad.TokiInit();
+                    break;
                 case "Gaelco":
                     Video.nMode = 1;
                     itemSize = new ToolStripMenuItem[Video.nMode];
@@ -297,7 +318,7 @@ namespace ui
                     resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
                     Video.iMode = 0;
                     itemSelect();
-                    suna8ToolStripMenuItem.Enabled = true;
+                    //suna8ToolStripMenuItem.Enabled = true;
                     SunA8.SunA8Init();
                     SunA8.GDIInit();
                     break;
@@ -598,6 +619,10 @@ namespace ui
         {
             technosform = new technosForm(this);
         }
+        private void InitTadForm()
+        {
+            tadform = new tadForm(this);
+        }
         public void InitGaelcoForm()
         {
             gaelcoform = new gaelcoForm(this);
@@ -817,6 +842,10 @@ namespace ui
         private void technosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             technosform.Show();
+        }
+        private void tadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tadform.Show();
         }
         private void gaelcoToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1047,6 +1076,15 @@ namespace ui
                         Video.offsety = 0;
                         Video.width = 256;
                         Video.height = 240;
+                    }
+                    break;
+                case "Tad":
+                    if (Video.iMode == 0)
+                    {
+                        Video.offsetx = 0;
+                        Video.offsety = 16;
+                        Video.width = 256;
+                        Video.height = 224;
                     }
                     break;
                 case "Gaelco":

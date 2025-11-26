@@ -402,6 +402,48 @@ namespace mame
                     }
                     vblank_interrupts_per_frame = 0;
                     break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            MC68000.m1 = new MC68000();
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.m1;
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 10000000;
+                            cpu[1].cycles_per_second = 14318180 / 4;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            MC68000.m1 = new MC68000();
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.m1;
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 12000000;
+                            cpu[1].cycles_per_second = 4000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {
@@ -1567,6 +1609,52 @@ namespace mame
                             M6809.mm1[0].ReadOpArg = Technos.M2ReadOp_ddragon;
                             M6809.mm1[0].RM = Technos.M2ReadByte_ddragon;
                             M6809.mm1[0].WM = Technos.M2WriteByte_ddragon;
+                            break;
+                    }
+                    break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            MC68000.m1.ReadOpByte = Tad.MReadOpByte_toki;
+                            MC68000.m1.ReadByte = Tad.MReadByte_toki;
+                            MC68000.m1.ReadOpWord = Tad.MReadOpWord_toki;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Tad.MReadWord_toki;
+                            MC68000.m1.ReadOpLong = Tad.MReadOpLong_toki;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Tad.MReadLong_toki;
+                            MC68000.m1.WriteByte = Tad.MWriteByte_toki;
+                            MC68000.m1.WriteWord = Tad.MWriteWord_toki;
+                            MC68000.m1.WriteLong = Tad.MWriteLong_toki;
+                            Z80A.zz1[0].ReadOp = Tad.ZReadOp_seibu;
+                            Z80A.zz1[0].ReadOpArg = Tad.ZReadMemory_seibu;
+                            Z80A.zz1[0].ReadMemory = Tad.ZReadMemory_seibu;
+                            Z80A.zz1[0].WriteMemory = Tad.ZWriteMemory_seibu;
+                            Z80A.zz1[0].ReadHardware = Tad.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Tad.ZWriteHardware;
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            MC68000.m1.ReadOpByte = Tad.MReadOpByte_toki;
+                            MC68000.m1.ReadByte = Tad.MReadByte_tokib;
+                            MC68000.m1.ReadOpWord = Tad.MReadOpWord_toki;
+                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Tad.MReadWord_tokib;
+                            MC68000.m1.ReadOpLong = Tad.MReadOpLong_toki;
+                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Tad.MReadLong_tokib;
+                            MC68000.m1.WriteByte = Tad.MWriteByte_tokib;
+                            MC68000.m1.WriteWord = Tad.MWriteWord_tokib;
+                            MC68000.m1.WriteLong = Tad.MWriteLong_tokib;
+                            Z80A.zz1[0].ReadOp = Tad.ZReadOp_tokib;
+                            Z80A.zz1[0].ReadOpArg = Tad.ZReadMemory_tokib;
+                            Z80A.zz1[0].ReadMemory = Tad.ZReadMemory_tokib;
+                            Z80A.zz1[0].WriteMemory = Tad.ZWriteMemory_tokib;
+                            Z80A.zz1[0].ReadHardware = Tad.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Tad.ZWriteHardware;
                             break;
                     }
                     break;
@@ -2885,6 +2973,14 @@ namespace mame
                             break;                        
                     }
                     break;
+                case "Tad":
+                    m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
+                    MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                    MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                    z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
+                    Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                    Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {
@@ -3119,6 +3215,7 @@ namespace mame
                     Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                     break;
                 case "CPS1":
+                case "Tad":
                 case "Namco System 1":
                     break;
                 case "IGS011":
@@ -3368,8 +3465,11 @@ namespace mame
                 case "Neo Geo":
                 case "Technos":
                     break;
+                case "Tad":
+                    Generic.irq_0_1_line_hold();
+                    break;
                 case "Gaelco":
-                    Generic.irq_0_6_line_hold();
+                    Generic.irq_0_6_line_assert();
                     break;
                 case "SunA8":
                     iloops = 0;

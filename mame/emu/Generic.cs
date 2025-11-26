@@ -15,6 +15,7 @@ namespace mame
         public static byte[] videoram, colorram;
         public static byte[] generic_nvram;
         public static byte[] buffered_spriteram;
+        public static ushort[] videoram16;
         public static ushort[] buffered_spriteram16;
         public static byte[] spriteram;
         public static ushort[] spriteram16, spriteram16_2;
@@ -124,7 +125,11 @@ namespace mame
         public static void irq_2_0_line_hold()
         {
             Cpuint.cpunum_set_input_line(2, 0, LineState.HOLD_LINE);
-        }        
+        }
+        public static void irq_0_6_line_assert()
+        {
+            Cpuint.cpunum_set_input_line(0, 6, LineState.ASSERT_LINE);
+        }
         public static void watchdog_reset_w()
         {
             Watchdog.watchdog_reset();
@@ -301,6 +306,21 @@ namespace mame
         {
             paletteram_2[offset] = data;
             set_color_444(offset, 0, 4, 8, paletteram16_split(offset));
+        }
+        public static void paletteram16_xxxxBBBBGGGGRRRR_word_w(int offset, ushort data)
+        {
+            paletteram16[offset] = data;
+            set_color_444(offset, 0, 4, 8, paletteram16[offset]);
+        }
+        public static void paletteram16_xxxxBBBBGGGGRRRR_word_w1(int offset, byte data)
+        {
+            paletteram16[offset] = (ushort)((data << 8) | (paletteram16[offset] & 0xff));
+            set_color_444(offset, 0, 4, 8, paletteram16[offset]);
+        }
+        public static void paletteram16_xxxxBBBBGGGGRRRR_word_w2(int offset, byte data)
+        {
+            paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
+            set_color_444(offset, 0, 4, 8, paletteram16[offset]);
         }
         public static void paletteram16_xxxxRRRRGGGGBBBB_word_w(int offset, ushort data)
         {

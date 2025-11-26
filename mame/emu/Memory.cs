@@ -48,6 +48,27 @@ namespace mame
                     Technos.byte2 = 0xff;
                     Technos.bytee = 0xe7;
                     break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            Tad.bytec = 0;
+                            Tad.short1 = -1;
+                            Tad.sbyte2 = -1;
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            Tad.short1 = 0x3f3f;
+                            Tad.sbyte2 = 0x1f;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     Gaelco.sbyte1 = -1;
                     Gaelco.sbyte2 = -1;
@@ -255,6 +276,27 @@ namespace mame
                     Technos.byte1_old = 0;
                     Technos.byte2_old = 0;
                     Technos.bytee_old = 0;
+                    break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            Tad.bytec_old = 0;
+                            Tad.short1_old = 0;
+                            Tad.sbyte2_old = 0;
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            Tad.short1_old = 0;
+                            Tad.sbyte2_old = 0;
+                            break;
+                    }
                     break;
                 case "Gaelco":
                     Gaelco.sbyte1_old = 0;

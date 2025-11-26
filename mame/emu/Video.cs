@@ -250,6 +250,41 @@ namespace mame
                     video_update_callback = Technos.video_update_ddragon;
                     video_eof_callback = Technos.video_eof_ddragon;
                     break;
+                case "Tad":
+                    screenstate.width = 0x100;
+                    screenstate.height = 0x100;
+                    screenstate.visarea.min_x = 0;
+                    screenstate.visarea.max_x = 0xff;
+                    screenstate.visarea.min_y = 0x10;
+                    screenstate.visarea.max_y = 0xef;
+                    fullwidth = 0x100;
+                    fullheight = 0x100;
+                    frame_update_time = new Atime(0, (long)(1e18 / 60));
+                    screenstate.vblank_period = (long)(1e18 / 60) / 0x100 * (0x100 - 0xe0);
+                    UI.ui_update_callback = UI.ui_update_cps;
+                    bitmapbase = new ushort[2][];
+                    bitmapbase[0] = new ushort[0x100 * 0x100];
+                    bitmapbase[1] = new ushort[0x100 * 0x100];
+                    bbmp = new Bitmap[1];
+                    bbmp[0] = new Bitmap(0x100, 0x100);                    
+                    video_eof_callback = Tad.video_eof_toki;
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            video_update_callback = Tad.video_update_toki;
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            video_update_callback = Tad.video_update_tokib;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     screenstate.width = 0x200;
                     screenstate.height = 0x200;
@@ -706,6 +741,7 @@ namespace mame
                     break;
                 case "Neo Geo":
                 case "Technos":
+                case "Tad":
                     break;
                 case "SunA8":
                     Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 0x100);
@@ -920,6 +956,7 @@ namespace mame
             {
                 video_frame_update();
             }
+            Video.screenstate.frame_number++;
         }
         public static void scanline0_callback()
         {

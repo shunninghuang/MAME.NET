@@ -124,7 +124,7 @@ namespace mame
             {
                 writer.Write(Palette.entry_color[i]);
             }
-            writer.Write(Memory.mainram, 0, 0x8000);
+            writer.Write(Memory.mainram, 0, 0x10000);
             writer.Write(Memory.audioram, 0, 0x800);
             for (i = 0; i < 4; i++)
             {
@@ -147,7 +147,6 @@ namespace mame
                 writer.Write(Generic.paletteram16[i]);
             }
             MC68000.m1.SaveStateBinary(writer);
-            M6809.mm1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
             writer.Write(Timer.global_basetime.seconds);
             writer.Write(Timer.global_basetime.attoseconds);
@@ -171,7 +170,7 @@ namespace mame
             {
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
-            Memory.mainram = reader.ReadBytes(0x8000);
+            Memory.mainram = reader.ReadBytes(0x10000);
             Memory.audioram = reader.ReadBytes(0x800);
             for (i = 0; i < 4; i++)
             {
@@ -194,7 +193,6 @@ namespace mame
                 Generic.paletteram16[i] = reader.ReadUInt16();
             }
             MC68000.m1.LoadStateBinary(reader);
-            M6809.mm1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
             Timer.global_basetime.seconds = reader.ReadInt32();
             Timer.global_basetime.attoseconds = reader.ReadInt64();

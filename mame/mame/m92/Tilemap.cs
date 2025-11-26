@@ -108,6 +108,13 @@ namespace mame
                 pf_layer[2].tmap.pen_to_flags[2, k] = 0x10;
                 pf_layer[2].wide_tmap.pen_to_flags[2, k] = 0x10;
             }
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(M92.pf_layer[0].tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[0].wide_tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[1].tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[1].wide_tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[2].tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[2].wide_tmap);
         }
     }
     public partial class Tmap

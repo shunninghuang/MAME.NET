@@ -101,6 +101,9 @@ namespace mame
                     fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg_rtype2;
                     break;
             }
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
         }
         public static void tilemap_init_m82()
         {
@@ -221,6 +224,10 @@ namespace mame
             bg_tilemap.tile_update3 = bg_tilemap.tile_update_m72_bg;
             fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg;
             bg_tilemap_large.tile_update3 = bg_tilemap.tile_update_m72_bg;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
+            Tilemap.lsTmap.Add(bg_tilemap_large);
         }
     }
     public partial class Tmap

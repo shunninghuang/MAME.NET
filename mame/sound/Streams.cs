@@ -1097,6 +1097,19 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
+        private static void streams_update_tad_tokib()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            ym3812stream.adjuststream(second_tick);
+            MSM5205.mm1[0].voice.stream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+        }
         private static void streams_update_gaelco_bigkarnk()
         {
             Atime curtime = Timer.global_basetime;

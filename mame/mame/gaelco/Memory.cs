@@ -13,7 +13,7 @@ namespace mame
         {
             address &= 0xffffff;
             sbyte result = 0;
-            if (address <= 0x7ffff)
+            if (address <= 0x07ffff)
             {
                 if (address < Memory.mainrom.Length)
                 {
@@ -30,7 +30,7 @@ namespace mame
         {
             address &= 0xffffff;
             sbyte result = 0;
-            if (address <= 0x7ffff)
+            if (address <= 0x07ffff)
             {
                 if (address < Memory.mainrom.Length)
                 {
@@ -55,7 +55,7 @@ namespace mame
             }
             else if (address >= 0x102000 && address <= 0x103fff)
             {
-                int offset = (address - 0x102000)/2;
+                int offset = (address - 0x102000) / 2;
                 if (address % 2 == 0)
                 {
                     result = (sbyte)(gaelco_screen[offset] >> 8);
@@ -155,7 +155,7 @@ namespace mame
         {
             address &= 0xffffff;
             short result = 0;
-            if (address + 1 <= 0x7ffff)
+            if (address + 1 <= 0x07ffff)
             {
                 if (address < Memory.mainrom.Length)
                 {
@@ -172,7 +172,7 @@ namespace mame
         {
             address &= 0xffffff;
             short result = 0;
-            if (address <= 0x7ffff)
+            if (address <= 0x07ffff)
             {
                 if (address + 1 < Memory.mainrom.Length)
                 {
@@ -190,7 +190,7 @@ namespace mame
             }
             else if (address >= 0x102000 && address + 1 <= 0x103fff)
             {
-                int offset = (address - 0x102000)/2;
+                int offset = (address - 0x102000) / 2;
                 result = (short)gaelco_screen[offset];
             }
             else if (address >= 0x200000 && address + 1 <= 0x2007ff)
@@ -288,6 +288,10 @@ namespace mame
                     gaelco_vregs[offset] = (ushort)((gaelco_vregs[offset] & 0xff00) | (byte)value);
                 }
             }
+            else if (address >= 0x10800c && address <= 0x10800d)
+            {
+                irqack_w();
+            }
             else if (address >= 0x200000 && address <= 0x2007ff)
             {
                 int offset = (address - 0x200000) / 2;
@@ -351,13 +355,17 @@ namespace mame
             }
             else if (address >= 0x102000 && address + 1 <= 0x103fff)
             {
-                int offset = (address - 0x102000)/2;
+                int offset = (address - 0x102000) / 2;
                 gaelco_screen[offset] = (ushort)value;
             }
             else if (address >= 0x108000 && address + 1 <= 0x108007)
             {
                 int offset = (address - 0x108000) / 2;
                 gaelco_vregs[offset] = (ushort)value;
+            }
+            else if (address >= 0x10800c && address + 1 <= 0x10800d)
+            {
+                irqack_w();
             }
             else if (address >= 0x200000 && address + 1 <= 0x2007ff)
             {
@@ -647,7 +655,7 @@ namespace mame
             }
             else if (address >= 0x102000 && address <= 0x103fff)
             {
-                int offset = (address - 0x102000)/2;
+                int offset = (address - 0x102000) / 2;
                 if (address % 2 == 0)
                 {
                     gaelco_screen[offset] = (ushort)((value << 8) | (gaelco_screen[offset] & 0xff));
@@ -668,6 +676,10 @@ namespace mame
                 {
                     gaelco_vregs[offset] = (ushort)((gaelco_vregs[offset] & 0xff00) | (byte)value);
                 }
+            }
+            else if (address >= 0x10800c && address <= 0x10800d)
+            {
+                irqack_w();
             }
             else if (address >= 0x200000 && address <= 0x2007ff)
             {
@@ -701,7 +713,7 @@ namespace mame
                 }
             }
             else if (address >= 0x70000e && address <= 0x70000f)
-            {                
+            {
                 if (address % 2 == 1)
                 {
                     OKI6295.okim6295_data_0_lsb_w((byte)value);
@@ -739,6 +751,10 @@ namespace mame
                 int offset = (address - 0x108000) / 2;
                 gaelco_vregs[offset] = (ushort)value;
             }
+            else if (address >= 0x10800c && address + 1 <= 0x10800d)
+            {
+                irqack_w();
+            }
             else if (address >= 0x200000 && address + 1 <= 0x2007ff)
             {
                 int offset = (address - 0x200000) / 2;
@@ -769,7 +785,7 @@ namespace mame
             MWriteWord_maniacsq(address, (short)(value >> 16));
             MWriteWord_maniacsq(address + 2, (short)value);
         }
-        public static void MWriteByte_squash(int address,sbyte value)
+        public static void MWriteByte_squash(int address, sbyte value)
         {
             address &= 0xffffff;
             if (address >= 0x000000 && address <= 0x0fffff)
@@ -796,11 +812,11 @@ namespace mame
                 int offset = (address - 0x102000) / 2;
                 if (address % 2 == 0)
                 {
-                    gaelco_encrypted_w1(offset,(byte)value);
+                    gaelco_encrypted_w1(offset, (byte)value);
                 }
                 else if (address % 2 == 1)
                 {
-                    gaelco_encrypted_w2(offset,(byte)value);
+                    gaelco_encrypted_w2(offset, (byte)value);
                 }
             }
             else if (address >= 0x108000 && address <= 0x108007)
@@ -814,6 +830,10 @@ namespace mame
                 {
                     gaelco_vregs[offset] = (ushort)((gaelco_vregs[offset] & 0xff00) | (byte)value);
                 }
+            }
+            else if (address >= 0x10800c && address <= 0x10800d)
+            {
+                irqack_w();
             }
             else if (address >= 0x200000 && address <= 0x2007ff)
             {
@@ -859,7 +879,7 @@ namespace mame
                 Memory.mainram[offset] = (byte)value;
             }
         }
-        public static void MWriteWord_squash(int address,short value)
+        public static void MWriteWord_squash(int address, short value)
         {
             address &= 0xffffff;
             if (address >= 0x000000 && address + 1 <= 0x0fffff)
@@ -884,6 +904,10 @@ namespace mame
             {
                 int offset = (address - 0x108000) / 2;
                 gaelco_vregs[offset] = (ushort)value;
+            }
+            else if (address >= 0x10800c && address + 1 <= 0x10800d)
+            {
+                irqack_w();
             }
             else if (address >= 0x200000 && address + 1 <= 0x2007ff)
             {
@@ -970,6 +994,10 @@ namespace mame
                     gaelco_vregs[offset] = (ushort)((gaelco_vregs[offset] & 0xff00) | (byte)value);
                 }
             }
+            else if (address >= 0x10800c && address <= 0x10800d)
+            {
+                irqack_w();
+            }
             else if (address >= 0x200000 && address <= 0x2007ff)
             {
                 int offset = (address - 0x200000) / 2;
@@ -1039,6 +1067,10 @@ namespace mame
             {
                 int offset = (address - 0x108000) / 2;
                 gaelco_vregs[offset] = (ushort)value;
+            }
+            else if (address >= 0x10800c && address + 1 <= 0x10800d)
+            {
+                irqack_w();
             }
             else if (address >= 0x200000 && address + 1 <= 0x2007ff)
             {

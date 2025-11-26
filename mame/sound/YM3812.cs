@@ -70,6 +70,15 @@ namespace mame
                 case "drgnwrldv40k":
                     ym3812handler = null;
                     break;
+                case "toki":
+                case "tokiu":
+                case "tokip":
+                case "tokia":
+                case "tokiua":
+                case "juju":
+                case "jujuba":
+                    ym3812handler = Tad.seibu_ym3812_irqhandler;
+                    break;
                 default:
                     ym3812handler = null;
                     break;
@@ -88,6 +97,14 @@ namespace mame
         public static void ym3812_write_port_0_w(byte data)
         {
             FMOpl.ym3812_write(1, data);
+        }
+        public static byte ym3812_status_port_0_r()
+        {
+            return FMOpl.ym3812_read(0);
+        }
+        public static byte ym3812_read_port_0_r()
+        {
+            return FMOpl.ym3812_read(1);
         }
         public static void SaveStateBinary(BinaryWriter writer)
         {

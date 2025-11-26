@@ -52,6 +52,10 @@ namespace mame
                     Technos.video_start_ddragon();
                     machine_reset_callback = Technos.machine_reset_ddragon;
                     break;
+                case "Tad":
+                    Tad.video_start_toki();
+                    machine_reset_callback = Tad.machine_reset_seibu_sound;
+                    break;
                 case "Gaelco":
                     machine_reset_callback = Gaelco.machine_reset_gaelco;
                     break;

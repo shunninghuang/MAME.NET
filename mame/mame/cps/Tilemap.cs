@@ -126,6 +126,10 @@ namespace mame
                     ttmap[2].total_elements = CPS.gfxrom.Length / 0x200;
                     break;
             }
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(ttmap[0]);
+            Tilemap.lsTmap.Add(ttmap[1]);
+            Tilemap.lsTmap.Add(ttmap[2]);
         }
     }
     public partial class Tmap

@@ -107,10 +107,6 @@ namespace mame
             {
                 result = Memory.mainram[address];
             }
-            else if (address >= 0x0000 && address <= 0x17ff)
-            {
-                result = Memory.mainram[address];
-            }
             if (address >= 0x4000 && address <= 0x7fff)
             {
                 int offset = address - 0x4000;

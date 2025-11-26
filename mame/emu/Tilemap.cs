@@ -387,6 +387,10 @@ namespace mame
                     screen_height = 0x200;
                     Technos.tilemap_init();
                     break;
+                case "Tad":
+                    screen_width = 0x100;
+                    screen_height = 0x100;
+                    break;
                 case "Gaelco":
                     screen_width = 0x200;
                     screen_height = 0x200;
@@ -451,6 +455,7 @@ namespace mame
                 case "Data East":
                 case "Tehkan":
                 case "Technos":
+                case "Tad":
                 case "Gaelco":
                 case "Namco System 1":
                 case "PGM":

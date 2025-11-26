@@ -149,10 +149,22 @@ namespace mame
         }
         public static void cpunum_set_input_line_and_vector2(int cpunum, int line, LineState state, int vector)
         {
+            bool b1 = false;
+            foreach (irq irq1 in lirq)
+            {
+                if (cpunum == irq1.cpunum && line == irq1.line)
+                {
+                    b1 = true;
+                    break;
+                }
+            }
             if (line >= 0 && line < 35)
             {
                 lirq.Add(new irq(cpunum, line, state, vector, Timer.get_current_time()));
-                Timer.timer_set_internal(Cpuint.cpunum_empty_event_queue, "cpunum_empty_event_queue");
+                if (!b1)
+                {
+                    Timer.timer_set_internal(Cpuint.cpunum_empty_event_queue, "cpunum_empty_event_queue");
+                }
             }
         }
         public static void cpunum_empty_event_queue()

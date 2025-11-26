@@ -164,6 +164,28 @@ namespace mame
                     record_port_callback = Technos.record_port_ddragon;
                     replay_port_callback = Technos.replay_port_ddragon;
                     break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            loop_inputports_callback = Tad.loop_inputports_tad_toki;
+                            record_port_callback = Tad.record_port_tad_toki;
+                            replay_port_callback = Tad.replay_port_tad_toki;
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            loop_inputports_callback = Tad.loop_inputports_tad_tokib;
+                            record_port_callback = Tad.record_port_tad_tokib;
+                            replay_port_callback = Tad.replay_port_tad_tokib;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {
@@ -673,7 +695,7 @@ namespace mame
                 return;
             }
             frame_update();
-            Video.screenstate.frame_number++;
+            //Video.screenstate.frame_number++;
         }
         private static void frame_update()
         {

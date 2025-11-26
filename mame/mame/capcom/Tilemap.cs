@@ -185,7 +185,6 @@ namespace mame
             tx_tilemap.colscroll = new int[bg_tilemap.scrollcols];
             tx_tilemap.tilemap_draw_instance3 = tx_tilemap.tilemap_draw_instance_capcom_sf;
             tx_tilemap.tile_update3 = tx_tilemap.tile_update_capcom_tx;
-
             Tilemap.lsTmap = new List<Tmap>();
             Tilemap.lsTmap.Add(bg_tilemap);
             Tilemap.lsTmap.Add(fg_tilemap);
@@ -399,7 +398,7 @@ namespace mame
             byte flags;
             int tile_index;
             int code, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             tile_index = col * rows + row;
             int base_offset = 2 * tile_index;
             int attr = Capcom.gfx5rom[base_offset + 0x10000];
@@ -418,7 +417,7 @@ namespace mame
             byte flags;
             int tile_index;
             int code, color;
-            int pen_data_offset, palette_base, group;
+            int pen_data_offset, palette_base;
             tile_index = col * rows + row;
             int base_offset = 0x20000 + 2 * tile_index;
             int attr = Capcom.gfx5rom[base_offset + 0x10000];

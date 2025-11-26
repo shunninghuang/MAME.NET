@@ -36,6 +36,8 @@ namespace mame
             bg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
             bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_dataeast_pcktgal;
             bg_tilemap.tile_update3 = bg_tilemap.tile_update_pcktgal_bg;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
         }
     }
     public partial class Tmap

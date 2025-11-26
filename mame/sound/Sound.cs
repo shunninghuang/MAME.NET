@@ -43,7 +43,6 @@ namespace mame
                     latched_value = new ushort[2];
                     utempdata = new ushort[2];
                     sound_update = sound_update_cps1;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     YM2151.ym2151_init(3579545);
                     OKI6295.okim6295_start();
                     ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
@@ -54,7 +53,6 @@ namespace mame
                 case "CPS2":
                 case "CPS2turbo":
                     sound_update = sound_update_qsound;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     QSound.qsound_start();
                     qsoundstream = new sound_stream(4000000 / 166, 0, 2, QSound.qsound_update);
                     mixerstream = new sound_stream(48000, 2, 0, null);
@@ -63,7 +61,6 @@ namespace mame
                     latched_value = new ushort[1];
                     utempdata = new ushort[1];
                     sound_update = sound_update_dataeast_pcktgal;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     YM2203.ym2203_start(0, 1500000, generic_2203);
                     YM3812.ym3812_start(3000000);
                     MSM5205.msm5205_start(0, 384000, Dataeast.pcktgal_adpcm_int, 5);
@@ -74,7 +71,6 @@ namespace mame
                     latched_value = new ushort[1];
                     utempdata = new ushort[1];
                     sound_update = sound_update_tehkan_pbaction;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     AY8910.ay8910_interface generic_ay8910 = new AY8910.ay8910_interface();
                     generic_ay8910.flags = 1;
                     generic_ay8910.res_load = new int[3] { 1000, 1000, 1000 };
@@ -91,7 +87,6 @@ namespace mame
                     latched_value = new ushort[2];
                     utempdata = new ushort[2];
                     sound_update = sound_update_neogeo;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     YM2610.ym2610_start(8000000);
                     ym2610stream = new sound_stream(111111, 0, 2, YM2610.F2610.ym2610_update_one);
                     AY8910.AA8910[0].stream.gain = 0x100;
@@ -117,7 +112,6 @@ namespace mame
                             latched_value = new ushort[1];
                             utempdata = new ushort[1];
                             sound_update = sound_update_technos_ddragon;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             YM2151.ym2151_init(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             MSM5205.msm5205_start(0, 375000, Technos.dd_adpcm_int, 5);
@@ -130,7 +124,6 @@ namespace mame
                             latched_value = new ushort[1];
                             utempdata = new ushort[1];
                             sound_update = sound_update_technos_ddragon2;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             YM2151.ym2151_init(3579545);
                             OKI6295.okim6295_start();
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
@@ -143,12 +136,40 @@ namespace mame
                             latched_value = new ushort[1];
                             utempdata = new ushort[1];
                             sound_update = sound_update_technos_toffy;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             YM2151.ym2151_init(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
                     }
+                    break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            sound_update = sound_update_gaelco_bigkarnk;                            
+                            YM3812.ym3812_start(3579545);
+                            OKI6295.okim6295_start();
+                            ym3812stream = new sound_stream(49715, 0, 1, FMOpl.ym3812_update_one);
+                            okistream = new sound_stream(1000000 / 132, 0, 1, OKI6295.okim6295_update);
+                            mixerstream = new sound_stream(48000, 2, 0, null);
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            sound_update = sound_update_tad_tokib;
+                            YM3812.ym3812_start(3579545);
+                            MSM5205.msm5205_start(0, 384000, Tad.toki_adpcm_int, 4);
+                            ym3812stream = new sound_stream(49715, 0, 1, FMOpl.ym3812_update_one);
+                            mixerstream = new sound_stream(48000, 2, 0, null);
+                            break;
+                    }                    
                     break;
                 case "Gaelco":
                     switch (Machine.sName)
@@ -157,7 +178,6 @@ namespace mame
                             latched_value = new ushort[1];
                             utempdata = new ushort[1];
                             sound_update = sound_update_gaelco_bigkarnk;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             YM3812.ym3812_start(3580000);
                             OKI6295.okim6295_start();
                             ym3812stream = new sound_stream(49722, 0, 1, FMOpl.ym3812_update_one);
@@ -174,7 +194,6 @@ namespace mame
                         case "squash":
                         case "thoop":
                             sound_update = sound_update_gaelco_biomtoy;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             OKI6295.okim6295_start();
                             okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);
                             mixerstream = new sound_stream(48000, 1, 0, null);
@@ -185,7 +204,6 @@ namespace mame
                     latched_value = new ushort[2];
                     utempdata = new ushort[2];
                     sound_update = sound_update_suna8;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     YM3812.ym3812_start(4000000);
                     AY8910.ay8910_interface starfigh_ay8910_interface = new AY8910.ay8910_interface();
                     starfigh_ay8910_interface.flags = 1;
@@ -202,7 +220,6 @@ namespace mame
                     break;
                 case "Namco System 1":
                     sound_update = sound_update_namcos1;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     YM2151.ym2151_init(3579580);
                     Namco.namco_start();
                     DAC.dac_start();
@@ -223,7 +240,6 @@ namespace mame
                         case "drgnwrldv11h":
                         case "drgnwrldv40k":
                             sound_update = sound_update_igs011_drgnwrld;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             OKI6295.okim6295_start();
                             YM3812.ym3812_start(3579545);
                             okistream = new sound_stream(1047600 / 132, 0, 1, OKI6295.okim6295_update);
@@ -237,7 +253,6 @@ namespace mame
                         case "xymg":
                         case "wlcc":
                             sound_update = sound_update_igs011_lhb;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             OKI6295.okim6295_start();
                             okistream = new sound_stream(1047600 / 132, 0, 1, OKI6295.okim6295_update);
                             mixerstream = new sound_stream(48000, 1, 0, null);
@@ -245,7 +260,6 @@ namespace mame
                         case "lhb2":
                         case "nkishusp":
                             sound_update = sound_update_igs011_lhb2;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             OKI6295.okim6295_start();
                             YM2413.ym2413_start(3579545);
                             okistream = new sound_stream(1047600 / 132, 0, 1, OKI6295.okim6295_update);
@@ -255,7 +269,6 @@ namespace mame
                         case "vbowl":
                         case "vbowlj":
                             sound_update = sound_update_igs011_vbowl;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             ICS2115.ics2115_start();
                             ics2115stream = new sound_stream(33075, 0, 2, ICS2115.ics2115_update);
                             mixerstream = new sound_stream(48000, 2, 0, null);
@@ -266,7 +279,6 @@ namespace mame
                     latched_value = new ushort[3];
                     utempdata = new ushort[3];
                     sound_update = sound_update_pgm;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     ICS2115.ics2115_start();
                     ics2115stream = new sound_stream(33075, 0, 2, ICS2115.ics2115_update);
                     mixerstream = new sound_stream(48000, 2, 0, null);
@@ -275,7 +287,6 @@ namespace mame
                     latched_value = new ushort[1];
                     utempdata = new ushort[1];
                     sound_update = sound_update_m72;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     YM2151.ym2151_init(3579545);
                     DAC.dac_start();
                     ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
@@ -286,7 +297,6 @@ namespace mame
                     latched_value = new ushort[1];
                     utempdata = new ushort[1];
                     sound_update = sound_update_m92;
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     YM2151.ym2151_init(3579545);
                     Iremga20.iremga20_start();
                     ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
@@ -303,7 +313,6 @@ namespace mame
                             latched_value = new ushort[2];
                             utempdata = new ushort[2];
                             sound_update = sound_update_taito_tokio;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             YM2203.ym2203_start(0, 3000000, generic_2203);
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
@@ -328,7 +337,6 @@ namespace mame
                             latched_value = new ushort[2];
                             utempdata = new ushort[2];
                             sound_update = sound_update_taito_bublbobl;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             YM2203.ym2203_start(0, 3000000, generic_2203);
                             YM3812.ym3526_start(3000000);
                             ym3526stream = new sound_stream(41666, 0, 1, FMOpl.ym3526_update_one);
@@ -343,7 +351,6 @@ namespace mame
                             latched_value = new ushort[1];
                             utempdata = new ushort[1];
                             sound_update = sound_update_taito_opwolf;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             YM2151.ym2151_init(4000000);
                             ym2151stream = new sound_stream(62500, 0, 2, YM2151.ym2151_update_one);
                             MSM5205.msm5205_start(0, 384000, Taito.opwolf_msm5205_vck, 5);
@@ -372,7 +379,6 @@ namespace mame
                             YM2203.ym2203_start(0, 3000000, masterw_ay8910_interface);
                             sound_update = sound_update_taitob_masterw;
                             AY8910.AA8910[0].stream.gain = 0x100;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                         case "qzshowby":
@@ -383,7 +389,6 @@ namespace mame
                             ym2610stream = new sound_stream(111111, 0, 2, YM2610.F2610.ym2610b_update_one);
                             sound_update = sound_update_taitob_pbobble;
                             AY8910.AA8910[0].stream.gain = 0x100;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             mixerstream = new sound_stream(48000, 3, 0, null);
                             break;
                         case "nastar":
@@ -411,7 +416,6 @@ namespace mame
                             ym2610stream = new sound_stream(111111, 0, 2, YM2610.F2610.ym2610_update_one);
                             sound_update = sound_update_taitob_pbobble;
                             AY8910.AA8910[0].stream.gain = 0x100;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             mixerstream = new sound_stream(48000, 3, 0, null);
                             break;
                         case "viofight":
@@ -424,7 +428,6 @@ namespace mame
                             OKI6295.okim6295_start();
                             sound_update = sound_update_taitob_viofight;
                             AY8910.AA8910[0].stream.gain = 0x100;
-                            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                             okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);
                             mixerstream = new sound_stream(48000, 5, 0, null);
                             break;
@@ -553,7 +556,6 @@ namespace mame
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
                     }
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     break;
                 case "Capcom":
                     latched_value = new ushort[1];
@@ -592,9 +594,9 @@ namespace mame
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                     }
-                    sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
                     break;
             }
+            sound_update_timer = Timer.timer_alloc_common(sound_update, "sound_update", false);
             Timer.timer_adjust_periodic(sound_update_timer, update_frequency, update_frequency);
         }
         public static void sound_reset()
@@ -1114,6 +1116,34 @@ namespace mame
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_technos_toffy();
         }
+        public static void sound_update_tad_tokib()
+        {
+            int sampindex;
+            ym3812stream.stream_update();
+            MSM5205.mm1[0].voice.stream.stream_update();
+            generate_resampled_data_ym3812(0x100, 0);
+            generate_resampled_data_msm5205_0(0x99, 1);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_tad_tokib();
+        }
         public static void sound_update_gaelco_bigkarnk()
         {
             int sampindex;
@@ -1532,7 +1562,7 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_capcom_sf();
+            streams_update_technos_ddragon();
         }
         public static void sound_update_taitob_masterw()
         {
@@ -2020,7 +2050,7 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_capcom_sf();
+            streams_update_technos_ddragon();
         }
         public static void latch_callback()
         {
