@@ -71,7 +71,7 @@ namespace mame
         }
         public static void seibu_bank_w(byte data)
         {
-            basebanksnd = 0x10000 + (data & 0x01) * 0x4000;
+            basebanksnd = 0x10000 + (data & 0x01) * 0x8000;
         }
         public static void seibu_coin_w()
         {
