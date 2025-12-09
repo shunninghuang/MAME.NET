@@ -7,7 +7,7 @@ namespace ui
 {
     public class Version
     {
-        public static string build_version = "MAME.NET (build 20251208)";
+        public static string build_version = "MAME.NET (build 20251209)";
         public static string author = "shunninghuang";
     }
 }

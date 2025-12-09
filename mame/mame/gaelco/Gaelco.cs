@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class Gaelco
     {
-        public static byte[] gfx1rom, gfx2rom;
+        public static byte[] gfx1rom, gfx2rom, okirom1;
         public static byte dsw1, dsw2, bytes;
         public static void GaelcoInit()
         {
@@ -17,6 +17,7 @@ namespace mame
             Memory.audiorom = Machine.GetRom("audiocpu.rom");
             gfx1rom = Machine.GetRom("gfx1.rom");
             gfx2rom = Machine.GetRom("gfx2.rom");
+            okirom1 = Machine.GetRom("oki.rom");
             OKI6295.okirom = Machine.GetRom("oki.rom");
             Memory.mainram = new byte[0x10000];
             Memory.audioram = new byte[0x800];
@@ -105,11 +106,11 @@ namespace mame
         }
         public static void OKIM6295_bankswitch_w(ushort data)
         {
-            Array.Copy(OKI6295.okirom, (data & 0x0f) * 0x10000, OKI6295.okirom, 0x30000, 0x10000);
+            Array.Copy(okirom1, (data & 0x0f) * 0x10000, OKI6295.okirom, 0x30000, 0x10000);
         }
         public static void OKIM6295_bankswitch_w2(byte data)
         {
-            Array.Copy(OKI6295.okirom, (data & 0x0f) * 0x10000, OKI6295.okirom, 0x30000, 0x10000);
+            Array.Copy(okirom1, (data & 0x0f) * 0x10000, OKI6295.okirom, 0x30000, 0x10000);
         }
         public static void irqack_w()
         {
