@@ -62,6 +62,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.megasys1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -163,6 +164,7 @@
             this.neogeoToolStripMenuItem,
             this.technosToolStripMenuItem,
             this.tadToolStripMenuItem,
+            this.megasys1ToolStripMenuItem,
             this.gaelcoToolStripMenuItem,
             this.namcos1ToolStripMenuItem,
             this.igs011ToolStripMenuItem,
@@ -341,6 +343,13 @@
             this.tsslStatus.Size = new System.Drawing.Size(17, 17);
             this.tsslStatus.Text = "...";
             // 
+            // megasys1ToolStripMenuItem
+            // 
+            this.megasys1ToolStripMenuItem.Name = "megasys1ToolStripMenuItem";
+            this.megasys1ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.megasys1ToolStripMenuItem.Text = "Megasys1 debugger";
+            this.megasys1ToolStripMenuItem.Click += new System.EventHandler(this.megasys1ToolStripMenuItem_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -401,5 +410,6 @@
         private System.Windows.Forms.ToolStripMenuItem technosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gaelcoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem megasys1ToolStripMenuItem;
     }
 }

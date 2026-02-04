@@ -309,12 +309,10 @@ namespace mame
             }
             else
             {
-                blockmove_8toN_transpen_pri16_konami68000(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, pri_mask, sx, sy);
+                blockmove_8toN_transpen_pri16_konami68000(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, pri_mask, sx, sy);
             }
         }
-        public static void blockmove_8toN_pen_table_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo,
-                int leftskip, int topskip, int flipx, int flipy,
-                int dstwidth, int dstheight, int colorbase, uint pmask, int sx, int sy)
+        public static void blockmove_8toN_pen_table_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, uint pmask, int sx, int sy)
         {
             int ydir, xdir, col, i, j, offsetx, offsety;
             int srcdata_offset = code * 0x100;
@@ -387,12 +385,10 @@ namespace mame
                 }
             }
         }
-        public static void blockmove_8toN_transpen_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo,
-                int leftskip, int topskip, int flipx, int flipy,
-                int dstwidth, int dstheight, int colorbase,uint pmask, int sx, int sy)
+        public static void blockmove_8toN_transpen_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int sx, int sy)
         {
             int ydir, xdir, col, i, j, offsetx, offsety;
-            int srcdata_offset = code * 0x100;
+            int srcdata_offset = code * srcwidth * srcheight;
             offsetx = sx;
             offsety = sy;
             if (flipy != 0)
@@ -424,15 +420,15 @@ namespace mame
                     col = bb1[srcdata_offset + srcmodulo * i + j];
                     if (col != 0)
                     {
-                        if (((1 << (Tilemap.priority_bitmap[offsety+ydir*i,offsetx+xdir*j] & 0x1f)) & pmask) == 0)
+                        if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
                         {
-                            if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80)!=0)
+                            if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
                             {
-                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)shadow_table[imode][colorbase + col];
+                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = (ushort)shadow_table[imode][colorbase + col];
                             }
                             else
                             {
-                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);
+                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = (ushort)(colorbase + col);
                             }
                         }
                         Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | 0x1f);

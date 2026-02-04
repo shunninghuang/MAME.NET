@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class Drawgfx
     {
-        public static void common_drawgfx_namcos1(int sizex, int sizey, int tx, int ty, int code, int color, int flipx, int flipy, int sx, int sy, int pri_mask, RECT clip)
+        public static void common_drawgfx_namcos1(int sizex, int sizey, int tx, int ty, int code, int color, int flipx, int flipy, int sx, int sy, uint pri_mask, RECT clip)
         {
             int ox;
             int oy;
@@ -73,7 +73,7 @@ namespace mame
                 blockmove_8toN_pen_table_pri16_namcos1(tx, ty, code, sw, sh, ls, ts, flipx, flipy, dw, dh, colorbase, pri_mask, sx, sy);
             }
         }
-        public static void blockmove_8toN_transpen_pri16_namcos1(int tx, int ty, int code, int srcwidth, int srcheight, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int pmask, int sx, int sy)
+        public static void blockmove_8toN_transpen_pri16_namcos1(int tx, int ty, int code, int srcwidth, int srcheight, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, uint pmask, int sx, int sy)
         {
             int xdir, ydir, col, i, j, offsetx, offsety;
             int srcdata_offset = code * 0x400 + tx + ty * 0x20;
@@ -124,7 +124,7 @@ namespace mame
                 }
             }
         }
-        public static void blockmove_8toN_pen_table_pri16_namcos1(int tx, int ty, int code, int srcwidth, int srcheight, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int pmask, int sx, int sy)
+        public static void blockmove_8toN_pen_table_pri16_namcos1(int tx, int ty, int code, int srcwidth, int srcheight, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, uint pmask, int sx, int sy)
         {
             int xdir, ydir, col, i, j, offsetx, offsety;
             int src_offset;

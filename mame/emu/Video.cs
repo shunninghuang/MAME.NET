@@ -237,14 +237,14 @@ namespace mame
                     screenstate.visarea.max_x = 0xff;
                     screenstate.visarea.min_y = 0;
                     screenstate.visarea.max_y = 0xef;
-                    fullwidth = 0x200;
-                    fullheight = 0x200;
+                    fullwidth = 0x180;
+                    fullheight = 0x110;
                     frame_update_time = new Atime(0, (long)(1e18 / 6000000) * screenstate.width * screenstate.height);
                     screenstate.vblank_period = (long)(1e18 / 6000000) * 0x180 * (0x110 - 0xf0);
                     UI.ui_update_callback = UI.ui_update_cps;
                     bitmapbase = new ushort[2][];
-                    bitmapbase[0] = new ushort[0x200 * 0x200];
-                    bitmapbase[1] = new ushort[0x200 * 0x200];
+                    bitmapbase[0] = new ushort[0x180 * 0x110];
+                    bitmapbase[1] = new ushort[0x180 * 0x110];
                     bbmp = new Bitmap[1];
                     bbmp[0] = new Bitmap(0x180, 0x110);
                     video_update_callback = Technos.video_update_ddragon;
@@ -266,7 +266,7 @@ namespace mame
                     bitmapbase[0] = new ushort[0x100 * 0x100];
                     bitmapbase[1] = new ushort[0x100 * 0x100];
                     bbmp = new Bitmap[1];
-                    bbmp[0] = new Bitmap(0x100, 0x100);                    
+                    bbmp[0] = new Bitmap(0x100, 0x100);
                     video_eof_callback = Tad.video_eof_toki;
                     switch (Machine.sName)
                     {
@@ -285,6 +285,26 @@ namespace mame
                             break;
                     }
                     break;
+                case "Megasys1":
+                    screenstate.width = 0x196;
+                    screenstate.height = 0x107;
+                    screenstate.visarea.min_x = 0;
+                    screenstate.visarea.max_x = 0xff;
+                    screenstate.visarea.min_y = 0x10;
+                    screenstate.visarea.max_y = 0xef;
+                    fullwidth = 0x196;
+                    fullheight = 0x107;
+                    frame_update_time = new Atime(0, (long)(1e18 / 6000000) * 406 * 263);
+                    screenstate.vblank_period = (long)(1e18 / 6000000) * 406 * (263 - 224);
+                    UI.ui_update_callback = UI.ui_update_cps;
+                    bitmapbase = new ushort[2][];
+                    bitmapbase[0] = new ushort[0x196 * 0x107];
+                    bitmapbase[1] = new ushort[0x196 * 0x107];
+                    bbmp = new Bitmap[1];
+                    bbmp[0] = new Bitmap(0x196, 0x107);
+                    video_update_callback = Megasys1.video_update_megasys1;
+                    video_eof_callback = Gaelco.video_eof_bigkarnk;
+                    break;
                 case "Gaelco":
                     screenstate.width = 0x200;
                     screenstate.height = 0x200;
@@ -302,8 +322,26 @@ namespace mame
                     bitmapbase[1] = new ushort[0x200 * 0x200];
                     bbmp = new Bitmap[1];
                     bbmp[0] = new Bitmap(0x200, 0x200);
-                    video_update_callback = Gaelco.video_update_bigkarnk;
                     video_eof_callback = Gaelco.video_eof_bigkarnk;
+                    switch (Machine.sName)
+                    {
+                        case "bigkarnk":
+                            video_update_callback = Gaelco.video_update_bigkarnk;
+                            break;
+                        case "biomtoy":
+                        case "biomtoya":
+                        case "biomtoyb":
+                        case "biomtoyc":
+                        case "bioplayc":
+                        case "maniacsp":
+                        case "lastkm":
+                            video_update_callback = Gaelco.video_update_maniacsq;
+                            break;
+                        case "squash":
+                        case "thoop":
+                            video_update_callback = Gaelco.video_update_squash;
+                            break;
+                    }
                     break;
                 case "SunA8":
                     screenstate.width = 0x100;
@@ -742,6 +780,10 @@ namespace mame
                 case "Neo Geo":
                 case "Technos":
                 case "Tad":
+                    break;
+                case "Megasys1":
+                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 263);
+                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
                     break;
                 case "SunA8":
                     Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 0x100);

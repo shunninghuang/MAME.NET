@@ -186,6 +186,58 @@ namespace mame
                             break;
                     }
                     break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai":
+                        case "makaiden":
+                        case "p47":
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                        case "avspirit":
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        //case "edfbl":
+                        case "64street":
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            loop_inputports_callback = Megasys1.loop_inputports_megasys1_64street;
+                            record_port_callback = Megasys1.record_port;
+                            replay_port_callback = Megasys1.replay_port;
+                            break;
+                        case "hayaosi1":
+                            loop_inputports_callback = Megasys1.loop_inputports_megasys1_hayaosi1;
+                            record_port_callback = Megasys1.record_port;
+                            replay_port_callback = Megasys1.replay_port;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {

@@ -76,7 +76,9 @@ namespace cpu.m68000
             else
             { // false
                 if (displacement8 != 0)
+                {
                     pendingCycles -= 8;
+                }
                 else
                 {
                     PC += 2;

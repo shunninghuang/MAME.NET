@@ -57,12 +57,12 @@ namespace ui
                     CheatWriteByte = (int i1, byte b1) => { Namcos1.N0WriteMemory((ushort)i1, b1); };
                     break;
                 case "IGS011":
-                    CheatReadByte = (int i1) => { return (byte)MC68000.m1.ReadByte(i1); };
-                    CheatWriteByte = (int i1, byte b1) => { MC68000.m1.WriteByte(i1, (sbyte)b1); };
+                    CheatReadByte = (int i1) => { return (byte)MC68000.mm1[0].ReadByte(i1); };
+                    CheatWriteByte = (int i1, byte b1) => { MC68000.mm1[0].WriteByte(i1, (sbyte)b1); };
                     break;
                 case "PGM":
-                    CheatReadByte = (int i1) => { return (byte)MC68000.m1.ReadByte(i1); };
-                    CheatWriteByte = (int i1, byte b1) => { MC68000.m1.WriteByte(i1, (sbyte)b1); };
+                    CheatReadByte = (int i1) => { return (byte)MC68000.mm1[0].ReadByte(i1); };
+                    CheatWriteByte = (int i1, byte b1) => { MC68000.mm1[0].WriteByte(i1, (sbyte)b1); };
                     break;
                 case "M72":
                 case "M92":

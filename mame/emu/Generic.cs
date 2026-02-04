@@ -146,7 +146,7 @@ namespace mame
         {
             int inputcount=0;
             int line;
-            if (objcpunum == 0 && Cpuexec.cpu[0] == MC68000.m1)
+            if (objcpunum == 0 && Cpuexec.cpu[0] == MC68000.mm1[0])
             {
                 inputcount = 8;
             }
@@ -385,6 +385,21 @@ namespace mame
         public static void paletteram16_xRRRRRGGGGGBBBBB_word_w(int offset)
         {
             set_color_555(offset, 10, 5, 0, paletteram16[offset]);
+        }
+        public static void paletteram16_RRRRRGGGGGBBBBBx_word_w(int offset, ushort data)
+        {
+            paletteram16[offset] = data;
+            set_color_555(offset, 11, 6, 1, paletteram16[offset]);
+        }
+        public static void paletteram16_RRRRRGGGGGBBBBBx_word_w1(int offset, ushort data)
+        {
+            paletteram16[offset] = (ushort)((data << 8) | (paletteram16[offset] & 0xff));
+            set_color_555(offset, 11, 6, 1, paletteram16[offset]);
+        }
+        public static void paletteram16_RRRRRGGGGGBBBBBx_word_w2(int offset, ushort data)
+        {
+            paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
+            set_color_555(offset, 11, 6, 1, paletteram16[offset]);
         }
         public static void paletteram16_RRRRGGGGBBBBRGBx_word_w(int offset, ushort data)
         {

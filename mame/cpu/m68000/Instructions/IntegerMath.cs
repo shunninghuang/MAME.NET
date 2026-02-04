@@ -819,7 +819,8 @@ namespace cpu.m68000
 
         void ILL()
         {
-            TrapVector2(4);
+            //TrapVector2(4);
+            TrapVector2(11);
         }
 
         void ILL_Disasm(DisassemblyInfo info)

@@ -194,8 +194,8 @@ namespace mame
         }
         public static void write_dword(int offset, int data)
         {
-            MC68000.m1.WriteWord(offset, (short)(data >> 16));
-            MC68000.m1.WriteWord(offset + 2, (short)data);
+            MC68000.mm1[0].WriteWord(offset, (short)(data >> 16));
+            MC68000.mm1[0].WriteWord(offset + 2, (short)data);
         }
         public static void protection_w(ushort data)
         {
@@ -206,8 +206,8 @@ namespace mame
 		        { 6, 7, 4, 5, 3, 2, 1, 0, 8, 9 }
 	        };
             int map;
-            map = maplist[MC68000.m1.ReadByte(0xffc006), (MC68000.m1.ReadByte(0xffc003) << 1) + (MC68000.m1.ReadWord(0xffc004) >> 8)];
-            switch (MC68000.m1.ReadByte(0xffc684))
+            map = maplist[MC68000.mm1[0].ReadByte(0xffc006), (MC68000.mm1[0].ReadByte(0xffc003) << 1) + (MC68000.mm1[0].ReadWord(0xffc004) >> 8)];
+            switch (MC68000.mm1[0].ReadByte(0xffc684))
             {
                 case 1:
                     {
@@ -240,23 +240,23 @@ namespace mame
 			            };
                         int d1 = delta1[map] + 0xc0;
                         int d2 = delta2[map];
-                        MC68000.m1.WriteWord(0xffc680, (short)d1);
-                        MC68000.m1.WriteWord(0xffc682, (short)d2);
-                        MC68000.m1.WriteWord(0xffc00c, 0xc0);
-                        MC68000.m1.WriteWord(0xffc00e, 0);
+                        MC68000.mm1[0].WriteWord(0xffc680, (short)d1);
+                        MC68000.mm1[0].WriteWord(0xffc682, (short)d2);
+                        MC68000.mm1[0].WriteWord(0xffc00c, 0xc0);
+                        MC68000.mm1[0].WriteWord(0xffc00e, 0);
                         sf_fg_scroll_w((ushort)d1);
                         sf_bg_scroll_w((ushort)d2);
                         break;
                     }
                 case 4:
                     {
-                        int pos = MC68000.m1.ReadByte(0xffc010);
+                        int pos = MC68000.mm1[0].ReadByte(0xffc010);
                         pos = (pos + 1) & 3;
-                        MC68000.m1.WriteByte(0xffc010, (sbyte)pos);
+                        MC68000.mm1[0].WriteByte(0xffc010, (sbyte)pos);
                         if (pos == 0)
                         {
-                            int d1 = MC68000.m1.ReadWord(0xffc682);
-                            int off = MC68000.m1.ReadWord(0xffc00e);
+                            int d1 = MC68000.mm1[0].ReadWord(0xffc682);
+                            int off = MC68000.mm1[0].ReadWord(0xffc00e);
                             if (off != 512)
                             {
                                 off++;
@@ -267,8 +267,8 @@ namespace mame
                                 off = 0;
                                 d1 -= 512;
                             }
-                            MC68000.m1.WriteWord(0xffc682, (short)d1);
-                            MC68000.m1.WriteWord(0xffc00e, (short)off);
+                            MC68000.mm1[0].WriteWord(0xffc682, (short)d1);
+                            MC68000.mm1[0].WriteWord(0xffc00e, (short)off);
                             sf_bg_scroll_w((ushort)d1);
                         }
                         break;
@@ -288,8 +288,8 @@ namespace mame
 		        { 6, 7, 4, 5, 3, 2, 1, 0, 8, 9 }
 	        };
             int map;
-            map = maplist[MC68000.m1.ReadByte(0xffc006), (MC68000.m1.ReadByte(0xffc003) << 1) + (MC68000.m1.ReadWord(0xffc004) >> 8)];
-            switch (MC68000.m1.ReadByte(0xffc684))
+            map = maplist[MC68000.mm1[0].ReadByte(0xffc006), (MC68000.mm1[0].ReadByte(0xffc003) << 1) + (MC68000.mm1[0].ReadWord(0xffc004) >> 8)];
+            switch (MC68000.mm1[0].ReadByte(0xffc684))
             {
                 case 1:
                     {
@@ -322,23 +322,23 @@ namespace mame
 			            };
                         int d1 = delta1[map] + 0xc0;
                         int d2 = delta2[map];
-                        MC68000.m1.WriteWord(0xffc680, (short)d1);
-                        MC68000.m1.WriteWord(0xffc682, (short)d2);
-                        MC68000.m1.WriteWord(0xffc00c, 0xc0);
-                        MC68000.m1.WriteWord(0xffc00e, 0);
+                        MC68000.mm1[0].WriteWord(0xffc680, (short)d1);
+                        MC68000.mm1[0].WriteWord(0xffc682, (short)d2);
+                        MC68000.mm1[0].WriteWord(0xffc00c, 0xc0);
+                        MC68000.mm1[0].WriteWord(0xffc00e, 0);
                         sf_fg_scroll_w1((byte)(d1 >> 8));
                         sf_bg_scroll_w((byte)(d2 >> 8));
                         break;
                     }
                 case 4:
                     {
-                        int pos = MC68000.m1.ReadByte(0xffc010);
+                        int pos = MC68000.mm1[0].ReadByte(0xffc010);
                         pos = (pos + 1) & 3;
-                        MC68000.m1.WriteByte(0xffc010, (sbyte)pos);
+                        MC68000.mm1[0].WriteByte(0xffc010, (sbyte)pos);
                         if (pos == 0)
                         {
-                            int d1 = MC68000.m1.ReadWord(0xffc682);
-                            int off = MC68000.m1.ReadWord(0xffc00e);
+                            int d1 = MC68000.mm1[0].ReadWord(0xffc682);
+                            int off = MC68000.mm1[0].ReadWord(0xffc00e);
                             if (off != 512)
                             {
                                 off++;
@@ -349,8 +349,8 @@ namespace mame
                                 off = 0;
                                 d1 -= 512;
                             }
-                            MC68000.m1.WriteWord(0xffc682, (short)d1);
-                            MC68000.m1.WriteWord(0xffc00e, (short)off);
+                            MC68000.mm1[0].WriteWord(0xffc682, (short)d1);
+                            MC68000.mm1[0].WriteWord(0xffc00e, (short)off);
                             sf_bg_scroll_w((byte)(d1>>8));
                         }
                         break;
@@ -370,8 +370,8 @@ namespace mame
 		        { 6, 7, 4, 5, 3, 2, 1, 0, 8, 9 }
 	        };
             int map;
-            map = maplist[MC68000.m1.ReadByte(0xffc006), (MC68000.m1.ReadByte(0xffc003) << 1) + (MC68000.m1.ReadWord(0xffc004) >> 8)];
-            switch (MC68000.m1.ReadByte(0xffc684))
+            map = maplist[MC68000.mm1[0].ReadByte(0xffc006), (MC68000.mm1[0].ReadByte(0xffc003) << 1) + (MC68000.mm1[0].ReadWord(0xffc004) >> 8)];
+            switch (MC68000.mm1[0].ReadByte(0xffc684))
             {
                 case 1:
                     {
@@ -404,23 +404,23 @@ namespace mame
 			            };
                         int d1 = delta1[map] + 0xc0;
                         int d2 = delta2[map];
-                        MC68000.m1.WriteWord(0xffc680, (short)d1);
-                        MC68000.m1.WriteWord(0xffc682, (short)d2);
-                        MC68000.m1.WriteWord(0xffc00c, 0xc0);
-                        MC68000.m1.WriteWord(0xffc00e, 0);
+                        MC68000.mm1[0].WriteWord(0xffc680, (short)d1);
+                        MC68000.mm1[0].WriteWord(0xffc682, (short)d2);
+                        MC68000.mm1[0].WriteWord(0xffc00c, 0xc0);
+                        MC68000.mm1[0].WriteWord(0xffc00e, 0);
                         sf_fg_scroll_w((byte)d1);
                         sf_bg_scroll_w((byte)d2);
                         break;
                     }
                 case 4:
                     {
-                        int pos = MC68000.m1.ReadByte(0xffc010);
+                        int pos = MC68000.mm1[0].ReadByte(0xffc010);
                         pos = (pos + 1) & 3;
-                        MC68000.m1.WriteByte(0xffc010, (sbyte)pos);
+                        MC68000.mm1[0].WriteByte(0xffc010, (sbyte)pos);
                         if (pos == 0)
                         {
-                            int d1 = MC68000.m1.ReadWord(0xffc682);
-                            int off = MC68000.m1.ReadWord(0xffc00e);
+                            int d1 = MC68000.mm1[0].ReadWord(0xffc682);
+                            int off = MC68000.mm1[0].ReadWord(0xffc00e);
                             if (off != 512)
                             {
                                 off++;
@@ -431,8 +431,8 @@ namespace mame
                                 off = 0;
                                 d1 -= 512;
                             }
-                            MC68000.m1.WriteWord(0xffc682, (short)d1);
-                            MC68000.m1.WriteWord(0xffc00e, (short)off);
+                            MC68000.mm1[0].WriteWord(0xffc682, (short)d1);
+                            MC68000.mm1[0].WriteWord(0xffc00e, (short)off);
                             sf_bg_scroll_w((byte)d1);
                         }
                         break;

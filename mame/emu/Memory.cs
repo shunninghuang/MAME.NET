@@ -69,6 +69,25 @@ namespace mame
                             break;
                     }
                     break;
+                case "Megasys1":
+                    Megasys1.shorts = -1;
+                    Megasys1.short1 = 0xff;
+                    Megasys1.short2 = -1;
+                    switch (Machine.sName)
+                    {
+                        case "hayaosi1":
+                            Megasys1.shorts = -1;
+                            Megasys1.short1 = -1;
+                            Megasys1.short2 = -1;
+                            break;
+                        case "peekaboo":
+                        case "peakaboou":
+                            Megasys1.shorts = -1;
+                            Megasys1.short1 = 0x80;
+                            Megasys1.short2 = -0x80;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     Gaelco.sbyte1 = -1;
                     Gaelco.sbyte2 = -1;
@@ -297,6 +316,11 @@ namespace mame
                             Tad.sbyte2_old = 0;
                             break;
                     }
+                    break;
+                case "Megasys1":
+                    Megasys1.shorts_old = 0;
+                    Megasys1.short1_old = 0;
+                    Megasys1.short2_old = 0;
                     break;
                 case "Gaelco":
                     Gaelco.sbyte1_old = 0;

@@ -185,7 +185,7 @@ namespace mame
         };
         public static void drgw_interrupt()
         {
-            if (Cpuexec.iloops == 0)
+            if (Cpuexec.cpu[0].iloops == 0)
             {
                 Cpuint.cpunum_set_input_line(0, 6, LineState.HOLD_LINE);
             }

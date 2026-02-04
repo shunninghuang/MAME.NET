@@ -51,7 +51,7 @@ namespace mame
             }
             writer.Write(Memory.mainram, 0, 0x4000);
             writer.Write(mainram2, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Cpuint.SaveStateBinary(writer);
             writer.Write(Timer.global_basetime.seconds);
@@ -107,7 +107,7 @@ namespace mame
             }
             Memory.mainram = reader.ReadBytes(0x4000);
             mainram2 = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Cpuint.LoadStateBinary(reader);
             Timer.global_basetime.seconds = reader.ReadInt32();
@@ -157,7 +157,7 @@ namespace mame
             }
             writer.Write(Memory.mainram, 0, 0x4000);
             writer.Write(mainram2, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -219,7 +219,7 @@ namespace mame
             }
             Memory.mainram = reader.ReadBytes(0x4000);
             mainram2 = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -285,7 +285,7 @@ namespace mame
                 writer.Write(Palette.entry_color[i]);
             }
             writer.Write(Memory.mainram, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -357,7 +357,7 @@ namespace mame
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
             Memory.mainram = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -424,7 +424,7 @@ namespace mame
                 writer.Write(Palette.entry_color[i]);
             }
             writer.Write(Memory.mainram, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -477,7 +477,7 @@ namespace mame
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
             Memory.mainram = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -530,7 +530,7 @@ namespace mame
                 writer.Write(Palette.entry_color[i]);
             }
             writer.Write(Memory.mainram, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -583,7 +583,7 @@ namespace mame
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
             Memory.mainram = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -634,7 +634,7 @@ namespace mame
                 writer.Write(Palette.entry_color[i]);
             }
             writer.Write(Memory.mainram, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -686,7 +686,7 @@ namespace mame
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
             Memory.mainram = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -741,7 +741,7 @@ namespace mame
                 writer.Write(Palette.entry_color[i]);
             }
             writer.Write(Memory.mainram, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -792,7 +792,7 @@ namespace mame
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
             Memory.mainram = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -844,7 +844,7 @@ namespace mame
             }
             writer.Write(Memory.mainram, 0, 0x4000);
             writer.Write(mainram2, 0, 0x80);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -900,7 +900,7 @@ namespace mame
             }
             Memory.mainram = reader.ReadBytes(0x4000);
             mainram2 = reader.ReadBytes(0x80);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -952,7 +952,7 @@ namespace mame
             }
             writer.Write(Memory.mainram, 0, 0x4000);
             writer.Write(mainram2, 0, 0x80);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -1005,7 +1005,7 @@ namespace mame
             }
             Memory.mainram = reader.ReadBytes(0x4000);
             mainram2 = reader.ReadBytes(0x80);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -1058,7 +1058,7 @@ namespace mame
                 writer.Write(Palette.entry_color[i]);
             }
             writer.Write(Memory.mainram, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -1110,7 +1110,7 @@ namespace mame
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
             Memory.mainram = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
@@ -1163,7 +1163,7 @@ namespace mame
                 writer.Write(Palette.entry_color[i]);
             }
             writer.Write(Memory.mainram, 0, 0x4000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x2000);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -1221,7 +1221,7 @@ namespace mame
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
             Memory.mainram = reader.ReadBytes(0x4000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x2000);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);

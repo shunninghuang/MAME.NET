@@ -7182,6 +7182,293 @@
     <year>1989</year>
     <manufacturer>bootleg</manufacturer>
   </game>
+  <game name="lomakai" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Legend of Makai (World)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="makaiden" board="Megasys1">
+    <parent>lomakai</parent>
+    <direction></direction>
+    <description>Makai Densetsu (Japan)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="p47" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>P-47 - The Phantom Fighter (World)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="p47j" board="Megasys1">
+    <parent>p47</parent>
+    <direction></direction>
+    <description>P-47 - The Freedom Fighter (Japan)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="p47je" board="Megasys1">
+    <parent>p47</parent>
+    <direction></direction>
+    <description>P-47 - The Freedom Fighter (Japan, Export)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="kickoff" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Kick Off (Japan)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="tshingen" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Shingen Samurai-Fighter (Japan, English)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="tshingena" board="Megasys1">
+    <parent>tshingen</parent>
+    <direction></direction>
+    <description>Takeda Shingen (Japan, Japanese)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="kazan" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Ninja Kazan (World)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="iganinju" board="Megasys1">
+    <parent>kazan</parent>
+    <direction></direction>
+    <description>Iga Ninjyutsuden (Japan)</description>
+    <year>1988</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="astyanax" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>The Astyanax</description>
+    <year>1989</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="lordofk" board="Megasys1">
+    <parent>astyanax</parent>
+    <direction></direction>
+    <description>The Lord of King (Japan)</description>
+    <year>1989</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="hachoo" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Hachoo!</description>
+    <year>1989</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="jitsupro" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Jitsuryoku!! Pro Yakyuu (Japan)</description>
+    <year>1989</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="plusalph" board="Megasys1">
+    <parent></parent>
+    <direction>270</direction>
+    <description>Plus Alpha</description>
+    <year>1989</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="stdragon" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Saint Dragon (set 1)</description>
+    <year>1989</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <!--<game name="stdragona" board="Megasys1">
+    <parent>stdragon</parent>
+    <direction></direction>
+    <description>Saint Dragon (set 2)</description>
+    <year>1989</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>-->
+  <game name="stdragonb" board="Megasys1">
+    <parent>stdragon</parent>
+    <direction></direction>
+    <description>Saint Dragon (bootleg)</description>
+    <year>1989</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="rodland" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Rod-Land (World)</description>
+    <year>1990</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="rodlandj" board="Megasys1">
+    <parent>rodland</parent>
+    <direction></direction>
+    <description>Rod-Land (Japan)</description>
+    <year>1990</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="rittam" board="Megasys1">
+    <parent>rodland</parent>
+    <direction></direction>
+    <description>R&amp;T (Rod-Land prototype?)</description>
+    <year>1990</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="rodlandjb" board="Megasys1">
+    <parent>rodland</parent>
+    <direction></direction>
+    <description>Rod-Land (Japan bootleg)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="phantasm" board="Megasys1">
+    <parent>avspirit</parent>
+    <direction></direction>
+    <description>Phantasm (Japan)</description>
+    <year>1990</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="edfp" board="Megasys1">
+    <parent>edf</parent>
+    <direction></direction>
+    <description>E.D.F. : Earth Defense Force (Japan, prototype)</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="soldam" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Soldam</description>
+    <year>1992</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="soldamj" board="Megasys1">
+    <parent>soldam</parent>
+    <direction></direction>
+    <description>Soldam (Japan)</description>
+    <year>1992</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="avspirit" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Avenging Spirit</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <!--<game name="monkelf" board="Megasys1">
+    <parent>avspirit</parent>
+    <direction></direction>
+    <description>Monky Elf (Korean bootleg of Avenging Spirit)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
+  <game name="edf" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>E.D.F. : Earth Defense Force (set 1)</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="edfa" board="Megasys1">
+    <parent>edf</parent>
+    <direction></direction>
+    <description>E.D.F. : Earth Defense Force (set 2)</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="edfu" board="Megasys1">
+    <parent>edf</parent>
+    <direction></direction>
+    <description>E.D.F. : Earth Defense Force (North America)</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <!--<game name="edfbl" board="Megasys1">
+    <parent>edf</parent>
+    <direction></direction>
+    <description>E.D.F. : Earth Defense Force (bootleg)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
+  <game name="hayaosi1" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Hayaoshi Quiz Ouza Ketteisen - The King Of Quiz</description>
+    <year>1993</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="64street" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>64th. Street - A Detective Story (World)</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="64streetj" board="Megasys1">
+    <parent>64street</parent>
+    <direction></direction>
+    <description>64th. Street - A Detective Story (Japan, set 1)</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="64streetja" board="Megasys1">
+    <parent>64street</parent>
+    <direction></direction>
+    <description>64th. Street - A Detective Story (Japan, set 2)</description>
+    <year>1991</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="bigstrik" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Big Striker</description>
+    <year>1992</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="chimerab" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Chimera Beast (prototype)</description>
+    <year>1993</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="cybattlr" board="Megasys1">
+    <parent></parent>
+    <direction>90</direction>
+    <description>Cybattler</description>
+    <year>1993</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <!--<game name="peekaboo" board="Megasys1">
+    <parent></parent>
+    <direction></direction>
+    <description>Peek-a-Boo!</description>
+    <year>1993</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>
+  <game name="peekaboou" board="Megasys1">
+    <parent>peekaboo</parent>
+    <direction></direction>
+    <description>Peek-a-Boo! (North America, ver 1.0)</description>
+    <year>1993</year>
+    <manufacturer>Jaleco</manufacturer>
+  </game>-->
   <game name="bigkarnk" board="Gaelco">
     <parent></parent>
     <direction></direction>

@@ -109,7 +109,7 @@ namespace mame
         }
         public static void z80_ram_w(int offset, byte data)
         {
-            int pc = MC68000.m1.PC;
+            int pc = MC68000.mm1[0].PC;
             Memory.audioram[offset] = data;
             if (pc != 0xf12 && pc != 0xde2 && pc != 0x100c50 && pc != 0x100b20)
             {

@@ -8,194 +8,13 @@ namespace mame
 {
     public partial class Capcom
     {
-        public static void tilemap_init()
-        {
-            switch (Machine.sName)
-            {
-                case "gng":
-                case "gnga":
-                case "gngbl":
-                case "gngprot":
-                case "gngblita":
-                case "gngc":
-                case "gngt":
-                case "makaimur":
-                case "makaimurc":
-                case "makaimurg":
-                case "diamond":
-                    tilemap_init_gng();
-                    break;
-                case "sf":
-                case "sfua":
-                case "sfj":
-                case "sfjan":
-                case "sfan":
-                case "sfp":
-                    tilemap_init_sf();
-                    break;
-            }
-        }
-        public static void tilemap_init_gng()
-        {
-            int i;
-            fg_tilemap = new Tmap();
-            fg_tilemap.cols = 0x20;
-            fg_tilemap.rows = 0x20;
-            fg_tilemap.tilewidth = 8;
-            fg_tilemap.tileheight = 8;
-            fg_tilemap.width = 0x100;
-            fg_tilemap.height = 0x100;
-            fg_tilemap.enable = true;
-            fg_tilemap.all_tiles_dirty = true;
-            fg_tilemap.total_elements = gfx1rom.Length / 0x40;
-            fg_tilemap.pixmap = new ushort[0x100 * 0x100];
-            fg_tilemap.flagsmap = new byte[0x100, 0x100];
-            fg_tilemap.tileflags = new byte[0x20, 0x20];
-            fg_tilemap.pen_data = new byte[0x40];
-            fg_tilemap.pen_to_flags = new byte[1, 16];
-            for (i = 0; i < 16; i++)
-            {
-                fg_tilemap.pen_to_flags[0, i] = 0x10;
-            }
-            fg_tilemap.pen_to_flags[0, 3] = 0;
-            fg_tilemap.scrollrows = 1;
-            fg_tilemap.scrollcols = 1;
-            fg_tilemap.rowscroll = new int[fg_tilemap.scrollrows];
-            fg_tilemap.colscroll = new int[fg_tilemap.scrollcols];
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_gng;
-            fg_tilemap.tile_update3 = fg_tilemap.tile_update_capcom_fg_gng;
-            bg_tilemap = new Tmap();
-            bg_tilemap.cols = 0x20;
-            bg_tilemap.rows = 0x20;
-            bg_tilemap.tilewidth = 0x10;
-            bg_tilemap.tileheight = 0x10;
-            bg_tilemap.width = 0x200;
-            bg_tilemap.height = 0x200;
-            bg_tilemap.enable = true;
-            bg_tilemap.all_tiles_dirty = true;
-            bg_tilemap.total_elements = gfx2rom.Length / 0x100;
-            bg_tilemap.pixmap = new ushort[0x200 * 0x200];
-            bg_tilemap.flagsmap = new byte[0x200, 0x200];
-            bg_tilemap.tileflags = new byte[0x20, 0x20];
-            bg_tilemap.pen_data = new byte[0x100];
-            bg_tilemap.pen_to_flags = new byte[2, 16];
-            for (i = 0; i < 8; i++)
-            {
-                bg_tilemap.pen_to_flags[0, i] = 0x20;
-            }
-            for (i = 8; i < 0x10; i++)
-            {
-                bg_tilemap.pen_to_flags[0, i] = 0x30;
-            }
-            bg_tilemap.pen_to_flags[1, 0] = 0x20;
-            for (i = 1; i < 8; i++)
-            {
-                bg_tilemap.pen_to_flags[1, i] = 0x10;
-            }
-            for (i = 8; i < 0x10; i++)
-            {
-                bg_tilemap.pen_to_flags[1, i] = 0x30;
-            }
-            bg_tilemap.scrollrows = 1;
-            bg_tilemap.scrollcols = 1;
-            bg_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
-            bg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_gng;
-            bg_tilemap.tile_update3 = bg_tilemap.tile_update_capcom_bg_gng;
-        }
-        public static void tilemap_init_sf()
-        {
-            int i;
-            bg_tilemap = new Tmap();
-            bg_tilemap.cols = 0x800;
-            bg_tilemap.rows = 0x10;
-            bg_tilemap.tilewidth = 0x10;
-            bg_tilemap.tileheight = 0x10;
-            bg_tilemap.width = 0x8000;
-            bg_tilemap.height = 0x100;
-            bg_tilemap.enable = true;
-            bg_tilemap.all_tiles_dirty = true;
-            bg_tilemap.total_elements = gfx1rom.Length / 0x100;
-            bg_tilemap.pixmap = new ushort[0x100 * 0x8000];
-            bg_tilemap.flagsmap = new byte[0x100, 0x8000];
-            bg_tilemap.tileflags = new byte[0x10, 0x800];
-            bg_tilemap.pen_data = new byte[0x100];
-            bg_tilemap.pen_to_flags = new byte[1, 16];
-            for (i = 0; i < 16; i++)
-            {
-                bg_tilemap.pen_to_flags[0, i] = 0x10;
-            }
-            bg_tilemap.scrollrows = 1;
-            bg_tilemap.scrollcols = 1;
-            bg_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
-            bg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
-            bg_tilemap.tile_update3 = bg_tilemap.tile_update_capcom_bg;
 
-            fg_tilemap = new Tmap();
-            fg_tilemap.cols = 0x800;
-            fg_tilemap.rows = 0x10;
-            fg_tilemap.tilewidth = 0x10;
-            fg_tilemap.tileheight = 0x10;
-            fg_tilemap.width = 0x8000;
-            fg_tilemap.height = 0x100;
-            fg_tilemap.enable = true;
-            fg_tilemap.all_tiles_dirty = true;
-            fg_tilemap.total_elements = gfx2rom.Length / 0x100;
-            fg_tilemap.pixmap = new ushort[0x100 * 0x8000];
-            fg_tilemap.flagsmap = new byte[0x100, 0x8000];
-            fg_tilemap.tileflags = new byte[0x10, 0x800];
-            fg_tilemap.pen_data = new byte[0x100];
-            fg_tilemap.pen_to_flags = new byte[1, 16];
-            for (i = 0; i < 15; i++)
-            {
-                fg_tilemap.pen_to_flags[0, i] = 0x10;
-            }
-            fg_tilemap.pen_to_flags[0, 3] = 0;
-            fg_tilemap.scrollrows = 1;
-            fg_tilemap.scrollcols = 1;
-            fg_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
-            fg_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_sf;
-            fg_tilemap.tile_update3 = fg_tilemap.tile_update_capcom_fg;
-
-            tx_tilemap = new Tmap();
-            tx_tilemap.cols = 0x40;
-            tx_tilemap.rows = 0x20;
-            tx_tilemap.tilewidth = 8;
-            tx_tilemap.tileheight = 8;
-            tx_tilemap.width = 0x200;
-            tx_tilemap.height = 0x100;
-            tx_tilemap.enable = true;
-            tx_tilemap.all_tiles_dirty = true;
-            tx_tilemap.total_elements = gfx4rom.Length / 0x40;
-            tx_tilemap.pixmap = new ushort[0x100 * 0x200];
-            tx_tilemap.flagsmap = new byte[0x100, 0x200];
-            tx_tilemap.tileflags = new byte[0x20, 0x40];
-            tx_tilemap.pen_data = new byte[0x40];
-            tx_tilemap.pen_to_flags = new byte[1, 16];
-            for (i = 0; i < 16; i++)
-            {
-                tx_tilemap.pen_to_flags[0, i] = 0x10;
-            }
-            tx_tilemap.pen_to_flags[0, 3] = 0;
-            tx_tilemap.scrollrows = 1;
-            tx_tilemap.scrollcols = 1;
-            tx_tilemap.rowscroll = new int[bg_tilemap.scrollrows];
-            tx_tilemap.colscroll = new int[bg_tilemap.scrollcols];
-            tx_tilemap.tilemap_draw_instance3 = tx_tilemap.tilemap_draw_instance_capcom_sf;
-            tx_tilemap.tile_update3 = tx_tilemap.tile_update_capcom_tx;
-            Tilemap.lsTmap = new List<Tmap>();
-            Tilemap.lsTmap.Add(bg_tilemap);
-            Tilemap.lsTmap.Add(fg_tilemap);
-            Tilemap.lsTmap.Add(tx_tilemap);
-        }
     }
     public partial class Tmap
     {
         public void tilemap_draw_instance_capcom_gng(RECT cliprect, int xpos, int ypos)
         {
-            int mincol, maxcol;
+            int mincol, maxcol, logindex;
             int x1, y1, x2, y2;
             int y, nexty;
             int offsety1, offsety2;
@@ -232,11 +51,12 @@ namespace mame
                     }
                     else
                     {
-                        if (tileflags[row, column] == Tilemap.TILE_FLAG_DIRTY)
+                        logindex = row * cols + column;
+                        if (tileflags[logindex] == Tilemap.TILE_FLAG_DIRTY)
                         {
-                            tile_update3(column, row);
+                            tile_update3(logindex, column, row);
                         }
-                        if ((tileflags[row, column] & mask) != 0)
+                        if ((tileflags[logindex] & mask) != 0)
                         {
                             cur_trans = trans_t.MASKED;
                         }
@@ -294,7 +114,7 @@ namespace mame
         }
         public void tilemap_draw_instance_capcom_sf(RECT cliprect, int xpos, int ypos)
         {
-            int mincol, maxcol;
+            int mincol, maxcol, logindex;
             int x1, y1, x2, y2;
             int y, nexty;
             int offsety1, offsety2;
@@ -331,11 +151,12 @@ namespace mame
                     }
                     else
                     {
-                        if (tileflags[row, column] == Tilemap.TILE_FLAG_DIRTY)
+                        logindex = row * cols + column;
+                        if (tileflags[logindex] == Tilemap.TILE_FLAG_DIRTY)
                         {
-                            tile_update3(column, row);
+                            tile_update3(logindex, column, row);
                         }
-                        if ((tileflags[row, column] & mask) != 0)
+                        if ((tileflags[logindex] & mask) != 0)
                         {
                             cur_trans = trans_t.MASKED;
                         }
@@ -359,7 +180,7 @@ namespace mame
                         {
                             for (cury = y; cury < nexty; cury++)
                             {
-                                Array.Copy(pixmap, offsety2 * width + x_start, Video.bitmapbase[Video.curbitmap], (offsety2 + ypos) * 0x200 + xpos + x_start, x_end - x_start);
+                                Array.Copy(pixmap, offsety2 * width + x_start, Video.bitmapbase[Video.curbitmap], (offsety2 + ypos) * Video.fullwidth + xpos + x_start, x_end - x_start);
                                 offsety2++;
                             }
                         }
@@ -371,7 +192,7 @@ namespace mame
                                 {
                                     if ((flagsmap[offsety2, i - xpos] & mask) == value)
                                     {
-                                        Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * 0x200 + i] = pixmap[offsety2 * width + i - xpos];
+                                        Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * Video.fullwidth + i] = pixmap[offsety2 * width + i - xpos];
                                     }
                                 }
                                 offsety2++;
@@ -391,16 +212,16 @@ namespace mame
                 nexty = Math.Min(nexty, y2);
             }
         }
-        public void tile_update_capcom_bg(int col, int row)
+        public void tile_update_capcom_bg(int logindex, int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             byte flags;
-            int tile_index;
+            int memindex;
             int code, color;
             int pen_data_offset, palette_base;
-            tile_index = col * rows + row;
-            int base_offset = 2 * tile_index;
+            memindex = logical_to_memory[logindex];
+            int base_offset = 2 * memindex;
             int attr = Capcom.gfx5rom[base_offset + 0x10000];
             color = Capcom.gfx5rom[base_offset];
             code = (Capcom.gfx5rom[base_offset + 0x10000 + 1] << 8) | Capcom.gfx5rom[base_offset + 1];
@@ -408,18 +229,18 @@ namespace mame
             pen_data_offset = code * 0x100;
             palette_base = color * 0x10;
             flags = (byte)((attr & 0x03) ^ (attributes & 0x03));
-            tileflags[row, col] = tile_draw(Capcom.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
+            tileflags[logindex] = tile_draw(Capcom.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
-        public void tile_update_capcom_fg(int col, int row)
+        public void tile_update_capcom_fg(int logindex, int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             byte flags;
-            int tile_index;
+            int memindex;
             int code, color;
             int pen_data_offset, palette_base;
-            tile_index = col * rows + row;
-            int base_offset = 0x20000 + 2 * tile_index;
+            memindex = logical_to_memory[logindex];
+            int base_offset = 0x20000 + 2 * memindex;
             int attr = Capcom.gfx5rom[base_offset + 0x10000];
             color = Capcom.gfx5rom[base_offset];
             code = (Capcom.gfx5rom[base_offset + 0x10000 + 1] << 8) | Capcom.gfx5rom[base_offset + 1];
@@ -427,64 +248,64 @@ namespace mame
             pen_data_offset = code * 0x100;
             palette_base = 0x100 + (color * 0x10);
             flags = (byte)((attr & 0x03) ^ (attributes & 0x03));
-            tileflags[row, col] = tile_draw(Capcom.gfx2rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
+            tileflags[logindex] = tile_draw(Capcom.gfx2rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
-        public void tile_update_capcom_tx(int col, int row)
+        public void tile_update_capcom_tx(int logindex, int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             byte flags;
-            int tile_index;
+            int memindex;
             int code, color;
             int pen_data_offset, palette_base;
-            tile_index = row * cols + col;
-            code = Capcom.sf_videoram[tile_index];
+            memindex = logical_to_memory[logindex];
+            code = Capcom.sf_videoram[memindex];
             color = code >> 12;
             flags = (byte)((((code & 0xc00) >> 10) & 0x03) ^ (attributes & 0x03));
             code = (code & 0x3ff) % total_elements;
             pen_data_offset = code * 0x40;
             palette_base = 0x300 + (color * 0x4);
-            tileflags[row, col] = tile_draw(Capcom.gfx4rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
+            tileflags[logindex] = tile_draw(Capcom.gfx4rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
-        public void tile_update_capcom_bg_gng(int col, int row)
+        public void tile_update_capcom_bg_gng(int logindex, int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             byte flags;
-            int tile_index;
+            int memindex;
             int code, color;
             int pen_data_offset, palette_base;
             byte group;
-            tile_index = col * rows + row;
-            int base_offset = 2 * tile_index;
-            int attr = Capcom.gng_bgvideoram[tile_index + 0x400];
+            memindex = logical_to_memory[logindex];
+            int base_offset = 2 * memindex;
+            int attr = Capcom.gng_bgvideoram[memindex + 0x400];
             color = attr & 0x07;
-            code = Capcom.gng_bgvideoram[tile_index] + ((attr & 0xc0) << 2);
+            code = Capcom.gng_bgvideoram[memindex] + ((attr & 0xc0) << 2);
             code = code % total_elements;
             pen_data_offset = code * 0x100;
             palette_base = color * 8;
             flags = (byte)((((attr & 0x30) >> 4) & 0x03) ^ (attributes & 0x03));
             group = (byte)((attr & 0x08) >> 3);
-            tileflags[row, col] = tile_draw(Capcom.gfx2rom, pen_data_offset, x0, y0, palette_base, 0, group, flags);
+            tileflags[logindex] = tile_draw(Capcom.gfx2rom, pen_data_offset, x0, y0, palette_base, 0, group, flags);
         }
-        public void tile_update_capcom_fg_gng(int col, int row)
+        public void tile_update_capcom_fg_gng(int logindex, int col, int row)
         {
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             byte flags;
-            int tile_index;
+            int memindex;
             int code, color;
             int pen_data_offset, palette_base;
-            tile_index = row * cols + col;
-            int base_offset = 2 * tile_index;
-            int attr = Capcom.gng_fgvideoram[tile_index + 0x400];
+            memindex = logical_to_memory[logindex];
+            int base_offset = 2 * memindex;
+            int attr = Capcom.gng_fgvideoram[memindex + 0x400];
             color = attr & 0x0f;
-            code = Capcom.gng_fgvideoram[tile_index] + ((attr & 0xc0) << 2);
+            code = Capcom.gng_fgvideoram[memindex] + ((attr & 0xc0) << 2);
             code = code % total_elements;
             pen_data_offset = code * 0x40;
             palette_base = 0x80 + color * 4;
             flags = (byte)((((attr & 0x30) >> 4) & 0x03) ^ (attributes & 0x03));
-            tileflags[row, col] = tile_draw(Capcom.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
+            tileflags[logindex] = tile_draw(Capcom.gfx1rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
     }
 }

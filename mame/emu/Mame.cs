@@ -528,6 +528,67 @@ namespace mame
                     }
                     YM2151.ym2151_postload();
                     break;
+                case "Tad":
+                    Tad.background_layer.all_tiles_dirty = true;
+                    Tad.foreground_layer.all_tiles_dirty = true;
+                    Tad.text_layer.all_tiles_dirty = true;
+                    break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai":
+                        case "makaiden":
+                            AY8910.AA8910[0].ay8910_postload();
+                            YM2203.FF2203[0].ym2203_postload();
+                            break;
+                        case "p47"://A
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                        case "avspirit":
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        case "hayaosi1":
+                        //case "edfbl":
+                        case "64street":
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            YM2151.ym2151_postload();
+                            break;
+                        case "peekaboo":
+                        case "peakaboou":
+                            break;
+                    }
+                    for (i = 0; i < 3; i++)
+                    {
+                        Megasys1.megasys1_tmap[i].all_tiles_dirty = true;
+                    }
+                    break;
                 case "Gaelco":
                     Gaelco.gaelco_tilemap[0].all_tiles_dirty = true;
                     Gaelco.gaelco_tilemap[1].all_tiles_dirty = true;
@@ -562,7 +623,7 @@ namespace mame
                         case "tokio":
                         case "tokioo":
                         case "tokiou":
-                        case "tokiob":                            
+                        case "tokiob":
                         case "bublbobl":
                         case "bublbobl1":
                         case "bublboblr":

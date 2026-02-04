@@ -64,21 +64,22 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = 0x10 * color;
-            blockmove_8toN_transpen16_m72(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, sy, sx);
+            blockmove_8toN_transpen16_m72(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, 0, sx, sy);
         }
-        public static void blockmove_8toN_transpen16_m72(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int offsety, int offsetx)
+        public static void blockmove_8toN_transpen16_m72(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, int transpen, int sx, int sy)
         {
             int ydir, xdir, col, i, j;
-            int srcdata_offset = code * 0x100;
+            int offsetx = sx, offsety = sy;
+            int srcdata_offset = code * srcwidth * srcheight;
             if (flipy != 0)
             {
                 offsety += (dstheight - 1);
-                srcdata_offset += (srcheight - dstheight - topskip) * 0x10;
+                srcdata_offset += (srcheight - dstheight - topskip) * srcmodulo;
                 ydir = -1;
             }
             else
             {
-                srcdata_offset += topskip * 0x10;
+                srcdata_offset += topskip * srcmodulo;
                 ydir = 1;
             }
             if (flipx != 0)
@@ -97,9 +98,9 @@ namespace mame
                 for (j = 0; j < dstwidth; j++)
                 {
                     col = bb1[srcdata_offset + srcmodulo * i + j];
-                    if (col != 0)
+                    if (col != transpen)
                     {
-                        Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);
+                        Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = (ushort)(colorbase + col);
                     }
                 }
             }

@@ -107,24 +107,24 @@ namespace ui
             string sDisassemble, sDisassemble2 = "";
             for (i = 0; i < 8; i++)
             {
-                tbDs[i].Text = MC68000.m1.D[i].u32.ToString("X8");
-                tbAs[i].Text = MC68000.m1.A[i].u32.ToString("X8");
+                tbDs[i].Text = MC68000.mm1[0].D[i].u32.ToString("X8");
+                tbAs[i].Text = MC68000.mm1[0].A[i].u32.ToString("X8");
             }
-            tbPPC.Text = MC68000.m1.PPC.ToString("X6");
-            tbOP.Text = MC68000.m1.op.ToString("X4");
-            cbS.Checked = MC68000.m1.S;
-            cbM.Checked = MC68000.m1.M;
-            cbX.Checked = MC68000.m1.X;
-            cbN.Checked = MC68000.m1.N;
-            cbZ.Checked = MC68000.m1.Z;
-            cbV.Checked = MC68000.m1.V;
-            cbC.Checked = MC68000.m1.C;
-            tbIML.Text = MC68000.m1.InterruptMaskLevel.ToString();
-            tbUSP.Text = MC68000.m1.usp.ToString("X8");
-            tbSSP.Text = MC68000.m1.ssp.ToString("X8");
-            tbCycles.Text = MC68000.m1.TotalExecutedCycles.ToString("X16");
-            tbPC.Text = MC68000.m1.PC.ToString("X6");
-            sDisassemble = MC68000.m1.Disassemble(MC68000.m1.PPC).ToString();
+            tbPPC.Text = MC68000.mm1[0].PPC.ToString("X6");
+            tbOP.Text = MC68000.mm1[0].op.ToString("X4");
+            cbS.Checked = MC68000.mm1[0].S;
+            cbM.Checked = MC68000.mm1[0].M;
+            cbX.Checked = MC68000.mm1[0].X;
+            cbN.Checked = MC68000.mm1[0].N;
+            cbZ.Checked = MC68000.mm1[0].Z;
+            cbV.Checked = MC68000.mm1[0].V;
+            cbC.Checked = MC68000.mm1[0].C;
+            tbIML.Text = MC68000.mm1[0].InterruptMaskLevel.ToString();
+            tbUSP.Text = MC68000.mm1[0].usp.ToString("X8");
+            tbSSP.Text = MC68000.mm1[0].ssp.ToString("X8");
+            tbCycles.Text = MC68000.mm1[0].TotalExecutedCycles.ToString("X16");
+            tbPC.Text = MC68000.mm1[0].PC.ToString("X6");
+            sDisassemble = MC68000.mm1[0].Disassemble(MC68000.mm1[0].PPC).ToString();
             tbDisassemble.Text = sDisassemble;
             sDisassemble2 = sDisassemble;
             foreach (MyCheckBox cb in lsCB)
@@ -136,7 +136,7 @@ namespace ui
             }
             if (cbTotal.Checked)
             {
-                sDisassemble2 = MC68000.m1.TotalExecutedCycles.ToString("X") + " " + sDisassemble2;
+                sDisassemble2 = MC68000.mm1[0].TotalExecutedCycles.ToString("X") + " " + sDisassemble2;
             }
             tbResult.AppendText(sDisassemble2 + "\r\n");
         }
@@ -192,30 +192,30 @@ namespace ui
         }
         public void m68000_start_debug()
         {
-            if (bLogNew && lsPPC.IndexOf(MC68000.m1.PPC) < 0)
+            if (bLogNew && lsPPC.IndexOf(MC68000.mm1[0].PPC) < 0)
             {
                 m68000FState = m68000State;
                 m68000State = M68000State.M68000_STOP;
-                lsPPC.Add(MC68000.m1.PPC);
-                tbResult.AppendText(MC68000.m1.Disassemble(MC68000.m1.PPC).ToString() + "\r\n");
+                lsPPC.Add(MC68000.mm1[0].PPC);
+                tbResult.AppendText(MC68000.mm1[0].Disassemble(MC68000.mm1[0].PPC).ToString() + "\r\n");
                 m68000State = m68000FState;
             }
-            PPC = MC68000.m1.PPC;
-            TotalExecutedCycles = MC68000.m1.TotalExecutedCycles;
+            PPC = MC68000.mm1[0].PPC;
+            TotalExecutedCycles = MC68000.mm1[0].TotalExecutedCycles;
             if (iStatus == 1)
             {
                 iStatus = 0;
             }
             if (m68000State == M68000State.M68000_STEP2)
             {
-                if (MC68000.m1.PPC == PPCTill)
+                if (MC68000.mm1[0].PPC == PPCTill)
                 {
                     m68000State =M68000State.M68000_STOP;
                 }
             }
             if (m68000State == M68000State.M68000_STEP3)
             {
-                if (MC68000.m1.TotalExecutedCycles >= CyclesTill)
+                if (MC68000.mm1[0].TotalExecutedCycles >= CyclesTill)
                 {
                     m68000State = M68000State.M68000_STOP;
                 }

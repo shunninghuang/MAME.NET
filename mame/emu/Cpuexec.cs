@@ -31,6 +31,7 @@ namespace mame
         public int cycles_running;
         public int cycles_stolen;
         public int icount;
+        public int iloops;
         public Timer.emu_timer partial_frame_timer;
         public Atime partial_frame_period;
         public virtual ulong TotalExecutedCycles { get; set; }
@@ -48,7 +49,7 @@ namespace mame
         public static int iType, bLog, bLog0, bLog1, bLog2, bLog3,bLogS;
         public static bool bLog02, bLog12, bLog22, bLog32;
         public static bool b11 = true, b12 = true, b13 = true, b14 = true;
-        public static int iloops, activecpu, icpu, ncpu, iloops2;
+        public static int activecpu, icpu, ncpu;
         public static cpuexec_data[] cpu;
         public static Timer.emu_timer timedint_timer;
         public static Atime timedint_period, timeslice_period;
@@ -65,14 +66,17 @@ namespace mame
             switch (Machine.sBoard)
             {
                 case "CPS-1":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     cpu[0].cycles_per_second = 10000000;
                     switch (Machine.sName)
@@ -148,14 +152,17 @@ namespace mame
                     cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
                     break;
                 case "CPS-1(QSound)":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     cpu[0].cycles_per_second = 12000000;
                     cpu[1].cycles_per_second = 8000000;
@@ -164,14 +171,17 @@ namespace mame
                     vblank_interrupts_per_frame = 1;
                     break;
                 case "CPS2":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     cpu[0].cycles_per_second = (int)(16000000 * 0.7375f);
                     cpu[1].cycles_per_second = 8000000;
@@ -181,14 +191,17 @@ namespace mame
                     vblank_interrupt = CPS.cps2_interrupt;
                     break;
                 case "CPS2turbo":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     cpu[0].cycles_per_second = (int)(32000000 * 0.7375f);
                     cpu[1].cycles_per_second = 16000000;
@@ -234,14 +247,17 @@ namespace mame
                     vblank_interrupt = Generic.nmi_0_line_pulse;
                     break;
                 case "Neo Geo":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     cpu[0].cycles_per_second = 12000000;
                     cpu[1].cycles_per_second = 4000000;
@@ -412,14 +428,17 @@ namespace mame
                         case "tokiua":
                         case "juju":
                         case "jujuba":
-                            MC68000.m1 = new MC68000();
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                             Z80A.nZ80 = 1;
                             Z80A.zz1 = new Z80A[Z80A.nZ80];
                             Z80A.zz1[0] = new Z80A();
                             Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                             ncpu = 2;
                             cpu = new cpuexec_data[ncpu];
-                            cpu[0] = MC68000.m1;
+                            cpu[0] = MC68000.mm1[0];
                             cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 10000000;
                             cpu[1].cycles_per_second = 14318180 / 4;
@@ -428,19 +447,151 @@ namespace mame
                             break;
                         case "tokib":
                         case "jujub":
-                            MC68000.m1 = new MC68000();
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                             Z80A.nZ80 = 1;
                             Z80A.zz1 = new Z80A[Z80A.nZ80];
                             Z80A.zz1[0] = new Z80A();
                             Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                             ncpu = 2;
                             cpu = new cpuexec_data[ncpu];
-                            cpu[0] = MC68000.m1;
+                            cpu[0] = MC68000.mm1[0];
                             cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 12000000;
                             cpu[1].cycles_per_second = 4000000;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 3;
+                            break;
+                    }
+                    break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai"://Z
+                        case "makaiden":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 6000000;
+                            cpu[1].cycles_per_second = 3000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 256;
+                            vblank_interrupt = Megasys1.megasys1A_scanline;
+                            break;
+                        case "p47"://A
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                            MC68000.nMC68000 = 2;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[1] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            MC68000.mm1[1].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = MC68000.mm1[1];
+                            cpu[0].cycles_per_second = 6000000;
+                            cpu[1].cycles_per_second = 7000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 263;
+                            vblank_interrupt = Megasys1.megasys1A_scanline;
+                            break;
+                        case "avspirit"://B
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        case "hayaosi1":
+                            MC68000.nMC68000 = 2;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();                            
+                            MC68000.mm1[1] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            MC68000.mm1[1].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = MC68000.mm1[1];
+                            cpu[0].cycles_per_second = 8000000;
+                            cpu[1].cycles_per_second = 7000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 263;
+                            vblank_interrupt = Megasys1.megasys1B_scanline;
+                            break;
+                        //case "edfbl":
+                        //    break;
+                        case "64street"://C
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            MC68000.nMC68000 = 2;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[1] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            MC68000.mm1[1].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = MC68000.mm1[1];
+                            cpu[0].cycles_per_second = 12000000;
+                            cpu[1].cycles_per_second = 7000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 263;
+                            vblank_interrupt = Megasys1.megasys1B_scanline;
+                            break;
+                        case "peekaboo"://D
+                        case "peakaboou":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            ncpu = 1;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[0].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
                             break;
                     }
                     break;
@@ -448,13 +599,16 @@ namespace mame
                     switch (Machine.sName)
                     {
                         case "bigkarnk":
-                            MC68000.m1 = new MC68000();
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                             M6809.mm1 = new M6809[1];
                             M6809.mm1[0] = new M6809();
                             M6809.mm1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                             ncpu = 2;
                             cpu = new cpuexec_data[ncpu];
-                            cpu[0] = MC68000.m1;
+                            cpu[0] = MC68000.mm1[0];
                             cpu[1] = M6809.mm1[0];
                             cpu[0].cycles_per_second = 10000000;
                             cpu[1].cycles_per_second = 8867000 / 4;
@@ -470,10 +624,13 @@ namespace mame
                         case "lastkm":
                         case "squash":
                         case "thoop":
-                            MC68000.m1 = new MC68000();
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                             ncpu = 1;
                             cpu = new cpuexec_data[ncpu];
-                            cpu[0] = MC68000.m1;
+                            cpu[0] = MC68000.mm1[0];
                             cpu[0].cycles_per_second = 12000000;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             break;
@@ -524,10 +681,13 @@ namespace mame
                     vblank_interrupts_per_frame = 1;
                     break;
                 case "IGS011":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     ncpu = 1;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[0].cycles_per_second = 7333333;
                     cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                     switch (Machine.sName)
@@ -568,14 +728,17 @@ namespace mame
                     }
                     break;
                 case "PGM":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     cpu[0].cycles_per_second = 20000000;
                     cpu[1].cycles_per_second = 8468000;
@@ -755,14 +918,17 @@ namespace mame
                         case "opwolfj":
                         case "opwolfu":                        
                         case "opwolfp":
-                            MC68000.m1 = new MC68000();
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                             Z80A.nZ80 = 1;
                             Z80A.zz1 = new Z80A[Z80A.nZ80];
                             Z80A.zz1[0] = new Z80A();
                             Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                             ncpu = 2;
                             cpu = new cpuexec_data[ncpu];
-                            cpu[0] = MC68000.m1;
+                            cpu[0] = MC68000.mm1[0];
                             cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 8000000;
                             cpu[1].cycles_per_second = 4000000;
@@ -771,7 +937,10 @@ namespace mame
                             vblank_interrupts_per_frame = 1;
                             break;
                         case "opwolfb":
-                            MC68000.m1 = new MC68000();
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                             Z80A.nZ80 = 2;
                             Z80A.zz1 = new Z80A[Z80A.nZ80];
                             Z80A.zz1[0] = new Z80A();
@@ -780,7 +949,7 @@ namespace mame
                             Z80A.zz1[1].irq_callback = Cpuint.cpu_2_irq_callback;
                             ncpu = 3;
                             cpu = new cpuexec_data[ncpu];
-                            cpu[0] = MC68000.m1;
+                            cpu[0] = MC68000.mm1[0];
                             cpu[1] = Z80A.zz1[0];
                             cpu[2] = Z80A.zz1[1];
                             cpu[0].cycles_per_second = 8000000;
@@ -794,14 +963,17 @@ namespace mame
                     }
                     break;
                 case "Taito B":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     cpu[0].cycles_per_second = 12000000;
                     cpu[1].cycles_per_second = 4000000;
@@ -897,14 +1069,17 @@ namespace mame
                     }
                     break;
                 case "Konami 68000":
-                    MC68000.m1 = new MC68000();
+                    MC68000.nMC68000 = 1;
+                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                    MC68000.mm1[0] = new MC68000();
+                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                     Z80A.nZ80 = 1;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
                     Z80A.zz1[0] = new Z80A();
                     Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
                     ncpu = 2;
                     cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.m1;
+                    cpu[0] = MC68000.mm1[0];
                     cpu[1] = Z80A.zz1[0];
                     vblank_interrupts_per_frame = 1;
                     switch (Machine.sName)
@@ -1049,7 +1224,10 @@ namespace mame
                         case "sfjan":
                         case "sfan":
                         case "sfp":
-                            MC68000.m1 = new MC68000();
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
                             Z80A.nZ80 = 2;
                             Z80A.zz1 = new Z80A[Z80A.nZ80];
                             Z80A.zz1[0] = new Z80A();
@@ -1058,7 +1236,7 @@ namespace mame
                             Z80A.zz1[1].irq_callback = Cpuint.cpu_2_irq_callback;
                             ncpu = 3;
                             cpu = new cpuexec_data[ncpu];
-                            cpu[0] = MC68000.m1;
+                            cpu[0] = MC68000.mm1[0];
                             cpu[1] = Z80A.zz1[0];
                             cpu[2] = Z80A.zz1[1];
                             cpu[0].cycles_per_second = 8000000;
@@ -1087,15 +1265,15 @@ namespace mame
             switch (Machine.sBoard)
             {
                 case "CPS-1":
-                    MC68000.m1.ReadOpByte = CPS.MReadOpByte_cps1;
-                    MC68000.m1.ReadByte = CPS.MReadByte_cps1;
-                    MC68000.m1.ReadOpWord = CPS.MReadOpWord_cps1;
-                    MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MReadWord_cps1;
-                    MC68000.m1.ReadOpLong = CPS.MReadOpLong_cps1;
-                    MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MReadLong_cps1;
-                    MC68000.m1.WriteByte = CPS.MWriteByte_cps1;
-                    MC68000.m1.WriteWord = CPS.MWriteWord_cps1;
-                    MC68000.m1.WriteLong = CPS.MWriteLong_cps1;
+                    MC68000.mm1[0].ReadOpByte = CPS.MReadOpByte_cps1;
+                    MC68000.mm1[0].ReadByte = CPS.MReadByte_cps1;
+                    MC68000.mm1[0].ReadOpWord = CPS.MReadOpWord_cps1;
+                    MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MReadWord_cps1;
+                    MC68000.mm1[0].ReadOpLong = CPS.MReadOpLong_cps1;
+                    MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MReadLong_cps1;
+                    MC68000.mm1[0].WriteByte = CPS.MWriteByte_cps1;
+                    MC68000.mm1[0].WriteWord = CPS.MWriteWord_cps1;
+                    MC68000.mm1[0].WriteLong = CPS.MWriteLong_cps1;
                     Z80A.zz1[0].ReadOp = CPS.ZReadOp_cps1;
                     Z80A.zz1[0].ReadOpArg = CPS.ZReadMemory_cps1;
                     Z80A.zz1[0].ReadMemory = CPS.ZReadMemory_cps1;
@@ -1113,70 +1291,70 @@ namespace mame
                         case "forgottnuaa":
                         case "lostwrld":
                         case "lostwrldo":
-                            MC68000.m1.ReadByte = CPS.MCReadByte_forgottn;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MCReadWord_forgottn;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MCReadLong_forgottn;
-                            MC68000.m1.WriteByte = CPS.MCWriteByte_forgottn;
-                            MC68000.m1.WriteWord = CPS.MCWriteWord_forgottn;
-                            MC68000.m1.WriteLong = CPS.MCWriteLong_forgottn;
+                            MC68000.mm1[0].ReadByte = CPS.MCReadByte_forgottn;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MCReadWord_forgottn;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MCReadLong_forgottn;
+                            MC68000.mm1[0].WriteByte = CPS.MCWriteByte_forgottn;
+                            MC68000.mm1[0].WriteWord = CPS.MCWriteWord_forgottn;
+                            MC68000.mm1[0].WriteLong = CPS.MCWriteLong_forgottn;
                             break;
                         case "sf2ee":
                         case "sf2ue":
                         case "sf2thndr":
-                            MC68000.m1.ReadByte = CPS.MCReadByte_sf2thndr;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MCReadWord_sf2thndr;
-                            MC68000.m1.WriteWord = CPS.MCWriteWord_sf2thndr;
+                            MC68000.mm1[0].ReadByte = CPS.MCReadByte_sf2thndr;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MCReadWord_sf2thndr;
+                            MC68000.mm1[0].WriteWord = CPS.MCWriteWord_sf2thndr;
                             break;
                         case "sf2ceblp":
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MCReadWord_sf2ceblp;
-                            MC68000.m1.WriteWord = CPS.MCWriteWord_sf2ceblp;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MCReadWord_sf2ceblp;
+                            MC68000.mm1[0].WriteWord = CPS.MCWriteWord_sf2ceblp;
                             break;
                         case "sf2m3":
                         case "sf2m8":
-                            MC68000.m1.ReadByte = CPS.MCReadByte_sf2m3;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MCReadWord_sf2m3;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MCReadLong_sf2m3;
-                            MC68000.m1.WriteByte = CPS.MCWriteByte_sf2m3;
-                            MC68000.m1.WriteWord = CPS.MCWriteWord_sf2m3;
-                            MC68000.m1.WriteLong = CPS.MCWriteLong_sf2m3;
+                            MC68000.mm1[0].ReadByte = CPS.MCReadByte_sf2m3;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MCReadWord_sf2m3;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MCReadLong_sf2m3;
+                            MC68000.mm1[0].WriteByte = CPS.MCWriteByte_sf2m3;
+                            MC68000.mm1[0].WriteWord = CPS.MCWriteWord_sf2m3;
+                            MC68000.mm1[0].WriteLong = CPS.MCWriteLong_sf2m3;
                             break;
                         case "sf2m10":
                             CPS.mainram2 = new byte[0x100000];
                             CPS.mainram3 = new byte[0x100];
-                            MC68000.m1.ReadByte = CPS.MCReadByte_sf2m10;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MCReadWord_sf2m10;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MCReadLong_sf2m10;
-                            MC68000.m1.WriteByte = CPS.MCWriteByte_sf2m10;
-                            MC68000.m1.WriteWord = CPS.MCWriteWord_sf2m10;
-                            MC68000.m1.WriteLong = CPS.MCWriteLong_sf2m10;
+                            MC68000.mm1[0].ReadByte = CPS.MCReadByte_sf2m10;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MCReadWord_sf2m10;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MCReadLong_sf2m10;
+                            MC68000.mm1[0].WriteByte = CPS.MCWriteByte_sf2m10;
+                            MC68000.mm1[0].WriteWord = CPS.MCWriteWord_sf2m10;
+                            MC68000.mm1[0].WriteLong = CPS.MCWriteLong_sf2m10;
                             break;
                         case "sf2dongb":
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MCReadWord_sf2dongb;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MCReadWord_sf2dongb;
                             break;
                         case "dinohunt":
-                            MC68000.m1.ReadByte = CPS.MCReadByte_dinohunt;
+                            MC68000.mm1[0].ReadByte = CPS.MCReadByte_dinohunt;
                             break;
                         case "pang3":
                         case "pang3r1":
                         case "pang3j":
                         case "pang3b":
-                            MC68000.m1.ReadByte = CPS.MCReadByte_pang3;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MCReadWord_pang3;
-                            MC68000.m1.WriteByte = CPS.MCWriteByte_pang3;
-                            MC68000.m1.WriteWord = CPS.MCWriteWord_pang3;
+                            MC68000.mm1[0].ReadByte = CPS.MCReadByte_pang3;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MCReadWord_pang3;
+                            MC68000.mm1[0].WriteByte = CPS.MCWriteByte_pang3;
+                            MC68000.mm1[0].WriteWord = CPS.MCWriteWord_pang3;
                             break;
                     }
                     break;
                 case "CPS-1(QSound)":
-                    MC68000.m1.ReadOpByte = CPS.MReadOpByte_qsound;
-                    MC68000.m1.ReadByte = CPS.MReadByte_qsound;
-                    MC68000.m1.ReadOpWord = CPS.MReadOpWord_qsound;
-                    MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MReadWord_qsound;
-                    MC68000.m1.ReadOpLong = CPS.MReadOpLong_qsound;
-                    MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MReadLong_qsound;
-                    MC68000.m1.WriteByte = CPS.MWriteByte_qsound;
-                    MC68000.m1.WriteWord = CPS.MWriteWord_qsound;
-                    MC68000.m1.WriteLong = CPS.MWriteLong_qsound;
+                    MC68000.mm1[0].ReadOpByte = CPS.MReadOpByte_qsound;
+                    MC68000.mm1[0].ReadByte = CPS.MReadByte_qsound;
+                    MC68000.mm1[0].ReadOpWord = CPS.MReadOpWord_qsound;
+                    MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MReadWord_qsound;
+                    MC68000.mm1[0].ReadOpLong = CPS.MReadOpLong_qsound;
+                    MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MReadLong_qsound;
+                    MC68000.mm1[0].WriteByte = CPS.MWriteByte_qsound;
+                    MC68000.mm1[0].WriteWord = CPS.MWriteWord_qsound;
+                    MC68000.mm1[0].WriteLong = CPS.MWriteLong_qsound;
                     Z80A.zz1[0].ReadOp = CPS.ZReadOp_qsound;
                     Z80A.zz1[0].ReadOpArg = CPS.ZReadMemory_qsound;
                     Z80A.zz1[0].ReadMemory = CPS.ZReadMemory_qsound;
@@ -1185,17 +1363,17 @@ namespace mame
                     Z80A.zz1[0].WriteHardware = CPS.ZWriteHardware;
                     break;
                 case "CPS2":
-                    MC68000.m1.ReadOpByte = CPS.MReadOpByte_cps2;
-                    MC68000.m1.ReadByte = CPS.MReadByte_cps2;
-                    MC68000.m1.ReadOpWord = CPS.MReadOpWord_cps2;
-                    MC68000.m1.ReadPcrelWord = CPS.MReadPcrelWord_cps2;
-                    MC68000.m1.ReadWord = CPS.MReadWord_cps2;
-                    MC68000.m1.ReadOpLong = CPS.MReadOpLong_cps2;
-                    MC68000.m1.ReadPcrelLong = CPS.MReadPcrelLong_cps2;
-                    MC68000.m1.ReadLong = CPS.MReadLong_cps2;
-                    MC68000.m1.WriteByte = CPS.MWriteByte_cps2;
-                    MC68000.m1.WriteWord = CPS.MWriteWord_cps2;
-                    MC68000.m1.WriteLong = CPS.MWriteLong_cps2;
+                    MC68000.mm1[0].ReadOpByte = CPS.MReadOpByte_cps2;
+                    MC68000.mm1[0].ReadByte = CPS.MReadByte_cps2;
+                    MC68000.mm1[0].ReadOpWord = CPS.MReadOpWord_cps2;
+                    MC68000.mm1[0].ReadPcrelWord = CPS.MReadPcrelWord_cps2;
+                    MC68000.mm1[0].ReadWord = CPS.MReadWord_cps2;
+                    MC68000.mm1[0].ReadOpLong = CPS.MReadOpLong_cps2;
+                    MC68000.mm1[0].ReadPcrelLong = CPS.MReadPcrelLong_cps2;
+                    MC68000.mm1[0].ReadLong = CPS.MReadLong_cps2;
+                    MC68000.mm1[0].WriteByte = CPS.MWriteByte_cps2;
+                    MC68000.mm1[0].WriteWord = CPS.MWriteWord_cps2;
+                    MC68000.mm1[0].WriteLong = CPS.MWriteLong_cps2;
                     switch (Machine.sName)
                     {
                         case "ddtodd":
@@ -1243,26 +1421,26 @@ namespace mame
                         case "progearjd":
                         case "progearjbl":
                         case "hsf2d":
-                            MC68000.m1.ReadOpByte = CPS.MReadOpByte_cps2_dead;
-                            MC68000.m1.ReadByte = CPS.MReadByte_cps2_dead;
-                            MC68000.m1.ReadOpWord = CPS.MReadOpWord_cps2_dead;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MReadWord_cps2_dead;
-                            MC68000.m1.ReadOpLong = CPS.MReadOpLong_cps2_dead;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MReadLong_cps2_dead;
-                            MC68000.m1.WriteByte = CPS.MWriteByte_cps2_dead;
-                            MC68000.m1.WriteWord = CPS.MWriteWord_cps2_dead;
-                            MC68000.m1.WriteLong = CPS.MWriteLong_cps2_dead;
+                            MC68000.mm1[0].ReadOpByte = CPS.MReadOpByte_cps2_dead;
+                            MC68000.mm1[0].ReadByte = CPS.MReadByte_cps2_dead;
+                            MC68000.mm1[0].ReadOpWord = CPS.MReadOpWord_cps2_dead;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MReadWord_cps2_dead;
+                            MC68000.mm1[0].ReadOpLong = CPS.MReadOpLong_cps2_dead;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MReadLong_cps2_dead;
+                            MC68000.mm1[0].WriteByte = CPS.MWriteByte_cps2_dead;
+                            MC68000.mm1[0].WriteWord = CPS.MWriteWord_cps2_dead;
+                            MC68000.mm1[0].WriteLong = CPS.MWriteLong_cps2_dead;
                             break;
                         case "sfz3mix13":
-                            MC68000.m1.ReadOpByte = CPS.MReadOpByte_cps2turbo;
-                            MC68000.m1.ReadByte = CPS.MReadByte_cps2turbo;
-                            MC68000.m1.ReadOpWord = CPS.MReadOpWord_cps2turbo;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MReadWord_cps2turbo;
-                            MC68000.m1.ReadOpLong = CPS.MReadOpLong_cps2turbo;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MReadLong_cps2turbo;
-                            MC68000.m1.WriteByte = CPS.MWriteByte_cps2turbo;
-                            MC68000.m1.WriteWord = CPS.MWriteWord_cps2turbo;
-                            MC68000.m1.WriteLong = CPS.MWriteLong_cps2turbo;
+                            MC68000.mm1[0].ReadOpByte = CPS.MReadOpByte_cps2turbo;
+                            MC68000.mm1[0].ReadByte = CPS.MReadByte_cps2turbo;
+                            MC68000.mm1[0].ReadOpWord = CPS.MReadOpWord_cps2turbo;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MReadWord_cps2turbo;
+                            MC68000.mm1[0].ReadOpLong = CPS.MReadOpLong_cps2turbo;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MReadLong_cps2turbo;
+                            MC68000.mm1[0].WriteByte = CPS.MWriteByte_cps2turbo;
+                            MC68000.mm1[0].WriteWord = CPS.MWriteWord_cps2turbo;
+                            MC68000.mm1[0].WriteLong = CPS.MWriteLong_cps2turbo;
                             break;
                     }
                     Z80A.zz1[0].ReadOp = CPS.ZReadOp_qsound;
@@ -1273,15 +1451,15 @@ namespace mame
                     Z80A.zz1[0].WriteHardware = CPS.ZWriteHardware;
                     break;
                 case "CPS2turbo":
-                    MC68000.m1.ReadOpByte = CPS.MReadOpByte_cps2turbo;
-                    MC68000.m1.ReadByte = CPS.MReadByte_cps2turbo;
-                    MC68000.m1.ReadOpWord = CPS.MReadOpWord_cps2turbo;
-                    MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = CPS.MReadWord_cps2turbo;
-                    MC68000.m1.ReadOpLong = CPS.MReadOpLong_cps2turbo;
-                    MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = CPS.MReadLong_cps2turbo;
-                    MC68000.m1.WriteByte = CPS.MWriteByte_cps2turbo;
-                    MC68000.m1.WriteWord = CPS.MWriteWord_cps2turbo;
-                    MC68000.m1.WriteLong = CPS.MWriteLong_cps2turbo;
+                    MC68000.mm1[0].ReadOpByte = CPS.MReadOpByte_cps2turbo;
+                    MC68000.mm1[0].ReadByte = CPS.MReadByte_cps2turbo;
+                    MC68000.mm1[0].ReadOpWord = CPS.MReadOpWord_cps2turbo;
+                    MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = CPS.MReadWord_cps2turbo;
+                    MC68000.mm1[0].ReadOpLong = CPS.MReadOpLong_cps2turbo;
+                    MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = CPS.MReadLong_cps2turbo;
+                    MC68000.mm1[0].WriteByte = CPS.MWriteByte_cps2turbo;
+                    MC68000.mm1[0].WriteWord = CPS.MWriteWord_cps2turbo;
+                    MC68000.mm1[0].WriteLong = CPS.MWriteLong_cps2turbo;
                     Z80A.zz1[0].ReadOp = CPS.ZReadOp_qsound;
                     Z80A.zz1[0].ReadOpArg = CPS.ZReadMemory_qsound;
                     Z80A.zz1[0].ReadMemory = CPS.ZReadMemory_qsound;
@@ -1338,15 +1516,15 @@ namespace mame
                     Z80A.zz1[1].WriteHardware = Tehkan.Z1WriteHardware;
                     break;
                 case "Neo Geo":
-                    MC68000.m1.ReadOpByte = Neogeo.MReadOpByte;
-                    MC68000.m1.ReadByte = Neogeo.MReadByte;
-                    MC68000.m1.ReadOpWord = Neogeo.MReadOpWord;
-                    MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord;
-                    MC68000.m1.ReadOpLong = Neogeo.MReadOpLong;
-                    MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong;
-                    MC68000.m1.WriteByte = Neogeo.MWriteByte;
-                    MC68000.m1.WriteWord = Neogeo.MWriteWord;
-                    MC68000.m1.WriteLong = Neogeo.MWriteLong;
+                    MC68000.mm1[0].ReadOpByte = Neogeo.MReadOpByte;
+                    MC68000.mm1[0].ReadByte = Neogeo.MReadByte;
+                    MC68000.mm1[0].ReadOpWord = Neogeo.MReadOpWord;
+                    MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord;
+                    MC68000.mm1[0].ReadOpLong = Neogeo.MReadOpLong;
+                    MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong;
+                    MC68000.mm1[0].WriteByte = Neogeo.MWriteByte;
+                    MC68000.mm1[0].WriteWord = Neogeo.MWriteWord;
+                    MC68000.mm1[0].WriteLong = Neogeo.MWriteLong;
                     Z80A.zz1[0].ReadOp = Neogeo.ZReadOp;
                     Z80A.zz1[0].ReadOpArg = Neogeo.ZReadOp;
                     Z80A.zz1[0].ReadMemory = Neogeo.ZReadMemory;
@@ -1357,66 +1535,66 @@ namespace mame
                     {
                         case "fatfury2":
                         case "ssideki":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_fatfury2;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_fatfury2;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_fatfury2;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_fatfury2;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_fatfury2;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_fatfury2;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_fatfury2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_fatfury2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_fatfury2;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_fatfury2;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_fatfury2;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_fatfury2;
                             break;
                         case "irrmaze":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_irrmaze;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_irrmaze;
                             break;
                         case "kof98":
                         case "kof98a":
                         case "kof98k":
                         case "kof98ka":
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_kof98;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_kof98;
                             break;
                         case "kof99":
                         case "kof99h":
                         case "kof99e":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_kof99;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_kof99;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_kof99;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_kof99;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_kof99;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_kof99;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_kof99;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_kof99;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_kof99;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_kof99;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_kof99;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_kof99;
                             break;
                         case "garou":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_garou;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_garou;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_garou;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_garou;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_garou;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_garou;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_garou;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_garou;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_garou;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_garou;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_garou;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_garou;
                             break;
                         case "garouh":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_garou;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_garou;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_garou;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_garouh;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_garouh;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_garouh;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_garou;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_garou;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_garou;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_garouh;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_garouh;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_garouh;
                             break;
                         case "mslug3":
-                            MC68000.m1.ReadOpByte = Neogeo.MReadByte_mslug3;
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_mslug3;
-                            MC68000.m1.ReadOpWord = Neogeo.MReadWord_mslug3;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_mslug3;
-                            MC68000.m1.ReadOpLong = Neogeo.MReadLong_mslug3;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_mslug3;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_mslug3;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_mslug3;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_mslug3;
+                            MC68000.mm1[0].ReadOpByte = Neogeo.MReadByte_mslug3;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_mslug3;
+                            MC68000.mm1[0].ReadOpWord = Neogeo.MReadWord_mslug3;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_mslug3;
+                            MC68000.mm1[0].ReadOpLong = Neogeo.MReadLong_mslug3;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_mslug3;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_mslug3;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_mslug3;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_mslug3;
                             break;
                         case "kof2000":
-                            MC68000.m1.ReadOpByte = MC68000.m1.ReadByte = Neogeo.MReadByte_kof2000;
-                            MC68000.m1.ReadOpWord = MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_kof2000;
-                            MC68000.m1.ReadOpLong = MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_kof2000;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_kof2000;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_kof2000;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_kof2000;
+                            MC68000.mm1[0].ReadOpByte = MC68000.mm1[0].ReadByte = Neogeo.MReadByte_kof2000;
+                            MC68000.mm1[0].ReadOpWord = MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_kof2000;
+                            MC68000.mm1[0].ReadOpLong = MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_kof2000;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_kof2000;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_kof2000;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_kof2000;
                             break;
                         case "mslug5":
                         case "mslug5h":
@@ -1425,81 +1603,81 @@ namespace mame
                         case "kof2003h":
                         case "svcboot":
                         case "svcsplus":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_pvc;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_pvc;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_pvc;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_pvc;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_pvc;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_pvc;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_pvc;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_pvc;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_pvc;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_pvc;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_pvc;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_pvc;
                             break;
                         case "cthd2003":
                         case "ct2k3sp":
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_cthd2003;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_cthd2003;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_cthd2003;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_cthd2003;
                             break;
                         case "ms5plus":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_ms5plus;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_ms5plus;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_ms5plus;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_ms5plus;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_ms5plus;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_ms5plus;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_ms5plus;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_ms5plus;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_ms5plus;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_ms5plus;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_ms5plus;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_ms5plus;
                             break;
                         case "kog":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_kog;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_kog;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_kog;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_kog;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_kog;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_kog;
                             break;
                         case "kf2k3bl":
                         case "kf2k3upl":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_kf2k3bl;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_kf2k3bl;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_kf2k3bl;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_kf2k3bl;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_kf2k3bl;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_kf2k3bl;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_kf2k3bl;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_kf2k3bl;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_kf2k3bl;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_kf2k3bl;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_kf2k3bl;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_kf2k3bl;
                             break;
                         case "kf2k3bla":
                         case "kf2k3pl":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_kf2k3bl;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_kf2k3bl;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_kf2k3bl;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_kf2k3pl;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_kf2k3pl;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_kf2k3pl;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_kf2k3bl;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_kf2k3bl;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_kf2k3bl;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_kf2k3pl;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_kf2k3pl;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_kf2k3pl;
                             break;
                         case "sbp":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_sbp;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_sbp;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_sbp;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_sbp;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_sbp;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_sbp;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_sbp;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_sbp;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_sbp;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_sbp;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_sbp;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_sbp;
                             break;
                         case "kof10th":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_kof10th;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_kof10th;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_kof10th;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_kof10th;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_kof10th;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_kof10th;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_kof10th;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_kof10th;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_kof10th;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_kof10th;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_kof10th;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_kof10th;
                             break;
                         case "jockeygp":
                         case "jockeygpa":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_jockeygp;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_jockeygp;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_jockeygp;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_jockeygp;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_jockeygp;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_jockeygp;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_jockeygp;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_jockeygp;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_jockeygp;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_jockeygp;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_jockeygp;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_jockeygp;
                             break;
                         case "vliner":
-                            MC68000.m1.ReadByte = Neogeo.MReadByte_vliner;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Neogeo.MReadWord_vliner;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Neogeo.MReadLong_vliner;
-                            MC68000.m1.WriteByte = Neogeo.MWriteByte_jockeygp;
-                            MC68000.m1.WriteWord = Neogeo.MWriteWord_jockeygp;
-                            MC68000.m1.WriteLong = Neogeo.MWriteLong_jockeygp;
+                            MC68000.mm1[0].ReadByte = Neogeo.MReadByte_vliner;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Neogeo.MReadWord_vliner;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Neogeo.MReadLong_vliner;
+                            MC68000.mm1[0].WriteByte = Neogeo.MWriteByte_jockeygp;
+                            MC68000.mm1[0].WriteWord = Neogeo.MWriteWord_jockeygp;
+                            MC68000.mm1[0].WriteLong = Neogeo.MWriteLong_jockeygp;
                             break;
                     }
                     break;
@@ -1622,15 +1800,15 @@ namespace mame
                         case "tokiua":
                         case "juju":
                         case "jujuba":
-                            MC68000.m1.ReadOpByte = Tad.MReadOpByte_toki;
-                            MC68000.m1.ReadByte = Tad.MReadByte_toki;
-                            MC68000.m1.ReadOpWord = Tad.MReadOpWord_toki;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Tad.MReadWord_toki;
-                            MC68000.m1.ReadOpLong = Tad.MReadOpLong_toki;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Tad.MReadLong_toki;
-                            MC68000.m1.WriteByte = Tad.MWriteByte_toki;
-                            MC68000.m1.WriteWord = Tad.MWriteWord_toki;
-                            MC68000.m1.WriteLong = Tad.MWriteLong_toki;
+                            MC68000.mm1[0].ReadOpByte = Tad.MReadOpByte_toki;
+                            MC68000.mm1[0].ReadByte = Tad.MReadByte_toki;
+                            MC68000.mm1[0].ReadOpWord = Tad.MReadOpWord_toki;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Tad.MReadWord_toki;
+                            MC68000.mm1[0].ReadOpLong = Tad.MReadOpLong_toki;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Tad.MReadLong_toki;
+                            MC68000.mm1[0].WriteByte = Tad.MWriteByte_toki;
+                            MC68000.mm1[0].WriteWord = Tad.MWriteWord_toki;
+                            MC68000.mm1[0].WriteLong = Tad.MWriteLong_toki;
                             Z80A.zz1[0].ReadOp = Tad.ZReadOp_seibu;
                             Z80A.zz1[0].ReadOpArg = Tad.ZReadMemory_seibu;
                             Z80A.zz1[0].ReadMemory = Tad.ZReadMemory_seibu;
@@ -1640,15 +1818,15 @@ namespace mame
                             break;
                         case "tokib":
                         case "jujub":
-                            MC68000.m1.ReadOpByte = Tad.MReadOpByte_toki;
-                            MC68000.m1.ReadByte = Tad.MReadByte_tokib;
-                            MC68000.m1.ReadOpWord = Tad.MReadOpWord_toki;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Tad.MReadWord_tokib;
-                            MC68000.m1.ReadOpLong = Tad.MReadOpLong_toki;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Tad.MReadLong_tokib;
-                            MC68000.m1.WriteByte = Tad.MWriteByte_tokib;
-                            MC68000.m1.WriteWord = Tad.MWriteWord_tokib;
-                            MC68000.m1.WriteLong = Tad.MWriteLong_tokib;
+                            MC68000.mm1[0].ReadOpByte = Tad.MReadOpByte_toki;
+                            MC68000.mm1[0].ReadByte = Tad.MReadByte_tokib;
+                            MC68000.mm1[0].ReadOpWord = Tad.MReadOpWord_toki;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Tad.MReadWord_tokib;
+                            MC68000.mm1[0].ReadOpLong = Tad.MReadOpLong_toki;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Tad.MReadLong_tokib;
+                            MC68000.mm1[0].WriteByte = Tad.MWriteByte_tokib;
+                            MC68000.mm1[0].WriteWord = Tad.MWriteWord_tokib;
+                            MC68000.mm1[0].WriteLong = Tad.MWriteLong_tokib;
                             Z80A.zz1[0].ReadOp = Tad.ZReadOp_tokib;
                             Z80A.zz1[0].ReadOpArg = Tad.ZReadMemory_tokib;
                             Z80A.zz1[0].ReadMemory = Tad.ZReadMemory_tokib;
@@ -1658,19 +1836,140 @@ namespace mame
                             break;
                     }
                     break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai":
+                        case "makaiden":
+                            MC68000.mm1[0].ReadOpByte = Megasys1.M0ReadOpByte_Z;
+                            MC68000.mm1[0].ReadByte = Megasys1.M0ReadByte_Z;
+                            MC68000.mm1[0].ReadOpWord = Megasys1.M0ReadOpWord_Z;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Megasys1.M0ReadWord_Z;
+                            MC68000.mm1[0].ReadOpLong = Megasys1.M0ReadOpLong_Z;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Megasys1.M0ReadLong_Z;
+                            MC68000.mm1[0].WriteByte = Megasys1.M0WriteByte_Z;
+                            MC68000.mm1[0].WriteWord = Megasys1.M0WriteWord_Z;
+                            MC68000.mm1[0].WriteLong = Megasys1.M0WriteLong_Z;
+                            Z80A.zz1[0].ReadOp = Megasys1.ZReadOp;
+                            Z80A.zz1[0].ReadOpArg = Megasys1.ZReadMemory;
+                            Z80A.zz1[0].ReadMemory = Megasys1.ZReadMemory;
+                            Z80A.zz1[0].WriteMemory = Megasys1.ZWriteMemory;
+                            Z80A.zz1[0].ReadHardware = Megasys1.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Megasys1.ZWriteHardware;
+                            break;
+                        case "p47":
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                            MC68000.mm1[0].ReadOpByte = Megasys1.M0ReadOpByte_Z;
+                            MC68000.mm1[0].ReadByte = Megasys1.M0ReadByte_A;
+                            MC68000.mm1[0].ReadOpWord = Megasys1.M0ReadOpWord_Z;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Megasys1.M0ReadWord_A;
+                            MC68000.mm1[0].ReadOpLong = Megasys1.M0ReadOpLong_Z;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Megasys1.M0ReadLong_A;
+                            MC68000.mm1[0].WriteByte = Megasys1.M0WriteByte_A;
+                            MC68000.mm1[0].WriteWord = Megasys1.M0WriteWord_A;
+                            MC68000.mm1[0].WriteLong = Megasys1.M0WriteLong_A;
+                            MC68000.mm1[1].ReadOpByte = Megasys1.M1ReadOpByte_A;
+                            MC68000.mm1[1].ReadByte = Megasys1.M1ReadByte_A;
+                            MC68000.mm1[1].ReadOpWord = Megasys1.M1ReadOpWord_A;
+                            MC68000.mm1[1].ReadWord = MC68000.mm1[1].ReadPcrelWord = Megasys1.M1ReadWord_A;
+                            MC68000.mm1[1].ReadOpLong = Megasys1.M1ReadOpLong_A;
+                            MC68000.mm1[1].ReadLong = MC68000.mm1[1].ReadPcrelLong = Megasys1.M1ReadLong_A;
+                            MC68000.mm1[1].WriteByte = Megasys1.M1WriteByte_A;
+                            MC68000.mm1[1].WriteWord = Megasys1.M1WriteWord_A;
+                            MC68000.mm1[1].WriteLong = Megasys1.M1WriteLong_A;
+                            break;
+                        case "avspirit":
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        case "hayaosi1":
+                        //case "edfbl":
+                            MC68000.mm1[0].ReadOpByte = Megasys1.M0ReadOpByte_B;
+                            MC68000.mm1[0].ReadByte = Megasys1.M0ReadByte_B;
+                            MC68000.mm1[0].ReadOpWord = Megasys1.M0ReadOpWord_B;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Megasys1.M0ReadWord_B;
+                            MC68000.mm1[0].ReadOpLong = Megasys1.M0ReadOpLong_B;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Megasys1.M0ReadLong_B;
+                            MC68000.mm1[0].WriteByte = Megasys1.M0WriteByte_B;
+                            MC68000.mm1[0].WriteWord = Megasys1.M0WriteWord_B;
+                            MC68000.mm1[0].WriteLong = Megasys1.M0WriteLong_B;
+                            MC68000.mm1[1].ReadOpByte = Megasys1.M1ReadOpByte_B;
+                            MC68000.mm1[1].ReadByte = Megasys1.M1ReadByte_B;
+                            MC68000.mm1[1].ReadOpWord = Megasys1.M1ReadOpWord_B;
+                            MC68000.mm1[1].ReadWord = MC68000.mm1[1].ReadPcrelWord = Megasys1.M1ReadWord_B;
+                            MC68000.mm1[1].ReadOpLong = Megasys1.M1ReadOpLong_B;
+                            MC68000.mm1[1].ReadLong = MC68000.mm1[1].ReadPcrelLong = Megasys1.M1ReadLong_B;
+                            MC68000.mm1[1].WriteByte = Megasys1.M1WriteByte_B;
+                            MC68000.mm1[1].WriteWord = Megasys1.M1WriteWord_B;
+                            MC68000.mm1[1].WriteLong = Megasys1.M1WriteLong_B;
+                            break;
+                        case "64street":
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            MC68000.mm1[0].ReadOpByte = Megasys1.M0ReadOpByte_C;
+                            MC68000.mm1[0].ReadByte = Megasys1.M0ReadByte_C;
+                            MC68000.mm1[0].ReadOpWord = Megasys1.M0ReadOpWord_C;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Megasys1.M0ReadWord_C;
+                            MC68000.mm1[0].ReadOpLong = Megasys1.M0ReadOpLong_C;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Megasys1.M0ReadLong_C;
+                            MC68000.mm1[0].WriteByte = Megasys1.M0WriteByte_C;
+                            MC68000.mm1[0].WriteWord = Megasys1.M0WriteWord_C;
+                            MC68000.mm1[0].WriteLong = Megasys1.M0WriteLong_C;
+                            MC68000.mm1[1].ReadOpByte = Megasys1.M1ReadOpByte_A;
+                            MC68000.mm1[1].ReadByte = Megasys1.M1ReadByte_B;
+                            MC68000.mm1[1].ReadOpWord = Megasys1.M1ReadOpWord_A;
+                            MC68000.mm1[1].ReadWord = MC68000.mm1[1].ReadPcrelWord = Megasys1.M1ReadWord_B;
+                            MC68000.mm1[1].ReadOpLong = Megasys1.M1ReadOpLong_A;
+                            MC68000.mm1[1].ReadLong = MC68000.mm1[1].ReadPcrelLong = Megasys1.M1ReadLong_B;
+                            MC68000.mm1[1].WriteByte = Megasys1.M1WriteByte_B;
+                            MC68000.mm1[1].WriteWord = Megasys1.M1WriteWord_B;
+                            MC68000.mm1[1].WriteLong = Megasys1.M1WriteLong_B;
+                            break;
+                        case "peekaboo"://D
+                        case "peakaboou":
+
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {
                         case "bigkarnk":
-                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_bigkarnk;
-                            MC68000.m1.ReadByte = Gaelco.MReadByte_bigkarnk;
-                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_bigkarnk;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_bigkarnk;
-                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_bigkarnk;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_bigkarnk;
-                            MC68000.m1.WriteByte = Gaelco.MWriteByte_bigkarnk;
-                            MC68000.m1.WriteWord = Gaelco.MWriteWord_bigkarnk;
-                            MC68000.m1.WriteLong = Gaelco.MWriteLong_bigkarnk;
+                            MC68000.mm1[0].ReadOpByte = Gaelco.MReadOpByte_bigkarnk;
+                            MC68000.mm1[0].ReadByte = Gaelco.MReadByte_bigkarnk;
+                            MC68000.mm1[0].ReadOpWord = Gaelco.MReadOpWord_bigkarnk;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Gaelco.MReadWord_bigkarnk;
+                            MC68000.mm1[0].ReadOpLong = Gaelco.MReadOpLong_bigkarnk;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Gaelco.MReadLong_bigkarnk;
+                            MC68000.mm1[0].WriteByte = Gaelco.MWriteByte_bigkarnk;
+                            MC68000.mm1[0].WriteWord = Gaelco.MWriteWord_bigkarnk;
+                            MC68000.mm1[0].WriteLong = Gaelco.MWriteLong_bigkarnk;
                             M6809.mm1[0].ReadOp = Gaelco.M6809ReadOp_bigkarnk;
                             M6809.mm1[0].ReadOpArg = Gaelco.M6809ReadOp_bigkarnk;
                             M6809.mm1[0].RM = Gaelco.M6809ReadByte_bigkarnk;
@@ -1683,37 +1982,37 @@ namespace mame
                         case "bioplayc":
                         case "maniacsp":
                         case "lastkm":
-                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_maniacsq;
-                            MC68000.m1.ReadByte = Gaelco.MReadByte_maniacsq;
-                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_maniacsq;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_maniacsq;
-                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_maniacsq;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_maniacsq;
-                            MC68000.m1.WriteByte = Gaelco.MWriteByte_maniacsq;
-                            MC68000.m1.WriteWord = Gaelco.MWriteWord_maniacsq;
-                            MC68000.m1.WriteLong = Gaelco.MWriteLong_maniacsq;
+                            MC68000.mm1[0].ReadOpByte = Gaelco.MReadOpByte_maniacsq;
+                            MC68000.mm1[0].ReadByte = Gaelco.MReadByte_maniacsq;
+                            MC68000.mm1[0].ReadOpWord = Gaelco.MReadOpWord_maniacsq;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Gaelco.MReadWord_maniacsq;
+                            MC68000.mm1[0].ReadOpLong = Gaelco.MReadOpLong_maniacsq;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Gaelco.MReadLong_maniacsq;
+                            MC68000.mm1[0].WriteByte = Gaelco.MWriteByte_maniacsq;
+                            MC68000.mm1[0].WriteWord = Gaelco.MWriteWord_maniacsq;
+                            MC68000.mm1[0].WriteLong = Gaelco.MWriteLong_maniacsq;
                             break;
                         case "squash":
-                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_maniacsq;
-                            MC68000.m1.ReadByte = Gaelco.MReadByte_maniacsq;
-                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_maniacsq;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_maniacsq;
-                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_maniacsq;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_maniacsq;
-                            MC68000.m1.WriteByte = Gaelco.MWriteByte_squash;
-                            MC68000.m1.WriteWord = Gaelco.MWriteWord_squash;
-                            MC68000.m1.WriteLong = Gaelco.MWriteLong_squash;
+                            MC68000.mm1[0].ReadOpByte = Gaelco.MReadOpByte_maniacsq;
+                            MC68000.mm1[0].ReadByte = Gaelco.MReadByte_maniacsq;
+                            MC68000.mm1[0].ReadOpWord = Gaelco.MReadOpWord_maniacsq;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Gaelco.MReadWord_maniacsq;
+                            MC68000.mm1[0].ReadOpLong = Gaelco.MReadOpLong_maniacsq;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Gaelco.MReadLong_maniacsq;
+                            MC68000.mm1[0].WriteByte = Gaelco.MWriteByte_squash;
+                            MC68000.mm1[0].WriteWord = Gaelco.MWriteWord_squash;
+                            MC68000.mm1[0].WriteLong = Gaelco.MWriteLong_squash;
                             break;
                         case "thoop":
-                            MC68000.m1.ReadOpByte = Gaelco.MReadOpByte_maniacsq;
-                            MC68000.m1.ReadByte = Gaelco.MReadByte_maniacsq;
-                            MC68000.m1.ReadOpWord = Gaelco.MReadOpWord_maniacsq;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Gaelco.MReadWord_maniacsq;
-                            MC68000.m1.ReadOpLong = Gaelco.MReadOpLong_maniacsq;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Gaelco.MReadLong_maniacsq;
-                            MC68000.m1.WriteByte = Gaelco.MWriteByte_thoop;
-                            MC68000.m1.WriteWord = Gaelco.MWriteWord_thoop;
-                            MC68000.m1.WriteLong = Gaelco.MWriteLong_thoop;
+                            MC68000.mm1[0].ReadOpByte = Gaelco.MReadOpByte_maniacsq;
+                            MC68000.mm1[0].ReadByte = Gaelco.MReadByte_maniacsq;
+                            MC68000.mm1[0].ReadOpWord = Gaelco.MReadOpWord_maniacsq;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Gaelco.MReadWord_maniacsq;
+                            MC68000.mm1[0].ReadOpLong = Gaelco.MReadOpLong_maniacsq;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Gaelco.MReadLong_maniacsq;
+                            MC68000.mm1[0].WriteByte = Gaelco.MWriteByte_thoop;
+                            MC68000.mm1[0].WriteWord = Gaelco.MWriteWord_thoop;
+                            MC68000.mm1[0].WriteLong = Gaelco.MWriteLong_thoop;
                             break;
                     }
                     break;
@@ -1777,142 +2076,142 @@ namespace mame
                         case "drgnwrldv30":
                         case "drgnwrldv10c":
                         case "drgnwrldv11h":
-                            MC68000.m1.ReadOpByte = IGS011.MReadOpByte_drgnwrld;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_drgnwrld;
-                            MC68000.m1.ReadOpWord = IGS011.MReadOpWord_drgnwrld;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_drgnwrld;
-                            MC68000.m1.ReadOpLong = IGS011.MReadOpLong_drgnwrld;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_drgnwrld;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_drgnwrld;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_drgnwrld;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_drgnwrld;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadOpByte_drgnwrld;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_drgnwrld;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadOpWord_drgnwrld;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_drgnwrld;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadOpLong_drgnwrld;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_drgnwrld;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_drgnwrld;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_drgnwrld;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_drgnwrld;
                             break;
                         case "drgnwrldv21":
-                            MC68000.m1.ReadOpByte = IGS011.MReadByte_drgnwrld_igs012;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_drgnwrld_igs012;
-                            MC68000.m1.ReadOpWord = IGS011.MReadWord_drgnwrld_igs012_drgnwrldv21;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_drgnwrld_igs012_drgnwrldv21;
-                            MC68000.m1.ReadOpLong = IGS011.MReadLong_drgnwrld_igs012;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_drgnwrld_igs012;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_drgnwrld_igs012;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_drgnwrld_igs012;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadByte_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadWord_drgnwrld_igs012_drgnwrldv21;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_drgnwrld_igs012_drgnwrldv21;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadLong_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_drgnwrld_igs012;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_drgnwrld_igs012;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_drgnwrld_igs012;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_drgnwrld_igs012;
                             break;
                         case "drgnwrldv21j":
                         case "drgnwrldv20j":
                         case "drgnwrldv40k":
-                            MC68000.m1.ReadOpByte = IGS011.MReadByte_drgnwrld_igs012;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_drgnwrld_igs012;
-                            MC68000.m1.ReadOpWord = IGS011.MReadWord_drgnwrld_igs012;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_drgnwrld_igs012;
-                            MC68000.m1.ReadOpLong = IGS011.MReadLong_drgnwrld_igs012;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_drgnwrld_igs012;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_drgnwrld_igs012;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_drgnwrld_igs012;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadByte_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadWord_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadLong_drgnwrld_igs012;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_drgnwrld_igs012;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_drgnwrld_igs012;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_drgnwrld_igs012;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_drgnwrld_igs012;
                             break;
                         case "lhb":
                         case "lhbv33c":
-                            MC68000.m1.ReadOpByte = IGS011.MReadByte_lhb;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_lhb;
-                            MC68000.m1.ReadOpWord = IGS011.MReadWord_lhb;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_lhb;
-                            MC68000.m1.ReadOpLong = IGS011.MReadLong_lhb;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_lhb;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_lhb;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_lhb;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_lhb;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadByte_lhb;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_lhb;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadWord_lhb;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_lhb;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadLong_lhb;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_lhb;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_lhb;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_lhb;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_lhb;
                             break;
                         case "dbc":
-                            MC68000.m1.ReadOpByte = IGS011.MReadByte_lhb;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_lhb;
-                            MC68000.m1.ReadOpWord = IGS011.MReadWord_lhb;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_dbc;
-                            MC68000.m1.ReadOpLong = IGS011.MReadLong_lhb;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_lhb;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_lhb;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_lhb;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_lhb;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadByte_lhb;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_lhb;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadWord_lhb;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_dbc;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadLong_lhb;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_lhb;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_lhb;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_lhb;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_lhb;
                             break;
                         case "ryukobou":
-                            MC68000.m1.ReadOpByte = IGS011.MReadByte_lhb;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_lhb;
-                            MC68000.m1.ReadOpWord = IGS011.MReadWord_lhb;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_ryukobou;
-                            MC68000.m1.ReadOpLong = IGS011.MReadLong_lhb;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_lhb;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_lhb;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_lhb;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_lhb;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadByte_lhb;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_lhb;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadWord_lhb;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_ryukobou;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadLong_lhb;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_lhb;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_lhb;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_lhb;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_lhb;
                             break;
                         case "lhb2":
-                            MC68000.m1.ReadOpByte = IGS011.MReadOpByte_lhb2;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_lhb2;
-                            MC68000.m1.ReadOpWord = IGS011.MReadOpWord_lhb2;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_lhb2;
-                            MC68000.m1.ReadOpLong = IGS011.MReadOpLong_lhb2;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_lhb2;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_lhb2;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_lhb2;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_lhb2;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadOpByte_lhb2;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_lhb2;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadOpWord_lhb2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_lhb2;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadOpLong_lhb2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_lhb2;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_lhb2;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_lhb2;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_lhb2;
                             break;
                         case "xymg":
-                            MC68000.m1.ReadOpByte = IGS011.MReadOpByte_xymg;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_xymg;
-                            MC68000.m1.ReadOpWord = IGS011.MReadOpWord_xymg;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_xymg;
-                            MC68000.m1.ReadOpLong = IGS011.MReadOpLong_xymg;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_xymg;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_xymg;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_xymg;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_xymg;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadOpByte_xymg;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_xymg;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadOpWord_xymg;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_xymg;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadOpLong_xymg;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_xymg;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_xymg;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_xymg;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_xymg;
                             break;
                         case "wlcc":
-                            MC68000.m1.ReadOpByte = IGS011.MReadOpByte_wlcc;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_wlcc;
-                            MC68000.m1.ReadOpWord = IGS011.MReadOpWord_wlcc;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_wlcc;
-                            MC68000.m1.ReadOpLong = IGS011.MReadOpLong_wlcc;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_wlcc;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_wlcc;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_wlcc;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_wlcc;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadOpByte_wlcc;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_wlcc;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadOpWord_wlcc;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_wlcc;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadOpLong_wlcc;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_wlcc;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_wlcc;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_wlcc;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_wlcc;
                             break;
                         case "vbowl":
                         case "vbowlj":
-                            MC68000.m1.ReadOpByte = IGS011.MReadOpByte_vbowl;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_vbowl;
-                            MC68000.m1.ReadOpWord = IGS011.MReadOpWord_vbowl;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_vbowl;
-                            MC68000.m1.ReadOpLong = IGS011.MReadOpLong_vbowl;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_vbowl;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_vbowl;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_vbowl;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_vbowl;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadOpByte_vbowl;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_vbowl;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadOpWord_vbowl;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_vbowl;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadOpLong_vbowl;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_vbowl;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_vbowl;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_vbowl;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_vbowl;
                             break;
                         case "nkishusp":
-                            MC68000.m1.ReadOpByte = IGS011.MReadOpByte_nkishusp;
-                            MC68000.m1.ReadByte = IGS011.MReadByte_nkishusp;
-                            MC68000.m1.ReadOpWord = IGS011.MReadOpWord_nkishusp;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = IGS011.MReadWord_nkishusp;
-                            MC68000.m1.ReadOpLong = IGS011.MReadOpLong_nkishusp;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = IGS011.MReadLong_nkishusp;
-                            MC68000.m1.WriteByte = IGS011.MWriteByte_nkishusp;
-                            MC68000.m1.WriteWord = IGS011.MWriteWord_nkishusp;
-                            MC68000.m1.WriteLong = IGS011.MWriteLong_nkishusp;
+                            MC68000.mm1[0].ReadOpByte = IGS011.MReadOpByte_nkishusp;
+                            MC68000.mm1[0].ReadByte = IGS011.MReadByte_nkishusp;
+                            MC68000.mm1[0].ReadOpWord = IGS011.MReadOpWord_nkishusp;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = IGS011.MReadWord_nkishusp;
+                            MC68000.mm1[0].ReadOpLong = IGS011.MReadOpLong_nkishusp;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = IGS011.MReadLong_nkishusp;
+                            MC68000.mm1[0].WriteByte = IGS011.MWriteByte_nkishusp;
+                            MC68000.mm1[0].WriteWord = IGS011.MWriteWord_nkishusp;
+                            MC68000.mm1[0].WriteLong = IGS011.MWriteLong_nkishusp;
                             break;
                     }
                     break;
                 case "PGM":
-                    MC68000.m1.ReadOpByte = PGM.MReadOpByte;
-                    MC68000.m1.ReadByte = PGM.MReadByte;
-                    MC68000.m1.ReadOpWord = PGM.MReadOpWord;
-                    MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = PGM.MReadWord;
-                    MC68000.m1.ReadOpLong = PGM.MReadOpLong;
-                    MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = PGM.MReadLong;
-                    MC68000.m1.WriteByte = PGM.MWriteByte;
-                    MC68000.m1.WriteWord = PGM.MWriteWord;
-                    MC68000.m1.WriteLong = PGM.MWriteLong;
+                    MC68000.mm1[0].ReadOpByte = PGM.MReadOpByte;
+                    MC68000.mm1[0].ReadByte = PGM.MReadByte;
+                    MC68000.mm1[0].ReadOpWord = PGM.MReadOpWord;
+                    MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = PGM.MReadWord;
+                    MC68000.mm1[0].ReadOpLong = PGM.MReadOpLong;
+                    MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = PGM.MReadLong;
+                    MC68000.mm1[0].WriteByte = PGM.MWriteByte;
+                    MC68000.mm1[0].WriteWord = PGM.MWriteWord;
+                    MC68000.mm1[0].WriteLong = PGM.MWriteLong;
                     Z80A.zz1[0].ReadOp = PGM.ZReadMemory;
                     Z80A.zz1[0].ReadOpArg = PGM.ZReadMemory;
                     Z80A.zz1[0].ReadMemory = PGM.ZReadMemory;
@@ -1929,22 +2228,22 @@ namespace mame
                         case "orlegend111t":
                         case "orlegend111k":
                         case "orlegend105k":
-                            MC68000.m1.ReadByte = PGM.MPReadByte_orlegend;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = PGM.MPReadWord_orlegend;
-                            MC68000.m1.WriteByte = PGM.MPWriteByte_orlegend;
-                            MC68000.m1.WriteWord = PGM.MPWriteWord_orlegend;
+                            MC68000.mm1[0].ReadByte = PGM.MPReadByte_orlegend;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = PGM.MPReadWord_orlegend;
+                            MC68000.mm1[0].WriteByte = PGM.MPWriteByte_orlegend;
+                            MC68000.mm1[0].WriteWord = PGM.MPWriteWord_orlegend;
                             break;
                         case "drgw2":
                         case "dw2v100x":
                         case "drgw2j":
                         case "drgw2c":
                         case "drgw2hk":
-                            MC68000.m1.ReadByte = PGM.MPReadByte_drgw2;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord= PGM.MPReadWord_drgw2;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong= PGM.MPReadLong_drgw2;
-                            MC68000.m1.WriteByte = PGM.MPWriteByte_drgw2;
-                            MC68000.m1.WriteWord = PGM.MPWriteWord_drgw2;
-                            MC68000.m1.WriteLong = PGM.MPWriteLong_drgw2;
+                            MC68000.mm1[0].ReadByte = PGM.MPReadByte_drgw2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord= PGM.MPReadWord_drgw2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong= PGM.MPReadLong_drgw2;
+                            MC68000.mm1[0].WriteByte = PGM.MPWriteByte_drgw2;
+                            MC68000.mm1[0].WriteWord = PGM.MPWriteWord_drgw2;
+                            MC68000.mm1[0].WriteLong = PGM.MPWriteLong_drgw2;
                             break;
                     }
                     break;
@@ -2228,15 +2527,15 @@ namespace mame
                         case "opwolfa":
                         case "opwolfj":
                         case "opwolfu":
-                            MC68000.m1.ReadOpByte = Taito.MReadOpByte_opwolf;
-                            MC68000.m1.ReadByte = Taito.MReadByte_opwolf;
-                            MC68000.m1.ReadOpWord = Taito.MReadOpWord_opwolf;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taito.MReadWord_opwolf;
-                            MC68000.m1.ReadOpLong = Taito.MReadOpLong_opwolf;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taito.MReadLong_opwolf;
-                            MC68000.m1.WriteByte = Taito.MWriteByte_opwolf;
-                            MC68000.m1.WriteWord = Taito.MWriteWord_opwolf;
-                            MC68000.m1.WriteLong = Taito.MWriteLong_opwolf;
+                            MC68000.mm1[0].ReadOpByte = Taito.MReadOpByte_opwolf;
+                            MC68000.mm1[0].ReadByte = Taito.MReadByte_opwolf;
+                            MC68000.mm1[0].ReadOpWord = Taito.MReadOpWord_opwolf;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taito.MReadWord_opwolf;
+                            MC68000.mm1[0].ReadOpLong = Taito.MReadOpLong_opwolf;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taito.MReadLong_opwolf;
+                            MC68000.mm1[0].WriteByte = Taito.MWriteByte_opwolf;
+                            MC68000.mm1[0].WriteWord = Taito.MWriteWord_opwolf;
+                            MC68000.mm1[0].WriteLong = Taito.MWriteLong_opwolf;
                             Z80A.zz1[0].ReadOp = Taito.ZReadOp_opwolf;
                             Z80A.zz1[0].ReadOpArg = Taito.ZReadOp_opwolf;
                             Z80A.zz1[0].ReadMemory = Taito.ZReadMemory_opwolf;
@@ -2245,15 +2544,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
                             break;
                         case "opwolfb":
-                            MC68000.m1.ReadOpByte = Taito.MReadOpByte_opwolf;
-                            MC68000.m1.ReadByte = Taito.MReadByte_opwolfb;
-                            MC68000.m1.ReadOpWord = Taito.MReadOpWord_opwolf;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taito.MReadWord_opwolfb;
-                            MC68000.m1.ReadOpLong = Taito.MReadOpLong_opwolf;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taito.MReadLong_opwolfb;
-                            MC68000.m1.WriteByte = Taito.MWriteByte_opwolfb;
-                            MC68000.m1.WriteWord = Taito.MWriteWord_opwolfb;
-                            MC68000.m1.WriteLong = Taito.MWriteLong_opwolfb;
+                            MC68000.mm1[0].ReadOpByte = Taito.MReadOpByte_opwolf;
+                            MC68000.mm1[0].ReadByte = Taito.MReadByte_opwolfb;
+                            MC68000.mm1[0].ReadOpWord = Taito.MReadOpWord_opwolf;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taito.MReadWord_opwolfb;
+                            MC68000.mm1[0].ReadOpLong = Taito.MReadOpLong_opwolf;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taito.MReadLong_opwolfb;
+                            MC68000.mm1[0].WriteByte = Taito.MWriteByte_opwolfb;
+                            MC68000.mm1[0].WriteWord = Taito.MWriteWord_opwolfb;
+                            MC68000.mm1[0].WriteLong = Taito.MWriteLong_opwolfb;
                             Z80A.zz1[0].ReadOp = Taito.ZReadOp_opwolf;
                             Z80A.zz1[0].ReadOpArg = Taito.ZReadOp_opwolf;
                             Z80A.zz1[0].ReadMemory = Taito.ZReadMemory_opwolf;
@@ -2268,15 +2567,15 @@ namespace mame
                             Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
                             break;
                         case "opwolfp":
-                            MC68000.m1.ReadOpByte = Taito.MReadOpByte_opwolf;
-                            MC68000.m1.ReadByte = Taito.MReadByte_opwolfp;
-                            MC68000.m1.ReadOpWord = Taito.MReadOpWord_opwolf;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taito.MReadWord_opwolfp;
-                            MC68000.m1.ReadOpLong = Taito.MReadOpLong_opwolf;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taito.MReadLong_opwolfp;
-                            MC68000.m1.WriteByte = Taito.MWriteByte_opwolfp;
-                            MC68000.m1.WriteWord = Taito.MWriteWord_opwolfp;
-                            MC68000.m1.WriteLong = Taito.MWriteLong_opwolfp;
+                            MC68000.mm1[0].ReadOpByte = Taito.MReadOpByte_opwolf;
+                            MC68000.mm1[0].ReadByte = Taito.MReadByte_opwolfp;
+                            MC68000.mm1[0].ReadOpWord = Taito.MReadOpWord_opwolf;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taito.MReadWord_opwolfp;
+                            MC68000.mm1[0].ReadOpLong = Taito.MReadOpLong_opwolf;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taito.MReadLong_opwolfp;
+                            MC68000.mm1[0].WriteByte = Taito.MWriteByte_opwolfp;
+                            MC68000.mm1[0].WriteWord = Taito.MWriteWord_opwolfp;
+                            MC68000.mm1[0].WriteLong = Taito.MWriteLong_opwolfp;
                             Z80A.zz1[0].ReadOp = Taito.ZReadOp_opwolf;
                             Z80A.zz1[0].ReadOpArg = Taito.ZReadOp_opwolf;
                             Z80A.zz1[0].ReadMemory = Taito.ZReadMemory_opwolf;
@@ -2293,15 +2592,15 @@ namespace mame
                         case "masterwu":
                         case "masterwj":
                         case "yukiwo":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_masterw;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_masterw;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_masterw;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_masterw;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_masterw;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_masterw;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_masterw;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_masterw;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_masterw;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_masterw;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_masterw;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_masterw;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_masterw;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_masterw;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_masterw;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_masterw;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_masterw;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_masterw;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_masterw;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_masterw;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_masterw;
@@ -2315,15 +2614,15 @@ namespace mame
                         case "ashura":
                         case "ashuraj":
                         case "ashurau":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_rastsag2;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_rastsag2;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_rastsag2;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_rastsag2;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_rastsag2;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_rastsag2;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_rastsag2;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_rastsag2;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_rastsag2;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_rastsag2;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_rastsag2;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_rastsag2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_rastsag2;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_rastsag2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_rastsag2;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_rastsag2;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_rastsag2;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_rastsag2;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2334,15 +2633,15 @@ namespace mame
                         case "rambo3":
                         case "rambo3u":
                         case "rambo3p":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_rambo3;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_rambo3;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_rambo3;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_rambo3;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_rambo3;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_rambo3;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_rambo3;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_rambo3;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_rambo3;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_rambo3;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_rambo3;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_rambo3;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_rambo3;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_rambo3;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_rambo3;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_rambo3;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_rambo3;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_rambo3;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2353,15 +2652,15 @@ namespace mame
                         case "crimec":
                         case "crimecu":
                         case "crimecj":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_crimec;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_crimec;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_crimec;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_crimec;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_crimec;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_crimec;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_crimec;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_crimec;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_crimec;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_crimec;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_crimec;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_crimec;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_crimec;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_crimec;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_crimec;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_crimec;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_crimec;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_crimec;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2370,15 +2669,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
                             break;
                         case "tetrist":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_tetrist;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_tetrist;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_tetrist;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_tetrist;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_tetrist;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_tetrist;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_tetrist;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_tetrist;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_tetrist;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_tetrist;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_tetrist;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_tetrist;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_tetrist;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_tetrist;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_tetrist;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_tetrist;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_tetrist;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_tetrist;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2387,15 +2686,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
                             break;
                         case "tetrista":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_tetrista;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_tetrista;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_tetrista;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_tetrista;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_tetrista;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_tetrista;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_tetrista;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_tetrista;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_tetrista;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_tetrista;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_tetrista;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_tetrista;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_tetrista;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_tetrista;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_tetrista;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_tetrista;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_tetrista;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_tetrista;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_masterw;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_masterw;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_masterw;
@@ -2406,15 +2705,15 @@ namespace mame
                         case "viofight":
                         case "viofightu":
                         case "viofightj":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_viofight;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_viofight;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_viofight;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_viofight;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_viofight;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_viofight;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_viofight;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_viofight;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_viofight;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_viofight;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_viofight;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_viofight;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_viofight;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_viofight;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_viofight;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_viofight;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_viofight;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_viofight;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_viofight;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_viofight;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_viofight;
@@ -2425,15 +2724,15 @@ namespace mame
                         case "hitice":
                         case "hiticerb":
                         case "hiticej":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_hitice;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_hitice;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_hitice;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_hitice;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_hitice;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_hitice;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_hitice;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_hitice;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_hitice;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_hitice;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_hitice;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_hitice;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_hitice;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_hitice;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_hitice;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_hitice;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_hitice;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_hitice;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_viofight;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_viofight;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_viofight;
@@ -2443,15 +2742,15 @@ namespace mame
                             break;
                         case "selfeena":
                         case "ryujin":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_selfeena;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_selfeena;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_selfeena;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_selfeena;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_selfeena;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_selfeena;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_selfeena;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_selfeena;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_selfeena;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_selfeena;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_selfeena;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_selfeena;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_selfeena;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_selfeena;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_selfeena;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_selfeena;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_selfeena;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_selfeena;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2462,15 +2761,15 @@ namespace mame
                         case "silentd":
                         case "silentdj":
                         case "silentdu":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_silentd;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_silentd;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_silentd;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_silentd;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_silentd;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_silentd;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_silentd;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_silentd;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_silentd;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_silentd;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_silentd;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_silentd;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_silentd;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_silentd;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_silentd;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_silentd;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_silentd;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_silentd;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2479,15 +2778,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
                             break;
                         case "qzshowby":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_qzshowby;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_qzshowby;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_qzshowby;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_qzshowby;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_qzshowby;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_qzshowby;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_qzshowby;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_qzshowby;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_qzshowby;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_qzshowby;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_qzshowby;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_qzshowby;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_qzshowby;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_qzshowby;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_qzshowby;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_qzshowby;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_qzshowby;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_qzshowby;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2496,15 +2795,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware; 
                             break;
                         case "pbobble":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_pbobble;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_pbobble;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_pbobble;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_pbobble;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_pbobble;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_pbobble;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_pbobble;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_pbobble;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_pbobble;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_pbobble;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_pbobble;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_pbobble;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_pbobble;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_pbobble;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_pbobble;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_pbobble;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_pbobble;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_pbobble;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2514,15 +2813,15 @@ namespace mame
                             break;
                         case "spacedx":
                         case "spacedxj":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_spacedx;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_spacedx;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_spacedx;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_spacedx;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_spacedx;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_spacedx;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_spacedx;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_spacedx;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_spacedx;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_spacedx;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_spacedx;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_spacedx;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_spacedx;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_spacedx;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_spacedx;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_spacedx;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_spacedx;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_spacedx;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2531,15 +2830,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
                             break;
                         case "spacedxo":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_spacedxo;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_spacedxo;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_spacedxo;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_spacedxo;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_spacedxo;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_spacedxo;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_spacedxo;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_spacedxo;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_spacedxo;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_spacedxo;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_spacedxo;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_spacedxo;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_spacedxo;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_spacedxo;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_spacedxo;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_spacedxo;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_spacedxo;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_spacedxo;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2548,15 +2847,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
                             break;
                         case "sbm":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_sbm;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_sbm;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_sbm;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_sbm;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_sbm;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_sbm;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_sbm;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_sbm;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_sbm;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_sbm;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_sbm;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_sbm;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_sbm;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_sbm;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_sbm;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_sbm;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_sbm;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_sbm;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2565,15 +2864,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
                             break;
                         case "realpunc":
-                            MC68000.m1.ReadOpByte = Taitob.MReadOpByte_realpunc;
-                            MC68000.m1.ReadByte = Taitob.MReadByte_realpunc;
-                            MC68000.m1.ReadOpWord = Taitob.MReadOpWord_realpunc;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Taitob.MReadWord_realpunc;
-                            MC68000.m1.ReadOpLong = Taitob.MReadOpLong_realpunc;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Taitob.MReadLong_realpunc;
-                            MC68000.m1.WriteByte = Taitob.MWriteByte_realpunc;
-                            MC68000.m1.WriteWord = Taitob.MWriteWord_realpunc;
-                            MC68000.m1.WriteLong = Taitob.MWriteLong_realpunc;
+                            MC68000.mm1[0].ReadOpByte = Taitob.MReadOpByte_realpunc;
+                            MC68000.mm1[0].ReadByte = Taitob.MReadByte_realpunc;
+                            MC68000.mm1[0].ReadOpWord = Taitob.MReadOpWord_realpunc;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Taitob.MReadWord_realpunc;
+                            MC68000.mm1[0].ReadOpLong = Taitob.MReadOpLong_realpunc;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Taitob.MReadLong_realpunc;
+                            MC68000.mm1[0].WriteByte = Taitob.MWriteByte_realpunc;
+                            MC68000.mm1[0].WriteWord = Taitob.MWriteWord_realpunc;
+                            MC68000.mm1[0].WriteLong = Taitob.MWriteLong_realpunc;
                             Z80A.zz1[0].ReadOp = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadOpArg = Taitob.ZReadOp_pbobble;
                             Z80A.zz1[0].ReadMemory = Taitob.ZReadMemory_pbobble;
@@ -2589,27 +2888,27 @@ namespace mame
                     switch (Machine.sName)
                     {
                         case "cuebrick":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_cuebrick;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_cuebrick;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_cuebrick;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_cuebrick;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_cuebrick;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_cuebrick;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_cuebrick;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_cuebrick;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_cuebrick;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_cuebrick;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_cuebrick;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_cuebrick;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_cuebrick;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_cuebrick;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_cuebrick;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_cuebrick;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_cuebrick;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_cuebrick;
                             break;
                         case "mia":
                         case "mia2":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_mia;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_mia;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_mia;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_mia;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_mia;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_mia;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_mia;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_mia;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_mia;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_mia;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_mia;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_mia;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_mia;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_mia;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_mia;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_mia;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_mia;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_mia;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_mia;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_mia;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_mia;
@@ -2628,15 +2927,15 @@ namespace mame
                         case "tmht2pa":
                         case "tmnt2pj":
                         case "tmnt2po":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_tmnt;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_tmnt;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_tmnt;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_tmnt;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_tmnt;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_tmnt;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_tmnt;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_tmnt;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_tmnt;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_tmnt;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_tmnt;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_tmnt;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_tmnt;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_tmnt;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_tmnt;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_tmnt;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_tmnt;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_tmnt;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_tmnt;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_tmnt;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_tmnt;
@@ -2645,15 +2944,15 @@ namespace mame
                         case "punkshot":
                         case "punkshot2":
                         case "punkshotj":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_punkshot;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_punkshot;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_punkshot;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_punkshot;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_punkshot;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_punkshot;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_punkshot;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_punkshot;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_punkshot;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_punkshot;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_punkshot;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_punkshot;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_punkshot;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_punkshot;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_punkshot;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_punkshot;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_punkshot;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_punkshot;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_punkshot;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_punkshot;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_punkshot;
@@ -2663,15 +2962,15 @@ namespace mame
                         case "lgtnfghta":
                         case "lgtnfghtu":
                         case "trigon":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_lgtnfght;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_lgtnfght;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_lgtnfght;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_lgtnfght;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_lgtnfght;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_lgtnfght;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_lgtnfght;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_lgtnfght;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_lgtnfght;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_lgtnfght;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_lgtnfght;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_lgtnfght;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_lgtnfght;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_lgtnfght;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_lgtnfght;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_lgtnfght;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_lgtnfght;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_lgtnfght;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_lgtnfght;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_lgtnfght;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_lgtnfght;
@@ -2680,15 +2979,15 @@ namespace mame
                         case "blswhstl":
                         case "blswhstla":
                         case "detatwin":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_blswhstl;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_blswhstl;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_blswhstl;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_blswhstl;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_blswhstl;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_blswhstl;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_blswhstl;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_blswhstl;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_blswhstl;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_blswhstl;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_blswhstl;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_blswhstl;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_blswhstl;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_blswhstl;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_blswhstl;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_blswhstl;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_blswhstl;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_blswhstl;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_ssriders;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_ssriders;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_ssriders;
@@ -2696,15 +2995,15 @@ namespace mame
                             break;
                         case "glfgreat":
                         case "glfgreatj":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_glfgreat;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_glfgreat;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_glfgreat;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_glfgreat;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_glfgreat;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_glfgreat;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_glfgreat;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_glfgreat;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_glfgreat;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_glfgreat;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_glfgreat;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_glfgreat;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_glfgreat;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_glfgreat;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_glfgreat;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_glfgreat;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_glfgreat;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_glfgreat;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_glfgreat;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_glfgreat;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_glfgreat;
@@ -2716,15 +3015,15 @@ namespace mame
                         case "tmht24pe":
                         case "tmnt22pu":
                         case "qgakumon":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_tmnt2;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_tmnt2;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_tmnt2;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_tmnt2;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_tmnt2;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_tmnt2;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_tmnt2;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_tmnt2;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_tmnt2;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_tmnt2;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_tmnt2;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_tmnt2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_tmnt2;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_tmnt2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_tmnt2;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_tmnt2;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_tmnt2;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_tmnt2;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_ssriders;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_ssriders;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_ssriders;
@@ -2743,15 +3042,15 @@ namespace mame
                         case "ssridersjad":
                         case "ssridersjac":
                         case "ssridersjbd":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_ssriders;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_ssriders;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_ssriders;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_ssriders;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_ssriders;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_ssriders;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_ssriders;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_ssriders;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_ssriders;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_ssriders;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_ssriders;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_ssriders;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_ssriders;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_ssriders;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_ssriders;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_ssriders;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_ssriders;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_ssriders;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_ssriders;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_ssriders;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_ssriders;
@@ -2760,15 +3059,15 @@ namespace mame
                         case "thndrx2":
                         case "thndrx2a":
                         case "thndrx2j":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_thndrx2;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_thndrx2;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_thndrx2;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_thndrx2;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_thndrx2;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_thndrx2;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_thndrx2;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_thndrx2;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_thndrx2;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_thndrx2;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_thndrx2;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_thndrx2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_thndrx2;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_thndrx2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_thndrx2;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_thndrx2;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_thndrx2;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_thndrx2;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_thndrx2;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_thndrx2;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_thndrx2;
@@ -2776,15 +3075,15 @@ namespace mame
                             break;
                         case "prmrsocr":
                         case "prmrsocrj":
-                            MC68000.m1.ReadOpByte = Konami68000.MReadOpByte_prmrsocr;
-                            MC68000.m1.ReadByte = Konami68000.MReadByte_prmrsocr;
-                            MC68000.m1.ReadOpWord = Konami68000.MReadOpWord_prmrsocr;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Konami68000.MReadWord_prmrsocr;
-                            MC68000.m1.ReadOpLong = Konami68000.MReadOpLong_prmrsocr;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Konami68000.MReadLong_prmrsocr;
-                            MC68000.m1.WriteByte = Konami68000.MWriteByte_prmrsocr;
-                            MC68000.m1.WriteWord = Konami68000.MWriteWord_prmrsocr;
-                            MC68000.m1.WriteLong = Konami68000.MWriteLong_prmrsocr;
+                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_prmrsocr;
+                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_prmrsocr;
+                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_prmrsocr;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_prmrsocr;
+                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_prmrsocr;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_prmrsocr;
+                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_prmrsocr;
+                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_prmrsocr;
+                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_prmrsocr;
                             Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_prmrsocr;
                             Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_prmrsocr;
                             Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_prmrsocr;
@@ -2829,15 +3128,15 @@ namespace mame
                             Z80A.zz1[0].WriteHardware = Capcom.Z0WriteHardware;
                             break;
                         case "sf":
-                            MC68000.m1.ReadOpByte = Capcom.MReadOpByte_sfus;
-                            MC68000.m1.ReadByte = Capcom.MReadByte_sfus;
-                            MC68000.m1.ReadOpWord = Capcom.MReadOpWord_sfus;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Capcom.MReadWord_sfus;
-                            MC68000.m1.ReadOpLong = Capcom.MReadOpLong_sfus;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Capcom.MReadLong_sfus;
-                            MC68000.m1.WriteByte = Capcom.MWriteByte_sf;
-                            MC68000.m1.WriteWord = Capcom.MWriteWord_sf;
-                            MC68000.m1.WriteLong = Capcom.MWriteLong_sf;
+                            MC68000.mm1[0].ReadOpByte = Capcom.MReadOpByte_sfus;
+                            MC68000.mm1[0].ReadByte = Capcom.MReadByte_sfus;
+                            MC68000.mm1[0].ReadOpWord = Capcom.MReadOpWord_sfus;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Capcom.MReadWord_sfus;
+                            MC68000.mm1[0].ReadOpLong = Capcom.MReadOpLong_sfus;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Capcom.MReadLong_sfus;
+                            MC68000.mm1[0].WriteByte = Capcom.MWriteByte_sf;
+                            MC68000.mm1[0].WriteWord = Capcom.MWriteWord_sf;
+                            MC68000.mm1[0].WriteLong = Capcom.MWriteLong_sf;
                             Z80A.zz1[0].ReadOp = Capcom.Z0ReadOp_sf;
                             Z80A.zz1[0].ReadOpArg = Capcom.Z0ReadOp_sf;
                             Z80A.zz1[0].ReadMemory = Capcom.Z0ReadMemory_sf;
@@ -2853,15 +3152,15 @@ namespace mame
                             break;
                         case "sfua":
                         case "sfj":
-                            MC68000.m1.ReadOpByte = Capcom.MReadByte_sfjp;
-                            MC68000.m1.ReadByte = Capcom.MReadByte_sfjp;
-                            MC68000.m1.ReadOpWord = Capcom.MReadOpWord_sfus;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Capcom.MReadWord_sfjp;
-                            MC68000.m1.ReadOpLong = Capcom.MReadOpLong_sfus;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Capcom.MReadLong_sfus;
-                            MC68000.m1.WriteByte = Capcom.MWriteByte_sf;
-                            MC68000.m1.WriteWord = Capcom.MWriteWord_sf;
-                            MC68000.m1.WriteLong = Capcom.MWriteLong_sf;
+                            MC68000.mm1[0].ReadOpByte = Capcom.MReadByte_sfjp;
+                            MC68000.mm1[0].ReadByte = Capcom.MReadByte_sfjp;
+                            MC68000.mm1[0].ReadOpWord = Capcom.MReadOpWord_sfus;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Capcom.MReadWord_sfjp;
+                            MC68000.mm1[0].ReadOpLong = Capcom.MReadOpLong_sfus;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Capcom.MReadLong_sfus;
+                            MC68000.mm1[0].WriteByte = Capcom.MWriteByte_sf;
+                            MC68000.mm1[0].WriteWord = Capcom.MWriteWord_sf;
+                            MC68000.mm1[0].WriteLong = Capcom.MWriteLong_sf;
                             Z80A.zz1[0].ReadOp = Capcom.Z0ReadOp_sf;
                             Z80A.zz1[0].ReadOpArg = Capcom.Z0ReadOp_sf;
                             Z80A.zz1[0].ReadMemory = Capcom.Z0ReadMemory_sf;
@@ -2878,18 +3177,18 @@ namespace mame
                         case "sfjan":
                         case "sfan":
                         case "sfp":
-                            MC68000.m1.ReadOpByte = Capcom.MReadByte_sf;
-                            MC68000.m1.ReadByte = Capcom.MReadByte_sf;
-                            MC68000.m1.ReadOpWord = Capcom.MReadOpWord_sfus;
-                            MC68000.m1.ReadWord = MC68000.m1.ReadPcrelWord = Capcom.MReadWord_sf;
-                            MC68000.m1.ReadOpLong = Capcom.MReadOpLong_sfus;
-                            MC68000.m1.ReadLong = MC68000.m1.ReadPcrelLong = Capcom.MReadLong_sfus;
-                            MC68000.m1.WriteByte = Capcom.MWriteByte_sf;
-                            MC68000.m1.WriteWord = Capcom.MWriteWord_sf;
-                            MC68000.m1.WriteLong = Capcom.MWriteLong_sf;
-                            MC68000.m1.WriteByte = Capcom.MWriteByte_sf;
-                            MC68000.m1.WriteWord = Capcom.MWriteWord_sf;
-                            MC68000.m1.WriteLong = Capcom.MWriteLong_sf;
+                            MC68000.mm1[0].ReadOpByte = Capcom.MReadByte_sf;
+                            MC68000.mm1[0].ReadByte = Capcom.MReadByte_sf;
+                            MC68000.mm1[0].ReadOpWord = Capcom.MReadOpWord_sfus;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Capcom.MReadWord_sf;
+                            MC68000.mm1[0].ReadOpLong = Capcom.MReadOpLong_sfus;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Capcom.MReadLong_sfus;
+                            MC68000.mm1[0].WriteByte = Capcom.MWriteByte_sf;
+                            MC68000.mm1[0].WriteWord = Capcom.MWriteWord_sf;
+                            MC68000.mm1[0].WriteLong = Capcom.MWriteLong_sf;
+                            MC68000.mm1[0].WriteByte = Capcom.MWriteByte_sf;
+                            MC68000.mm1[0].WriteWord = Capcom.MWriteWord_sf;
+                            MC68000.mm1[0].WriteLong = Capcom.MWriteLong_sf;
                             Z80A.zz1[0].ReadOp = Capcom.Z0ReadOp_sf;
                             Z80A.zz1[0].ReadOpArg = Capcom.Z0ReadOp_sf;
                             Z80A.zz1[0].ReadMemory = Capcom.Z0ReadMemory_sf;
@@ -2917,8 +3216,8 @@ namespace mame
                 case "PGM":
                 case "Taito B":
                     m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                    MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                    MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                    MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                    MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                     z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                     Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                     Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
@@ -2975,19 +3274,82 @@ namespace mame
                     break;
                 case "Tad":
                     m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                    MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                    MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                    MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                    MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                     z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                     Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                     Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                    break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai":
+                        case "makaiden":
+                            m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
+                            Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                            Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                            break;
+                        case "p47":
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                        case "avspirit":
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        case "hayaosi1":
+                        //case "edfbl":
+                        case "64street":
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[1].debugger_start_cpu_hook_callback = null_callback;
+                            MC68000.mm1[1].debugger_stop_cpu_hook_callback = null_callback;
+                            break;
+                        case "peekaboo":
+                        case "peakaboou":
+                            m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            break;
+                    }
                     break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {
                         case "bigkarnk":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                             M6809.mm1[0].DisassemblerInit();
                             M6809.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m6809form.m6809_start_debug;
                             M6809.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m6809form.m6809_stop_debug;
@@ -3002,15 +3364,15 @@ namespace mame
                         case "squash":
                         case "thoop":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                             break;
                     }
                     break;
                 case "IGS011":
                     m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                    MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                    MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                    MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                    MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                     break;
                 case "SunA8":
                     z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
@@ -3075,16 +3437,16 @@ namespace mame
                         case "opwolfu":                        
                         case "opwolfp":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                             z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                             Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                             Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
                             break;
                         case "opwolfb":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                             z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                             Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                             Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
@@ -3098,13 +3460,13 @@ namespace mame
                     {
                         case "cuebrick":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                             break;
                         default:
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                             z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                             Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                             Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
@@ -3140,8 +3502,8 @@ namespace mame
                         case "sfan":
                         case "sfp":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
-                            MC68000.m1.debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
-                            MC68000.m1.debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
+                            MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
                             z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                             Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                             Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
@@ -3162,13 +3524,13 @@ namespace mame
         }
         public static void trigger2()
         {
-            if (iloops2 == 0)
+            if (Cpuexec.cpu[1].iloops == 0)
             {
-                iloops2 = 4;
+                Cpuexec.cpu[1].iloops = 4;
             }
-            iloops2--;
+            Cpuexec.cpu[1].iloops--;
             Generic.irq_1_0_line_hold();
-            if (iloops2 > 1)
+            if (Cpuexec.cpu[1].iloops > 1)
             {
                 Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
             }
@@ -3217,6 +3579,11 @@ namespace mame
                 case "CPS1":
                 case "Tad":
                 case "Namco System 1":
+                    break;
+                case "Megasys1":
+                    timeslice_period = new Atime(0, Video.screenstate.frame_period / 2000);
+                    timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                    Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                     break;
                 case "IGS011":
                     /*switch (Machine.sName)
@@ -3449,7 +3816,7 @@ namespace mame
                     break;
                 case "CPS2":
                 case "CPS2turbo":
-                    iloops = 0;
+                    Cpuexec.cpu[0].iloops = 0;
                     CPS.cps2_interrupt();
                     Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                     break;
@@ -3457,7 +3824,7 @@ namespace mame
                     Generic.nmi_line_pulse0();
                     break;
                 case "Tehkan":
-                    iloops = 0;
+                    Cpuexec.cpu[1].iloops = 0;
                     vblank_interrupt();
                     Tehkan.pbaction_interrupt();
                     Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
@@ -3468,12 +3835,17 @@ namespace mame
                 case "Tad":
                     Generic.irq_0_1_line_hold();
                     break;
+                case "Megasys1":
+                    Cpuexec.cpu[0].iloops = 0;
+                    vblank_interrupt();
+                    Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                    break;
                 case "Gaelco":
                     Generic.irq_0_6_line_assert();
                     break;
                 case "SunA8":
-                    iloops = 0;
-                    iloops2 = 0;
+                    Cpuexec.cpu[0].iloops = 0;
+                    Cpuexec.cpu[1].iloops = 0;
                     Generic.irq_1_0_line_hold();
                     Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                     Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
@@ -3498,7 +3870,7 @@ namespace mame
                         case "drgnwrldv10c":
                         case "drgnwrldv11h":
                         case "drgnwrldv40k":
-                            iloops = 0;
+                            Cpuexec.cpu[0].iloops = 0;
                             IGS011.lhb2_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             break;
@@ -3506,7 +3878,7 @@ namespace mame
                         case "lhbv33c":
                         case "dbc":
                         case "ryukobou":
-                            iloops = 0;
+                            Cpuexec.cpu[0].iloops = 0;
                             IGS011.lhb_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             break;
@@ -3530,14 +3902,14 @@ namespace mame
                         case "drgw2j":
                         case "drgw2c":
                         case "drgw2hk":
-                            iloops = 0;
+                            Cpuexec.cpu[0].iloops = 0;
                             vblank_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             break;
                     }
                     break;
                 case "M72":
-                    iloops = 0;
+                    Cpuexec.cpu[1].iloops = 0;
                     vblank_interrupt();
                     Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
                     break;
@@ -3590,7 +3962,7 @@ namespace mame
                             {
                                 Cpuint.cpunum_set_input_line(1, 0, LineState.HOLD_LINE);
                             }
-                            iloops = 0;
+                            Cpuexec.cpu[3].iloops = 0;
                             vblank_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[3].partial_frame_timer, Cpuexec.cpu[3].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             break;
@@ -3627,7 +3999,7 @@ namespace mame
                     switch (Machine.sName)
                     {
                         case "cuebrick":
-                            iloops = 0;
+                            Cpuexec.cpu[0].iloops = 0;
                             vblank_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             break;
@@ -3654,7 +4026,7 @@ namespace mame
                             {
                                 Generic.irq_0_0_line_hold();
                             }
-                            iloops = 0;
+                            Cpuexec.cpu[1].iloops = 0;
                             vblank_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             break;
@@ -3680,13 +4052,13 @@ namespace mame
                 case "CPS2turbo":
                 case "IGS011":
                 case "Konami 68000":
-                    if (iloops == 0)
+                    if (Cpuexec.cpu[0].iloops == 0)
                     {
-                        iloops = vblank_interrupts_per_frame;
+                        Cpuexec.cpu[0].iloops = vblank_interrupts_per_frame;
                     }
-                    iloops--;
+                    Cpuexec.cpu[0].iloops--;
                     vblank_interrupt();
-                    if (iloops > 1)
+                    if (Cpuexec.cpu[0].iloops > 1)
                     {
                         Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                     }
@@ -3699,13 +4071,13 @@ namespace mame
                         case "drgw2j":
                         case "drgw2c":
                         case "drgw2hk":
-                            if (iloops == 0)
+                            if (Cpuexec.cpu[0].iloops == 0)
                             {
-                                iloops = vblank_interrupts_per_frame;
+                                Cpuexec.cpu[0].iloops = vblank_interrupts_per_frame;
                             }
-                            iloops--;
+                            Cpuexec.cpu[0].iloops--;
                             vblank_interrupt();
-                            if (iloops > 1)
+                            if (Cpuexec.cpu[0].iloops > 1)
                             {
                                 Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             }
@@ -3713,37 +4085,49 @@ namespace mame
                     }
                     break;
                 case "Tehkan":
-                    if (iloops == 0)
+                    if (Cpuexec.cpu[1].iloops == 0)
                     {
-                        iloops = vblank_interrupts_per_frame;
+                        Cpuexec.cpu[1].iloops = vblank_interrupts_per_frame;
                     }
-                    iloops--;
+                    Cpuexec.cpu[1].iloops--;
                     Tehkan.pbaction_interrupt();
-                    if (iloops > 1)
+                    if (Cpuexec.cpu[1].iloops > 1)
                     {
                         Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
                     }
                     break;
-                case "SunA8":
-                    if (iloops == 0)
+                case "Megasys1":
+                    if(Cpuexec.cpu[0].iloops==0)
                     {
-                        iloops = vblank_interrupts_per_frame;
+                        Cpuexec.cpu[0].iloops = vblank_interrupts_per_frame;
                     }
-                    iloops--;
+                    Cpuexec.cpu[0].iloops--;
+                    vblank_interrupt();
+                    if (Cpuexec.cpu[0].iloops > 1)
+                    {
+                        Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                    }
+                    break;
+                case "SunA8":
+                    if (Cpuexec.cpu[0].iloops == 0)
+                    {
+                        Cpuexec.cpu[0].iloops = vblank_interrupts_per_frame;
+                    }
+                    Cpuexec.cpu[0].iloops--;
                     SunA8.hardhea2_interrupt();
-                    if (iloops > 1)
+                    if (Cpuexec.cpu[0].iloops > 1)
                     {
                         Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
                     }
                     break;
                 case "M72":
-                    if (iloops == 0)
+                    if (Cpuexec.cpu[1].iloops == 0)
                     {
-                        iloops = vblank_interrupts_per_frame;
+                        Cpuexec.cpu[1].iloops = vblank_interrupts_per_frame;
                     }
-                    iloops--;
+                    Cpuexec.cpu[1].iloops--;
                     vblank_interrupt();
-                    if (iloops > 1)
+                    if (Cpuexec.cpu[1].iloops > 1)
                     {
                         Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
                     }
@@ -3752,13 +4136,13 @@ namespace mame
                     switch (Machine.sName)
                     {
                         case "bub68705":
-                            if (iloops == 0)
+                            if (Cpuexec.cpu[3].iloops == 0)
                             {
-                                iloops = vblank_interrupts_per_frame;
+                                Cpuexec.cpu[3].iloops = vblank_interrupts_per_frame;
                             }
-                            iloops--;
+                            Cpuexec.cpu[3].iloops--;
                             vblank_interrupt();
-                            if (iloops > 1)
+                            if (Cpuexec.cpu[3].iloops > 1)
                             {
                                 Timer.timer_adjust_periodic(Cpuexec.cpu[3].partial_frame_timer, Cpuexec.cpu[3].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             }
@@ -3779,13 +4163,13 @@ namespace mame
                         case "makaimurc":
                         case "makaimurg":
                         case "diamond":
-                            if (iloops == 0)
+                            if (Cpuexec.cpu[1].iloops == 0)
                             {
-                                iloops = vblank_interrupts_per_frame;
+                                Cpuexec.cpu[1].iloops = vblank_interrupts_per_frame;
                             }
-                            iloops--;
+                            Cpuexec.cpu[1].iloops--;
                             vblank_interrupt();
-                            if (iloops > 1)
+                            if (Cpuexec.cpu[1].iloops > 1)
                             {
                                 Timer.timer_adjust_periodic(Cpuexec.cpu[1].partial_frame_timer, Cpuexec.cpu[1].partial_frame_period, Attotime.ATTOTIME_NEVER);
                             }

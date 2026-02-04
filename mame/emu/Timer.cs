@@ -482,8 +482,34 @@ namespace mame
                     switch (Machine.sBoard)
                     {
                         case "CPS2":
+                        case "CPS2turbo":
                         case "IGS011":
                         case "Konami68000":
+                            Cpuexec.cpu[0].partial_frame_timer = lt[i];
+                            lt.Remove(lt[i]);
+                            lt.Add(Cpuexec.cpu[0].partial_frame_timer);
+                            break;
+                        case "PGM":
+                            switch (Machine.sName)
+                            {
+                                case "drgw2":
+                                case "dw2v100x":
+                                case "drgw2j":
+                                case "drgw2c":
+                                case "drgw2hk":
+                                    Cpuexec.cpu[0].partial_frame_timer = lt[i];
+                                    lt.Remove(lt[i]);
+                                    lt.Add(Cpuexec.cpu[0].partial_frame_timer);
+                                    break;
+                            }
+                            break;
+                        case "Tehkan":
+                            Cpuexec.cpu[1].partial_frame_timer = lt[i];
+                            lt.Remove(lt[i]);
+                            lt.Add(Cpuexec.cpu[1].partial_frame_timer);
+                            break;
+                        case "Megasys1":
+                        case "SunA8":
                             Cpuexec.cpu[0].partial_frame_timer = lt[i];
                             lt.Remove(lt[i]);
                             lt.Add(Cpuexec.cpu[0].partial_frame_timer);
@@ -492,6 +518,16 @@ namespace mame
                             Cpuexec.cpu[1].partial_frame_timer = lt[i];
                             lt.Remove(lt[i]);
                             lt.Add(Cpuexec.cpu[1].partial_frame_timer);
+                            break;
+                        case "Taito":
+                            switch (Machine.sName)
+                            {
+                                case "bub68705":
+                                    Cpuexec.cpu[3].partial_frame_timer = lt[i];
+                                    lt.Remove(lt[i]);
+                                    lt.Add(Cpuexec.cpu[3].partial_frame_timer);
+                                    break;
+                            }
                             break;
                         case "Capcom":
                             switch (Machine.sName)

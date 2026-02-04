@@ -69,7 +69,7 @@ namespace mame
         public static void blockmove_8toN_transpen16_bublbobl(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int offsetx, int offsety)
         {
             int ydir, xdir, col, i, j;
-            int srcdata_offset = code * 0x40;
+            int srcdata_offset = code * srcwidth * srcheight;
             if (flipy != 0)
             {
                 offsety += (dstheight - 1);
@@ -167,12 +167,10 @@ namespace mame
             int colorbase = color * 0x10;
             blockmove_8toN_transpen_pri16_opwolf(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, pri_mask, sx, sy);
         }
-        public static void blockmove_8toN_transpen_pri16_opwolf(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo,
-                int leftskip, int topskip, int flipx, int flipy,
-                int dstwidth, int dstheight, int colorbase, uint pmask, int sx, int sy)
+        public static void blockmove_8toN_transpen_pri16_opwolf(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, uint pmask, int sx, int sy)
         {
             int ydir, xdir, col, i, j, offsetx, offsety;
-            int srcdata_offset = code * 0x100;
+            int srcdata_offset = code * srcwidth * srcheight;
             offsetx = sx;
             offsety = sy;
             if (flipy != 0)

@@ -101,7 +101,7 @@ namespace mame
         }
         public static void hardhea2_interrupt()
         {
-            switch (Cpuexec.iloops)
+            switch (Cpuexec.cpu[0].iloops)
             {
                 case 240:
                     Cpuint.cpunum_set_input_line(0, 0, LineState.HOLD_LINE);

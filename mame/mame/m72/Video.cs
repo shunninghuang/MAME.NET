@@ -14,6 +14,186 @@ namespace mame
         private static ushort[] uuB200;
         public static int scrollx1, scrolly1, scrollx2, scrolly2;
         public static int video_off, spriteram_size, majtitle_rowscroll;
+        public static void video_start_m72()
+        {
+            int i;
+            bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+            fg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+
+            bg_tilemap.total_elements = M72.gfx21rom.Length / 0x40;
+            bg_tilemap.pen_to_flags = new byte[3, 16];
+            for (i = 0; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[0, i] = 0x20;
+            }
+            for (i = 0; i < 8; i++)
+            {
+                bg_tilemap.pen_to_flags[1, i] = 0x20;
+            }
+            for (i = 8; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[1, i] = 0x10;
+            }
+            bg_tilemap.pen_to_flags[2, 0] = 0x20;
+            for (i = 1; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[2, i] = 0x10;
+            }
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
+            fg_tilemap.total_elements = M72.gfx21rom.Length / 0x40;
+            fg_tilemap.pen_to_flags = new byte[3, 32];
+            fg_tilemap.pen_to_flags[0, 0] = 0;
+            for (i = 1; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[0, i] = 0x20;
+            }
+            fg_tilemap.pen_to_flags[1, 0] = 0;
+            for (i = 1; i < 8; i++)
+            {
+                fg_tilemap.pen_to_flags[1, i] = 0x20;
+            }
+            for (i = 8; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[1, i] = 0x10;
+            }
+            fg_tilemap.pen_to_flags[2, 0] = 0;
+            for (i = 1; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[2, i] = 0x10;
+            }
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_sf;
+            switch (Machine.sName)
+            {
+                case "airduel":
+                case "airduelm72":
+                    bg_tilemap.tile_update3 = bg_tilemap.tile_update_m72_bg;
+                    fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg;
+                    break;
+                case "ltswords":
+                case "kengo":
+                case "kengoa":
+                    bg_tilemap.tile_update3 = bg_tilemap.tile_update_m72_bg_rtype2;
+                    fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg_rtype2;
+                    break;
+            }
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
+
+
+            uuB200 = new ushort[0x200 * 0x200];
+            Video.new_clip = new RECT();
+            spriteram_size = 0x400;
+            for (i = 0; i < 0x40000; i++)
+            {
+                uuB200[i] = 0x200;
+            }
+            m72_spriteram = new ushort[0x200];
+            m72_videoram1 = new byte[0x4000];
+            m72_videoram2 = new byte[0x4000];
+            fg_tilemap.tilemap_set_scrolldx(0, 0);
+            fg_tilemap.tilemap_set_scrolldy(-128, 16);
+            bg_tilemap.tilemap_set_scrolldx(0, 0);
+            bg_tilemap.tilemap_set_scrolldy(-128, 16);
+            switch (Machine.sName)
+            {
+                case "ltswords":
+                case "kengo":
+                case "kengoa":
+                    fg_tilemap.tilemap_set_scrolldx(6, 0);
+                    bg_tilemap.tilemap_set_scrolldx(6, 0);
+                    break;
+            }
+        }
+        public static int m82_scan_rows(int col, int row, int num_cols, int num_rows)
+        {
+            return row * 256 + col;
+        }
+        public static void video_start_m82()
+        {
+            int i;
+            fg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+            bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+            bg_tilemap_large = Tmap.tilemap_create(m82_scan_rows, 8, 8, 128, 64);
+            bg_tilemap.total_elements = M72.gfx21rom.Length / 0x40;
+            bg_tilemap.pen_data = new byte[0x40];
+            bg_tilemap.pen_to_flags = new byte[3, 16];
+            for (i = 0; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[0, i] = 0x20;
+            }
+            for (i = 0; i < 8; i++)
+            {
+                bg_tilemap.pen_to_flags[1, i] = 0x20;
+            }
+            for (i = 8; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[1, i] = 0x10;
+            }
+            bg_tilemap.pen_to_flags[2, 0] = 0x20;
+            for (i = 1; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[2, i] = 0x10;
+            }
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
+            fg_tilemap.total_elements = M72.gfx21rom.Length / 0x40;
+            fg_tilemap.pen_to_flags = new byte[3, 32];
+            fg_tilemap.pen_to_flags[0, 0] = 0;
+            for (i = 1; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[0, i] = 0x20;
+            }
+            fg_tilemap.pen_to_flags[1, 0] = 0;
+            for (i = 1; i < 8; i++)
+            {
+                fg_tilemap.pen_to_flags[1, i] = 0x20;
+            }
+            for (i = 8; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[1, i] = 0x10;
+            }
+            fg_tilemap.pen_to_flags[2, 0] = 0;
+            for (i = 1; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[2, i] = 0x10;
+            }
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_sf;
+            bg_tilemap_large.total_elements = M72.gfx21rom.Length / 0x40;
+            bg_tilemap_large.pen_to_flags = new byte[3, 16];
+            for (i = 0; i < 16; i++)
+            {
+                bg_tilemap_large.pen_to_flags[0, i] = 0x20;
+            }
+            for (i = 0; i < 8; i++)
+            {
+                bg_tilemap_large.pen_to_flags[1, i] = 0x20;
+            }
+            for (i = 8; i < 16; i++)
+            {
+                bg_tilemap_large.pen_to_flags[1, i] = 0x10;
+            }
+            bg_tilemap_large.pen_to_flags[2, 0] = 0x20;
+            for (i = 1; i < 16; i++)
+            {
+                bg_tilemap_large.pen_to_flags[2, i] = 0x10;
+            }
+            bg_tilemap_large.tilemap_draw_instance3 = bg_tilemap_large.tilemap_draw_instance_capcom_sf;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_m72_bg;
+            fg_tilemap.tile_update3 = fg_tilemap.tile_update_m72_fg;
+            bg_tilemap_large.tile_update3 = bg_tilemap_large.tile_update_m72_bg;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
+            Tilemap.lsTmap.Add(bg_tilemap_large);
+
+            uuB200 = new ushort[0x400 * 0x200];
+            Video.new_clip = new RECT();
+            spriteram_size = 0x400;
+            for (i = 0; i < 0x80000; i++)
+            {
+                uuB200[i] = 0x200;
+            }
+        }
         public static ushort m72_palette1_r(int offset)
         {
             offset &= ~0x100;
@@ -44,37 +224,25 @@ namespace mame
         }
         public static void m72_videoram1_w(int offset, byte data)
         {
-            int row, col;
             m72_videoram1[offset] = data;
-            row = (offset / 4) / 0x40;
-            col = (offset / 4) % 0x40;
-            fg_tilemap.tilemap_mark_tile_dirty(row, col);
+            fg_tilemap.tilemap_mark_tile_dirty(offset / 4);
         }
         public static void m72_videoram2_w(int offset, byte data)
         {
-            int row, col;
             m72_videoram2[offset] = data;
-            row = (offset / 4) / 0x40;
-            col = (offset / 4) % 0x40;
-            bg_tilemap.tilemap_mark_tile_dirty(row, col);
+            bg_tilemap.tilemap_mark_tile_dirty(offset / 4);
         }
         public static void m72_videoram1_w(int offset, ushort data)
         {
-            int row, col;
             m72_videoram1[offset * 2] = (byte)data;
             m72_videoram1[offset * 2 + 1] = (byte)(data >> 8);
-            row = (offset / 2) / 0x40;
-            col = (offset / 2) % 0x40;
-            fg_tilemap.tilemap_mark_tile_dirty(row, col);
+            fg_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         public static void m72_videoram2_w(int offset, ushort data)
         {
-            int row, col;
             m72_videoram2[offset * 2] = (byte)data;
             m72_videoram2[offset * 2 + 1] = (byte)(data >> 8);
-            row = (offset / 2) / 0x40;
-            col = (offset / 2) % 0x40;
-            bg_tilemap.tilemap_mark_tile_dirty(row, col);
+            bg_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         public static void m72_irq_line_w(ushort data)
         {
@@ -193,33 +361,6 @@ namespace mame
                 offs += w * 4;
             }
         }
-        public static void video_start_m72()
-        {
-            int i;
-            uuB200 = new ushort[0x200 * 0x200];
-            Video.new_clip = new RECT();
-            spriteram_size = 0x400;
-            for (i = 0; i < 0x40000; i++)
-            {
-                uuB200[i] = 0x200;
-            }
-            m72_spriteram = new ushort[0x200];
-            m72_videoram1 = new byte[0x4000];
-            m72_videoram2 = new byte[0x4000];
-            fg_tilemap.tilemap_set_scrolldx(0, 0);
-            fg_tilemap.tilemap_set_scrolldy(-128, 16);
-            bg_tilemap.tilemap_set_scrolldx(0, 0);
-            bg_tilemap.tilemap_set_scrolldy(-128, 16);
-            switch (Machine.sName)
-            {
-                case "ltswords":
-                case "kengo":
-                case "kengoa":
-                    fg_tilemap.tilemap_set_scrolldx(6, 0);
-                    bg_tilemap.tilemap_set_scrolldx(6, 0);
-                    break;
-            }
-        }
         public static void video_update_m72()
         {
             if (video_off!=0)
@@ -240,18 +381,6 @@ namespace mame
         public static void video_eof_m72()
         {
 
-        }
-        public static void video_start_m82()
-        {
-            int i;
-            uuB200 = new ushort[0x400 * 0x200];
-            Video.new_clip = new RECT();
-            spriteram_size = 0x400;
-            for (i = 0; i < 0x80000; i++)
-            {
-                uuB200[i] = 0x200;
-            }
-
-        }
+        }        
     }
 }

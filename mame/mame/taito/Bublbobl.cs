@@ -314,7 +314,7 @@ namespace mame
         }
         public static void bublbobl_m68705_interrupt()
         {
-            if ((Cpuexec.iloops & 1) != 0)
+            if ((Cpuexec.cpu[3].iloops & 1) != 0)
             {
                 Cpuint.cpunum_set_input_line(3, 0, LineState.CLEAR_LINE);
             }

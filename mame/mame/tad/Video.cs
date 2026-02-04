@@ -33,304 +33,88 @@ namespace mame
         public static void video_start_toki()
         {
             int j;
-            text_layer = new Tmap();
-            text_layer.cols = 0x20;
-            text_layer.rows = 0x20;
-            text_layer.tilewidth = 8;
-            text_layer.tileheight = 8;
-            text_layer.width = 0x100;
-            text_layer.height = 0x100;
-            text_layer.enable = true;
-            text_layer.all_tiles_dirty = true;
-            text_layer.total_elements = 0x1000;//gfx2rom.Length / 0x100;
-            text_layer.pixmap = new ushort[0x100 * 0x100];
-            text_layer.flagsmap = new byte[0x100, 0x100];
-            text_layer.tileflags = new byte[0x20, 0x20];
-            text_layer.pen_data = new byte[0x40];
+            text_layer = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 32, 32);
+            text_layer.total_elements = 0x1000;
             text_layer.pen_to_flags = new byte[1, 16];
-            text_layer.scrollrows = 1;
-            text_layer.scrollcols = 1;
-            text_layer.rowscroll = new int[text_layer.scrollrows];
-            text_layer.colscroll = new int[text_layer.scrollcols];
-            text_layer.tilemap_draw_instance3 = text_layer.tilemap_draw_instance_tehkan_pbaction;
-            text_layer.tile_update3 = text_layer.tile_update_tad_text;
-            background_layer = new Tmap();
-            background_layer.cols = 0x20;
-            background_layer.rows = 0x20;
-            background_layer.tilewidth = 0x10;
-            background_layer.tileheight = 0x10;
-            background_layer.width = 0x200;
-            background_layer.height = 0x200;
-            background_layer.enable = true;
-            background_layer.all_tiles_dirty = true;
-            background_layer.total_elements = 0x2000;//gfx2rom.Length / 0x100;
-            background_layer.pixmap = new ushort[0x200 * 0x200];
-            background_layer.flagsmap = new byte[0x200, 0x200];
-            background_layer.tileflags = new byte[0x20, 0x20];
-            background_layer.pen_data = new byte[0x100];
-            background_layer.pen_to_flags = new byte[1, 16];
-            background_layer.scrollrows = 1;
-            background_layer.scrollcols = 1;
-            background_layer.rowscroll = new int[background_layer.scrollrows];
-            background_layer.colscroll = new int[background_layer.scrollcols];
-            background_layer.tilemap_draw_instance3 = background_layer.tilemap_draw_instance_tehkan_pbaction;
-            background_layer.tile_update3 = background_layer.tile_update_tad_back;
-            foreground_layer = new Tmap();
-            foreground_layer.cols = 0x20;
-            foreground_layer.rows = 0x20;
-            foreground_layer.tilewidth = 0x10;
-            foreground_layer.tileheight = 0x10;
-            foreground_layer.width = 0x200;
-            foreground_layer.height = 0x200;
-            foreground_layer.enable = true;
-            foreground_layer.all_tiles_dirty = true;
-            foreground_layer.total_elements = 0x1000;//gfx2rom.Length / 0x100;
-            foreground_layer.pixmap = new ushort[0x200 * 0x200];
-            foreground_layer.flagsmap = new byte[0x200, 0x200];
-            foreground_layer.tileflags = new byte[0x20, 0x20];
-            foreground_layer.pen_data = new byte[0x100];
-            foreground_layer.pen_to_flags = new byte[1, 16];
-            foreground_layer.scrollrows = 1;
-            foreground_layer.scrollcols = 1;
-            foreground_layer.rowscroll = new int[foreground_layer.scrollrows];
-            foreground_layer.colscroll = new int[foreground_layer.scrollcols];
-            foreground_layer.tilemap_draw_instance3 = foreground_layer.tilemap_draw_instance_tehkan_pbaction;
-            foreground_layer.tile_update3 = foreground_layer.tile_update_tad_fore;
             for (j = 0; j < 15; j++)
             {
                 text_layer.pen_to_flags[0, j] = 0x10;
             }
             text_layer.pen_to_flags[0, 15] = 0;
+            text_layer.tilemap_draw_instance3 = text_layer.tilemap_draw_instance_capcom_gng;
+            text_layer.tile_update3 = text_layer.tile_update_tad_text;
+
+            background_layer = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 16, 16, 32, 32);
+            background_layer.total_elements = 0x2000;
+            background_layer.pen_to_flags = new byte[1, 16];
             for (j = 0; j < 15; j++)
             {
                 background_layer.pen_to_flags[0, j] = 0x10;
             }
             background_layer.pen_to_flags[0, 15] = 0;
+            background_layer.tilemap_draw_instance3 = background_layer.tilemap_draw_instance_capcom_gng;
+            background_layer.tile_update3 = background_layer.tile_update_tad_back;
+
+            foreground_layer = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 16, 16, 32, 32);
+            foreground_layer.total_elements = 0x1000;
+            foreground_layer.pen_to_flags = new byte[1, 16];
             for (j = 0; j < 15; j++)
             {
                 foreground_layer.pen_to_flags[0, j] = 0x10;
             }
             foreground_layer.pen_to_flags[0, 15] = 0;
+            foreground_layer.tilemap_draw_instance3 = foreground_layer.tilemap_draw_instance_capcom_gng;
+            foreground_layer.tile_update3 = foreground_layer.tile_update_tad_fore;
+            
             Tilemap.lsTmap = new List<Tmap>();
             Tilemap.lsTmap.Add(text_layer);
             Tilemap.lsTmap.Add(background_layer);
-            Tilemap.lsTmap.Add(foreground_layer);
+            Tilemap.lsTmap.Add(foreground_layer);            
         }
         public static void toki_foreground_videoram16_w(int offset, ushort data)
         {
             Generic.videoram16[offset] = data;
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((text_layer.attributes & 1) == 1)
-            {
-                col = text_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((text_layer.attributes & 2) == 2)
-            {
-                row = text_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            text_layer.tilemap_mark_tile_dirty(row, col);
+            text_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_foreground_videoram16_w1(int offset, byte data)
         {
             Generic.videoram16[offset] = (ushort)((data << 8) | (Generic.videoram16[offset] & 0xff));
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((text_layer.attributes & 1) == 1)
-            {
-                col = text_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((text_layer.attributes & 2) == 2)
-            {
-                row = text_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            text_layer.tilemap_mark_tile_dirty(row, col);
+            text_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_foreground_videoram16_w2(int offset, byte data)
         {
             Generic.videoram16[offset] = (ushort)((Generic.videoram16[offset] & 0xff00) | data);
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((text_layer.attributes & 1) == 1)
-            {
-                col = text_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((text_layer.attributes & 2) == 2)
-            {
-                row = text_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            text_layer.tilemap_mark_tile_dirty(row, col);
+            text_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_background1_videoram16_w(int offset, ushort data)
         {
             toki_background1_videoram16[offset] = data;
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((background_layer.attributes & 1) == 1)
-            {
-                col = background_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((background_layer.attributes & 2) == 2)
-            {
-                row = background_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            background_layer.tilemap_mark_tile_dirty(row, col);
+            background_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_background1_videoram16_w1(int offset, byte data)
         {
             toki_background1_videoram16[offset] = (ushort)((data << 8) | (toki_background1_videoram16[offset] & 0xff));
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((background_layer.attributes & 1) == 1)
-            {
-                col = background_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((background_layer.attributes & 2) == 2)
-            {
-                row = background_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            background_layer.tilemap_mark_tile_dirty(row, col);
+            background_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_background1_videoram16_w2(int offset, byte data)
         {
             toki_background1_videoram16[offset] = (ushort)((toki_background1_videoram16[offset] & 0xff00) | data);
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((background_layer.attributes & 1) == 1)
-            {
-                col = background_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((background_layer.attributes & 2) == 2)
-            {
-                row = background_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            background_layer.tilemap_mark_tile_dirty(row, col);
+            background_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_background2_videoram16_w(int offset, ushort data)
         {
             toki_background2_videoram16[offset] = data;
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((foreground_layer.attributes & 1) == 1)
-            {
-                col = foreground_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((foreground_layer.attributes & 2) == 2)
-            {
-                row = foreground_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            foreground_layer.tilemap_mark_tile_dirty(row, col);
+            foreground_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_background2_videoram16_w1(int offset, byte data)
         {
             toki_background2_videoram16[offset] = (ushort)((data << 8) | (toki_background2_videoram16[offset] & 0xff));
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((foreground_layer.attributes & 1) == 1)
-            {
-                col = foreground_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((foreground_layer.attributes & 2) == 2)
-            {
-                row = foreground_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            foreground_layer.tilemap_mark_tile_dirty(row, col);
+            foreground_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_background2_videoram16_w2(int offset, byte data)
         {
             toki_background2_videoram16[offset] = (ushort)((toki_background2_videoram16[offset] & 0xff00) | data);
-            int row, col, row2, col2;
-            col2 = offset % 0x20;
-            row2 = offset / 0x20;
-            if ((foreground_layer.attributes & 1) == 1)
-            {
-                col = foreground_layer.cols - 1 - col2;
-            }
-            else
-            {
-                col = col2;
-            }
-            if ((foreground_layer.attributes & 2) == 2)
-            {
-                row = foreground_layer.rows - 1 - row2;
-            }
-            else
-            {
-                row = row2;
-            }
-            foreground_layer.tilemap_mark_tile_dirty(row, col);
+            foreground_layer.tilemap_mark_tile_dirty(offset);
         }
         public static void toki_draw_sprites(RECT cliprect)
         {

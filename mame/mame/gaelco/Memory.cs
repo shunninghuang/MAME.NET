@@ -530,7 +530,7 @@ namespace mame
                 }
                 else if (address % 2 == 1)
                 {
-                    result = (sbyte)OKI6295.okim6295_status_0_lsb_r();
+                    result = (sbyte)OKI6295.oo1[0].okim6295_status_r();
                 }
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
@@ -610,7 +610,7 @@ namespace mame
             }
             else if (address >= 0x70000e && address + 1 <= 0x70000f)
             {
-                result = (short)OKI6295.okim6295_status_0_lsb_r();
+                result = (short)OKI6295.oo1[0].okim6295_status_r();
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
@@ -716,7 +716,7 @@ namespace mame
             {
                 if (address % 2 == 1)
                 {
-                    OKI6295.okim6295_data_0_lsb_w((byte)value);
+                    OKI6295.oo1[0].okim6295_data_w((byte)value);
                 }
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
@@ -771,7 +771,7 @@ namespace mame
             }
             else if (address >= 0x70000e && address + 1 <= 0x70000f)
             {
-                OKI6295.okim6295_data_0_lsb_w((byte)value);
+                OKI6295.oo1[0].okim6295_data_w((byte)value);
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
@@ -870,7 +870,7 @@ namespace mame
             {
                 if (address % 2 == 1)
                 {
-                    OKI6295.okim6295_data_0_lsb_w((byte)value);
+                    OKI6295.oo1[0].okim6295_data_w((byte)value);
                 }
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
@@ -925,7 +925,7 @@ namespace mame
             }
             else if (address >= 0x70000e && address + 1 <= 0x70000f)
             {
-                OKI6295.okim6295_data_0_lsb_w((byte)value);
+                OKI6295.oo1[0].okim6295_data_w((byte)value);
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
@@ -938,15 +938,6 @@ namespace mame
         {
             MWriteWord_squash(address, (short)(value >> 16));
             MWriteWord_squash(address + 2, (short)value);
-        }
-        public static byte M6809ReadOp_bigkarnk(ushort address)
-        {
-            byte result = 0;
-            if (address >= 0x0c00 && address <= 0xffff)
-            {
-                result = Memory.audiorom[address];
-            }
-            return result;
         }
         public static void MWriteByte_thoop(int address, sbyte value)
         {
@@ -1033,7 +1024,7 @@ namespace mame
             {
                 if (address % 2 == 1)
                 {
-                    OKI6295.okim6295_data_0_lsb_w((byte)value);
+                    OKI6295.oo1[0].okim6295_data_w((byte)value);
                 }
             }
             else if (address >= 0xff0000 && address <= 0xffffff)
@@ -1088,7 +1079,7 @@ namespace mame
             }
             else if (address >= 0x70000e && address + 1 <= 0x70000f)
             {
-                OKI6295.okim6295_data_0_lsb_w((byte)value);
+                OKI6295.oo1[0].okim6295_data_w((byte)value);
             }
             else if (address >= 0xff0000 && address + 1 <= 0xffffff)
             {
@@ -1102,6 +1093,15 @@ namespace mame
             MWriteWord_thoop(address, (short)(value >> 16));
             MWriteWord_thoop(address + 2, (short)value);
         }
+        public static byte M6809ReadOp_bigkarnk(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0c00 && address <= 0xffff)
+            {
+                result = Memory.audiorom[address];
+            }
+            return result;
+        }
         public static byte M6809ReadByte_bigkarnk(ushort address)
         {
             byte result = 0;
@@ -1111,7 +1111,7 @@ namespace mame
             }
             else if (address >= 0x0800 && address <= 0x0801)
             {
-                result = OKI6295.okim6295_status_0_r();
+                result = (byte)OKI6295.oo1[0].okim6295_status_r();
             }
             else if (address == 0x0a00)
             {
@@ -1135,7 +1135,7 @@ namespace mame
             }
             else if (address == 0x0800)
             {
-                OKI6295.okim6295_data_0_w(data);
+                OKI6295.oo1[0].okim6295_data_w(data);
             }
             else if (address == 0x0a00)
             {

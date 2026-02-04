@@ -65,6 +65,12 @@ namespace mame
                     numcolors = 0x400;
                     palette_set_callback = palette_entry_set_color2;
                     break;
+                case "Megasys1":
+                    trans_color = Color.Magenta;
+                    trans_uint = (uint)trans_color.ToArgb();
+                    numcolors = 0x400;
+                    palette_set_callback = palette_entry_set_color2;
+                    break;
                 case "Gaelco":
                     trans_color = Color.Magenta;
                     trans_uint = (uint)trans_color.ToArgb();

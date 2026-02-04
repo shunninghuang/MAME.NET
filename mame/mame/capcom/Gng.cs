@@ -26,6 +26,42 @@ namespace mame
         }
         public static void video_start_gng()
         {
+            int i;
+            fg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 32, 32);
+            bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_cols, 16, 16, 32, 32);
+            fg_tilemap.total_elements = gfx1rom.Length / 0x40;
+            fg_tilemap.pen_to_flags = new byte[1, 16];
+            for (i = 0; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            fg_tilemap.pen_to_flags[0, 3] = 0;
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_gng;
+            fg_tilemap.tile_update3 = fg_tilemap.tile_update_capcom_fg_gng;
+            bg_tilemap.total_elements = gfx2rom.Length / 0x100;
+            bg_tilemap.pen_to_flags = new byte[2, 16];
+            for (i = 0; i < 8; i++)
+            {
+                bg_tilemap.pen_to_flags[0, i] = 0x20;
+            }
+            for (i = 8; i < 0x10; i++)
+            {
+                bg_tilemap.pen_to_flags[0, i] = 0x30;
+            }
+            bg_tilemap.pen_to_flags[1, 0] = 0x20;
+            for (i = 1; i < 8; i++)
+            {
+                bg_tilemap.pen_to_flags[1, i] = 0x10;
+            }
+            for (i = 8; i < 0x10; i++)
+            {
+                bg_tilemap.pen_to_flags[1, i] = 0x30;
+            }
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_gng;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_capcom_bg_gng;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
             gng_fgvideoram = new byte[0x800];
             gng_bgvideoram = new byte[0x800];
             scrollx = new byte[2];
@@ -37,7 +73,7 @@ namespace mame
             int row, col;
             row = (offset & 0x3ff) / 0x20;
             col = (offset & 0x3ff) % 0x20;
-            fg_tilemap.tilemap_mark_tile_dirty(row, col);
+            fg_tilemap.tilemap_mark_tile_dirty(offset & 0x3ff);
         }
         public static void gng_bgvideoram_w(int offset, byte data)
         {
@@ -45,7 +81,7 @@ namespace mame
             int row, col;
             row = (offset & 0x3ff) % 0x20;
             col = (offset & 0x3ff) / 0x20;
-            bg_tilemap.tilemap_mark_tile_dirty(row, col);
+            bg_tilemap.tilemap_mark_tile_dirty(offset & 0x3ff);
         }
         public static void gng_bgscrollx_w(int offset, byte data)
         {

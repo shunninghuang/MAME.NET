@@ -65,12 +65,13 @@ namespace mame
             int dw = ex - sx + 1;										/* dest width */
             int dh = ey - sy + 1;										/* dest height */
             int colorbase = 0x10 * color;
-            blockmove_4toN_transpen_pri16(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, sy, sx, primask);
+            blockmove_4toN_transpen_pri16(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, primask, 0x0f, sx, sy);
         }
-        private static void blockmove_4toN_transpen_pri16(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int offsety, int offsetx, uint primask)
+        private static void blockmove_4toN_transpen_pri16(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int transpen, int sx, int sy)
         {
             int ydir, xdir, col, i, j;
-            int srcdata_offset = code * 0x100;
+            int offsetx = sx, offsety = sy;
+            int srcdata_offset = code * srcwidth * srcheight;
             if (flipy != 0)
             {
                 offsety += (dstheight - 1);
@@ -98,11 +99,11 @@ namespace mame
                 for (j = 0; j < dstwidth; j++)
                 {
                     col = bb1[srcdata_offset + srcmodulo * i + j];
-                    if (col != 0x0f)
+                    if (col != transpen)
                     {
-                        if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & primask) == 0)
+                        if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
                         {
-                            Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);
+                            Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = (ushort)(colorbase + col);
                         }
                         Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | 0x1f);
                     }

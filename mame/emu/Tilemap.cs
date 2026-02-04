@@ -20,7 +20,6 @@ namespace mame
     }
     public partial class Tmap
     {
-        public int laynum;
         public int rows;
         public int cols;
         public int tilewidth;
@@ -31,6 +30,7 @@ namespace mame
         public bool enable;
         public byte attributes;
         public bool all_tiles_dirty;
+        public bool all_tiles_clean;
         public int palette_offset;
         public byte priority;
         public int scrollrows;
@@ -43,13 +43,22 @@ namespace mame
         public int dy_flipped;
         public ushort[] pixmap;
         public byte[,] flagsmap;
-        public byte[,] tileflags;
+        public byte[] tileflags;
         public byte[,] pen_to_flags;
         public byte[] pen_data;
         public int mask, value;
         public int total_elements;
-        public Action<int, int> tile_update3;
-        public Action<RECT, int, int> tilemap_draw_instance3;               
+        public delegate int tilemap_mapper_func_delegate(int col, int row, int num_cols, int num_rows);
+        public delegate void tile_get_info_func_delegate(int tile_index, int param);
+        public tilemap_mapper_func_delegate mapper;
+        public int[] memory_to_logical;
+        public int max_logical_index;
+        public int[] logical_to_memory;
+        public int max_memory_index;
+        //public tile_get_info_func_delegate tile_get_info;
+        public int user_data;
+        public Action<int, int, int> tile_update3;
+        public Action<RECT, int, int> tilemap_draw_instance3;
         public int effective_rowscroll(int index)
         {
             int value;
@@ -100,9 +109,36 @@ namespace mame
             }
             return value;
         }
+        public static Tmap tilemap_create(tilemap_mapper_func_delegate mapper, int tilewidth, int tileheight, int cols, int rows)
+        {
+            Tmap t1 = new Tmap();
+            t1.rows = rows;
+            t1.cols = cols;
+            t1.tilewidth = tilewidth;
+            t1.tileheight = tileheight;
+            t1.width = cols * tilewidth;
+            t1.height = rows * tileheight;
+            t1.mapper = mapper;
+            t1.mappings_create();
+            t1.enable = true;
+            t1.all_tiles_dirty = true;
+            t1.scrollrows = 1;
+            t1.scrollcols = 1;
+            t1.rowscroll = new int[t1.height];
+            t1.colscroll = new int[t1.width];
+            t1.pixmap = new ushort[t1.width * t1.height];
+            t1.pen_data = new byte[t1.tilewidth * t1.tileheight];
+            t1.tileflags = new byte[t1.max_logical_index];
+            t1.flagsmap = new byte[t1.height, t1.width];
+            return t1;
+        }
         public void tilemap_set_palette_offset(int offset)
         {
             palette_offset = offset;
+        }
+        public void tilemap_set_enable(bool _enable)
+        {
+            enable = _enable;
         }
         public static void tilemap_set_flip(Tmap tmap, byte _attributes)
         {
@@ -142,9 +178,32 @@ namespace mame
                 row = index / cols;
             }
         }
-        public void tilemap_mark_tile_dirty(int row, int col)
+        public void tilemap_mark_tile_dirty(int memindex)
         {
-            tileflags[row, col] = Tilemap.TILE_FLAG_DIRTY;
+            if (memindex < max_memory_index)
+            {
+                int logindex = memory_to_logical[memindex];
+                if (logindex != -1)
+                {
+                    tileflags[logindex] = Tilemap.TILE_FLAG_DIRTY;
+                    all_tiles_clean = false;
+                }
+            }
+        }
+        public static void tilemap_mark_all_tiles_dirty(Tmap tmap)
+        {
+            if (tmap == null)
+            {
+                foreach (Tmap t1 in Tilemap.lsTmap)
+                {
+                    tilemap_mark_all_tiles_dirty(t1);
+                }
+            }
+            else
+            {
+                tmap.all_tiles_dirty = true;
+                tmap.all_tiles_clean = false;
+            }
         }
         public void tilemap_set_scroll_rows(int scroll_rows)
         {
@@ -261,9 +320,59 @@ namespace mame
                 int i1 = 1;
             }
         }
+        public static int tilemap_scan_rows(int col, int row, int num_cols, int num_rows)
+        {
+            return row * num_cols + col;
+        }
+        public static int tilemap_scan_cols(int col, int row, int num_cols, int num_rows)
+        {
+            return col * num_rows + row;
+        }
+        public void mappings_create()
+        {
+            int col, row;
+            max_logical_index = rows * cols;
+            max_memory_index = 0;
+            for (row = 0; row < rows; row++)
+            {
+                for (col = 0; col < cols; col++)
+                {
+                    int memindex = mapper(col, row, cols, rows);
+                    max_memory_index = Math.Max(max_memory_index, memindex);
+                }
+            }
+            max_memory_index++;
+            memory_to_logical = new int[max_memory_index];
+            logical_to_memory = new int[max_logical_index];
+            mappings_update();
+        }
         public void mappings_update()
         {
-            all_tiles_dirty = true;
+            int logindex;
+            int memindex;
+            for (memindex = 0; memindex < max_memory_index; memindex++)
+            {
+                memory_to_logical[memindex] = -1;
+            }
+            for (logindex = 0; logindex < max_logical_index; logindex++)
+            {
+                int logical_col = logindex % cols;
+                int logical_row = logindex / cols;
+                memindex = mapper(logical_col, logical_row, cols, rows);
+                int flipped_logindex;
+                if ((attributes & Tilemap.TILEMAP_FLIPX) != 0)
+                {
+                    logical_col = (cols - 1) - logical_col;
+                }
+                if ((attributes & Tilemap.TILEMAP_FLIPY) != 0)
+                {
+                    logical_row = (rows - 1) - logical_row;
+                }
+                flipped_logindex = logical_row * cols + logical_col;
+                memory_to_logical[memindex] = flipped_logindex;
+                logical_to_memory[flipped_logindex] = memindex;
+            }
+            tilemap_mark_all_tiles_dirty(this);
         }
         public byte tile_draw(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base,byte category, byte group, byte flags)
         {
@@ -346,13 +455,14 @@ namespace mame
     {
         public static List<Tmap> lsTmap = new List<Tmap>();
         public static byte[,] priority_bitmap;
-        public static byte[,] bb00,bbFF;
-        public static byte[] bb0F;
+        public static byte[,] bb00;
+        public static byte[] bb0F,bbFF;
         public static int screen_width, screen_height;
         private static int INVALID_LOGICAL_INDEX = -1;
         public static byte TILEMAP_PIXEL_TRANSPARENT = 0x00;
         private static byte TILEMAP_PIXEL_CATEGORY_MASK = 0x0f;		/* category is stored in the low 4 bits */
         public static byte TILE_FLAG_DIRTY = 0xff;
+        public static byte TILEMAP_DRAW_OPAQUE = 0x80;
         public static byte TILEMAP_PIXEL_LAYER0 = 0x10;
         public static byte TILE_FLIPX = 0x01;		/* draw this tile horizontally flipped */
         public static byte TILE_FLIPY = 0x02;		/* draw this tile vertically flipped */
@@ -370,56 +480,52 @@ namespace mame
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
-                    CPS.tilemap_init();
                     break;
                 case "Data East":
                     screen_width = 0x100;
                     screen_height = 0x100;
-                    Dataeast.tilemap_init();
                     break;
                 case "Tehkan":
                     screen_width = 0x100;
                     screen_height = 0x100;
-                    Tehkan.tilemap_init();
                     break;
                 case "Technos":
-                    screen_width = 0x200;
-                    screen_height = 0x200;
-                    Technos.tilemap_init();
+                    screen_width = 0x180;
+                    screen_height = 0x110;
                     break;
                 case "Tad":
                     screen_width = 0x100;
                     screen_height = 0x100;
                     break;
+                case "Megasys1":
+                    screen_width = 0x196;
+                    screen_height = 0x107;
+                    priority_bitmap = new byte[0x107, 0x196];
+                    break;
                 case "Gaelco":
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
-                    Gaelco.tilemap_init();
                     break;
                 case "Namco System 1":
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
-                    Namcos1.tilemap_init();
                     break;
                 case "PGM":
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
-                    PGM.tilemap_init();
                     break;
                 case "M72":
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
-                    M72.tilemap_init();
                     break;
                 case "M92":
                     screen_width = 0x200;
-                    screen_height = 0x200;
+                    screen_height = 0x100;
                     priority_bitmap = new byte[0x200, 0x200];
-                    M92.tilemap_init();
                     break;
                 case "Taito":
                     screen_width = 0x140;
@@ -431,19 +537,16 @@ namespace mame
                     screen_width = 0x200;
                     screen_height = 0x100;
                     priority_bitmap = new byte[0x100, 0x200];
-                    Taitob.tilemap_init();
                     break;
                 case "Konami 68000":
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
-                    Konami68000.tilemap_init();
                     break;
                 case "Capcom":
                     screen_width = 0x200;
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
-                    Capcom.tilemap_init();
                     break;
             }            
             switch (Machine.sBoard)
@@ -455,7 +558,7 @@ namespace mame
                 case "Data East":
                 case "Tehkan":
                 case "Technos":
-                case "Tad":
+                case "Tad":                
                 case "Gaelco":
                 case "Namco System 1":
                 case "PGM":
@@ -464,22 +567,29 @@ namespace mame
                 case "Taito B":
                 case "Konami 68000":
                     bb0F = new byte[0x400];
-                    bbFF = new byte[0x80, 0x40];
-                    for (i = 0; i < 0x80; i++)
+                    bbFF = new byte[0x2000];
+                    for (i = 0; i < 0x2000; i++)
                     {
-                        for (j = 0; j < 0x40; j++)
-                        {
-                            bbFF[i, j] = 0xff;
-                        }
+                        bbFF[i] = 0xff;
                     }
                     for (i = 0; i < 0x400; i++)
                     {
                         bb0F[i] = 0x0f;
                     }
                     break;
+                case "Megasys1":
+                    bbFF = new byte[0x200000];
+                    for (i = 0; i < 0x200000; i++)
+                    {
+                        bbFF[i] = 0xff;
+                    }
+                    break;
                 case "M92":
-                    screen_height = 0x100;
-                    bbFF = new byte[0x80, 0x40];
+                    bbFF = new byte[0x2000];
+                    for (i = 0; i < 0x2000; i++)
+                    {
+                        bbFF[i] = 0xff;
+                    }
                     bb00 = new byte[0x200, 0x200];
                     for (i = 0; i < 0x200; i++)
                     {
@@ -488,22 +598,12 @@ namespace mame
                             bb00[i, j] = 0;
                         }
                     }
-                    for (i = 0; i < 0x80; i++)
-                    {
-                        for (j = 0; j < 0x40; j++)
-                        {
-                            bbFF[i, j] = 0xff;
-                        }
-                    }
                     break;
                 case "Capcom":
-                    bbFF = new byte[0x800, 0x10];
-                    for (i = 0; i < 0x800; i++)
+                    bbFF = new byte[0x8000];
+                    for (i = 0; i < 0x8000; i++)
                     {
-                        for (j = 0; j < 0x10; j++)
-                        {
-                            bbFF[i, j] = 0xff;
-                        }
+                        bbFF[i] = 0xff;
                     }
                     break;
             }

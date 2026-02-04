@@ -809,7 +809,7 @@ namespace mame
             }
             else if (address == 0x6000)
             {
-                result = OKI6295.okim6295_status_0_r();
+                result = (byte)OKI6295.oo1[0].okim6295_status_r();
             }
             else if (address >= 0x8000 && address <= 0xffff)
             {
@@ -868,7 +868,7 @@ namespace mame
             }
             else if (address == 0x6000)
             {
-                OKI6295.okim6295_data_0_w(value);
+                OKI6295.oo1[0].okim6295_data_w(value);
             }
         }
         public static byte ZReadOp_tokib(ushort address)

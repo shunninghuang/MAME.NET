@@ -16,7 +16,35 @@ namespace mame
         public static int copy_sprites;
         public static void video_start_namcos1()
         {
-            int i;
+            int i,j;
+            ttmap = new Tmap[6];
+            ttmap[0] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+            ttmap[1] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+            ttmap[2] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+            ttmap[3] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
+            ttmap[4] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 36, 28);
+            ttmap[5] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 36, 28);
+            ttmap[0].videoram_offset = 0x0000;
+            ttmap[1].videoram_offset = 0x2000;
+            ttmap[2].videoram_offset = 0x4000;
+            ttmap[3].videoram_offset = 0x6000;
+            ttmap[4].videoram_offset = 0x7010;
+            ttmap[5].videoram_offset = 0x7810;
+            for(i=0;i<6;i++)
+            {
+                ttmap[i].pen_to_flags = new byte[1, 0x100];
+                for (j = 0; j < 0x100; j++)
+                {
+                    ttmap[i].pen_to_flags[0, j] = 0x10;
+                }
+                ttmap[i].tile_update3 = ttmap[i].tile_update_namcos1;
+                ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instance_namcos1;
+            }
+            Tilemap.lsTmap = new List<Tmap>();
+            for (i = 0; i < 6; i++)
+            {
+                Tilemap.lsTmap.Add(ttmap[i]);
+            }
             namcos1_videoram = new byte[0x8000];
             namcos1_cus116 = new byte[0x10];
             namcos1_spriteram = new byte[0x1000];
@@ -64,29 +92,15 @@ namespace mame
             {
                 int layer = offset >> 13;
                 int num = (offset & 0x1fff) >> 1;
-                int row, col;
-                //row = num / Tilemap.ttmap[layer].cols;
-                //col = num % Tilemap.ttmap[layer].cols;
-                //Tilemap.tilemap_mark_tile_dirty(Tilemap.ttmap[layer], row, col);
-                //row = num / Tmap.ttmap[layer].cols;
-                //col = num % Tmap.ttmap[layer].cols;
-                ttmap[layer].get_row_col(num, out row, out col);
-                ttmap[layer].tilemap_mark_tile_dirty(row, col);
+                ttmap[layer].tilemap_mark_tile_dirty(num);
             }
             else
             {
                 int layer = (offset >> 11 & 1) + 4;
                 int num = ((offset & 0x7ff) - 0x10) >> 1;
-                int row, col;
                 if (num >= 0 && num < 0x3f0)
                 {
-                    //row = num / Tilemap.ttmap[layer].cols;
-                    //col = num % Tilemap.ttmap[layer].cols;
-                    //Tilemap.tilemap_mark_tile_dirty(Tilemap.ttmap[layer], row, col);
-                    //row = num / Tmap.ttmap[layer].cols;
-                    //col = num % Tmap.ttmap[layer].cols;
-                    ttmap[layer].get_row_col(num, out row, out col);
-                    ttmap[layer].tilemap_mark_tile_dirty(row, col);
+                    ttmap[layer].tilemap_mark_tile_dirty(num);
                 }
             }
         }
@@ -176,7 +190,7 @@ namespace mame
                     flipy ^= 1;
                 }
                 sy++;
-                Drawgfx.common_drawgfx_namcos1(sizex, sizey, tx, ty, sprite, color, flipx, flipy, sx & 0x1ff, ((sy + 16) & 0xff) - 16, pri_mask | (1 << 31), cliprect);
+                Drawgfx.common_drawgfx_namcos1(sizex, sizey, tx, ty, sprite, color, flipx, flipy, sx & 0x1ff, ((sy + 16) & 0xff) - 16, (uint)(pri_mask | (1 << 31)), cliprect);
             }
         }
         public static void video_update_namcos1()

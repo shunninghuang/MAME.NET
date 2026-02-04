@@ -37,7 +37,7 @@ namespace mame
             Generic.videoram[offset] = data;
             row = (offset / 2) / 0x20;
             col = (offset / 2) % 0x20;
-            bg_tilemap.tilemap_mark_tile_dirty(row, col);
+            bg_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         public static void pcktgal_flipscreen_w(byte data)
         {
@@ -46,6 +46,21 @@ namespace mame
                 Generic.flip_screen_set(data & 0x80);
                 bg_tilemap.all_tiles_dirty = true;
             }
+        }
+        public static void video_start_pcktgal()
+        {
+            int i;
+            bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 32, 32);
+            bg_tilemap.total_elements = gfx1rom.Length / 0x40;
+            bg_tilemap.pen_to_flags = new byte[1, 16];
+            for (i = 0; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_gng;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_pcktgal_bg;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
         }
         public static void draw_sprites(RECT cliprect)
         {

@@ -36,11 +36,12 @@ namespace mame
                 case "drgnwrldv40k":
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     gfx1rom = Machine.GetRom("gfx1.rom");
-                    OKI6295.okirom = Machine.GetRom("oki.rom");
+                    OKI6295.oo1[0] = new OKI6295();
+                    OKI6295.oo1[0].okirom = Machine.GetRom("oki.rom");
                     dsw1 = 0xff;
                     dsw2 = 0xff;
                     dsw3 = 0xff;
-                    if (Memory.mainrom == null || gfx1rom == null || OKI6295.okirom == null)
+                    if (Memory.mainrom == null || gfx1rom == null || OKI6295.oo1[0].okirom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -51,13 +52,14 @@ namespace mame
                 case "ryukobou":
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     gfx1rom = Machine.GetRom("gfx1.rom");
-                    OKI6295.okirom = Machine.GetRom("oki.rom");
+                    OKI6295.oo1[0] = new OKI6295();
+                    OKI6295.oo1[0].okirom = Machine.GetRom("oki.rom");
                     dsw1 = 0xf7;
                     dsw2 = 0xff;
                     dsw3 = 0xff;
                     dsw4 = 0xf0;
                     dsw5 = 0xff;
-                    if (Memory.mainrom == null || gfx1rom == null || OKI6295.okirom == null)
+                    if (Memory.mainrom == null || gfx1rom == null || OKI6295.oo1[0].okirom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -216,7 +218,7 @@ namespace mame
         }
         public static void chmplst2_interrupt()
         {
-            switch (Cpuexec.iloops)
+            switch (Cpuexec.cpu[0].iloops)
             {
                 case 0:
                     Cpuint.cpunum_set_input_line(0, 6, LineState.HOLD_LINE);
@@ -558,7 +560,7 @@ namespace mame
                     //if (ACCESSING_BITS_0_7)
                     {
                         lhb2_pen_hi = (byte)(data & 0x07);
-                        OKI6295.okim6295_set_bank_base((data & 0x08) != 0 ? 0x40000 : 0);
+                        OKI6295.oo1[0].okim6295_set_bank_base((data & 0x08) != 0 ? 0x40000 : 0);
                     }
                     break;
             }
@@ -583,7 +585,7 @@ namespace mame
                     //if (ACCESSING_BITS_0_7)
                     {
                         lhb2_pen_hi = (byte)(data & 0x07);
-                        OKI6295.okim6295_set_bank_base((data & 0x08) != 0 ? 0x40000 : 0);
+                        OKI6295.oo1[0].okim6295_set_bank_base((data & 0x08) != 0 ? 0x40000 : 0);
                     }
                     break;
             }
@@ -661,7 +663,7 @@ namespace mame
                     //if (ACCESSING_BITS_0_7)
                     {
                         Generic.coin_counter_w(0, data & 0x01);
-                        OKI6295.okim6295_set_bank_base((data & 0x10) != 0 ? 0x40000 : 0);
+                        OKI6295.oo1[0].okim6295_set_bank_base((data & 0x10) != 0 ? 0x40000 : 0);
                     }
                     break;
             }
@@ -679,7 +681,7 @@ namespace mame
                     //if (ACCESSING_BITS_0_7)
                     {
                         Generic.coin_counter_w(0, data & 0x01);
-                        OKI6295.okim6295_set_bank_base((data & 0x10) != 0 ? 0x40000 : 0);
+                        OKI6295.oo1[0].okim6295_set_bank_base((data & 0x10) != 0 ? 0x40000 : 0);
                     }
                     break;
             }
@@ -858,11 +860,11 @@ namespace mame
         private static void lhb_okibank_w(byte data)
         {
             //ACCESSING_BITS_8_15
-            OKI6295.okim6295_set_bank_base((data & 0x2) != 0 ? 0x40000 : 0);
+            OKI6295.oo1[0].okim6295_set_bank_base((data & 0x2) != 0 ? 0x40000 : 0);
         }
         private static void lhb_okibank_w(ushort data)
         {
-            OKI6295.okim6295_set_bank_base((data & 0x200) != 0 ? 0x40000 : 0);
+            OKI6295.oo1[0].okim6295_set_bank_base((data & 0x200) != 0 ? 0x40000 : 0);
         }
         private static byte ics2115_0_word_r1(int offset)
         {

@@ -2,139 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace mame
 {
     public partial class CPS
     {
         public static Tmap[] ttmap;
-        public static void tilemap_init()
-        {
-            int i;
-            switch (Machine.sBoard)
-            {
-                case "CPS-1":
-                case "CPS-1(QSound)":
-                    ttmap = new Tmap[3];
-                    ttmap[0] = new Tmap();
-                    ttmap[0].tilewidth = 8;
-                    ttmap[0].tileheight = 8;
-                    ttmap[0].width = 0x200;
-                    ttmap[0].height = 0x200;
-                    ttmap[0].scrollrows = 1;
-                    ttmap[0].pixmap = new ushort[0x200 * 0x200];
-                    ttmap[0].flagsmap = new byte[0x200, 0x200];
-                    ttmap[0].tileflags = new byte[0x40, 0x40];
-                    ttmap[0].pen_to_flags = new byte[4, 16];
-                    ttmap[0].pen_data = new byte[0x40];
-                    ttmap[1] = new Tmap();
-                    ttmap[1].tilewidth = 0x10;
-                    ttmap[1].tileheight = 0x10;
-                    ttmap[1].width = 0x400;
-                    ttmap[1].height = 0x400;
-                    ttmap[1].scrollrows = 0x400;
-                    ttmap[1].pixmap = new ushort[0x400 * 0x400];
-                    ttmap[1].flagsmap = new byte[0x400, 0x400];
-                    ttmap[1].tileflags = new byte[0x40, 0x40];
-                    ttmap[1].pen_to_flags = new byte[4, 16];
-                    ttmap[1].pen_data = new byte[0x100];
-                    ttmap[2] = new Tmap();
-                    ttmap[2].tilewidth = 0x20;
-                    ttmap[2].tileheight = 0x20;
-                    ttmap[2].width = 0x800;
-                    ttmap[2].height = 0x800;
-                    ttmap[2].scrollrows = 1;
-                    ttmap[2].pixmap = new ushort[0x800 * 0x800];
-                    ttmap[2].flagsmap = new byte[0x800, 0x800];
-                    ttmap[2].tileflags = new byte[0x40, 0x40];
-                    ttmap[2].pen_to_flags = new byte[4, 16];
-                    ttmap[2].pen_data = new byte[0x400];
-                    for (i = 0; i < 3; i++)
-                    {
-                        ttmap[i].rows = 0x40;
-                        ttmap[i].cols = 0x40;
-                        ttmap[i].enable = true;
-                        ttmap[i].all_tiles_dirty = true;
-                        ttmap[i].scrollcols = 1;
-                        ttmap[i].rowscroll = new int[ttmap[i].scrollrows];
-                        ttmap[i].colscroll = new int[ttmap[i].scrollcols];
-                        ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instance_cps;
-                        ttmap[i].tilemap_set_scrolldx(0, 0);
-                        ttmap[i].tilemap_set_scrolldy(0x100, 0);
-                    }
-                    ttmap[0].tile_update3 = ttmap[0].tile_update_c0;
-                    ttmap[1].tile_update3 = ttmap[1].tile_update_c1;
-                    ttmap[2].tile_update3 = ttmap[2].tile_update_c2;
-                    ttmap[0].total_elements = CPS.gfxrom.Length / 0x40;
-                    ttmap[1].total_elements = CPS.gfxrom.Length / 0x80;
-                    ttmap[2].total_elements = CPS.gfxrom.Length / 0x200;
-                    break;
-                case "CPS2":
-                case "CPS2turbo":
-                    ttmap = new Tmap[3];
-                    ttmap[0] = new Tmap();
-                    ttmap[0].tilewidth = 8;
-                    ttmap[0].tileheight = 8;
-                    ttmap[0].width = 0x200;
-                    ttmap[0].height = 0x200;
-                    ttmap[0].scrollrows = 1;
-                    ttmap[0].pixmap = new ushort[0x200 * 0x200];
-                    ttmap[0].flagsmap = new byte[0x200, 0x200];
-                    ttmap[0].tileflags = new byte[0x40, 0x40];
-                    ttmap[0].pen_to_flags = new byte[4, 16];
-                    ttmap[0].pen_data = new byte[0x40];
-                    ttmap[1] = new Tmap();
-                    ttmap[1].tilewidth = 0x10;
-                    ttmap[1].tileheight = 0x10;
-                    ttmap[1].width = 0x400;
-                    ttmap[1].height = 0x400;
-                    ttmap[1].scrollrows = 0x400;
-                    ttmap[1].pixmap = new ushort[0x400 * 0x400];
-                    ttmap[1].flagsmap = new byte[0x400, 0x400];
-                    ttmap[1].tileflags = new byte[0x40, 0x40];
-                    ttmap[1].pen_to_flags = new byte[4, 16];
-                    ttmap[1].pen_data = new byte[0x100];
-                    ttmap[2] = new Tmap();
-                    ttmap[2].tilewidth = 0x20;
-                    ttmap[2].tileheight = 0x20;
-                    ttmap[2].width = 0x800;
-                    ttmap[2].height = 0x800;
-                    ttmap[2].scrollrows = 1;
-                    ttmap[2].pixmap = new ushort[0x800 * 0x800];
-                    ttmap[2].flagsmap = new byte[0x800, 0x800];
-                    ttmap[2].tileflags = new byte[0x40, 0x40];
-                    ttmap[2].pen_to_flags = new byte[4, 16];
-                    ttmap[2].pen_data = new byte[0x400];
-                    for (i = 0; i < 3; i++)
-                    {
-                        ttmap[i].rows = 0x40;
-                        ttmap[i].cols = 0x40;
-                        ttmap[i].enable = true;
-                        ttmap[i].all_tiles_dirty = true;
-                        ttmap[i].scrollcols = 1;
-                        ttmap[i].rowscroll = new int[ttmap[i].scrollrows];
-                        ttmap[i].colscroll = new int[ttmap[i].scrollcols];
-                        ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instance_cps;
-                        ttmap[i].tilemap_set_scrolldx(0, 0);
-                        ttmap[i].tilemap_set_scrolldy(0, 0);
-                    }
-                    ttmap[0].tile_update3 = ttmap[0].tile_update_c0;
-                    ttmap[1].tile_update3 = ttmap[1].tile_update_c1;
-                    ttmap[2].tile_update3 = ttmap[2].tile_update_c2;
-                    ttmap[0].total_elements = CPS.gfxrom.Length / 0x40;
-                    ttmap[1].total_elements = CPS.gfxrom.Length / 0x80;
-                    ttmap[2].total_elements = CPS.gfxrom.Length / 0x200;
-                    break;
-            }
-            Tilemap.lsTmap = new List<Tmap>();
-            Tilemap.lsTmap.Add(ttmap[0]);
-            Tilemap.lsTmap.Add(ttmap[1]);
-            Tilemap.lsTmap.Add(ttmap[2]);
-        }
     }
     public partial class Tmap
     {
-        public void tile_update_c0(int col, int row)
+        public void tile_update_c0(int logindex, int col, int row)
         {
             byte group0, flags0;
             int x0 = 0x08 * col;
@@ -145,42 +23,38 @@ namespace mame
             int gfxset;
             int match;
             int i, j;
-            memindex = (row & 0x1f) + ((col & 0x3f) << 5) + ((row & 0x20) << 6);
+            memindex = logical_to_memory[logindex];
+            code = CPS.gfxram[(CPS.scroll1 + 2 * memindex) * 2] * 0x100 + CPS.gfxram[(CPS.scroll1 + 2 * memindex) * 2 + 1];
+            match = 0;
+            foreach (CPS.gfx_range r in CPS.lsRange0)
             {
-                code = CPS.gfxram[(CPS.scroll1 + 2 * memindex) * 2] * 0x100 + CPS.gfxram[(CPS.scroll1 + 2 * memindex) * 2 + 1];
-                match = 0;
-                foreach (CPS.gfx_range r in CPS.lsRange0)
+                if (code >= r.start && code <= r.end)
                 {
-                    if (code >= r.start && code <= r.end)
-                    {
-                        code += r.add;
-                        match = 1;
-                        break;
-                    }
+                    code += r.add;
+                    match = 1;
+                    break;
                 }
-                code %= CPS.ttmap[0].total_elements;
-                gfxset = (memindex & 0x20) >> 5;
-                attr = CPS.gfxram[(CPS.scroll1 + 2 * memindex + 1) * 2] * 0x100 + CPS.gfxram[(CPS.scroll1 + 2 * memindex + 1) * 2 + 1];
-                {
-                    if (match == 0)
-                    {
-                        Array.Copy(Tilemap.bb0F, 0, pen_data, 0, 0x40);
-                    }
-                    else
-                    {
-                        for (j = 0; j < 0x08; j++)
-                        {
-                            Array.Copy(CPS.gfx1rom, code * 0x80 + gfxset * 8 + j * 0x10, pen_data, j * 8, 8);
-                        }
-                    }
-                    palette_base0 = 0x10 * ((attr & 0x1f) + 0x20);
-                    flags0 = (byte)(((attr & 0x60) >> 5) & 3);
-                }
-                group0 = (byte)((attr & 0x0180) >> 7);
             }
-            tileflags[row, col] = tile_draw(pen_data, 0, x0, y0, palette_base0, 0, group0, flags0);
+            code %= CPS.ttmap[0].total_elements;
+            gfxset = (memindex & 0x20) >> 5;
+            attr = CPS.gfxram[(CPS.scroll1 + 2 * memindex + 1) * 2] * 0x100 + CPS.gfxram[(CPS.scroll1 + 2 * memindex + 1) * 2 + 1];
+            if (match == 0)
+            {
+                Array.Copy(Tilemap.bb0F, 0, pen_data, 0, 0x40);
+            }
+            else
+            {
+                for (j = 0; j < 0x08; j++)
+                {
+                    Array.Copy(CPS.gfx1rom, code * 0x80 + gfxset * 8 + j * 0x10, pen_data, j * 8, 8);
+                }
+            }
+            palette_base0 = 0x10 * ((attr & 0x1f) + 0x20);
+            flags0 = (byte)(((attr & 0x60) >> 5) & 3);
+            group0 = (byte)((attr & 0x0180) >> 7);
+            tileflags[logindex] = tile_draw(pen_data, 0, x0, y0, palette_base0, 0, group0, flags0);
         }
-        public void tile_update_c1(int col, int row)
+        public void tile_update_c1(int logindex, int col, int row)
         {
             byte group1, flags1;
             int x0 = 0x10 * col;
@@ -189,36 +63,34 @@ namespace mame
             int code, attr;
             int memindex;
             int match;
-            memindex = (row & 0x0f) + ((col & 0x3f) << 4) + ((row & 0x30) << 6);
+            memindex = logical_to_memory[logindex];
+            code = CPS.gfxram[(CPS.scroll2 + 2 * memindex) * 2] * 0x100 + CPS.gfxram[(CPS.scroll2 + 2 * memindex) * 2 + 1];
+            match = 0;
+            foreach (CPS.gfx_range r in CPS.lsRange1)
             {
-                code = CPS.gfxram[(CPS.scroll2 + 2 * memindex) * 2] * 0x100 + CPS.gfxram[(CPS.scroll2 + 2 * memindex) * 2 + 1];
-                match = 0;
-                foreach (CPS.gfx_range r in CPS.lsRange1)
+                if (code >= r.start && code <= r.end)
                 {
-                    if (code >= r.start && code <= r.end)
-                    {
-                        code += r.add;
-                        match = 1;
-                        break;
-                    }
+                    code += r.add;
+                    match = 1;
+                    break;
                 }
-                code %= CPS.ttmap[1].total_elements;
-                attr = CPS.gfxram[(CPS.scroll2 + 2 * memindex + 1) * 2] * 0x100 + CPS.gfxram[(CPS.scroll2 + 2 * memindex + 1) * 2 + 1];
-                if (match == 0)
-                {
-                    Array.Copy(Tilemap.bb0F, 0, pen_data, 0, 0x100);
-                }
-                else
-                {
-                    Array.Copy(CPS.gfx1rom, code * 0x100, pen_data, 0, 0x100);
-                }
-                palette_base1 = 0x10 * ((attr & 0x1f) + 0x40);
-                flags1 = (byte)(((attr & 0x60) >> 5) & 3);
-                group1 = (byte)((attr & 0x0180) >> 7);
             }
-            tileflags[row, col] = tile_draw(pen_data, 0, x0, y0, palette_base1, 0, group1, flags1);
+            code %= CPS.ttmap[1].total_elements;
+            attr = CPS.gfxram[(CPS.scroll2 + 2 * memindex + 1) * 2] * 0x100 + CPS.gfxram[(CPS.scroll2 + 2 * memindex + 1) * 2 + 1];
+            if (match == 0)
+            {
+                Array.Copy(Tilemap.bb0F, 0, pen_data, 0, 0x100);
+            }
+            else
+            {
+                Array.Copy(CPS.gfx1rom, code * 0x100, pen_data, 0, 0x100);
+            }
+            palette_base1 = 0x10 * ((attr & 0x1f) + 0x40);
+            flags1 = (byte)(((attr & 0x60) >> 5) & 3);
+            group1 = (byte)((attr & 0x0180) >> 7);
+            tileflags[logindex] = tile_draw(pen_data, 0, x0, y0, palette_base1, 0, group1, flags1);
         }
-        public void tile_update_c2(int col, int row)
+        public void tile_update_c2(int logindex, int col, int row)
         {
             byte group2, flags2;
             int x0 = 0x20 * col;
@@ -227,38 +99,36 @@ namespace mame
             int code, attr;
             int memindex;
             int match;
-            memindex = (row & 0x07) + ((col & 0x3f) << 3) + ((row & 0x38) << 6);
+            memindex = logical_to_memory[logindex];
+            code = (CPS.gfxram[(CPS.scroll3 + 2 * memindex) * 2] * 0x100 + CPS.gfxram[(CPS.scroll3 + 2 * memindex) * 2 + 1]) & 0x3fff;
+            match = 0;
+            foreach (CPS.gfx_range r in CPS.lsRange2)
             {
-                code = (CPS.gfxram[(CPS.scroll3 + 2 * memindex) * 2] * 0x100 + CPS.gfxram[(CPS.scroll3 + 2 * memindex) * 2 + 1]) & 0x3fff;
-                match = 0;
-                foreach (CPS.gfx_range r in CPS.lsRange2)
+                if (code >= r.start && code <= r.end)
                 {
-                    if (code >= r.start && code <= r.end)
-                    {
-                        code += r.add;
-                        match = 1;
-                        break;
-                    }
+                    code += r.add;
+                    match = 1;
+                    break;
                 }
-                code %= CPS.ttmap[2].total_elements;
-                attr = CPS.gfxram[(CPS.scroll3 + 2 * memindex + 1) * 2] * 0x100 + CPS.gfxram[(CPS.scroll3 + 2 * memindex + 1) * 2 + 1];
-                if (match == 0)
-                {
-                    Array.Copy(Tilemap.bb0F, 0, pen_data, 0, 0x400);
-                }
-                else
-                {
-                    Array.Copy(CPS.gfx1rom, code * 0x400, pen_data, 0, 0x400);
-                }
-                palette_base2 = 0x10 * ((attr & 0x1f) + 0x60);
-                flags2 = (byte)(((attr & 0x60) >> 5) & 3);
-                group2 = (byte)((attr & 0x0180) >> 7);
             }
-            tileflags[row, col] = tile_draw(pen_data, 0, x0, y0, palette_base2, 0, group2, flags2);
+            code %= CPS.ttmap[2].total_elements;
+            attr = CPS.gfxram[(CPS.scroll3 + 2 * memindex + 1) * 2] * 0x100 + CPS.gfxram[(CPS.scroll3 + 2 * memindex + 1) * 2 + 1];
+            if (match == 0)
+            {
+                Array.Copy(Tilemap.bb0F, 0, pen_data, 0, 0x400);
+            }
+            else
+            {
+                Array.Copy(CPS.gfx1rom, code * 0x400, pen_data, 0, 0x400);
+            }
+            palette_base2 = 0x10 * ((attr & 0x1f) + 0x60);
+            flags2 = (byte)(((attr & 0x60) >> 5) & 3);
+            group2 = (byte)((attr & 0x0180) >> 7);
+            tileflags[logindex] = tile_draw(pen_data, 0, x0, y0, palette_base2, 0, group2, flags2);
         }
         public void tilemap_draw_instance_cps(RECT cliprect, int xpos, int ypos)
         {
-            int mincol, maxcol;
+            int mincol, maxcol, logindex;
             int x1, y1, x2, y2;
             int y, nexty;
             int offsety1, offsety2;
@@ -295,11 +165,12 @@ namespace mame
                     }
                     else
                     {
-                        if (tileflags[row, column] == Tilemap.TILE_FLAG_DIRTY)
+                        logindex = row * cols + column;
+                        if (tileflags[logindex] == Tilemap.TILE_FLAG_DIRTY)
                         {
-                            tile_update3(column, row);
+                            tile_update3(logindex, column, row);
                         }
-                        if ((tileflags[row, column] & mask) != 0)
+                        if ((tileflags[logindex] & mask) != 0)
                         {
                             cur_trans = trans_t.MASKED;
                         }
@@ -309,7 +180,9 @@ namespace mame
                         }
                     }
                     if (cur_trans == prev_trans)
+                    {
                         continue;
+                    }
                     x_end = column * tilewidth;
                     x_end = Math.Max(x_end, x1);
                     x_end = Math.Min(x_end, x2);
@@ -321,7 +194,7 @@ namespace mame
                         {
                             for (cury = y; cury < nexty; cury++)
                             {
-                                Array.Copy(pixmap, offsety2 * width + x_start, Video.bitmapbase[Video.curbitmap], (offsety2 + ypos) * 0x200 + xpos + x_start, x_end - x_start);
+                                Array.Copy(pixmap, offsety2 * width + x_start, Video.bitmapbase[Video.curbitmap], (offsety2 + ypos) * Video.fullwidth + xpos + x_start, x_end - x_start);
                                 if (priority != 0)
                                 {
                                     for (i = xpos + x_start; i < xpos + x_end; i++)
@@ -340,7 +213,7 @@ namespace mame
                                 {
                                     if ((flagsmap[offsety2, i - xpos] & mask) == value)
                                     {
-                                        Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * 0x200 + i] = pixmap[offsety2 * width + i - xpos];
+                                        Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * Video.fullwidth + i] = pixmap[offsety2 * width + i - xpos];
                                         Tilemap.priority_bitmap[offsety2 + ypos, i] = (byte)(Tilemap.priority_bitmap[offsety2 + ypos, i] | priority);
                                     }
                                 }

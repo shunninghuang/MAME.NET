@@ -121,6 +121,67 @@ namespace mame
                             break;
                     }
                     break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai"://Z
+                        case "makaiden":
+                            savestate_callback = Megasys1.SaveStateBinary_z;
+                            loadstate_callback = Megasys1.LoadStateBinary_z;
+                            break;
+                        case "p47"://A
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                            savestate_callback = Megasys1.SaveStateBinary_a;
+                            loadstate_callback = Megasys1.LoadStateBinary_a;
+                            break;
+                        case "avspirit"://B
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        case "hayaosi1":
+                        //case "edfbl":
+                            savestate_callback = Megasys1.SaveStateBinary_b;
+                            loadstate_callback = Megasys1.LoadStateBinary_b;
+                            break;
+                        case "64street"://C
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            savestate_callback = Megasys1.SaveStateBinary_c;
+                            loadstate_callback = Megasys1.LoadStateBinary_c;
+                            break;
+                        case "peekaboo"://D
+                        case "peakaboou":
+                            savestate_callback = Megasys1.SaveStateBinary_d;
+                            loadstate_callback = Megasys1.LoadStateBinary_d;
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {

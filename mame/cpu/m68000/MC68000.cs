@@ -9,7 +9,8 @@ namespace cpu.m68000
 {
     public sealed partial class MC68000 : cpuexec_data
     {
-        public static MC68000 m1;
+        public static MC68000[] mm1;
+        public static int nMC68000;
         // Machine State
         public Register[] D = new Register[8];
         public Register[] A = new Register[8];
@@ -45,6 +46,8 @@ namespace cpu.m68000
         bool s, m;
         public int usp, ssp;
         public bool stopped;
+
+        public Func<int, int> irq_callback = delegate(int line) { return 0; };
 
         /// <summary>Machine/Interrupt mode</summary>
         public bool M { get { return m; } set { m = value; } } // TODO probably have some switch logic maybe
@@ -176,8 +179,10 @@ namespace cpu.m68000
         }
         public override void set_irq_line(int irqline, LineState state)
         {
-            if (irqline ==(int)LineState.INPUT_LINE_NMI)
+            if (irqline == (int)LineState.INPUT_LINE_NMI)
+            {
                 irqline = 7;
+            }
             switch (state)
             {
                 case LineState.CLEAR_LINE:
@@ -201,6 +206,7 @@ namespace cpu.m68000
             pendingCycles = 0;
             S = true;
             M = false;
+            Z = true;
             InterruptMaskLevel = 7;
             Interrupt = 0;
             A[7].s32 = ReadOpLong(0);
@@ -286,58 +292,58 @@ namespace cpu.m68000
             int i;
             for (i = 0; i < 0x08; i++)
             {
-                writer.Write(MC68000.m1.D[i].u32);
+                writer.Write(D[i].u32);
             }
             for (i = 0; i < 0x08; i++)
             {
-                writer.Write(MC68000.m1.A[i].u32);
+                writer.Write(A[i].u32);
             }
-            writer.Write(MC68000.m1.PPC);
-            writer.Write(MC68000.m1.PC);
-            writer.Write(MC68000.m1.S);
-            writer.Write(MC68000.m1.M);
-            writer.Write(MC68000.m1.X);
-            writer.Write(MC68000.m1.N);
-            writer.Write(MC68000.m1.Z);
-            writer.Write(MC68000.m1.V);
-            writer.Write(MC68000.m1.C);
-            writer.Write(MC68000.m1.InterruptMaskLevel);
-            writer.Write(MC68000.m1.Interrupt);
-            writer.Write(MC68000.m1.int_cycles);
-            writer.Write(MC68000.m1.usp);
-            writer.Write(MC68000.m1.ssp);
-            writer.Write(MC68000.m1.stopped);
-            writer.Write(MC68000.m1.TotalExecutedCycles);
-            writer.Write(MC68000.m1.PendingCycles);
+            writer.Write(PPC);
+            writer.Write(PC);
+            writer.Write(S);
+            writer.Write(M);
+            writer.Write(X);
+            writer.Write(N);
+            writer.Write(Z);
+            writer.Write(V);
+            writer.Write(C);
+            writer.Write(InterruptMaskLevel);
+            writer.Write(Interrupt);
+            writer.Write(int_cycles);
+            writer.Write(usp);
+            writer.Write(ssp);
+            writer.Write(stopped);
+            writer.Write(TotalExecutedCycles);
+            writer.Write(PendingCycles);
         }
         public override void LoadStateBinary(BinaryReader reader)
         {
             int i;
             for (i = 0; i < 0x08; i++)
             {
-                MC68000.m1.D[i].u32 = reader.ReadUInt32();
+                D[i].u32 = reader.ReadUInt32();
             }
             for (i = 0; i < 0x08; i++)
             {
-                MC68000.m1.A[i].u32 = reader.ReadUInt32();
+                A[i].u32 = reader.ReadUInt32();
             }
-            MC68000.m1.PPC = reader.ReadInt32();
-            MC68000.m1.PC = reader.ReadInt32();
-            MC68000.m1.SetS(reader.ReadBoolean());
-            MC68000.m1.M = reader.ReadBoolean();
-            MC68000.m1.X = reader.ReadBoolean();
-            MC68000.m1.N = reader.ReadBoolean();
-            MC68000.m1.Z = reader.ReadBoolean();
-            MC68000.m1.V = reader.ReadBoolean();
-            MC68000.m1.C = reader.ReadBoolean();
-            MC68000.m1.InterruptMaskLevel = reader.ReadInt32();
-            MC68000.m1.Interrupt = reader.ReadInt32();
-            MC68000.m1.int_cycles = reader.ReadInt32();
-            MC68000.m1.usp = reader.ReadInt32();
-            MC68000.m1.ssp = reader.ReadInt32();
-            MC68000.m1.stopped = reader.ReadBoolean();
-            MC68000.m1.TotalExecutedCycles = reader.ReadUInt64();
-            MC68000.m1.PendingCycles = reader.ReadInt32();
+            PPC = reader.ReadInt32();
+            PC = reader.ReadInt32();
+            SetS(reader.ReadBoolean());
+            M = reader.ReadBoolean();
+            X = reader.ReadBoolean();
+            N = reader.ReadBoolean();
+            Z = reader.ReadBoolean();
+            V = reader.ReadBoolean();
+            C = reader.ReadBoolean();
+            InterruptMaskLevel = reader.ReadInt32();
+            Interrupt = reader.ReadInt32();
+            int_cycles = reader.ReadInt32();
+            usp = reader.ReadInt32();
+            ssp = reader.ReadInt32();
+            stopped = reader.ReadBoolean();
+            TotalExecutedCycles = reader.ReadUInt64();
+            PendingCycles = reader.ReadInt32();
         }
         public void SaveStateText(TextWriter writer, string id)
         {

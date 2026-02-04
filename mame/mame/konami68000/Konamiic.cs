@@ -52,18 +52,9 @@ namespace mame
             K052109_irq_enabled = 0;
             has_extra_video_ram = 0;
             K052109_tilemap = new Tmap[3];
-            for (i = 0; i < 3; i++)
-            {
-                K052109_tilemap[i] = new Tmap();
-                K052109_tilemap[i].tilewidth = 8;
-                K052109_tilemap[i].tileheight = 8;
-                K052109_tilemap[i].cols = 0x40;
-                K052109_tilemap[i].rows = 0x20;
-                K052109_tilemap[i].width = K052109_tilemap[i].cols * K052109_tilemap[i].tilewidth;
-                K052109_tilemap[i].height = K052109_tilemap[i].rows * K052109_tilemap[i].tileheight;
-                K052109_tilemap[i].enable = true;
-                K052109_tilemap[i].all_tiles_dirty = true;
-            }
+            K052109_tilemap[0] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
+            K052109_tilemap[1] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
+            K052109_tilemap[2] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
             K052109_ram = new byte[0x6000];
             K052109_colorram_F_offset = 0x0000;
             K052109_colorram_A_offset = 0x0800;
@@ -87,11 +78,7 @@ namespace mame
             {
                 K052109_tilemap[i].rowscroll = new int[K052109_tilemap[i].scrollrows];
                 K052109_tilemap[i].colscroll = new int[K052109_tilemap[1].scrollcols];
-                K052109_tilemap[i].tilemap_draw_instance3 = K052109_tilemap[i].tilemap_draw_instance_konami68000;
-                K052109_tilemap[i].pixmap = new ushort[0x100 * 0x200];
-                K052109_tilemap[i].flagsmap = new byte[0x100, 0x200];
-                K052109_tilemap[i].tileflags = new byte[0x20, 0x40];
-                K052109_tilemap[i].pen_data = new byte[0x40];
+                K052109_tilemap[i].tilemap_draw_instance3 = K052109_tilemap[i].tilemap_draw_instance_cps;
                 K052109_tilemap[i].pen_to_flags = new byte[1, 16];
                 K052109_tilemap[i].pen_to_flags[0, 0] = 0;
                 for (j = 1; j < 16; j++)
@@ -159,8 +146,7 @@ namespace mame
                 K052109_ram[offset] = data;
                 row = (offset & 0x7ff) / 0x40;
                 col = (offset & 0x7ff) % 0x40;
-                K052109_tilemap[(offset & 0x1800) >> 11].tilemap_mark_tile_dirty(row, col);
-                //tilemap_mark_tile_dirty(K052109_tilemap[(offset & 0x1800) >> 11], offset & 0x7ff);
+                K052109_tilemap[(offset & 0x1800) >> 11].tilemap_mark_tile_dirty(offset & 0x7ff);
             }
             else
             {
@@ -201,8 +187,7 @@ namespace mame
                             {
                                 row=(i&0x7ff)/0x40;
                                 col=(i&0x7ff)%0x40;
-                                K052109_tilemap[(i & 0x1800) >> 11].tilemap_mark_tile_dirty(row,col);
-                                //tilemap_mark_tile_dirty(K052109_tilemap[(i & 0x1800) >> 11], i & 0x7ff);
+                                K052109_tilemap[(i & 0x1800) >> 11].tilemap_mark_tile_dirty(i & 0x7ff);
                             }
                         }
                     }
@@ -241,8 +226,7 @@ namespace mame
                             {
                                 row=(i&0x7ff)/0x40;
                                 col=(i&0x7ff)%0x40;
-                                K052109_tilemap[(i & 0x1800) >> 11].tilemap_mark_tile_dirty(row,col);
-                                //tilemap_mark_tile_dirty(K052109_tilemap[(i & 0x1800) >> 11], i & 0x7ff);
+                                K052109_tilemap[(i & 0x1800) >> 11].tilemap_mark_tile_dirty(i & 0x7ff);
                             }
                         }
                     }

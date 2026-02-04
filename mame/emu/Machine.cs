@@ -34,6 +34,7 @@ namespace mame
                     machine_reset_callback = CPS.machine_reset_cps;
                     break;
                 case "Data East":
+                    Dataeast.video_start_pcktgal();
                     machine_reset_callback = Dataeast.machine_reset_dataeast;
                     break;
                 case "Tehkan":
@@ -56,7 +57,14 @@ namespace mame
                     Tad.video_start_toki();
                     machine_reset_callback = Tad.machine_reset_seibu_sound;
                     break;
+                case "Megasys1":
+                    Megasys1.driver_init();
+                    Megasys1.video_start_megasys1();
+                    Megasys1.palette_init_megasys1(Megasys1.promsrom);
+                    machine_reset_callback = Megasys1.machine_reset_megasys1;
+                    break;
                 case "Gaelco":
+                    Gaelco.video_start_gaelco();
                     machine_reset_callback = Gaelco.machine_reset_gaelco;
                     break;
                 case "SunA8":

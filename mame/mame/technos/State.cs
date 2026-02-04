@@ -195,13 +195,13 @@ namespace mame
             writer.Write(Sound.last_update_second);
             Timer.SaveStateBinary(writer);
             YM2151.SaveStateBinary(writer);
-            OKI6295.SaveStateBinary(writer);
+            OKI6295.oo1[0].SaveStateBinary(writer);
             writer.Write(Sound.latched_value[0]);
             writer.Write(Sound.utempdata[0]);
             writer.Write(Sound.ym2151stream.output_sampindex);
             writer.Write(Sound.ym2151stream.output_base_sampindex);
-            writer.Write(Sound.okistream.output_sampindex);
-            writer.Write(Sound.okistream.output_base_sampindex);
+            writer.Write(OKI6295.oo1[0].OKI.stream.output_sampindex);
+            writer.Write(OKI6295.oo1[0].OKI.stream.output_base_sampindex);
             writer.Write(Sound.mixerstream.output_sampindex);
             writer.Write(Sound.mixerstream.output_base_sampindex);
         }
@@ -246,13 +246,13 @@ namespace mame
             Sound.last_update_second = reader.ReadInt32();            
             Timer.LoadStateBinary(reader);
             YM2151.LoadStateBinary(reader);
-            OKI6295.LoadStateBinary(reader);
+            OKI6295.oo1[0].LoadStateBinary(reader);
             Sound.latched_value[0] = reader.ReadUInt16();
             Sound.utempdata[0] = reader.ReadUInt16();
             Sound.ym2151stream.output_sampindex = reader.ReadInt32();
             Sound.ym2151stream.output_base_sampindex = reader.ReadInt32();
-            Sound.okistream.output_sampindex = reader.ReadInt32();
-            Sound.okistream.output_base_sampindex = reader.ReadInt32();
+            OKI6295.oo1[0].OKI.stream.output_sampindex = reader.ReadInt32();
+            OKI6295.oo1[0].OKI.stream.output_base_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
         }

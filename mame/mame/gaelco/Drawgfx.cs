@@ -70,7 +70,7 @@ namespace mame
         {
             int ydir, xdir, col, i, j;
             int offsetx = sx, offsety = sy;
-            int srcdata_offset = code * 0x40;
+            int srcdata_offset = code * srcwidth * srcheight;
             if (flipy != 0)
             {
                 offsety += (dstheight - 1);

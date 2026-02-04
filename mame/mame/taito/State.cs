@@ -571,7 +571,7 @@ namespace mame
             }
             writer.Write(Memory.mainram, 0, 0x8000);
             writer.Write(mainram2, 0, 0x10000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x1000);
             for (i = 0; i < Z80A.nZ80; i++)
             {
@@ -708,7 +708,7 @@ namespace mame
             }
             Memory.mainram = reader.ReadBytes(0x8000);
             mainram2 = reader.ReadBytes(0x10000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x1000);
             for (i = 0; i < Z80A.nZ80; i++)
             {

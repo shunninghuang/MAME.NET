@@ -69,8 +69,9 @@ namespace mame
                 case "CPS-1":
                     cps_version = 1;
                     starsrom = Machine.GetRom("stars.rom");
-                    OKI6295.okirom = Machine.GetRom("oki.rom");
-                    if (Memory.mainrom == null || gfxrom == null || Memory.audiorom == null || OKI6295.okirom == null)
+                    OKI6295.oo1[0] = new OKI6295();
+                    OKI6295.oo1[0].okirom = Machine.GetRom("oki.rom");
+                    if (Memory.mainrom == null || gfxrom == null || Memory.audiorom == null || OKI6295.oo1[0].okirom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -2310,7 +2311,7 @@ namespace mame
         }
         public static void cps1_oki_pin7_w(byte data)
         {
-            OKI6295.okim6295_set_pin7(data & 1);
+            OKI6295.oo1[0].okim6295_set_pin7(data & 1);
         }
         public static void cps1_coinctrl_w(ushort data)
         {

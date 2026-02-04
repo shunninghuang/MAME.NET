@@ -18,7 +18,8 @@ namespace mame
             gfx1rom = Machine.GetRom("gfx1.rom");
             gfx2rom = Machine.GetRom("gfx2.rom");
             okirom1 = Machine.GetRom("oki.rom");
-            OKI6295.okirom = Machine.GetRom("oki.rom");
+            OKI6295.oo1[0] = new OKI6295();
+            OKI6295.oo1[0].okirom = Machine.GetRom("oki.rom");
             Memory.mainram = new byte[0x10000];
             Memory.audioram = new byte[0x800];
             gaelco_vregs = new ushort[4];
@@ -26,7 +27,7 @@ namespace mame
             gaelco_spriteram = new ushort[0x800];
             gaelco_screen = new ushort[0x1000];
             Generic.paletteram16 = new ushort[0x400];
-            if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || OKI6295.okirom == null)
+            if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || OKI6295.oo1[0].okirom == null)
             {
                 Machine.bRom = false;
             }
@@ -106,11 +107,11 @@ namespace mame
         }
         public static void OKIM6295_bankswitch_w(ushort data)
         {
-            Array.Copy(okirom1, (data & 0x0f) * 0x10000, OKI6295.okirom, 0x30000, 0x10000);
+            Array.Copy(okirom1, (data & 0x0f) * 0x10000, OKI6295.oo1[0].okirom, 0x30000, 0x10000);
         }
         public static void OKIM6295_bankswitch_w2(byte data)
         {
-            Array.Copy(okirom1, (data & 0x0f) * 0x10000, OKI6295.okirom, 0x30000, 0x10000);
+            Array.Copy(okirom1, (data & 0x0f) * 0x10000, OKI6295.oo1[0].okirom, 0x30000, 0x10000);
         }
         public static void irqack_w()
         {
@@ -124,7 +125,7 @@ namespace mame
             tile_index = ((offset << 1) & 0x0fff) >> 2;
             col = tile_index % 0x20;
             row = tile_index / 0x20;
-            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(row, col);
+            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void gaelco_vram_encrypted_w1(int offset, byte data)
         {
@@ -134,7 +135,7 @@ namespace mame
             tile_index = ((offset << 1) & 0x0fff) >> 2;
             col = tile_index % 0x20;
             row = tile_index / 0x20;
-            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(row, col);
+            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void gaelco_vram_encrypted_w2(int offset, byte data)
         {
@@ -144,7 +145,7 @@ namespace mame
             tile_index = ((offset << 1) & 0x0fff) >> 2;
             col = tile_index % 0x20;
             row = tile_index / 0x20;
-            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(row, col);
+            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void gaelco_encrypted_w(int offset, ushort data)
         {
@@ -169,7 +170,7 @@ namespace mame
             tile_index = ((offset << 1) & 0x0fff) >> 2;
             col = tile_index % 0x20;
             row = tile_index / 0x20;
-            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(row, col);
+            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void thoop_vram_encrypted_w1(int offset, byte data)
         {
@@ -179,7 +180,7 @@ namespace mame
             tile_index = ((offset << 1) & 0x0fff) >> 2;
             col = tile_index % 0x20;
             row = tile_index / 0x20;
-            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(row, col);
+            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void thoop_vram_encrypted_w2(int offset, byte data)
         {
@@ -189,7 +190,7 @@ namespace mame
             tile_index = ((offset << 1) & 0x0fff) >> 2;
             col = tile_index % 0x20;
             row = tile_index / 0x20;
-            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(row, col);
+            gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void thoop_encrypted_w(int offset, ushort data)
         {

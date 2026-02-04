@@ -14,6 +14,39 @@ namespace mame
         public static void video_start_sf()
         {
             int i;
+            bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_cols, 16, 16, 2048, 16);
+            fg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_cols, 16, 16, 2048, 16);
+            tx_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
+            bg_tilemap.total_elements = gfx1rom.Length / 0x100;
+            bg_tilemap.pen_to_flags = new byte[1, 16];
+            for (i = 0; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_capcom_bg;
+            fg_tilemap.total_elements = gfx2rom.Length / 0x100;
+            fg_tilemap.pen_to_flags = new byte[1, 16];
+            for (i = 0; i < 15; i++)
+            {
+                fg_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            fg_tilemap.pen_to_flags[0, 15] = 0;
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_sf;
+            fg_tilemap.tile_update3 = fg_tilemap.tile_update_capcom_fg;
+            tx_tilemap.total_elements = gfx4rom.Length / 0x40;
+            tx_tilemap.pen_to_flags = new byte[1, 16];
+            for (i = 0; i < 16; i++)
+            {
+                tx_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            tx_tilemap.pen_to_flags[0, 3] = 0;
+            tx_tilemap.tilemap_draw_instance3 = tx_tilemap.tilemap_draw_instance_capcom_sf;
+            tx_tilemap.tile_update3 = tx_tilemap.tile_update_capcom_tx;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
+            Tilemap.lsTmap.Add(tx_tilemap);
             sf_active = 0;
             uuB0000 = new ushort[0x200 * 0x100];
             for (i = 0; i < 0x20000; i++)
@@ -27,7 +60,7 @@ namespace mame
             sf_videoram[offset] = data;
             row = offset / 64;
             col = offset % 64;
-            tx_tilemap.tilemap_mark_tile_dirty(row, col);
+            tx_tilemap.tilemap_mark_tile_dirty(offset);
         }
         public static void sf_videoram_w1(int offset, byte data)
         {
@@ -35,7 +68,7 @@ namespace mame
             sf_videoram[offset] = (ushort)((data << 8) | (sf_videoram[offset] & 0xff));
             row = offset / 64;
             col = offset % 64;
-            tx_tilemap.tilemap_mark_tile_dirty(row, col);
+            tx_tilemap.tilemap_mark_tile_dirty(offset);
         }
         public static void sf_videoram_w2(int offset, byte data)
         {
@@ -43,7 +76,7 @@ namespace mame
             sf_videoram[offset] = (ushort)((sf_videoram[offset] & 0xff00) | data);
             row = offset / 64;
             col = offset % 64;
-            tx_tilemap.tilemap_mark_tile_dirty(row, col);
+            tx_tilemap.tilemap_mark_tile_dirty(offset);
         }
         public static void sf_bg_scroll_w(ushort data)
         {

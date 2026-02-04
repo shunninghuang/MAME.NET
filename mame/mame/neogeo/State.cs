@@ -51,7 +51,7 @@ namespace mame
             writer.Write(auto_animation_counter);
             writer.Write(auto_animation_frame_counter);
             writer.Write(Memory.mainram, 0, 0x10000);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             writer.Write(Memory.audioram, 0, 0x800);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
@@ -125,7 +125,7 @@ namespace mame
             auto_animation_counter = reader.ReadInt32();
             auto_animation_frame_counter = reader.ReadInt32();
             Memory.mainram = reader.ReadBytes(0x10000);
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Memory.audioram = reader.ReadBytes(0x800);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);

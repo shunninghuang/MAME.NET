@@ -120,12 +120,12 @@ namespace mame
             {
                 if ((offset & 0x6000) == pf_layer[laynum].vram_base)
                 {
-                    pf_layer[laynum].tmap.tilemap_mark_tile_dirty(((offset & 0x1fff) / 2) / 0x40, ((offset & 0x1fff) / 2) % 0x40);//tilemap_mark_tile_dirty((offset & 0x1fff) / 2);
-                    pf_layer[laynum].wide_tmap.tilemap_mark_tile_dirty(((offset & 0x3fff) / 2) / 0x80, ((offset & 0x3fff) / 2) % 0x80);
+                    pf_layer[laynum].tmap.tilemap_mark_tile_dirty((offset & 0x1fff) / 2);
+                    pf_layer[laynum].wide_tmap.tilemap_mark_tile_dirty((offset & 0x3fff) / 2);
                 }
                 if ((offset & 0x6000) == pf_layer[laynum].vram_base + 0x2000)
                 {
-                    pf_layer[laynum].wide_tmap.tilemap_mark_tile_dirty(((offset & 0x3fff) / 2) / 0x80, ((offset & 0x3fff) / 2) % 0x80);
+                    pf_layer[laynum].wide_tmap.tilemap_mark_tile_dirty((offset & 0x3fff) / 2);
                 }
             }
         }
@@ -261,8 +261,80 @@ namespace mame
         }
         public static void video_start_m92()
         {
-            int i;
+            int i, j, k;
             int laynum;
+            for (i = 0; i < 3; i++)
+            {
+                M92.pf_layer[i].tmap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
+                M92.pf_layer[i].tmap.total_elements = M92.gfx11rom.Length / 0x40;
+                M92.pf_layer[i].tmap.pen_to_flags = new byte[3, 0x10];
+                M92.pf_layer[i].tmap.user_data = i;
+                M92.pf_layer[i].tmap.tilemap_draw_instance3 = M92.pf_layer[i].tmap.tilemap_draw_instance_cps;
+                M92.pf_layer[i].tmap.tile_update3 = M92.pf_layer[i].tmap.tile_update_m92;
+                M92.pf_layer[i].wide_tmap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 128, 64);
+                M92.pf_layer[i].wide_tmap.total_elements = M92.gfx11rom.Length / 0x40;
+                M92.pf_layer[i].wide_tmap.pen_to_flags = new byte[3, 0x10];
+                M92.pf_layer[i].wide_tmap.user_data = i;
+                M92.pf_layer[i].wide_tmap.tilemap_draw_instance3 = M92.pf_layer[i].wide_tmap.tilemap_draw_instance_cps;
+                M92.pf_layer[i].wide_tmap.tile_update3 = M92.pf_layer[i].wide_tmap.tile_update_m92;
+            }
+            for (i = 0; i < 2; i++)
+            {
+                for (j = 0; j < 3; j++)
+                {
+                    pf_layer[i].tmap.pen_to_flags[j, 0] = 0;
+                    pf_layer[i].wide_tmap.pen_to_flags[j, 0] = 0;
+                }
+                for (k = 1; k < 0x10; k++)
+                {
+                    pf_layer[i].tmap.pen_to_flags[0, k] = 0x20;
+                    pf_layer[i].wide_tmap.pen_to_flags[0, k] = 0x20;
+                }
+                for (k = 1; k < 8; k++)
+                {
+                    pf_layer[i].tmap.pen_to_flags[1, k] = 0x20;
+                    pf_layer[i].wide_tmap.pen_to_flags[1, k] = 0x20;
+                }
+                for (k = 8; k < 0x10; k++)
+                {
+                    pf_layer[i].tmap.pen_to_flags[1, k] = 0x10;
+                    pf_layer[i].wide_tmap.pen_to_flags[1, k] = 0x10;
+                }
+                for (k = 1; k < 0x10; k++)
+                {
+                    pf_layer[i].tmap.pen_to_flags[2, k] = 0x10;
+                    pf_layer[i].wide_tmap.pen_to_flags[2, k] = 0x10;
+                }
+            }
+            for (k = 0; k < 0x10; k++)
+            {
+                pf_layer[2].tmap.pen_to_flags[0, k] = 0x20;
+                pf_layer[2].wide_tmap.pen_to_flags[0, k] = 0x20;
+            }
+            for (k = 0; k < 8; k++)
+            {
+                pf_layer[2].tmap.pen_to_flags[1, k] = 0x20;
+                pf_layer[2].wide_tmap.pen_to_flags[1, k] = 0x20;
+            }
+            for (k = 8; k < 0x10; k++)
+            {
+                pf_layer[2].tmap.pen_to_flags[1, k] = 0x10;
+                pf_layer[2].wide_tmap.pen_to_flags[1, k] = 0x10;
+            }
+            pf_layer[2].tmap.pen_to_flags[2, 0] = 0x20;
+            pf_layer[2].wide_tmap.pen_to_flags[2, 0] = 0x20;
+            for (k = 1; k < 0x10; k++)
+            {
+                pf_layer[2].tmap.pen_to_flags[2, k] = 0x10;
+                pf_layer[2].wide_tmap.pen_to_flags[2, k] = 0x10;
+            }
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(M92.pf_layer[0].tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[0].wide_tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[1].tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[1].wide_tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[2].tmap);
+            Tilemap.lsTmap.Add(M92.pf_layer[2].wide_tmap);
             uuB800 = new ushort[0x200 * 0x200];
             for (i = 0; i < 0x40000; i++)
             {

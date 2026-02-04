@@ -7,8 +7,38 @@ namespace mame
 {
     public partial class Technos
     {
+        public static int background_scan(int col, int row, int num_cols, int num_rows)
+        {
+            return (col & 0x0f) + ((row & 0x0f) << 4) + ((col & 0x10) << 4) + ((row & 0x10) << 5);
+        }
         public static void video_start_ddragon()
         {
+            int i;
+            bg_tilemap = Tmap.tilemap_create(background_scan, 16, 16, 32, 32);
+            fg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 32, 32);
+
+            bg_tilemap.total_elements = gfx2rom.Length / 0x40;
+            bg_tilemap.pen_to_flags = new byte[1, 16];
+            for (i = 0; i < 16; i++)
+            {
+                bg_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_ddragon;
+            bg_tilemap.tile_update3 = bg_tilemap.tile_update_ddragon_bg;
+
+            fg_tilemap.total_elements = gfx1rom.Length / 0x40;
+            fg_tilemap.pen_to_flags = new byte[1, 16];
+            fg_tilemap.pen_to_flags[0, 0] = 0;
+            for (i = 1; i < 16; i++)
+            {
+                fg_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_ddragon;
+            fg_tilemap.tile_update3 = fg_tilemap.tile_update_ddragon_fg;
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(bg_tilemap);
+            Tilemap.lsTmap.Add(fg_tilemap);
+
             gfxtotalelement = gfx2rom.Length / 0x100;
             fg_tilemap.tilemap_set_scrolldx(0, 384 - 256);
             bg_tilemap.tilemap_set_scrolldx(0, 384 - 256);
@@ -17,29 +47,13 @@ namespace mame
         }
         public static void ddragon_bgvideoram_w(int offset, byte data)
         {
-            int tile_index, row, col;
             ddragon_bgvideoram[offset] = data;
-            tile_index = offset / 2;
-            col = tile_index & 0x0f;
-            row = (tile_index & 0xf0) >> 4;
-            if ((tile_index & 0x100) != 0)
-            {
-                col |= 0x10;
-            }
-            if ((tile_index & 0x200) != 0)
-            {
-                row |= 0x10;
-            }
-            bg_tilemap.tilemap_mark_tile_dirty(row, col);
+            bg_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         public static void ddragon_fgvideoram_w(int offset, byte data)
         {
-            int tile_index, row, col;
             ddragon_fgvideoram[offset] = data;
-            tile_index = offset / 2;
-            col = tile_index % 0x20;
-            row = tile_index / 0x20;
-            fg_tilemap.tilemap_mark_tile_dirty(row, col);
+            fg_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         public static void draw_sprites(RECT cliprect)
         {

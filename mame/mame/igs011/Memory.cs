@@ -91,7 +91,7 @@ namespace mame
             {
                 //if (address == 0x600001)
                 {
-                    result = (sbyte)OKI6295.okim6295_status_0_lsb_r();
+                    result = (sbyte)OKI6295.oo1[0].okim6295_status_r();
                 }
             }
             else if (address >= 0x800002 && address <= 0x800003)
@@ -165,7 +165,7 @@ namespace mame
             }
             else if (address >= 0x600000 && address + 1 <= 0x600001)
             {
-                result = (short)OKI6295.okim6295_status_0_lsb_r();
+                result = (short)OKI6295.oo1[0].okim6295_status_r();
             }
             else if (address >= 0x800002 && address + 1 <= 0x800003)
             {
@@ -250,7 +250,7 @@ namespace mame
             {
                 if (address == 0x600001)
                 {
-                    OKI6295.okim6295_data_0_lsb_w((byte)value);
+                    OKI6295.oo1[0].okim6295_data_w((byte)value);
                 }
             }
             else if (address >= 0x700000 && address <= 0x700001)
@@ -356,7 +356,7 @@ namespace mame
             }            
             else if (address >= 0x600000 && address + 1 <= 0x600001)
             {
-                OKI6295.okim6295_data_0_lsb_w((byte)value);
+                OKI6295.oo1[0].okim6295_data_w((byte)value);
             }
             else if (address >= 0x700000 && address + 1 <= 0x700001)
             {

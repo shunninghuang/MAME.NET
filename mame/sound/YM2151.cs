@@ -948,6 +948,50 @@ namespace mame
                 case "Technos":
                     PSG.irqhandler = Technos.irq_handler;
                     break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "p47":
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                        case "avspirit":
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        case "hayaosi1":
+                        //case "edfbl":
+                        case "64street":
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            PSG.irqhandler = Megasys1.megasys1_sound_irq;
+                            break;
+                    }
+                    break;
                 case "Namco System 1":
                     PSG.irqhandler = Cpuint.namcos1_sound_interrupt;
                     break;

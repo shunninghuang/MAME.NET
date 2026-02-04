@@ -245,28 +245,19 @@ namespace mame
         }
         private static void pgm_tx_videoram_w(int offset, byte data)
         {
-            int col, row;
             pgm_tx_videoram[offset] = data;
-            col = (offset / 4) % 64;
-            row = (offset / 4) / 64;
-            pgm_tx_tilemap.tilemap_mark_tile_dirty(row, col);
+            pgm_tx_tilemap.tilemap_mark_tile_dirty(offset / 4);
         }
         private static void pgm_tx_videoram_w(int offset, ushort data)
         {
-            int col, row;
             pgm_tx_videoram[offset * 2] = (byte)(data >> 8);
             pgm_tx_videoram[offset * 2 + 1] = (byte)data;
-            col = (offset / 2) % 64;
-            row = (offset / 2) / 64;
-            pgm_tx_tilemap.tilemap_mark_tile_dirty(row, col);
+            pgm_tx_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         private static void pgm_bg_videoram_w(int offset, byte data)
         {
-            int col, row;
             pgm_bg_videoram[offset] = data;
-            col = (offset / 4) % 64;
-            row = (offset / 4) / 64;
-            pgm_bg_tilemap.tilemap_mark_tile_dirty(row, col);
+            pgm_bg_tilemap.tilemap_mark_tile_dirty(offset / 4);
         }
         private static void pgm_bg_videoram_w(int offset, ushort data)
         {
@@ -275,11 +266,36 @@ namespace mame
             pgm_bg_videoram[offset * 2 + 1] = (byte)data;
             col = (offset / 2) % 64;
             row = (offset / 2) / 64;
-            pgm_bg_tilemap.tilemap_mark_tile_dirty(row, col);
+            pgm_bg_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         public static void video_start_pgm()
         {
             int i;
+            pgm_tx_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
+            pgm_tx_tilemap.pen_to_flags = new byte[1, 16];
+            for (i = 0; i < 15; i++)
+            {
+                pgm_tx_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            pgm_tx_tilemap.pen_to_flags[0, 15] = 0;
+            pgm_tx_tilemap.total_elements = 0x800000 / 0x20;
+            pgm_tx_tilemap.tile_update3 = pgm_tx_tilemap.tile_update_pgm_tx;
+            pgm_tx_tilemap.tilemap_draw_instance3 = pgm_tx_tilemap.tilemap_draw_instance_cps;
+
+            pgm_bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 32, 32, 64, 64);
+            pgm_bg_tilemap.total_elements = 0x3333;
+            pgm_bg_tilemap.pen_to_flags = new byte[1, 32];
+            for (i = 0; i < 31; i++)
+            {
+                pgm_bg_tilemap.pen_to_flags[0, i] = 0x10;
+            }
+            pgm_bg_tilemap.pen_to_flags[0, 31] = 0;
+            pgm_bg_tilemap.total_elements = 0x3333;
+            pgm_bg_tilemap.scrollrows = 64 * 32;
+            pgm_bg_tilemap.rowscroll = new int[pgm_bg_tilemap.scrollrows];
+            pgm_bg_tilemap.tile_update3 = pgm_bg_tilemap.tile_update_pgm_bg;
+            pgm_bg_tilemap.tilemap_draw_instance3 = pgm_bg_tilemap.tilemap_draw_instance_cps;
+
             uu900 = new ushort[0x200 * 0x200];
             for (i = 0; i < 0x40000; i++)
             {

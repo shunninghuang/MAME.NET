@@ -9,7 +9,7 @@ namespace mame
     {
         public static void lhb2_interrupt()
         {
-            if (Cpuexec.iloops == 0)
+            if (Cpuexec.cpu[0].iloops == 0)
             {
                 Cpuint.cpunum_set_input_line(0, 6, LineState.HOLD_LINE);
             }
@@ -20,7 +20,7 @@ namespace mame
         }
         public static void wlcc_interrupt()
         {
-            if (Cpuexec.iloops == 0)
+            if (Cpuexec.cpu[0].iloops == 0)
             {
                 Cpuint.cpunum_set_input_line(0, 3, LineState.HOLD_LINE);
             }
@@ -35,7 +35,7 @@ namespace mame
             {
                 return;
             }
-            if (Cpuexec.iloops == 0)
+            if (Cpuexec.cpu[0].iloops == 0)
             {
                 Cpuint.cpunum_set_input_line(0, 6, LineState.HOLD_LINE);
             }
@@ -46,7 +46,7 @@ namespace mame
         }
         public static void vbowl_interrupt()
         {
-            if (Cpuexec.iloops == 0)
+            if (Cpuexec.cpu[0].iloops == 0)
             {
                 Cpuint.cpunum_set_input_line(0, 6, LineState.HOLD_LINE);
             }

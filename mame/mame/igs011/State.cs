@@ -61,7 +61,7 @@ namespace mame
             writer.Write(blitter.depth);
             writer.Write(blitter.pen);
             writer.Write(blitter.flags);
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
             writer.Write(Timer.global_basetime.seconds);
             writer.Write(Timer.global_basetime.attoseconds);
@@ -69,10 +69,10 @@ namespace mame
             writer.Write(Sound.last_update_second);
             Cpuexec.SaveStateBinary(writer);
             Timer.SaveStateBinary(writer);
-            OKI6295.SaveStateBinary(writer);
+            OKI6295.oo1[0].SaveStateBinary(writer);
             YM3812.SaveStateBinary(writer);
-            writer.Write(Sound.okistream.output_sampindex);
-            writer.Write(Sound.okistream.output_base_sampindex);
+            writer.Write(OKI6295.oo1[0].OKI.stream.output_sampindex);
+            writer.Write(OKI6295.oo1[0].OKI.stream.output_base_sampindex);
             writer.Write(Sound.ym3812stream.output_sampindex);
             writer.Write(Sound.ym3812stream.output_base_sampindex);
             writer.Write(Sound.mixerstream.output_sampindex);
@@ -130,7 +130,7 @@ namespace mame
             blitter.depth= reader.ReadUInt16();
             blitter.pen= reader.ReadUInt16();
             blitter.flags = reader.ReadUInt16();
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
             Timer.global_basetime.seconds = reader.ReadInt32();
             Timer.global_basetime.attoseconds = reader.ReadInt64();
@@ -138,10 +138,10 @@ namespace mame
             Sound.last_update_second = reader.ReadInt32();
             Cpuexec.LoadStateBinary(reader);
             Timer.LoadStateBinary(reader);
-            OKI6295.LoadStateBinary(reader);
+            OKI6295.oo1[0].LoadStateBinary(reader);
             YM3812.LoadStateBinary(reader);
-            Sound.okistream.output_sampindex = reader.ReadInt32();
-            Sound.okistream.output_base_sampindex = reader.ReadInt32();
+            OKI6295.oo1[0].OKI.stream.output_sampindex = reader.ReadInt32();
+            OKI6295.oo1[0].OKI.stream.output_base_sampindex = reader.ReadInt32();
             Sound.ym3812stream.output_sampindex = reader.ReadInt32();
             Sound.ym3812stream.output_base_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_sampindex = reader.ReadInt32();

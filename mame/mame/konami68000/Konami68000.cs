@@ -444,7 +444,7 @@ namespace mame
         }
         public static void cuebrick_interrupt()
         {
-            switch (Cpuexec.iloops)
+            switch (Cpuexec.cpu[0].iloops)
             {
                 case 0:
                     Cpuint.cpunum_set_input_line(0, 5, LineState.HOLD_LINE);
@@ -618,8 +618,8 @@ namespace mame
         }
         public static ushort ssriders_protection_r()
         {
-            int data = (ushort)MC68000.m1.ReadWord(0x105a0a);
-            int cmd = (ushort)MC68000.m1.ReadWord(0x1058fc);
+            int data = (ushort)MC68000.mm1[0].ReadWord(0x105a0a);
+            int cmd = (ushort)MC68000.mm1[0].ReadWord(0x1058fc);
             ushort result;
             switch (cmd)
             {
@@ -642,9 +642,9 @@ namespace mame
                     result = (ushort)(data & 0x00ff);
                     break;
                 case 0x8abc:
-                    data = -(ushort)MC68000.m1.ReadWord(0x105818);
+                    data = -(ushort)MC68000.mm1[0].ReadWord(0x105818);
                     data = ((data / 8 - 4) & 0x1f) * 0x40;
-                    data += (((ushort)MC68000.m1.ReadWord(0x105cb0) + 256 * K052109_r(0x1a01) + K052109_r(0x1a00) - 6) / 8 + 12) & 0x3f;
+                    data += (((ushort)MC68000.mm1[0].ReadWord(0x105cb0) + 256 * K052109_r(0x1a01) + K052109_r(0x1a00) - 6) / 8 + 12) & 0x3f;
                     result = (ushort)data;
                     break;
                 default:
@@ -665,7 +665,7 @@ namespace mame
 
                     for (i = 0; i < 128; i++)
                     {
-                        if (((ushort)MC68000.m1.ReadWord(0x180006 + 128 * i) >> 8) == logical_pri)
+                        if (((ushort)MC68000.mm1[0].ReadWord(0x180006 + 128 * i) >> 8) == logical_pri)
                         {
                             K053245_word_w2(8 * i, (ushort)hardware_pri);
                             hardware_pri++;

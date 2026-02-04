@@ -45,7 +45,8 @@ namespace mame
             Memory.mainrom = Machine.GetRom("maincpu.rom");
             Memory.audiorom = Machine.GetRom("audiocpu.rom");
             gfxrom = Machine.GetRom("gfx1.rom");
-            OKI6295.okirom = Machine.GetRom("oki.rom");
+            OKI6295.oo1[0] = new OKI6295();
+            OKI6295.oo1[0].okirom = Machine.GetRom("oki.rom");
             n = gfxrom.Length;
             gfx0rom = new byte[n * 2];
             gfx1rom = new byte[n * 2];

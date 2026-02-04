@@ -66,45 +66,7 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = 4 * color;
-            blockmove_8toN_transpen16_pcktgal(bb1, code, sw, sh, sm, ls, ts, flipx, flipy, dw, dh, colorbase, sy, sx);
-        }
-        public static void blockmove_8toN_transpen16_pcktgal(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int offsety, int offsetx)
-        {
-            int ydir, xdir, col, i, j;
-            int srcdata_offset = code * srcwidth * srcheight;
-            if (flipy != 0)
-            {
-                offsety += (dstheight - 1);
-                srcdata_offset += (srcheight - dstheight - topskip) * srcmodulo;
-                ydir = -1;
-            }
-            else
-            {
-                srcdata_offset += topskip * srcmodulo;
-                ydir = 1;
-            }
-            if (flipx != 0)
-            {
-                offsetx += (dstwidth - 1);
-                srcdata_offset += (srcwidth - dstwidth - leftskip);
-                xdir = -1;
-            }
-            else
-            {
-                srcdata_offset += leftskip;
-                xdir = 1;
-            }
-            for (i = 0; i < dstheight; i++)
-            {
-                for (j = 0; j < dstwidth; j++)
-                {
-                    col = bb1[srcdata_offset + srcmodulo * i + j];
-                    if (col != 0)
-                    {
-                        Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x100 + offsetx + xdir * j] = (ushort)(colorbase + col);
-                    }
-                }
-            }
+            blockmove_8toN_transpen16_m72(bb1, code, sw, sh, sm, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, 0, sy, sx);
         }
     }
 }

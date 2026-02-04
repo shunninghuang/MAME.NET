@@ -7525,7 +7525,7 @@ namespace mame
             }
             else if (address == 0xb000)
             {
-                result = OKI6295.okim6295_status_0_r();
+                result = (byte)OKI6295.oo1[0].okim6295_status_r();
             }
             return result;
         }
@@ -7558,7 +7558,7 @@ namespace mame
             }
             else if (address >= 0xb000 && address <= 0xb001)
             {
-                OKI6295.okim6295_data_0_w(value);
+                OKI6295.oo1[0].okim6295_data_w(value);
             }
         }
         public static byte ZReadHardware(ushort address)

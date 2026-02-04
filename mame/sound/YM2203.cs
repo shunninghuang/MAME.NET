@@ -72,6 +72,19 @@ namespace mame
                             break;
                     }
                     break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai":
+                        case "makaiden":
+                            FF2203[sndindex].OPN.ST.IRQ_Handler = Megasys1.irq_handler;
+                            FF2203[sndindex].OPN.ST.SSG.set_clock = AY8910.AA8910[sndindex].ay8910_set_clock_ym;
+                            FF2203[sndindex].OPN.ST.SSG.write = AY8910.AA8910[sndindex].ay8910_write_ym;
+                            FF2203[sndindex].OPN.ST.SSG.read = AY8910.AA8910[sndindex].ay8910_read_ym;
+                            FF2203[sndindex].OPN.ST.SSG.reset = AY8910.AA8910[sndindex].ay8910_reset_ym;
+                            break;
+                    }
+                    break;
                 case "Taito":
                     switch (Machine.sName)
                     {

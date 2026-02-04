@@ -120,8 +120,8 @@ namespace mame
     };
     public partial class Sound
     {
-        public static int last_update_second;        
-        public static sound_stream ym2151stream, okistream, mixerstream;
+        public static int last_update_second;
+        public static sound_stream ym2151stream, mixerstream;
         public static sound_stream qsoundstream;
         public static sound_stream ym2610stream;
         public static sound_stream namcostream,dacstream;
@@ -183,7 +183,7 @@ namespace mame
                 }
             }
         }
-        private static void generate_resampled_data_oki6295(int gain, int minput)
+        private static void generate_resampled_data_oki6295(int chip, int gain, int minput)
         {
             int offset;
             int sample;
@@ -192,20 +192,20 @@ namespace mame
             uint basefrac;
             uint step;
             int sampindex;
-            basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample - okistream.attoseconds_per_sample * 2;
+            basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample - OKI6295.oo1[chip].OKI.stream.attoseconds_per_sample * 2;
             if (basetime >= 0)
-                basesample = (int)(basetime / okistream.attoseconds_per_sample);
+                basesample = (int)(basetime / OKI6295.oo1[chip].OKI.stream.attoseconds_per_sample);
             else
-                basesample = (int)(-(-basetime / okistream.attoseconds_per_sample) - 1);
-            offset = basesample - okistream.output_base_sampindex;
-            basefrac = (uint)((basetime - basesample * okistream.attoseconds_per_sample) / (Attotime.ATTOSECONDS_PER_SECOND >> 22));
-            step = (uint)(((ulong)okistream.sample_rate << 22) / 48000);
+                basesample = (int)(-(-basetime / OKI6295.oo1[chip].OKI.stream.attoseconds_per_sample) - 1);
+            offset = basesample - OKI6295.oo1[chip].OKI.stream.output_base_sampindex;
+            basefrac = (uint)((basetime - basesample * OKI6295.oo1[chip].OKI.stream.attoseconds_per_sample) / (Attotime.ATTOSECONDS_PER_SECOND >> 22));
+            step = (uint)(((ulong)OKI6295.oo1[chip].OKI.stream.sample_rate << 22) / 48000);
             if (step < 0x400000)
             {
                 for (sampindex = 0; sampindex < 0x3c0; sampindex++)
                 {
                     int interp_frac = (int)(basefrac >> 10);
-                    sample = (okistream.streamoutput[0][offset] * (0x1000 - interp_frac) + okistream.streamoutput[0][offset + 1] * interp_frac) >> 12;
+                    sample = (OKI6295.oo1[chip].OKI.stream.streamoutput[0][offset] * (0x1000 - interp_frac) + OKI6295.oo1[chip].OKI.stream.streamoutput[0][offset + 1] * interp_frac) >> 12;
                     mixerstream.streaminput[minput][sampindex] = (sample * gain) >> 8;
                     basefrac += step;
                     offset += (int)(basefrac >> 22);
@@ -995,7 +995,7 @@ namespace mame
                 second_tick = true;
             }
             ym2151stream.adjuststream(second_tick);
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
@@ -1081,7 +1081,7 @@ namespace mame
                 second_tick = true;
             }
             ym2151stream.adjuststream(second_tick);
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
@@ -1110,6 +1110,20 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
+        private static void streams_update_megasys1_a()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            ym2151stream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
+            OKI6295.oo1[1].OKI.stream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+        }
         private static void streams_update_gaelco_bigkarnk()
         {
             Atime curtime = Timer.global_basetime;
@@ -1119,7 +1133,7 @@ namespace mame
                 second_tick = true;
             }
             ym3812stream.adjuststream(second_tick);
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
@@ -1131,7 +1145,7 @@ namespace mame
             {
                 second_tick = true;
             }
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
@@ -1172,7 +1186,7 @@ namespace mame
             {
                 second_tick = true;
             }
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             ym3812stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
@@ -1185,7 +1199,7 @@ namespace mame
             {
                 second_tick = true;
             }
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
@@ -1197,7 +1211,7 @@ namespace mame
             {
                 second_tick = true;
             }
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             ym2413stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
@@ -1290,7 +1304,7 @@ namespace mame
             }
             AY8910.AA8910[0].stream.adjuststream(second_tick);
             YM2203.FF2203[0].stream.adjuststream(second_tick);
-            okistream.adjuststream(second_tick);
+            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
             AY8910.AA8910[0].stream.updatesamplerate();
@@ -1388,20 +1402,6 @@ namespace mame
             last_update_second = curtime.seconds;
             AY8910.AA8910[0].stream.updatesamplerate();
             AY8910.AA8910[1].stream.updatesamplerate();
-        }
-        private static void streams_update_capcom_sf()
-        {
-            Atime curtime = Timer.global_basetime;
-            bool second_tick = false;
-            if (curtime.seconds != last_update_second)
-            {
-                second_tick = true;
-            }
-            ym2151stream.adjuststream(second_tick);
-            MSM5205.mm1[0].voice.stream.adjuststream(second_tick);
-            MSM5205.mm1[1].voice.stream.adjuststream(second_tick);
-            mixerstream.adjuststream(second_tick);
-            last_update_second = curtime.seconds;
         }
     }
 }

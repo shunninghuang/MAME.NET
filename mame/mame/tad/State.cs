@@ -56,7 +56,7 @@ namespace mame
             {
                 writer.Write(Generic.buffered_spriteram16[i]);
             }
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
             writer.Write(Timer.global_basetime.seconds);
@@ -66,11 +66,11 @@ namespace mame
             Cpuexec.SaveStateBinary(writer);
             Timer.SaveStateBinary(writer);
             YM3812.SaveStateBinary(writer);
-            OKI6295.SaveStateBinary(writer);
+            OKI6295.oo1[0].SaveStateBinary(writer);
             writer.Write(Sound.ym3812stream.output_sampindex);
             writer.Write(Sound.ym3812stream.output_base_sampindex);
-            writer.Write(Sound.okistream.output_sampindex);
-            writer.Write(Sound.okistream.output_base_sampindex);
+            writer.Write(OKI6295.oo1[0].OKI.stream.output_sampindex);
+            writer.Write(OKI6295.oo1[0].OKI.stream.output_base_sampindex);
             writer.Write(Sound.mixerstream.output_sampindex);
             writer.Write(Sound.mixerstream.output_base_sampindex);
         }
@@ -120,7 +120,7 @@ namespace mame
             {
                 Generic.buffered_spriteram16[i] = reader.ReadUInt16();
             }
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
             Timer.global_basetime.seconds = reader.ReadInt32();
@@ -130,11 +130,11 @@ namespace mame
             Cpuexec.LoadStateBinary(reader);
             Timer.LoadStateBinary(reader);
             YM3812.LoadStateBinary(reader);
-            OKI6295.LoadStateBinary(reader);
+            OKI6295.oo1[0].LoadStateBinary(reader);
             Sound.ym3812stream.output_sampindex = reader.ReadInt32();
             Sound.ym3812stream.output_base_sampindex = reader.ReadInt32();
-            Sound.okistream.output_sampindex = reader.ReadInt32();
-            Sound.okistream.output_base_sampindex = reader.ReadInt32();
+            OKI6295.oo1[0].OKI.stream.output_sampindex = reader.ReadInt32();
+            OKI6295.oo1[0].OKI.stream.output_base_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
         }
@@ -179,7 +179,7 @@ namespace mame
             {
                 writer.Write(Generic.buffered_spriteram16[i]);
             }
-            MC68000.m1.SaveStateBinary(writer);
+            MC68000.mm1[0].SaveStateBinary(writer);
             Z80A.zz1[0].SaveStateBinary(writer);
             Cpuint.SaveStateBinary(writer);
             writer.Write(Timer.global_basetime.seconds);
@@ -238,7 +238,7 @@ namespace mame
             {
                 Generic.buffered_spriteram16[i] = reader.ReadUInt16();
             }
-            MC68000.m1.LoadStateBinary(reader);
+            MC68000.mm1[0].LoadStateBinary(reader);
             Z80A.zz1[0].LoadStateBinary(reader);
             Cpuint.LoadStateBinary(reader);
             Timer.global_basetime.seconds = reader.ReadInt32();

@@ -72,58 +72,28 @@ namespace mame
                 for (j = 0; j < 2; j++)
                 {
                     PC080SN_tilemap[i][j] = new Tmap();
-                    if (PC080SN_dblwidth == 0)	/* standard tilemaps */
+                    if (PC080SN_dblwidth == 0)
                     {
-                        PC080SN_tilemap[i][j].cols = 64;
-                        PC080SN_tilemap[i][j].rows = 64;
-                        PC080SN_tilemap[i][j].tilewidth = 8;
-                        PC080SN_tilemap[i][j].tileheight = 8;
-                        PC080SN_tilemap[i][j].width = 0x200;
-                        PC080SN_tilemap[i][j].height = 0x200;
-                        PC080SN_tilemap[i][j].enable = true;
-                        PC080SN_tilemap[i][j].all_tiles_dirty = true;
+                        PC080SN_tilemap[i][j] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 64);
                         PC080SN_tilemap[i][j].total_elements = gfx1rom.Length / 0x40;
-                        PC080SN_tilemap[i][j].pixmap = new ushort[0x200 * 0x200];
-                        PC080SN_tilemap[i][j].flagsmap = new byte[0x200, 0x200];
-                        PC080SN_tilemap[i][j].tileflags = new byte[64, 64];
-                        PC080SN_tilemap[i][j].pen_data = new byte[0x40];
                         PC080SN_tilemap[i][j].pen_to_flags = new byte[1, 16];
                         PC080SN_tilemap[i][j].pen_to_flags[0, 0] = 0;
                         for (k = 1; k < 16; k++)
                         {
                             PC080SN_tilemap[i][j].pen_to_flags[0, k] = 0x10;
                         }
-                        PC080SN_tilemap[i][j].scrollrows = 1;
-                        PC080SN_tilemap[i][j].scrollcols = 1;
-                        PC080SN_tilemap[i][j].rowscroll = new int[PC080SN_tilemap[i][j].scrollrows];
-                        PC080SN_tilemap[i][j].colscroll = new int[PC080SN_tilemap[i][j].scrollcols];
                         PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_taito_opwolf;
                     }
-                    else	/* double width tilemaps */
+                    else
                     {
-                        PC080SN_tilemap[i][j].cols = 128;
-                        PC080SN_tilemap[i][j].rows = 64;
-                        PC080SN_tilemap[i][j].tilewidth = 8;
-                        PC080SN_tilemap[i][j].tileheight = 8;
-                        PC080SN_tilemap[i][j].width = 0x400;
-                        PC080SN_tilemap[i][j].height = 0x200;
-                        PC080SN_tilemap[i][j].enable = true;
-                        PC080SN_tilemap[i][j].all_tiles_dirty = true;
+                        PC080SN_tilemap[i][j] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 128, 64);
                         PC080SN_tilemap[i][j].total_elements = gfx1rom.Length / 0x40;
-                        PC080SN_tilemap[i][j].pixmap = new ushort[0x200 * 0x400];
-                        PC080SN_tilemap[i][j].flagsmap = new byte[0x200, 0x400];
-                        PC080SN_tilemap[i][j].tileflags = new byte[128, 64];
-                        PC080SN_tilemap[i][j].pen_data = new byte[0x40];
                         PC080SN_tilemap[i][j].pen_to_flags = new byte[1, 16];
                         PC080SN_tilemap[i][j].pen_to_flags[0, 0] = 0;
                         for (k = 1; k < 16; k++)
                         {
                             PC080SN_tilemap[i][j].pen_to_flags[0, k] = 0x10;
                         }
-                        PC080SN_tilemap[i][j].scrollrows = 1;
-                        PC080SN_tilemap[i][j].scrollcols = 1;
-                        PC080SN_tilemap[i][j].rowscroll = new int[PC080SN_tilemap[i][j].scrollrows];
-                        PC080SN_tilemap[i][j].colscroll = new int[PC080SN_tilemap[i][j].scrollcols];
                         PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_taito_opwolf;
                     }
                 }
@@ -168,118 +138,79 @@ namespace mame
         }
         public static void PC080SN_word_w(int chip, int offset, ushort data)
         {
-            int row, col, memindex;
             PC080SN_ram[chip][offset] = data;
             if (PC080SN_dblwidth == 0)
             {
                 if (offset < 0x2000)
                 {
-                    memindex = offset / 2;
-                    row = memindex / PC080SN_tilemap[chip][0].cols;
-                    col = memindex % PC080SN_tilemap[chip][0].cols;
-                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(offset / 2);
                 }
                 else if (offset >= 0x4000 && offset < 0x6000)
                 {
-                    memindex = (offset & 0x1fff) / 2;
-                    row = memindex / PC080SN_tilemap[chip][1].cols;
-                    col = memindex % PC080SN_tilemap[chip][1].cols;
-                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty((offset & 0x1fff) / 2);
                 }
             }
             else
             {
                 if (offset < 0x4000)
                 {
-                    memindex = offset & 0x1fff;
-                    row = memindex / PC080SN_tilemap[chip][0].cols;
-                    col = memindex % PC080SN_tilemap[chip][0].cols;
-                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(offset & 0x1fff);
                 }
                 else if (offset >= 0x4000 && offset < 0x8000)
                 {
-                    memindex = offset & 0x1fff;
-                    row = memindex / PC080SN_tilemap[chip][1].cols;
-                    col = memindex % PC080SN_tilemap[chip][1].cols;
-                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(offset & 0x1fff);
                 }
             }
         }
         public static void PC080SN_word_w1(int chip, int offset, byte data)
         {
-            int row, col, memindex;
             PC080SN_ram[chip][offset] = (ushort)((data << 8) | (PC080SN_ram[chip][offset] & 0xff));
             if (PC080SN_dblwidth == 0)
             {
                 if (offset < 0x2000)
                 {
-                    memindex = offset / 2;
-                    row = memindex / PC080SN_tilemap[chip][0].cols;
-                    col = memindex % PC080SN_tilemap[chip][0].cols;
-                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(offset / 2);
                 }
                 else if (offset >= 0x4000 && offset < 0x6000)
                 {
-                    memindex = (offset & 0x1fff) / 2;
-                    row = memindex / PC080SN_tilemap[chip][1].cols;
-                    col = memindex % PC080SN_tilemap[chip][1].cols;
-                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty((offset & 0x1fff) / 2);
                 }
             }
             else
             {
                 if (offset < 0x4000)
                 {
-                    memindex = offset & 0x1fff;
-                    row = memindex / PC080SN_tilemap[chip][0].cols;
-                    col = memindex % PC080SN_tilemap[chip][0].cols;
-                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(offset & 0x1fff);
                 }
                 else if (offset >= 0x4000 && offset < 0x8000)
                 {
-                    memindex = offset & 0x1fff;
-                    row = memindex / PC080SN_tilemap[chip][1].cols;
-                    col = memindex % PC080SN_tilemap[chip][1].cols;
-                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(offset & 0x1fff);
                 }
             }
         }
         public static void PC080SN_word_w2(int chip, int offset, byte data)
         {
-            int row, col, memindex;
             PC080SN_ram[chip][offset] = (ushort)((PC080SN_ram[chip][offset] & 0xff00) | data);
             if (PC080SN_dblwidth == 0)
             {
                 if (offset < 0x2000)
                 {
-                    memindex = offset / 2;
-                    row = memindex / PC080SN_tilemap[chip][0].cols;
-                    col = memindex % PC080SN_tilemap[chip][0].cols;
-                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(offset / 2);
                 }
                 else if (offset >= 0x4000 && offset < 0x6000)
                 {
-                    memindex = (offset & 0x1fff) / 2;
-                    row = memindex / PC080SN_tilemap[chip][1].cols;
-                    col = memindex % PC080SN_tilemap[chip][1].cols;
-                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty((offset & 0x1fff) / 2);
                 }
             }
             else
             {
                 if (offset < 0x4000)
                 {
-                    memindex = offset & 0x1fff;
-                    row = memindex / PC080SN_tilemap[chip][0].cols;
-                    col = memindex % PC080SN_tilemap[chip][0].cols;
-                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][0].tilemap_mark_tile_dirty(offset & 0x1fff);
                 }
                 else if (offset >= 0x4000 && offset < 0x8000)
                 {
-                    memindex = offset & 0x1fff;
-                    row = memindex / PC080SN_tilemap[chip][1].cols;
-                    col = memindex % PC080SN_tilemap[chip][1].cols;
-                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(row, col);
+                    PC080SN_tilemap[chip][1].tilemap_mark_tile_dirty(offset & 0x1fff);
                 }
             }
         }

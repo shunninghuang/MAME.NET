@@ -219,17 +219,17 @@ namespace mame
             if (scroll1 != cps1_base(CPS1_SCROLL1_BASE, 0x4000))
             {
                 scroll1 = cps1_base(CPS1_SCROLL1_BASE, 0x4000);
-                ttmap[0].all_tiles_dirty = true;
+                Tmap.tilemap_mark_all_tiles_dirty(ttmap[0]);
             }
             if (scroll2 != cps1_base(CPS1_SCROLL2_BASE, 0x4000))
             {
                 scroll2 = cps1_base(CPS1_SCROLL2_BASE, 0x4000);
-                ttmap[1].all_tiles_dirty = true;
+                Tmap.tilemap_mark_all_tiles_dirty(ttmap[1]);
             }
             if (scroll3 != cps1_base(CPS1_SCROLL3_BASE, 0x4000))
             {
                 scroll3 = cps1_base(CPS1_SCROLL3_BASE, 0x4000);
-                ttmap[2].all_tiles_dirty = true;
+                Tmap.tilemap_mark_all_tiles_dirty(ttmap[2]);
             }
             if (bootleg_kludge == 1)
             {
@@ -275,36 +275,31 @@ namespace mame
         }
         private static void cps1_gfxram_w(int offset)
         {
-            int row, col;
             int page = (offset >> 7) & 0x3c0;
-            int memindex;
             if (page == (cps_a_regs[CPS1_SCROLL1_BASE] & 0x3c0))
             {
-                memindex = offset / 2 & 0x0fff;
-                row = memindex / 0x800 * 0x20;
-                memindex %= 0x800;
-                row += memindex % 0x20;
-                col = memindex / 0x20;
-                ttmap[0].tilemap_mark_tile_dirty(row, col);
+                ttmap[0].tilemap_mark_tile_dirty(offset / 2 & 0x0fff);
             }
             if (page == (cps_a_regs[CPS1_SCROLL2_BASE] & 0x3c0))
             {
-                memindex = offset / 2 & 0x0fff;
-                row = memindex / 0x400 * 0x10;
-                memindex %= 0x400;
-                row += memindex % 0x10;
-                col = memindex / 0x10;
-                ttmap[1].tilemap_mark_tile_dirty(row, col);
+                ttmap[1].tilemap_mark_tile_dirty(offset / 2 & 0x0fff);
             }
             if (page == (cps_a_regs[CPS1_SCROLL3_BASE] & 0x3c0))
             {
-                memindex = offset / 2 & 0x0fff;
-                row = memindex / 0x200 * 0x08;
-                memindex %= 0x200;
-                row += memindex % 0x08;
-                col = memindex / 0x08;
-                ttmap[2].tilemap_mark_tile_dirty(row, col);
+                ttmap[2].tilemap_mark_tile_dirty(offset / 2 & 0x0fff);
             }
+        }
+        public static int tilemap0_scan(int col, int row, int num_cols, int num_rows)
+        {
+            return (row & 0x1f) + ((col & 0x3f) << 5) + ((row & 0x20) << 6);
+        }
+        public static int tilemap1_scan(int col, int row, int num_cols, int num_rows)
+        {
+            return (row & 0x0f) + ((col & 0x3f) << 4) + ((row & 0x30) << 6);
+        }
+        public static int tilemap2_scan(int col, int row, int num_cols, int num_rows)
+        {
+            return (row & 0x07) + ((col & 0x3f) << 3) + ((row & 0x38) << 6);
         }
         private static void cps1_update_transmasks()
         {
@@ -356,15 +351,27 @@ namespace mame
             g.Clear(Color.Magenta);
             g.Dispose();
             int i;
-            ttmap[0].enable = true;
-            ttmap[1].enable = true;
-            ttmap[2].enable = true;
-            ttmap[0].all_tiles_dirty = true;
-            ttmap[1].all_tiles_dirty = true;
-            ttmap[2].all_tiles_dirty = true;
-            Array.Clear(ttmap[0].pen_to_flags, 0, 0x40);
-            Array.Clear(ttmap[1].pen_to_flags, 0, 0x40);
-            Array.Clear(ttmap[2].pen_to_flags, 0, 0x40);
+            ttmap = new Tmap[3];
+            ttmap[0] = Tmap.tilemap_create(tilemap0_scan, 8, 8, 64, 64);
+            ttmap[1] = Tmap.tilemap_create(tilemap1_scan, 16, 16, 64, 64);
+            ttmap[2] = Tmap.tilemap_create(tilemap2_scan, 32, 32, 64, 64);
+            for (i = 0; i < 3; i++)
+            {
+                ttmap[i].user_data = i;
+                ttmap[i].pen_to_flags = new byte[4, 16];
+                ttmap[i].tilemap_draw_instance3 = ttmap[i].tilemap_draw_instance_cps;
+            }
+            ttmap[0].total_elements = CPS.gfxrom.Length / 0x40;
+            ttmap[1].total_elements = CPS.gfxrom.Length / 0x80;
+            ttmap[2].total_elements = CPS.gfxrom.Length / 0x200;
+            ttmap[0].tile_update3 = ttmap[0].tile_update_c0;
+            ttmap[1].tile_update3 = ttmap[1].tile_update_c1;
+            ttmap[2].tile_update3 = ttmap[2].tile_update_c2;            
+            
+            Tilemap.lsTmap = new List<Tmap>();
+            Tilemap.lsTmap.Add(ttmap[0]);
+            Tilemap.lsTmap.Add(ttmap[1]);
+            Tilemap.lsTmap.Add(ttmap[2]);
             cps1_update_transmasks();
             for (i = 0; i < 0xc00; i++)
             {
@@ -373,6 +380,25 @@ namespace mame
             primasks = new uint[8];
             cps1_stars_enabled = new int[2];
             cps1_buffered_obj = new ushort[0x400];
+            switch (Machine.sBoard)
+            {
+                case "CPS-1":
+                case "CPS-1(QSound)":
+                    for (i = 0; i < 3; i++)
+                    {
+                        ttmap[i].tilemap_set_scrolldx(0, 0);
+                        ttmap[i].tilemap_set_scrolldy(0x100, 0);
+                    }
+                    break;
+                case "CPS2":
+                case "CPS2turbo":
+                    for (i = 0; i < 3; i++)
+                    {
+                        ttmap[i].tilemap_set_scrolldx(0, 0);
+                        ttmap[i].tilemap_set_scrolldy(0, 0);
+                    }
+                    break;
+            }
             cps2_buffered_obj = new ushort[0x1000];
             cps2_objram1 = new ushort[0x1000];
             cps2_objram2 = new ushort[0x1000];
@@ -383,13 +409,11 @@ namespace mame
             }
             Array.Clear(cps1_buffered_obj, 0, 0x400);
             Array.Clear(cps2_buffered_obj, 0, 0x1000);
-
             Array.Clear(gfxram, 0, 0x30000);
             Array.Clear(cps_a_regs, 0, 0x20);
             Array.Clear(cps_b_regs, 0, 0x20);
             Array.Clear(cps2_objram1, 0, 0x1000);
             Array.Clear(cps2_objram2, 0, 0x1000);
-
             cps_a_regs[CPS1_OBJ_BASE] = 0x9200;
             cps_a_regs[CPS1_SCROLL1_BASE] = 0x9000;
             cps_a_regs[CPS1_SCROLL2_BASE] = 0x9040;
@@ -535,7 +559,7 @@ namespace mame
                 baseoffset = 0;
                 baseadd = 4;
             }
-            for (i = 0; i <= cps1_last_sprite_offset; i +=4)
+            for (i = 0; i <= cps1_last_sprite_offset; i += 4)
             {
                 int x, y, code, colour, col;
                 x = cps1_buffered_obj[baseoffset];
@@ -651,7 +675,7 @@ namespace mame
                     break;
                 }
             }
-            for (i = cps2_last_sprite_offset; i >= 0; i-= 4)
+            for (i = cps2_last_sprite_offset; i >= 0; i -= 4)
             {
                 x = cps2_buffered_obj[i];
                 y = cps2_buffered_obj[i + 1];

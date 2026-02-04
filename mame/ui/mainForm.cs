@@ -33,6 +33,7 @@ namespace ui
         public neogeoForm neogeoform;
         public technosForm technosform;
         public tadForm tadform;
+        public megasys1Form megasys1form;
         public gaelcoForm gaelcoform;
         public igs011Form igs011form;
         public namcos1Form namcos1form;
@@ -90,6 +91,7 @@ namespace ui
             InitNeogeoForm();
             InitTechnosForm();
             InitTadForm();
+            InitMegasys1Form();
             InitGaelcoForm();
             InitSunA8Form();
             InitNamcos1Form();
@@ -122,6 +124,8 @@ namespace ui
             tehkanToolStripMenuItem.Enabled = false;
             neogeoToolStripMenuItem.Enabled = false;
             technosToolStripMenuItem.Enabled = false;
+            tadToolStripMenuItem.Enabled = false;
+            megasys1ToolStripMenuItem.Enabled = false;
             gaelcoToolStripMenuItem.Enabled = false;
             //suna8ToolStripMenuItem.Enabled = false;
             namcos1ToolStripMenuItem.Enabled = false;
@@ -284,7 +288,24 @@ namespace ui
                     tadToolStripMenuItem.Enabled = true;
                     Tad.TokiInit();
                     Tad.GDIInit();
-                    Tad.TokiInit();
+                    break;
+                case "Megasys1":
+                    Video.nMode = 1;
+                    itemSize = new ToolStripMenuItem[Video.nMode];
+                    for (i = 0; i < Video.nMode; i++)
+                    {
+                        itemSize[i] = new ToolStripMenuItem();
+                        itemSize[i].Size = new Size(152, 22);
+                        itemSize[i].Click += new EventHandler(itemsizeToolStripMenuItem_Click);
+                    }
+                    itemSize[0].Text = "256x224";
+                    resetToolStripMenuItem.DropDownItems.Clear();
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
+                    itemSelect();
+                    megasys1ToolStripMenuItem.Enabled = true;
+                    Megasys1.Megasys1Init();
+                    Megasys1.GDIInit();
                     break;
                 case "Gaelco":
                     Video.nMode = 1;
@@ -623,6 +644,10 @@ namespace ui
         {
             tadform = new tadForm(this);
         }
+        private void InitMegasys1Form()
+        {
+            megasys1form = new megasys1Form(this);
+        }
         public void InitGaelcoForm()
         {
             gaelcoform = new gaelcoForm(this);
@@ -846,6 +871,10 @@ namespace ui
         private void tadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tadform.Show();
+        }
+        private void megasys1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            megasys1form.Show();
         }
         private void gaelcoToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1079,6 +1108,15 @@ namespace ui
                     }
                     break;
                 case "Tad":
+                    if (Video.iMode == 0)
+                    {
+                        Video.offsetx = 0;
+                        Video.offsety = 16;
+                        Video.width = 256;
+                        Video.height = 224;
+                    }
+                    break;
+                case "Megasys1":
                     if (Video.iMode == 0)
                     {
                         Video.offsetx = 0;

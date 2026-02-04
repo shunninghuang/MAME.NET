@@ -1035,7 +1035,7 @@ namespace mame
                 {
                     for (i4 = 0; i4 < 0x40; i4++)
                     {
-                        iCode = K052109_tilemap[1].tileflags[i3, i4];
+                        iCode = K052109_tilemap[1].tileflags[i3*0x40+i4];
                         for (i1 = 0; i1 < 8; i1++)
                         {
                             for (i2 = 0; i2 < 8; i2++)

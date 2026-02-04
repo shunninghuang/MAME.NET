@@ -38,8 +38,9 @@ namespace mame
                     gfx2rom = Machine.GetRom("gfx2.rom");
                     gfx3rom = Machine.GetRom("gfx3.rom");
                     gfx4rom = Machine.GetRom("gfx4.rom");
-                    OKI6295.okirom = Machine.GetRom("oki.rom");
-                    if (Memory.mainrom == null || Memory.audiorom == null || audioromop == null || gfx1rom == null || gfx2rom == null || gfx3rom == null || gfx4rom == null || OKI6295.okirom == null)
+                    OKI6295.oo1[0] = new OKI6295();
+                    OKI6295.oo1[0].okirom = Machine.GetRom("oki.rom");
+                    if (Memory.mainrom == null || Memory.audiorom == null || audioromop == null || gfx1rom == null || gfx2rom == null || gfx3rom == null || gfx4rom == null || OKI6295.oo1[0].okirom == null)
                     {
                         Machine.bRom = false;
                     }

@@ -70,7 +70,8 @@ namespace mame
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     gfx2rom = Machine.GetRom("gfx2.rom");
                     gfx3rom = Machine.GetRom("gfx3.rom");
-                    OKI6295.okirom = Machine.GetRom("oki.rom");
+                    OKI6295.oo1[0] = new OKI6295();
+                    OKI6295.oo1[0].okirom = Machine.GetRom("oki.rom");
                     Memory.mainram = new byte[0x1800];
                     subram = new byte[0x1000];
                     Memory.audioram = new byte[0x800];
@@ -79,7 +80,7 @@ namespace mame
                     ddragon_spriteram = new byte[0x1000];
                     Generic.paletteram = new byte[0x200];
                     Generic.paletteram_2 = new byte[0x200];
-                    if (Memory.mainrom == null || subrom == null || Memory.audiorom == null || gfx1rom == null || gfx2rom == null || gfx3rom == null || OKI6295.okirom == null)
+                    if (Memory.mainrom == null || subrom == null || Memory.audiorom == null || gfx1rom == null || gfx2rom == null || gfx3rom == null || OKI6295.oo1[0].okirom == null)
                     {
                         Machine.bRom = false;
                     }

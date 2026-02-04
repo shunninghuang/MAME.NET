@@ -44,9 +44,9 @@ namespace mame
                     utempdata = new ushort[2];
                     sound_update = sound_update_cps1;
                     YM2151.ym2151_init(3579545);
-                    OKI6295.okim6295_start();
+                    OKI6295.oo1[0].okim6295_start();
                     ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
-                    okistream = new sound_stream(1000000 / 132, 0, 1, OKI6295.okim6295_update);
+                    OKI6295.oo1[0].OKI.stream = new sound_stream(1000000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                     mixerstream = new sound_stream(48000, 3, 0, null);
                     break;
                 case "CPS-1(QSound)":
@@ -125,9 +125,9 @@ namespace mame
                             utempdata = new ushort[1];
                             sound_update = sound_update_technos_ddragon2;
                             YM2151.ym2151_init(3579545);
-                            OKI6295.okim6295_start();
+                            OKI6295.oo1[0].okim6295_start();
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
-                            okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);                            
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1056000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);                            
                             mixerstream = new sound_stream(48000, 3, 0, null);
                             break;
                         case "toffy":
@@ -154,9 +154,9 @@ namespace mame
                         case "jujuba":
                             sound_update = sound_update_gaelco_bigkarnk;                            
                             YM3812.ym3812_start(3579545);
-                            OKI6295.okim6295_start();
+                            OKI6295.oo1[0].okim6295_start();
                             ym3812stream = new sound_stream(49715, 0, 1, FMOpl.ym3812_update_one);
-                            okistream = new sound_stream(1000000 / 132, 0, 1, OKI6295.okim6295_update);
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1000000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
                         case "tokib":
@@ -171,6 +171,85 @@ namespace mame
                             break;
                     }                    
                     break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai":
+                        case "makaiden":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            sound_update = sound_update_megasys1_z;
+                            YM2203.ym2203_start(0, 3000000, generic_2203);
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "p47":
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                        case "avspirit":
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":                        
+                        //case "edfbl":
+                        case "64street":
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            latched_value = new ushort[2];
+                            utempdata = new ushort[2];
+                            sound_update = sound_update_megasys1_a;
+                            YM2151.ym2151_init(3500000);
+                            OKI6295.oo1[0].okim6295_start();
+                            OKI6295.oo1[1].okim6295_start();
+                            ym2151stream = new sound_stream(54687, 0, 2, YM2151.ym2151_update_one);
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(4000000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
+                            OKI6295.oo1[1].OKI.stream = new sound_stream(4000000 / 132, 0, 1, OKI6295.oo1[1].okim6295_update);
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "hayaosi1":
+                            latched_value = new ushort[2];
+                            utempdata = new ushort[2];
+                            sound_update = sound_update_megasys1_a;
+                            YM2151.ym2151_init(3500000);
+                            OKI6295.oo1[0].okim6295_start();
+                            OKI6295.oo1[1].okim6295_start();
+                            ym2151stream = new sound_stream(54687, 0, 2, YM2151.ym2151_update_one);
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(2000000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
+                            OKI6295.oo1[1].OKI.stream = new sound_stream(2000000 / 132, 0, 1, OKI6295.oo1[1].okim6295_update);
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "peekaboo"://D
+                        case "peakaboou":
+                            sound_update = sound_update_gaelco_biomtoy;
+                            OKI6295.oo1[0].okim6295_start();
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(2000000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
+                            mixerstream = new sound_stream(48000, 1, 0, null);
+                            break;
+                    }
+                    break;
                 case "Gaelco":
                     switch (Machine.sName)
                     {
@@ -179,9 +258,9 @@ namespace mame
                             utempdata = new ushort[1];
                             sound_update = sound_update_gaelco_bigkarnk;
                             YM3812.ym3812_start(3580000);
-                            OKI6295.okim6295_start();
+                            OKI6295.oo1[0].okim6295_start();
                             ym3812stream = new sound_stream(49722, 0, 1, FMOpl.ym3812_update_one);
-                            okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1056000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
                         case "biomtoy":
@@ -194,8 +273,8 @@ namespace mame
                         case "squash":
                         case "thoop":
                             sound_update = sound_update_gaelco_biomtoy;
-                            OKI6295.okim6295_start();
-                            okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);
+                            OKI6295.oo1[0].okim6295_start();
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1056000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             mixerstream = new sound_stream(48000, 1, 0, null);
                             break;
                     }
@@ -240,9 +319,9 @@ namespace mame
                         case "drgnwrldv11h":
                         case "drgnwrldv40k":
                             sound_update = sound_update_igs011_drgnwrld;
-                            OKI6295.okim6295_start();
+                            OKI6295.oo1[0].okim6295_start();
                             YM3812.ym3812_start(3579545);
-                            okistream = new sound_stream(1047600 / 132, 0, 1, OKI6295.okim6295_update);
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1047600 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             ym3812stream = new sound_stream(49715, 0, 1, FMOpl.ym3812_update_one);
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
@@ -253,16 +332,16 @@ namespace mame
                         case "xymg":
                         case "wlcc":
                             sound_update = sound_update_igs011_lhb;
-                            OKI6295.okim6295_start();
-                            okistream = new sound_stream(1047600 / 132, 0, 1, OKI6295.okim6295_update);
+                            OKI6295.oo1[0].okim6295_start();
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1047600 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             mixerstream = new sound_stream(48000, 1, 0, null);
                             break;
                         case "lhb2":
                         case "nkishusp":
                             sound_update = sound_update_igs011_lhb2;
-                            OKI6295.okim6295_start();
+                            OKI6295.oo1[0].okim6295_start();
                             YM2413.ym2413_start(3579545);
-                            okistream = new sound_stream(1047600 / 132, 0, 1, OKI6295.okim6295_update);
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1047600 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             ym2413stream = new sound_stream(49715, 0, 2, YM2413.ym2413_update_one);
                             mixerstream = new sound_stream(48000, 3, 0, null);
                             break;
@@ -425,10 +504,10 @@ namespace mame
                         case "hiticerb":
                         case "hiticej":
                             YM2203.ym2203_start(0, 3000000, masterw_ay8910_interface);
-                            OKI6295.okim6295_start();
+                            OKI6295.oo1[0].okim6295_start();
                             sound_update = sound_update_taitob_viofight;
                             AY8910.AA8910[0].stream.gain = 0x100;
-                            okistream = new sound_stream(1056000 / 132, 0, 1, OKI6295.okim6295_update);
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1056000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             mixerstream = new sound_stream(48000, 5, 0, null);
                             break;
                     }                    
@@ -605,7 +684,7 @@ namespace mame
             {
                 case "CPS-1":
                     YM2151.ym2151_reset_chip();
-                    OKI6295.okim6295_reset();
+                    OKI6295.oo1[0].okim6295_reset();
                     break;
                 case "CPS-1(QSound)":
                 case "CPS2":
@@ -622,6 +701,111 @@ namespace mame
                     break;
                 case "Neo Geo":
                     YM2610.F2610.ym2610_reset_chip();
+                    break;
+                case "Technos":
+                    switch (Machine.sName)
+                    {
+                        case "ddragon":
+                        case "ddragonw":
+                        case "ddragonw1":
+                        case "ddragonu":
+                        case "ddragonua":
+                        case "ddragonub":
+                        case "ddragonb2":
+                        case "ddragonb":
+                        case "ddragonba":
+                        case "tstrike":
+                        case "tstrikea":
+                        case "ddungeon":
+                        case "ddungeone":
+                        case "darktowr":
+                            YM2151.ym2151_reset_chip();
+                            break;
+                        case "ddragon2":
+                        case "ddragon2u":
+                        case "ddragon2b":
+                            YM2151.ym2151_reset_chip();
+                            OKI6295.oo1[0].okim6295_reset();
+                            break;
+                        case "toffy":
+                        case "stoffy":
+                        case "stoffyu":
+                            YM2151.ym2151_reset_chip();
+                            break;
+                    }
+                    break;
+                case "Tad":
+                    switch (Machine.sName)
+                    {
+                        case "toki":
+                        case "tokiu":
+                        case "tokip":
+                        case "tokia":
+                        case "tokiua":
+                        case "juju":
+                        case "jujuba":
+                            YM2151.ym2151_reset_chip();
+                            OKI6295.oo1[0].okim6295_reset();
+                            break;
+                        case "tokib":
+                        case "jujub":
+                            YM2151.ym2151_reset_chip();
+                            break;
+                    }
+                    break;
+                case "Megasys1":
+                    switch (Machine.sName)
+                    {
+                        case "lomakai":
+                        case "makaiden":
+                            YM2203.FF2203[0].ym2203_reset_chip();
+                            break;
+                        case "p47":
+                        case "p47j":
+                        case "p47je":
+                        case "kickoff":
+                        case "tshingen":
+                        case "tshingena":
+                        case "kazan":
+                        case "iganinju":
+                        case "astyanax":
+                        case "lordofk":
+                        case "hachoo":
+                        case "jitsupro":
+                        case "plusalph":
+                        case "stdragon":
+                        case "stdragona":
+                        case "stdragonb":
+                        case "rodland":
+                        case "rodlandj":
+                        case "rittam":
+                        case "rodlandjb":
+                        case "phantasm":
+                        case "edfp":
+                        case "soldam":
+                        case "soldamj":
+                        case "avspirit":
+                        case "monkelf":
+                        case "edf":
+                        case "edfa":
+                        case "edfu":
+                        case "hayaosi1":
+                        //case "edfbl":
+                        case "64street":
+                        case "64streetj":
+                        case "64streetja":
+                        case "bigstrik":
+                        case "chimerab":
+                        case "cybattlr":
+                            YM2151.ym2151_reset_chip();
+                            OKI6295.oo1[0].okim6295_reset();
+                            OKI6295.oo1[1].okim6295_reset();
+                            break;
+                        case "peekaboo":
+                        case "peakaboou":
+
+                            break;
+                    }
                     break;
                 case "SunA8":
                     FMOpl.ym3812_reset_chip();
@@ -641,7 +825,7 @@ namespace mame
                         case "drgnwrldv10c":
                         case "drgnwrldv11h":
                         case "drgnwrldv40k":
-                            OKI6295.okim6295_reset();
+                            OKI6295.oo1[0].okim6295_reset();
                             FMOpl.ym3812_reset_chip();
                             break;
                         case "lhb":
@@ -650,11 +834,11 @@ namespace mame
                         case "ryukobou":
                         case "xymg":
                         case "wlcc":
-                            OKI6295.okim6295_reset();
+                            OKI6295.oo1[0].okim6295_reset();
                             break;
                         case "lhb2":
                         case "nkishusp":
-                            OKI6295.okim6295_reset();
+                            OKI6295.oo1[0].okim6295_reset();
                             YM2413.ym2413_reset_chip();
                             break;
                         case "vbowl":
@@ -755,7 +939,7 @@ namespace mame
                         case "hiticerb":
                         case "hiticej":
                             YM2203.FF2203[0].ym2203_reset_chip();
-                            OKI6295.okim6295_reset();
+                            OKI6295.oo1[0].okim6295_reset();
                             break;
                     }
                     break;
@@ -874,9 +1058,9 @@ namespace mame
         {
             int sampindex;
             ym2151stream.stream_update();
-            okistream.stream_update();
+            OKI6295.oo1[0].OKI.stream.stream_update();
             generate_resampled_data_ym2151(0x59);
-            generate_resampled_data_oki6295(0x4c, 2);
+            generate_resampled_data_oki6295(0, 0x4c, 2);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
@@ -1066,9 +1250,9 @@ namespace mame
         {
             int sampindex;
             ym2151stream.stream_update();
-            okistream.stream_update();
+            OKI6295.oo1[0].OKI.stream.stream_update();
             generate_resampled_data_ym2151(0x99);
-            generate_resampled_data_oki6295(0x33, 2);
+            generate_resampled_data_oki6295(0, 0x33, 2);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
@@ -1144,13 +1328,80 @@ namespace mame
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_tad_tokib();
         }
+        public static void sound_update_megasys1_z()
+        {
+            int sampindex;
+            AY8910.AA8910[0].stream.stream_update();
+            YM2203.FF2203[0].stream.stream_update();
+            generate_resampled_data_ay8910_3(0, 0x80, 0);
+            generate_resampled_data_ym2203(0, 0x80, 3);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_taito_tokio();
+        }
+        public static void sound_update_megasys1_a()
+        {
+            int sampindex;
+            ym2151stream.stream_update();
+            OKI6295.oo1[0].OKI.stream.stream_update();
+            OKI6295.oo1[1].OKI.stream.stream_update();
+            generate_resampled_data_ym2151(0xcc);
+            generate_resampled_data_oki6295(0, 0x4c, 2);
+            generate_resampled_data_oki6295(1, 0x4c, 3);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int sampL, sampR;
+                sampL = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (sampL < -32768)
+                {
+                    sampL = -32768;
+                }
+                else if (sampL > 32767)
+                {
+                    sampL = 32767;
+                }
+                sampR = mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (sampR < -32768)
+                {
+                    sampR = -32768;
+                }
+                else if (sampR > 32767)
+                {
+                    sampR = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)sampL;
+                finalmixb[sampindex * 4 + 1] = (byte)((sampL & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)sampR;
+                finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
+            }            
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_megasys1_a();
+        }
         public static void sound_update_gaelco_bigkarnk()
         {
             int sampindex;
             ym3812stream.stream_update();
-            okistream.stream_update();
+            OKI6295.oo1[0].OKI.stream.stream_update();
             generate_resampled_data_ym3812(0x100, 0);
-            generate_resampled_data_oki6295(0x100, 1);
+            generate_resampled_data_oki6295(0, 0x100, 1);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
@@ -1175,8 +1426,8 @@ namespace mame
         public static void sound_update_gaelco_biomtoy()
         {
             int sampindex;
-            okistream.stream_update();
-            generate_resampled_data_oki6295(0x100, 0);
+            OKI6295.oo1[0].OKI.stream.stream_update();
+            generate_resampled_data_oki6295(0, 0x100, 0);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
@@ -1270,9 +1521,9 @@ namespace mame
         public static void sound_update_igs011_drgnwrld()
         {
             int sampindex;
-            okistream.stream_update();
+            OKI6295.oo1[0].OKI.stream.stream_update();
             ym3812stream.stream_update();
-            generate_resampled_data_oki6295(0x100, 0);
+            generate_resampled_data_oki6295(0, 0x100, 0);
             generate_resampled_data_ym3812(0x200, 1);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
@@ -1298,8 +1549,8 @@ namespace mame
         public static void sound_update_igs011_lhb()
         {
             int sampindex;
-            okistream.stream_update();
-            generate_resampled_data_oki6295(0x100, 0);
+            OKI6295.oo1[0].OKI.stream.stream_update();
+            generate_resampled_data_oki6295(0, 0x100, 0);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
@@ -1324,9 +1575,9 @@ namespace mame
         public static void sound_update_igs011_lhb2()
         {
             int sampindex;
-            okistream.stream_update();
+            OKI6295.oo1[0].OKI.stream.stream_update();
             ym2413stream.stream_update();
-            generate_resampled_data_oki6295(0x100, 0);
+            generate_resampled_data_oki6295(0, 0x100, 0);
             generate_resampled_data_ym2413(0x200, 1);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
@@ -1597,10 +1848,10 @@ namespace mame
             int sampindex;
             AY8910.AA8910[0].stream.stream_update();
             YM2203.FF2203[0].stream.stream_update();
-            okistream.stream_update();
+            OKI6295.oo1[0].OKI.stream.stream_update();
             generate_resampled_data_ay8910_3(0, 0x40, 0);
             generate_resampled_data_ym2203(0, 0xcc, 3);
-            generate_resampled_data_oki6295(0x80, 4);
+            generate_resampled_data_oki6295(0, 0x80, 4);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
