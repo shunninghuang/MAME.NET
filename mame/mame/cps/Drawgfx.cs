@@ -13,7 +13,7 @@ namespace mame
             int oy;
             int ex;
             int ey;
-            code %= CPS.total_elements;
+            code %= spritecount;
             ox = sx;
             oy = sy;
             ex = sx + 0x0f;

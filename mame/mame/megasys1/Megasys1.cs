@@ -11,7 +11,7 @@ namespace mame
         public static ushort[] megasys1_objectram;
         public static ushort[] megasys1_scrollx = new ushort[3], megasys1_scrolly = new ushort[3],megasys1_scroll_flag = new ushort[3];
         public static ushort megasys1_active_layers,megasys1_sprite_bank,megasys1_screen_flag, megasys1_sprite_flag,ip_latched;
-        public static int megasys1_bits_per_color_code,hardware_type_z,mainram_offset;
+        public static int megasys1_bits_per_color_code, hardware_type_z, mainram_offset;
         public static int[] megasys1_8x8_scroll_factor = new int[3], megasys1_16x16_scroll_factor = new int[3];
         public static ushort[] ip_select_values = new ushort[7];
         public static byte megasys1_ignore_oki_status = 0;
@@ -28,7 +28,7 @@ namespace mame
             }
             megasys1_objectram = new ushort[0x1000];
             Generic.paletteram16 = new ushort[0x400];
-            scrollrom = new byte[3][];            
+            scrollrom = new byte[3][];
             switch (Machine.sName)
             {
                 case "lomakai"://Z
@@ -41,7 +41,7 @@ namespace mame
                     scrollrom[1] = Machine.GetRom("scroll1.rom");
                     spritesrom = Machine.GetRom("sprites.rom");
                     promsrom = Machine.GetRom("proms.rom");
-                    if (Memory.mainrom == null || Memory.audiorom == null || scrollrom[0] == null || scrollrom[1] == null || spritesrom == null || promsrom==null)
+                    if (Memory.mainrom == null || Memory.audiorom == null || scrollrom[0] == null || scrollrom[1] == null || spritesrom == null || promsrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -94,7 +94,7 @@ namespace mame
                 case "edfa":
                 case "edfu":
                 case "hayaosi1":
-                //case "edfbl":
+                    //case "edfbl":
                     Memory.mainram = new byte[0x20000];
                     Memory.audioram = new byte[0x10000];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
@@ -132,7 +132,7 @@ namespace mame
                     OKI6295.oo1[1] = new OKI6295();
                     OKI6295.oo1[1].okirom = Machine.GetRom("oki2.rom");
                     promsrom = Machine.GetRom("proms.rom");
-                    if (Memory.mainrom == null || Memory.audiorom == null || scrollrom[0] == null || scrollrom[1] == null || scrollrom[2] == null || spritesrom == null || OKI6295.oo1[0].okirom == null || OKI6295.oo1[1].okirom == null||promsrom==null)
+                    if (Memory.mainrom == null || Memory.audiorom == null || scrollrom[0] == null || scrollrom[1] == null || scrollrom[2] == null || spritesrom == null || OKI6295.oo1[0].okirom == null || OKI6295.oo1[1].okirom == null || promsrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -153,7 +153,8 @@ namespace mame
                         Machine.bRom = false;
                     }
                     break;
-            }            
+            }
+            Drawgfx.spritecount = spritesrom.Length / 0x100;
             if (Machine.bRom)
             {
                 switch (Machine.sName)

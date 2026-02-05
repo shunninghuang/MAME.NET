@@ -170,14 +170,13 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = color;
-            blockmove_8toN_transpen_raw16_taitob(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, sx, sy);
+            blockmove_8toN_transpen_raw16_taitob(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, 0, sx, sy);
         }
-        public static void blockmove_8toN_transpen_raw16_taitob(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo,int leftskip, int topskip, int flipx, int flipy,int dstwidth, int dstheight, int colorbase, int sx, int sy)
+        public static void blockmove_8toN_transpen_raw16_taitob(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, int transpen, int sx, int sy)
         {
-            int ydir, xdir, col, i, j,offsetx,offsety;
-            int srcdata_offset = code * 0x100;
-            offsetx = sx;
-            offsety = sy;
+            int ydir, xdir, col, i, j;
+            int offsetx = sx, offsety = sy;
+            int srcdata_offset = code * srcwidth * srcheight;
             if (flipy != 0)
             {
                 offsety += (dstheight - 1);
@@ -205,9 +204,9 @@ namespace mame
                 for (j = 0; j < dstwidth; j++)
                 {
                     col = bb1[srcdata_offset + srcmodulo * i + j];
-                    if (col != 0)
+                    if (col != transpen)
                     {
-                        Taitob.framebuffer[Taitob.framebuffer_page][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);
+                        Taitob.framebuffer[Taitob.framebuffer_page][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = (ushort)(colorbase + col);
                     }
                 }
             }

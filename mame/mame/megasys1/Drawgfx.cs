@@ -7,12 +7,13 @@ namespace mame
 {
     public partial class Drawgfx
     {
-        public static void common_drawgfx_megasys1(byte[] bb1,int color_base, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, uint primask)
+        public static void common_drawgfx_megasys1(byte[] bb1, int color_base, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, uint primask)
         {
             int ox;
             int oy;
             int ex;
             int ey;
+            code %= spritecount;
             ox = sx;
             oy = sy;
             ex = sx + 0x10 - 1;
@@ -64,57 +65,7 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = color_base + 0x10 * color;
-            blockmove_8toN_transpen_pri16_megasys1(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x196, colorbase, primask, 0x0f, sx, sy);
-        }
-        public static void blockmove_8toN_transpen_pri16_megasys1(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int transpen, int sx, int sy)
-        {
-            int ydir, xdir, col, i, j;
-            int offsetx = sx, offsety = sy;
-            int srcdata_offset = code * srcwidth * srcheight;
-            if (flipy != 0)
-            {
-                offsety += (dstheight - 1);
-                srcdata_offset += (srcheight - dstheight - topskip) * srcmodulo;
-                ydir = -1;
-            }
-            else
-            {
-                srcdata_offset += topskip * srcmodulo;
-                ydir = 1;
-            }
-            if (flipx != 0)
-            {
-                offsetx += (dstwidth - 1);
-                srcdata_offset += (srcwidth - dstwidth - leftskip);
-                xdir = -1;
-            }
-            else
-            {
-                srcdata_offset += leftskip;
-                xdir = 1;
-            }
-            for (i = 0; i < dstheight; i++)
-            {
-                for (j = 0; j < dstwidth; j++)
-                {
-                    col = bb1[srcdata_offset + srcmodulo * i + j];
-                    if (col != transpen)
-                    {
-                        if ((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f) & pmask) == 0)
-                        {
-                            if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
-                            {
-                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = 0x800;
-                            }
-                            else
-                            {
-                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = (ushort)(colorbase + col);
-                            }
-                        }
-                        Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | 0x1f);
-                    }
-                }
-            }
+            blockmove_8toN_transpen_pri16_m92(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x196, colorbase, primask, 0x0f, sx, sy);
         }
     }
 }

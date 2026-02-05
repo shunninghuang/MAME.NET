@@ -64,7 +64,7 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = 0x10 * color;
-            blockmove_8toN_transpen16_bublbobl(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, colorbase, sy, sx);
+            blockmove_8toN_transpen16_m72(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x100, colorbase, 0x0f, sx, sy);
         }
     }
 }

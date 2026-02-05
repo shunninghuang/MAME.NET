@@ -744,12 +744,10 @@ namespace mame
                         case "tokiua":
                         case "juju":
                         case "jujuba":
-                            YM2151.ym2151_reset_chip();
                             OKI6295.oo1[0].okim6295_reset();
                             break;
                         case "tokib":
                         case "jujub":
-                            YM2151.ym2151_reset_chip();
                             break;
                     }
                     break;

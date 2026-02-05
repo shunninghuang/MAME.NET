@@ -64,57 +64,7 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = 0x10 * color;
-            blockmove_8toN_transpen_pri16_gaelco(bb1, code, sw, sh, 8, ls, ts, flipx, flipy, dw, dh, colorbase, sy, sx, primask);
-        }
-        public static void blockmove_8toN_transpen_pri16_gaelco(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int colorbase, int sy, int sx, uint primask)
-        {
-            int ydir, xdir, col, i, j;
-            int offsetx = sx, offsety = sy;
-            int srcdata_offset = code * srcwidth * srcheight;
-            if (flipy != 0)
-            {
-                offsety += (dstheight - 1);
-                srcdata_offset += (srcheight - dstheight - topskip) * 8;
-                ydir = -1;
-            }
-            else
-            {
-                srcdata_offset += topskip * 8;
-                ydir = 1;
-            }
-            if (flipx != 0)
-            {
-                offsetx += (dstwidth - 1);
-                srcdata_offset += (srcwidth - dstwidth - leftskip);
-                xdir = -1;
-            }
-            else
-            {
-                srcdata_offset += leftskip;
-                xdir = 1;
-            }
-            for (i = 0; i < dstheight; i++)
-            {
-                for (j = 0; j < dstwidth; j++)
-                {
-                    col = bb1[srcdata_offset + srcmodulo * i + j];
-                    if (col != 0)
-                    {
-                        if ((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f) & primask) == 0)
-                        {
-                            if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
-                            {
-                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = 0x800;
-                            }
-                            else
-                            {
-                                Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);
-                            }
-                        }
-                        Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | 0x1f);
-                    }
-                }
-            }
+            blockmove_8toN_transpen_pri16_m92(bb1, code, sw, sh, 8, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, primask, 0, sx, sy);
         }
     }
 }

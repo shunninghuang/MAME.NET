@@ -62,7 +62,7 @@ namespace mame
                 gfx1rom[i * 2] = (byte)(gfxrom[i] & 0x0f);
                 gfx1rom[i * 2 + 1] = (byte)(gfxrom[i] >> 4);
             }
-            total_elements = n / 0x80;
+            Drawgfx.spritecount = n / 0x80;
             Memory.audiorom = Machine.GetRom("audiocpu.rom");
             switch (Machine.sBoard)
             {

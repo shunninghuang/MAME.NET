@@ -48,7 +48,7 @@ namespace mame
                         Machine.bRom = false;
                     }
                     break;
-            }            
+            }
             if (Machine.bRom)
             {
                 dsw = 0xbf;
