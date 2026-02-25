@@ -137,6 +137,17 @@ namespace mame
                     mouse_enabled = true;
                     lightgun_enabled = false;
                     break;
+                case "drgnwrld":
+                case "drgnwrldv30":
+                case "drgnwrldv21":
+                case "drgnwrldv21j":
+                case "drgnwrldv20j":
+                case "drgnwrldv10c":
+                case "drgnwrldv11h":
+                case "drgnwrldv40k":
+                    mouse_enabled = true;
+                    lightgun_enabled = false;
+                    break;
                 default:
                     mouse_enabled = false;
                     lightgun_enabled = false;

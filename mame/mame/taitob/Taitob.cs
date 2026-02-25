@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace mame
 {
@@ -59,9 +58,7 @@ namespace mame
             {
                 gfx0rom[((i / 0x10) % 8 + (i / 0x80 * 0x10) + ((i / 8) % 2) * 8) * 8 + (i % 8)] = gfx1rom[i];
             }
-            /*BinaryWriter bw1 = new BinaryWriter(new FileStream("gfx1.dmp", FileMode.Create));
-            bw1.Write(gfx1rom, 0, n * 2);
-            bw1.Close();*/
+            Drawgfx.spritecount = gfx1rom.Length / 0x100;
             FM.ymsndrom = Machine.GetRom("ymsnd.rom");
             YMDeltat.ymsnddeltatrom = Machine.GetRom("ymsnddeltat.rom");
             if (Memory.mainrom == null || gfxrom == null || Memory.audiorom == null)

@@ -33,10 +33,7 @@ namespace mame
         }
         public static void pcktgal_videoram_w(int offset, byte data)
         {
-            int row, col;
             Generic.videoram[offset] = data;
-            row = (offset / 2) / 0x20;
-            col = (offset / 2) % 0x20;
             bg_tilemap.tilemap_mark_tile_dirty(offset / 2);
         }
         public static void pcktgal_flipscreen_w(byte data)

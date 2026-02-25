@@ -13,6 +13,7 @@ namespace mame
             int oy;
             int ex;
             int ey;
+            code %= spritecount;
             ox = sx;
             oy = sy;
             ex = sx + 8 - 1;
@@ -72,13 +73,10 @@ namespace mame
             int oy;
             int ex;
             int ey;
+            code %= spritecount;
             ox = sx;
             oy = sy;
             ex = sx + 0x10 - 1;
-            if (code > 0x4000 || color > 0x80)
-            {
-                int i1 = 1;
-            }
             if (sx < 0)
             {
                 sx = 0;

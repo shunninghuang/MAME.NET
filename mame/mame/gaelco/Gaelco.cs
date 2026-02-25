@@ -121,30 +121,18 @@ namespace mame
         {
             data = gaelco_decrypt(offset, data, 0x0f, 0x4228);
             gaelco_videoram[offset] = data;
-            int tile_index, row, col;
-            tile_index = ((offset << 1) & 0x0fff) >> 2;
-            col = tile_index % 0x20;
-            row = tile_index / 0x20;
             gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void gaelco_vram_encrypted_w1(int offset, byte data)
         {
             data = (byte)gaelco_decrypt(offset, data, 0x0f, 0x4228);
             gaelco_videoram[offset] = (ushort)((data << 8) | (gaelco_videoram[offset] & 0xff));
-            int tile_index, row, col;
-            tile_index = ((offset << 1) & 0x0fff) >> 2;
-            col = tile_index % 0x20;
-            row = tile_index / 0x20;
             gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void gaelco_vram_encrypted_w2(int offset, byte data)
         {
             data = (byte)gaelco_decrypt(offset, data, 0x0f, 0x4228);
             gaelco_videoram[offset] = (ushort)((gaelco_videoram[offset] & 0xff00) | data);
-            int tile_index, row, col;
-            tile_index = ((offset << 1) & 0x0fff) >> 2;
-            col = tile_index % 0x20;
-            row = tile_index / 0x20;
             gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void gaelco_encrypted_w(int offset, ushort data)
@@ -166,30 +154,18 @@ namespace mame
         {
             data = gaelco_decrypt(offset, data, 0x0e, 0x4228);
             gaelco_videoram[offset] = data;
-            int tile_index, row, col;
-            tile_index = ((offset << 1) & 0x0fff) >> 2;
-            col = tile_index % 0x20;
-            row = tile_index / 0x20;
             gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void thoop_vram_encrypted_w1(int offset, byte data)
         {
             data = (byte)gaelco_decrypt(offset, data, 0x0e, 0x4228);
             gaelco_videoram[offset] = (ushort)((data << 8) | (gaelco_videoram[offset] & 0xff));
-            int tile_index, row, col;
-            tile_index = ((offset << 1) & 0x0fff) >> 2;
-            col = tile_index % 0x20;
-            row = tile_index / 0x20;
             gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void thoop_vram_encrypted_w2(int offset, byte data)
         {
             data = (byte)gaelco_decrypt(offset, data, 0x0e, 0x4228);
             gaelco_videoram[offset] = (ushort)((gaelco_videoram[offset] & 0xff00) | data);
-            int tile_index, row, col;
-            tile_index = ((offset << 1) & 0x0fff) >> 2;
-            col = tile_index % 0x20;
-            row = tile_index / 0x20;
             gaelco_tilemap[offset >> 11].tilemap_mark_tile_dirty(((offset << 1) & 0x0fff) >> 2);
         }
         public static void thoop_encrypted_w(int offset, ushort data)

@@ -56,26 +56,17 @@ namespace mame
         }
         public static void sf_videoram_w(int offset, ushort data)
         {
-            int row, col;
             sf_videoram[offset] = data;
-            row = offset / 64;
-            col = offset % 64;
             tx_tilemap.tilemap_mark_tile_dirty(offset);
         }
         public static void sf_videoram_w1(int offset, byte data)
         {
-            int row, col;
             sf_videoram[offset] = (ushort)((data << 8) | (sf_videoram[offset] & 0xff));
-            row = offset / 64;
-            col = offset % 64;
             tx_tilemap.tilemap_mark_tile_dirty(offset);
         }
         public static void sf_videoram_w2(int offset, byte data)
         {
-            int row, col;
             sf_videoram[offset] = (ushort)((sf_videoram[offset] & 0xff00) | data);
-            row = offset / 64;
-            col = offset % 64;
             tx_tilemap.tilemap_mark_tile_dirty(offset);
         }
         public static void sf_bg_scroll_w(ushort data)

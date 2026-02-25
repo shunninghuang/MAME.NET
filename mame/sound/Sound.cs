@@ -510,7 +510,7 @@ namespace mame
                             OKI6295.oo1[0].OKI.stream = new sound_stream(1056000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             mixerstream = new sound_stream(48000, 5, 0, null);
                             break;
-                    }                    
+                    }
                     break;
                 case "Konami 68000":
                     switch (Machine.sName)

@@ -70,17 +70,11 @@ namespace mame
         public static void gng_fgvideoram_w(int offset, byte data)
         {
             gng_fgvideoram[offset] = data;
-            int row, col;
-            row = (offset & 0x3ff) / 0x20;
-            col = (offset & 0x3ff) % 0x20;
             fg_tilemap.tilemap_mark_tile_dirty(offset & 0x3ff);
         }
         public static void gng_bgvideoram_w(int offset, byte data)
         {
             gng_bgvideoram[offset] = data;
-            int row, col;
-            row = (offset & 0x3ff) % 0x20;
-            col = (offset & 0x3ff) / 0x20;
             bg_tilemap.tilemap_mark_tile_dirty(offset & 0x3ff);
         }
         public static void gng_bgscrollx_w(int offset, byte data)

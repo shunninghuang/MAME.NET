@@ -470,7 +470,6 @@ namespace mame
                         code = Memory.mainram[mainram_offset + spritedata_offset * 2 + 0x0e] * 0x100 + Memory.mainram[mainram_offset + spritedata_offset * 2 + 0x0f] + megasys1_objectram[objectdata_offset + 0x06 / 2];
                         color = (attr & color_mask);
                         Drawgfx.common_drawgfx_megasys1(spritesrom, 0x300, (code & 0xfff) + ((megasys1_sprite_bank & 1) << 12), color, flipx, flipy, sx, sy, cliprect, (uint)((((attr & 0x08) != 0) ? 0x0c : 0x0a) | (1 << 31)));
-                        //pdrawgfx(bitmap, machine->gfx[3],(code & 0xfff) + ((megasys1_sprite_bank & 1) << 12),color,flipx, flipy,sx, sy,cliprect,TRANSPARENCY_PEN, 15,(attr & 0x08) ? 0x0c : 0x0a);
                     }
                 }
             }
@@ -502,7 +501,6 @@ namespace mame
                         sy = 240 - sy;
                     }
                     Drawgfx.common_drawgfx_megasys1(spritesrom, 0x100, code, color, flipx, flipy, sx, sy, cliprect, (uint)((((attr & 0x08) != 0) ? 0x0c : 0x0a) | (1 << 31)));
-                    //pdrawgfx(bitmap, machine->gfx[2],code,color,flipx, flipy,sx, sy,cliprect,TRANSPARENCY_PEN, 15,(attr & 0x08) ? 0x0c : 0x0a);
                 }
             }
         }

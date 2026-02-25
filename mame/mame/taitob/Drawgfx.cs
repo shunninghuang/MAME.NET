@@ -119,6 +119,7 @@ namespace mame
             int oy;
             int ex;
             int ey;
+            code %= spritecount;
             ox = sx;
             oy = sy;
             ex = sx + 0x10 - 1;

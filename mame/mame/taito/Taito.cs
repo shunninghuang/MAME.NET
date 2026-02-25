@@ -38,6 +38,7 @@ namespace mame
                         gfx1rom[i * 2] = (byte)(gfx12rom[i] >> 4);
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
+                    Drawgfx.spritecount = gfx1rom.Length / 0x40;
                     prom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 1;
                     if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || prom == null)
@@ -77,6 +78,7 @@ namespace mame
                         gfx1rom[i * 2] = (byte)(gfx12rom[i] >> 4);
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
+                    Drawgfx.spritecount = gfx1rom.Length / 0x40;
                     prom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 0;
                     if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || mcurom == null || gfx1rom == null || prom == null)
@@ -115,6 +117,7 @@ namespace mame
                         gfx1rom[i * 2] = (byte)(gfx12rom[i] >> 4);
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
+                    Drawgfx.spritecount = gfx1rom.Length / 0x40;
                     prom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 0;
                     if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || prom == null)
@@ -147,6 +150,7 @@ namespace mame
                         gfx1rom[i * 2] = (byte)(gfx12rom[i] >> 4);
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
+                    Drawgfx.spritecount = gfx1rom.Length / 0x40;
                     prom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 0;
                     if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || prom == null)
@@ -188,6 +192,7 @@ namespace mame
                         gfx2rom[i * 2] = (byte)(gfx22rom[i] >> 4);
                         gfx2rom[i * 2 + 1] = (byte)(gfx22rom[i] & 0x0f);
                     }
+                    Drawgfx.spritecount = gfx2rom.Length / 0x100;
                     adpcmrom = Machine.GetRom("adpcm.rom");
                     Taitosnd.taitosnd_start();                    
                     if (Memory.mainrom == null || Memory.audiorom == null || gfx1rom == null || gfx2rom == null || adpcmrom == null)
@@ -227,6 +232,7 @@ namespace mame
                         gfx2rom[i * 2] = (byte)(gfx22rom[i] >> 4);
                         gfx2rom[i * 2 + 1] = (byte)(gfx22rom[i] & 0x0f);
                     }
+                    Drawgfx.spritecount = gfx2rom.Length / 0x100;
                     adpcmrom = Machine.GetRom("adpcm.rom");
                     Taitosnd.taitosnd_start();
                     if (Memory.mainrom == null || Memory.audiorom == null || subrom == null || gfx1rom == null || gfx2rom == null || adpcmrom == null)
@@ -265,6 +271,7 @@ namespace mame
                         gfx2rom[i * 2] = (byte)(gfx22rom[i] >> 4);
                         gfx2rom[i * 2 + 1] = (byte)(gfx22rom[i] & 0x0f);
                     }
+                    Drawgfx.spritecount = gfx2rom.Length / 0x100;
                     adpcmrom = Machine.GetRom("adpcm.rom");
                     Taitosnd.taitosnd_start();
                     if (Memory.mainrom == null || Memory.audiorom == null || gfx1rom == null || gfx2rom == null || adpcmrom == null)

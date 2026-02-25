@@ -42,7 +42,7 @@ namespace mame
             {
                 sbyte2 |= 0x10;
             }
-            if (Keyboard.IsPressed(Key.D))// || Mouse.deltaX > 0)
+            if (Keyboard.IsPressed(Key.D) || Mouse.deltaX > 0)
             {
                 sbyte0 &= ~0x10;
             }
@@ -50,7 +50,7 @@ namespace mame
             {
                 sbyte0 |= 0x10;
             }
-            if (Keyboard.IsPressed(Key.A))// || Mouse.deltaX < 0)
+            if (Keyboard.IsPressed(Key.A) || Mouse.deltaX < 0)
             {
                 sbyte2 &= ~0x02;
             }
@@ -58,7 +58,7 @@ namespace mame
             {
                 sbyte2 |= 0x02;
             }
-            if (Keyboard.IsPressed(Key.S))// || Mouse.deltaY > 0)
+            if (Keyboard.IsPressed(Key.S) || Mouse.deltaY > 0)
             {
                 sbyte0 &= ~0x04;
             }
@@ -66,7 +66,7 @@ namespace mame
             {
                 sbyte0 |= 0x04;
             }
-            if (Keyboard.IsPressed(Key.W))// || Mouse.deltaY < 0)
+            if (Keyboard.IsPressed(Key.W) || Mouse.deltaY < 0)
             {
                 sbyte2 &= ~0x01;
             }
@@ -74,7 +74,7 @@ namespace mame
             {
                 sbyte2 |= 0x01;
             }
-            if (Keyboard.IsPressed(Key.J))// || Mouse.buttons[0] != 0)
+            if (Keyboard.IsPressed(Key.J) || Mouse.buttons[0] != 0)
             {
                 sbyte2 &= ~0x04;
             }
@@ -82,7 +82,7 @@ namespace mame
             {
                 sbyte2 |= 0x04;
             }
-            if (Keyboard.IsPressed(Key.K))// || Mouse.buttons[1] != 0)
+            if (Keyboard.IsPressed(Key.K) || Mouse.buttons[1] != 0)
             {
                 sbyte0 &= ~0x40;
             }

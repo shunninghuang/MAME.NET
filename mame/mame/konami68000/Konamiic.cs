@@ -128,7 +128,6 @@ namespace mame
         }
         public static void K052109_w(int offset, byte data)
         {
-            int row, col;
             if (offset == 0x90d)
             {
                 int i1 = 1;
@@ -144,8 +143,6 @@ namespace mame
                     has_extra_video_ram = 1;
                 }
                 K052109_ram[offset] = data;
-                row = (offset & 0x7ff) / 0x40;
-                col = (offset & 0x7ff) % 0x40;
                 K052109_tilemap[(offset & 0x1800) >> 11].tilemap_mark_tile_dirty(offset & 0x7ff);
             }
             else
@@ -185,8 +182,6 @@ namespace mame
                             int bank = (K052109_ram[i] & 0x0c) >> 2;
                             if ((bank == 0 && ((dirty & 1)!=0) || (bank == 1 && ((dirty & 2)!=0))))
                             {
-                                row=(i&0x7ff)/0x40;
-                                col=(i&0x7ff)%0x40;
                                 K052109_tilemap[(i & 0x1800) >> 11].tilemap_mark_tile_dirty(i & 0x7ff);
                             }
                         }
@@ -224,8 +219,6 @@ namespace mame
                             int bank = (K052109_ram[i] & 0x0c) >> 2;
                             if ((bank == 2 && ((dirty & 1)!=0)) || (bank == 3 && ((dirty & 2)!=0)))
                             {
-                                row=(i&0x7ff)/0x40;
-                                col=(i&0x7ff)%0x40;
                                 K052109_tilemap[(i & 0x1800) >> 11].tilemap_mark_tile_dirty(i & 0x7ff);
                             }
                         }
