@@ -55,11 +55,11 @@ namespace mame
                         sy = -bublbobl_objectram[offs + 0];
                         for (yc = 0; yc < 32; yc++)
                         {
-                            if ((prom[prom_line_offset + yc / 2] & 0x08) != 0)
+                            if ((promsrom[prom_line_offset + yc / 2] & 0x08) != 0)
                             {
                                 continue;
                             }
-                            if ((prom[prom_line_offset + yc / 2] & 0x04) == 0)
+                            if ((promsrom[prom_line_offset + yc / 2] & 0x04) == 0)
                             {
                                 sx = bublbobl_objectram[offs + 2];
                                 if ((gfx_attr & 0x40) != 0)
@@ -70,7 +70,7 @@ namespace mame
                             for (xc = 0; xc < 2; xc++)
                             {
                                 int goffs, code, color, flipx, flipy, x, y;
-                                goffs = gfx_offs + xc * 0x40 + (yc & 7) * 0x02 + (prom[prom_line_offset + yc / 2] & 0x03) * 0x10;
+                                goffs = gfx_offs + xc * 0x40 + (yc & 7) * 0x02 + (promsrom[prom_line_offset + yc / 2] & 0x03) * 0x10;
                                 code = videoram[goffs] + 256 * (videoram[goffs + 1] & 0x03) + 1024 * (gfx_attr & 0x0f);
                                 color = (videoram[goffs + 1] & 0x3c) >> 2;
                                 flipx = videoram[goffs + 1] & 0x40;
@@ -585,6 +585,226 @@ namespace mame
             bm1.UnlockBits(bmData);
             return bm1;
         }
+        public static Bitmap GetBg_tnzs()
+        {
+            Color c1 = new Color();
+            Bitmap bm1;
+            bm1 = new Bitmap(0x100, 0x100);
+            BitmapData bmData;
+            bmData = bm1.LockBits(new Rectangle(0, 0, bm1.Width, bm1.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            unsafe
+            {
+                byte* ptr = (byte*)(bmData.Scan0);
+                byte* ptr2 = (byte*)0;
+                int x, y, column, tot, flag,offsetx,offsety,xdir,ydir,i1,i2;
+                int scrollx, scrolly;
+                int upperbits;
+                int m_offset = 0x400;
+                int ctrl2 = tnzs_objctrl[1];
+                if (((ctrl2 ^ (~ctrl2 << 1)) & 0x40) != 0)
+                {
+                    m_offset += 0x800;
+                }
+                if ((tnzs_bg_flag & 0x80) != 0)
+                {
+                    flag = 0;
+                }
+                else
+                {
+                    flag = 1;
+                }
+                tot = tnzs_objctrl[1] & 0x1f;
+                if (tot == 1)
+                {
+                    tot = 16;
+                }
+                upperbits = tnzs_objctrl[2] + tnzs_objctrl[3] * 256;
+                for (column = 0; column < tot; column++)
+                {
+                    scrollx = tnzs_scrollram[column * 16 + 4] - ((upperbits & 0x01) * 256);
+                    if (tnzs_screenflip != 0)
+                    {
+                        scrolly = tnzs_scrollram[column * 16] + 1 - 256;
+                    }
+                    else
+                    {
+                        scrolly = -tnzs_scrollram[column * 16] + 1;
+                    }
+                    for (y = 0; y < 16; y++)
+                    {
+                        for (x = 0; x < 2; x++)
+                        {
+                            int code, color, flipx, flipy, sx, sy;
+                            int i = 32 * (column ^ 8) + 2 * y + x;
+                            code = tnzs_objram[m_offset + i] + ((tnzs_objram[m_offset + i + 0x1000] & 0x3f) << 8);
+                            color = (tnzs_objram[m_offset + i + 0x1200] & 0xf8) >> 3;
+                            sx = x * 16;
+                            sy = y * 16;
+                            flipx = tnzs_objram[m_offset + i + 0x1000] & 0x80;
+                            flipy = tnzs_objram[m_offset + i + 0x1000] & 0x40;
+                            if (tnzs_screenflip != 0)
+                            {
+                                sy = 240 - sy;
+                                flipx = flipx == 0 ? 1 : 0;
+                                flipy = flipy == 0 ? 1 : 0;
+                            }
+                            if (flipx != 0)
+                            {
+                                offsetx = 0x0f;
+                                xdir = -1;
+                            }
+                            else
+                            {
+                                offsetx = 0;
+                                xdir = 1;
+                            }
+                            if (flipy != 0)
+                            {
+                                offsety = 0x0f;
+                                ydir = -1;
+                            }
+                            else
+                            {
+                                offsety = 0;
+                                ydir = 1;
+                            }
+                            for (i1 = 0; i1 < 0x10; i1++)
+                            {
+                                for (i2 = 0; i2 < 0x10; i2++)
+                                {
+                                    if (sx + scrollx + offsetx + xdir * i1 >= 0 && sx + scrollx + offsetx + xdir * i1 < 0x100 && ((sy + scrolly) & 0xff) + offsety + ydir * i2 >= 0 && ((sy + scrolly) & 0xff) + offsety + ydir * i2 < 0x100)
+                                    {
+                                        ushort c = gfx1rom[code * 0x100 + 0x10 * i2 + i1];
+                                        if (c != 0)
+                                        {
+                                            c1 = Color.FromArgb((int)Palette.entry_color[color * 0x10 + c]);
+                                            ptr2 = ptr + ((((sy + scrolly) & 0xff) + offsety + ydir * i2) * 0x100 + (sx + scrollx + offsetx + xdir * i1)) * 4;
+                                            *ptr2 = c1.B;
+                                            *(ptr2 + 1) = c1.G;
+                                            *(ptr2 + 2) = c1.R;
+                                            *(ptr2 + 3) = c1.A;
+                                        }
+                                    }
+                                    if (sx + 512 + scrollx + offsetx + xdir * i1 >= 0 && sx + 512 + scrollx + offsetx + xdir * i1 < 0x100 && ((sy + scrolly) & 0xff) + offsety + ydir * i2 >= 0 && ((sy + scrolly) & 0xff) + offsety + ydir * i2 < 0x100)
+                                    {
+                                        ushort c = gfx1rom[code * 0x100 + 0x10 * i2 + i1];
+                                        if (c != 0)
+                                        {
+                                            c1 = Color.FromArgb((int)Palette.entry_color[color * 0x10 + c]);
+                                            ptr2 = ptr + ((((sy + scrolly) & 0xff) + offsety + ydir * i2) * 0x100 + (sx + 512 + scrollx + offsetx + xdir * i1)) * 4;
+                                            *ptr2 = c1.B;
+                                            *(ptr2 + 1) = c1.G;
+                                            *(ptr2 + 2) = c1.R;
+                                            *(ptr2 + 3) = c1.A;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    upperbits >>= 1;
+                }
+            }
+            bm1.UnlockBits(bmData);
+            return bm1;
+        }
+        public static Bitmap GetFg_tnzs()
+        {
+            Color c1 = new Color();
+            Bitmap bm1;
+            bm1 = new Bitmap(0x100, 0x100);
+            BitmapData bmData;
+            bmData = bm1.LockBits(new Rectangle(0, 0, bm1.Width, bm1.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            unsafe
+            {
+                byte* ptr = (byte*)(bmData.Scan0);
+                byte* ptr2 = (byte*)0;
+                int char_offset = 0x0000, x_offset = 0x0200, y_offset = 0x0000, ctrl_offset = 0x1000, color_offset = 0x1200;
+                int i,i1,i2,offsetx,offsety,xdir,ydir;
+                int ctrl2 = tnzs_objctrl[1];
+                if (((ctrl2 ^ (~ctrl2 << 1)) & 0x40) != 0)
+                {
+                    char_offset += 0x800;
+                    x_offset += 0x800;
+                    ctrl_offset += 0x800;
+                    color_offset += 0x800;
+                }
+                for (i = 0x1ff; i >= 0; i--)
+                {
+                    int code, color, sx, sy, flipx, flipy;
+                    code = tnzs_objram[char_offset + i] + ((tnzs_objram[ctrl_offset + i] & 0x3f) << 8);
+                    color = (tnzs_objram[color_offset + i] & 0xf8) >> 3;
+                    sx = tnzs_objram[x_offset + i] - ((tnzs_objram[color_offset + i] & 1) << 8);
+                    sy = 240 - tnzs_vdcram[y_offset + i];
+                    flipx = tnzs_objram[ctrl_offset + i] & 0x80;
+                    flipy = tnzs_objram[ctrl_offset + i] & 0x40;
+                    if (tnzs_screenflip != 0)
+                    {
+                        sy = 240 - sy;
+                        flipx = flipx == 0 ? 1 : 0;
+                        flipy = flipy == 0 ? 1 : 0;
+                        if ((sy == 0) && (code == 0))
+                        {
+                            sy += 240;
+                        }
+                    }
+                    if (flipx != 0)
+                    {
+                        offsetx = 0x0f;
+                        xdir = -1;
+                    }
+                    else
+                    {
+                        offsetx = 0;
+                        xdir = 1;
+                    }
+                    if (flipy != 0)
+                    {
+                        offsety = 0x0f;
+                        ydir = -1;
+                    }
+                    else
+                    {
+                        offsety = 0;
+                        ydir = 1;
+                    }
+                    for (i1 = 0; i1 < 0x10; i1++)
+                    {
+                        for (i2 = 0; i2 < 0x10; i2++)
+                        {
+                            if (sx + offsetx + xdir * i1 >= 0 && sx + offsetx + xdir * i1 < 0x100 && (sy + 2) + offsety + ydir * i2 >= 0 && (sy + 2) + offsety + ydir * i2 < 0x100)
+                            {
+                                ushort c = gfx1rom[code * 0x100 + 0x10 * i2 + i1];
+                                if (c != 0)
+                                {
+                                    c1 = Color.FromArgb((int)Palette.entry_color[color * 0x10 + c]);
+                                    ptr2 = ptr + (((sy + 2) + offsety + ydir * i2) * 0x100 + (sx + offsetx + xdir * i1)) * 4;
+                                    *ptr2 = c1.B;
+                                    *(ptr2 + 1) = c1.G;
+                                    *(ptr2 + 2) = c1.R;
+                                    *(ptr2 + 3) = c1.A;
+                                }
+                            }
+                            if (sx + 512 + offsetx + xdir * i1 >= 0 && sx + 512 + offsetx + xdir * i1 < 0x100 && (sy + 2) + offsety + ydir * i2 >= 0 && (sy + 2) + offsety + ydir * i2 < 0x100)
+                            {
+                                ushort c = gfx1rom[code * 0x100 + 0x10 * i2 + i1];
+                                if (c != 0)
+                                {
+                                    c1 = Color.FromArgb((int)Palette.entry_color[color * 0x10 + c]);
+                                    ptr2 = ptr + (((sy + 2) + offsety + ydir * i2) * 0x100 + (sx + 512 + offsetx + xdir * i1)) * 4;
+                                    *ptr2 = c1.B;
+                                    *(ptr2 + 1) = c1.G;
+                                    *(ptr2 + 2) = c1.R;
+                                    *(ptr2 + 3) = c1.A;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            bm1.UnlockBits(bmData);
+            return bm1;
+        }
         public static Bitmap GetAllGDI()
         {
             Bitmap bm1 = new Bitmap(0x200, 0x200), bm2 = null;
@@ -640,6 +860,50 @@ namespace mame
                         bm2 = GetSprinte_opwolf();
                         g.DrawImage(bm2, 0, 0);
                     }          
+                    break;
+                case "plumppop":
+                case "jpopnics":
+                case "extrmatn":
+                case "extrmatnu":
+                case "extrmatnur":
+                case "extrmatnj":
+                case "arknoid2":
+                case "arknoid2u":
+                case "arknoid2j":
+                case "arknoid2b":
+                case "drtoppel":
+                case "drtoppelu":
+                case "drtoppelj":
+                case "kageki":
+                case "kagekiu":
+                case "kagekij":
+                case "kagekih":
+                case "chukatai":
+                case "chukataiu":
+                case "chukataij":
+                case "chukataija":
+                case "tnzs":
+                case "tnzsj":
+                case "tnzso":
+                case "tnzsjo":
+                case "tnzsuo":
+                case "tnzsoa":
+                case "tnzsop":
+                case "kabukiz":
+                case "kabukizj":
+                case "insectx":
+                case "insectxj":
+                case "insectxbl":
+                    if (bBg)
+                    {
+                        bm2 = GetBg_tnzs();
+                        g.DrawImage(bm2, 0, 0);
+                    }
+                    if (bFg)
+                    {
+                        bm2 = GetFg_tnzs();
+                        g.DrawImage(bm2, 0, 0);
+                    }
                     break;
             }            
             return bm1;

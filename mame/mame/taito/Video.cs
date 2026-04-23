@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class Taito
     {
-        public static byte[] gfx1rom, gfx2rom, gfx12rom, gfx22rom, prom;
+        public static byte[] gfx1rom, gfx2rom, gfx12rom, gfx22rom, promsrom;
         public static int bublbobl_objectram_size = 0x300;
         public static RECT cliprect;
         public static ushort[] uuFF;
@@ -58,11 +58,11 @@ namespace mame
                 sy = -bublbobl_objectram[offs + 0];
                 for (yc = 0; yc < 32; yc++)
                 {
-                    if ((prom[prom_line_offset+ yc / 2] & 0x08) != 0)
+                    if ((promsrom[prom_line_offset+ yc / 2] & 0x08) != 0)
                     {
                         continue;
                     }
-                    if ((prom[prom_line_offset + yc / 2] & 0x04) == 0)
+                    if ((promsrom[prom_line_offset + yc / 2] & 0x04) == 0)
                     {
                         sx = bublbobl_objectram[offs + 2];
                         if ((gfx_attr & 0x40) != 0)
@@ -73,7 +73,7 @@ namespace mame
                     for (xc = 0; xc < 2; xc++)
                     {
                         int goffs, code, color, flipx, flipy, x, y;
-                        goffs = gfx_offs + xc * 0x40 + (yc & 7) * 0x02 + (prom[prom_line_offset + yc / 2] & 0x03) * 0x10;
+                        goffs = gfx_offs + xc * 0x40 + (yc & 7) * 0x02 + (promsrom[prom_line_offset + yc / 2] & 0x03) * 0x10;
                         code = videoram[goffs] + 256 * (videoram[goffs + 1] & 0x03) + 1024 * (gfx_attr & 0x0f);
                         color = (videoram[goffs + 1] & 0x3c) >> 2;
                         flipx = videoram[goffs + 1] & 0x40;

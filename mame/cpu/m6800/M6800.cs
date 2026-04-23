@@ -888,11 +888,6 @@ namespace cpu.m6800
             CLEANUP_conters();
             INCREMENT_COUNTER(extra_cycles);
             extra_cycles = 0;
-            StreamWriter sw23 = null;
-            if (Cpuexec.bLog3 == 1)
-            {
-                sw23 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\23.txt", true);
-            }
             do
             {
                 int prevCycles = pendingCycles;
@@ -906,26 +901,15 @@ namespace cpu.m6800
                     //debugger_instruction_hook(Machine, PCD);                    
                     ireg = ReadOp(PC.LowWord);
                     PC.LowWord++;
-                    if (Cpuexec.bLog3 == 2 && PendingCycles == 0x5a45)
-                    {
-                        int i1 = 1;
-                    }
                     m6800_insn[ireg]();
                     INCREMENT_COUNTER(cycles_6800[ireg]);
                     int delta = prevCycles - pendingCycles;
                     totalExecutedCycles += (ulong)delta;
                 }
-                if (Cpuexec.bLog3==1)
-                {
-                    sw23.WriteLine(PPC.LowWord.ToString("x") + "\t" + PC.LowWord.ToString("x") + "\t" + PendingCycles.ToString("x") + "\t" + extra_cycles.ToString("x") + "\t" + S.LowWord.ToString("x") + "\t" + X.LowWord.ToString("x") + "\t" + D.LowWord.ToString("x") + "\t" + cc.ToString("x") + "\t" + wai_state.ToString("x") + "\t" + nmi_state.ToString("x") + "\t" + irq_state[0].ToString("x") + "\t" + irq_state[1].ToString("x") + "\t" + port1_ddr.ToString("x") + "\t" + port2_ddr.ToString("x") + "\t" + port3_ddr.ToString("x") + "\t" + port4_ddr.ToString("x") + "\t" + port1_data.ToString("x") + "\t" + port2_data.ToString("x") + "\t" + port3_data.ToString("x") + "\t" + port4_data.ToString("x") + "\t" + tcsr.ToString("x") + "\t" + pending_tcsr.ToString("x") + "\t" + irq2.ToString("x") + "\t" + ram_ctrl.ToString("x") + "\t" + timer_over.d.ToString("x"));
-                }
-            } while (pendingCycles > 0);
+            }
+            while (pendingCycles > 0);
             INCREMENT_COUNTER(extra_cycles);
             extra_cycles = 0;
-            if (Cpuexec.bLog3==1)
-            {
-                sw23.Close();
-            }
             return cycles - pendingCycles;
         }
         public byte hd63701_internal_registers_r(int offset)

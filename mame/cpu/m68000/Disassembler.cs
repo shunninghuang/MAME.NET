@@ -9,7 +9,6 @@ namespace cpu.m68000
         public string Args;
         public string RawBytes;
         public int Length;
-
         public override string ToString()
         {
             return string.Format("{0:X6}: {3,-20}  {1,-8} {2}", PC, Mnemonic, Args, RawBytes);
@@ -21,8 +20,7 @@ namespace cpu.m68000
         public DisassemblyInfo Disassemble(int pc)
         {
             var info = new DisassemblyInfo { Mnemonic = "UNKNOWN", PC = pc, Length = 2 };
-            op = (ushort)ReadOpWord(pc);
-            
+            op = (ushort)ReadOpWord(pc);            
             if (Opcodes[op] == MOVE) MOVE_Disasm(info);//
             else if (Opcodes[op] == MOVEA) MOVEA_Disasm(info);
             else if (Opcodes[op] == MOVEQ) MOVEQ_Disasm(info);
@@ -131,7 +129,6 @@ namespace cpu.m68000
             else if (Opcodes[op] == SUBX0) SUBX0_Disasm(info);
             else if (Opcodes[op] == SUBX1) SUBX1_Disasm(info);
             else if (Opcodes[op] == ILL) ILL_Disasm(info);
-
             var sb = new StringBuilder();
             for (int p = info.PC; p < info.PC + info.Length; p += 2)
             {

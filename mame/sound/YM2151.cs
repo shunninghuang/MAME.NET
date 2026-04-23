@@ -419,8 +419,8 @@ namespace mame
         {
             int oldstate = PSG.irqlinestate;
             PSG.irqlinestate |= 1;
-            if (oldstate == 0)
-            {              
+            if (oldstate == 0 && PSG.irqhandler != null)
+            {
                 PSG.irqhandler(1);
             }
         }
@@ -428,7 +428,7 @@ namespace mame
         {
             int oldstate = PSG.irqlinestate;
             PSG.irqlinestate |= 2;
-            if (oldstate == 0)
+            if (oldstate == 0 && PSG.irqhandler != null)
             {
                 PSG.irqhandler(1);
             }
@@ -437,7 +437,7 @@ namespace mame
         {
             int oldstate = PSG.irqlinestate;
             PSG.irqlinestate &= ~1;
-            if (oldstate == 1)
+            if (oldstate == 1 && PSG.irqhandler != null)
             {
                 PSG.irqhandler(0);
             }
@@ -446,7 +446,7 @@ namespace mame
         {
             int oldstate = PSG.irqlinestate;
             PSG.irqlinestate &= ~2;
-            if (oldstate == 2)
+            if (oldstate == 2 && PSG.irqhandler != null)
             {
                 PSG.irqhandler(0);
             }
@@ -1012,6 +1012,10 @@ namespace mame
                         case "opwolfp":
                             PSG.irqhandler = Taito.irq_handler;
                             PSG.porthandler = Taito.sound_bankswitch_w;
+                            break;
+                        case "jpopnics":
+                            PSG.irqhandler = null;
+                            PSG.porthandler = null;
                             break;
                     }
                     break;

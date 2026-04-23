@@ -561,10 +561,6 @@ namespace cpu.m6805
                 }
                 //debugger_instruction_hook(Machine, PC);
                 ireg = ReadOp(pc.LowWord++);
-                if (Cpuexec.bLog3 == 2 && PendingCycles == 0x45)
-                {
-                    int i1 = 1;
-                }
                 switch (ireg)
                 {
                     case 0x00: brset(0x01); break;

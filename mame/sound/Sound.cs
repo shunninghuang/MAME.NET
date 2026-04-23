@@ -127,7 +127,7 @@ namespace mame
                             YM2151.ym2151_init(3579545);
                             OKI6295.oo1[0].okim6295_start();
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
-                            OKI6295.oo1[0].OKI.stream = new sound_stream(1056000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);                            
+                            OKI6295.oo1[0].OKI.stream = new sound_stream(1056000 / 132, 0, 1, OKI6295.oo1[0].okim6295_update);
                             mixerstream = new sound_stream(48000, 3, 0, null);
                             break;
                         case "toffy":
@@ -152,7 +152,7 @@ namespace mame
                         case "tokiua":
                         case "juju":
                         case "jujuba":
-                            sound_update = sound_update_gaelco_bigkarnk;                            
+                            sound_update = sound_update_gaelco_bigkarnk;
                             YM3812.ym3812_start(3579545);
                             OKI6295.oo1[0].okim6295_start();
                             ym3812stream = new sound_stream(49715, 0, 1, FMOpl.ym3812_update_one);
@@ -169,7 +169,7 @@ namespace mame
                             ym3812stream = new sound_stream(49715, 0, 1, FMOpl.ym3812_update_one);
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
-                    }                    
+                    }
                     break;
                 case "Megasys1":
                     switch (Machine.sName)
@@ -210,7 +210,7 @@ namespace mame
                         case "monkelf":
                         case "edf":
                         case "edfa":
-                        case "edfu":                        
+                        case "edfu":
                         //case "edfbl":
                         case "64street":
                         case "64streetj":
@@ -351,7 +351,7 @@ namespace mame
                             ICS2115.ics2115_start();
                             ics2115stream = new sound_stream(33075, 0, 2, ICS2115.ics2115_update);
                             mixerstream = new sound_stream(48000, 2, 0, null);
-                            break;                        
+                            break;
                     }
                     break;
                 case "PGM":
@@ -435,6 +435,89 @@ namespace mame
                             MSM5205.msm5205_start(0, 384000, Taito.opwolf_msm5205_vck, 5);
                             MSM5205.msm5205_start(1, 384000, Taito.opwolf_msm5205_vck, 5);
                             mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "tnzs":
+                        case "tnzsj":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            sound_update = sound_update_taito_tnzs;
+                            YM2203.ym2203_start(0, 3000000, generic_2203);
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "plumppop":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            sound_update = sound_update_taito_tnzso;
+                            AY8910.ay8910_interface tnzso_ay8910_interface = new AY8910.ay8910_interface();
+                            tnzso_ay8910_interface.flags = 1;
+                            tnzso_ay8910_interface.res_load = new int[3] { 1000, 1000, 1000 };
+                            tnzso_ay8910_interface.portAread = Taito.dswa_r;
+                            tnzso_ay8910_interface.portBread = Taito.dswb_r;
+                            tnzso_ay8910_interface.portAwrite = null;
+                            tnzso_ay8910_interface.portBwrite = null;
+                            YM2203.ym2203_start(0, 3000000, tnzso_ay8910_interface);
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                            sound_update = sound_update_taito_kageki;
+                            AY8910.ay8910_interface kageki_ay8910_interface = new AY8910.ay8910_interface();
+                            kageki_ay8910_interface.flags = 1;
+                            kageki_ay8910_interface.res_load = new int[3] { 1000, 1000, 1000 };
+                            kageki_ay8910_interface.portAread = Taito.kageki_csport_r;
+                            kageki_ay8910_interface.portBread = null;
+                            kageki_ay8910_interface.portAwrite = null;
+                            kageki_ay8910_interface.portBwrite = Taito.kageki_csport_w;
+                            YM2203.ym2203_start(0, 3000000, kageki_ay8910_interface);
+                            Sample.samples_start();
+                            samplestream = new sound_stream(48000, 0, 1, Sample.sample_update_sound);
+                            mixerstream = new sound_stream(48000, 5, 0, null);
+                            break;
+                        case "jpopnics":
+                            sound_update = sound_update_taito_jpopnics;
+                            YM2151.ym2151_init(3000000);
+                            ym2151stream = new sound_stream(46875, 0, 2, YM2151.ym2151_update_one);
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "kabukiz":
+                        case "kabukizj":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            sound_update = sound_update_taito_kabukiz;
+                            AY8910.ay8910_interface kabukiz_ym2203_interface = new AY8910.ay8910_interface();
+                            kabukiz_ym2203_interface.flags = 1;
+                            kabukiz_ym2203_interface.res_load = new int[3] { 1000, 1000, 1000 };
+                            kabukiz_ym2203_interface.portAread = null;
+                            kabukiz_ym2203_interface.portBread = null;
+                            kabukiz_ym2203_interface.portAwrite = Taito.kabukiz_sound_bank_w;
+                            kabukiz_ym2203_interface.portBwrite = Taito.kabukiz_sample_w;
+                            YM2203.ym2203_start(0, 3000000, kabukiz_ym2203_interface);
+                            DAC.dac_start();
+                            dacstream = new sound_stream(192000, 0, 1, DAC.DAC_update);
+                            mixerstream = new sound_stream(48000, 5, 0, null);
                             break;
                     }
                     break;
@@ -1711,7 +1794,6 @@ namespace mame
                 finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
                 finalmixb[sampindex * 4 + 2] = (byte)samp;
                 finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
-                
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_m92();
@@ -1743,6 +1825,148 @@ namespace mame
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_taito_tokio();
+        }
+        public static void sound_update_taito_jpopnics()
+        {
+            int sampindex;
+            ym2151stream.stream_update();
+            generate_resampled_data_ym2151(0x4c);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_technos_toffy();
+        }
+        public static void sound_update_taito_kageki()
+        {
+            int sampindex;
+            AY8910.AA8910[0].stream.stream_update();
+            YM2203.FF2203[0].stream.stream_update();
+            samplestream.stream_update();
+            generate_resampled_data_ay8910_3(0, 0x26, 0);
+            generate_resampled_data_ym2203(0, 0x59, 3);
+            generate_resampled_data_sample(0x100, 4);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex] + mixerstream.streaminput[4][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_taito_kageki();
+        }
+        public static void sound_update_taito_tnzs()
+        {
+            int sampindex;
+            AY8910.AA8910[0].stream.stream_update();
+            YM2203.FF2203[0].stream.stream_update();
+            generate_resampled_data_ay8910_3(0, 0x100, 0);
+            generate_resampled_data_ym2203(0, 0x200, 3);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_taito_tokio();
+        }
+        public static void sound_update_taito_tnzso()
+        {
+            int sampindex;
+            AY8910.AA8910[0].stream.stream_update();
+            YM2203.FF2203[0].stream.stream_update();
+            generate_resampled_data_ay8910_3(0, 0x4c, 0);
+            generate_resampled_data_ym2203(0, 0x4c, 3);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_taito_tokio();
+        }
+        public static void sound_update_taito_kabukiz()
+        {
+            int sampindex;
+            AY8910.AA8910[0].stream.stream_update();
+            YM2203.FF2203[0].stream.stream_update();
+            dacstream.stream_update();
+            generate_resampled_data_ay8910_3(0, 0x100, 0);
+            generate_resampled_data_ym2203(0, 0x200, 3);
+            generate_resampled_data_dac(0x100, 4);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex] + mixerstream.streaminput[4][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_taito_kabukiz();
         }
         public static void sound_update_taito_bublbobl()
         {

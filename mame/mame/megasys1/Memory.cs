@@ -1046,7 +1046,7 @@ namespace mame
                 }
                 else if (address % 2 == 1)
                 {
-                    megasys1_soundlatch_w((byte)value);
+                    megasys1_soundlatch_w2((byte)value);
                 }
             }
             else if (address >= 0x088000 && address <= 0x0887ff)

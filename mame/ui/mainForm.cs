@@ -466,6 +466,39 @@ namespace ui
                         case "boblcave":
                         case "bublcave11":
                         case "bublcave10":
+                        case "plumppop":
+                        case "jpopnics":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzs":
+                        case "tnzsj":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "kabukiz":
+                        case "kabukizj":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
                             itemSize[0].Text = "256x224";
                             break;
                         case "opwolf":
@@ -1215,6 +1248,39 @@ namespace ui
                             case "boblcave":
                             case "bublcave11":
                             case "bublcave10":
+                            case "plumppop":
+                            case "jpopnics":
+                            case "extrmatn":
+                            case "extrmatnu":
+                            case "extrmatnur":
+                            case "extrmatnj":
+                            case "arknoid2":
+                            case "arknoid2u":
+                            case "arknoid2j":
+                            case "arknoid2b":
+                            case "drtoppel":
+                            case "drtoppelu":
+                            case "drtoppelj":
+                            case "kageki":
+                            case "kagekiu":
+                            case "kagekij":
+                            case "kagekih":
+                            case "chukatai":
+                            case "chukataiu":
+                            case "chukataij":
+                            case "chukataija":
+                            case "tnzs":
+                            case "tnzsj":
+                            case "tnzso":
+                            case "tnzsjo":
+                            case "tnzsuo":
+                            case "tnzsoa":
+                            case "tnzsop":
+                            case "kabukiz":
+                            case "kabukizj":
+                            case "insectx":
+                            case "insectxj":
+                            case "insectxbl":
                                 Video.offsetx = 0;
                                 Video.offsety = 16;
                                 Video.width = 256;

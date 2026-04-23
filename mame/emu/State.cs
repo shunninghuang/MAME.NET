@@ -269,6 +269,57 @@ namespace mame
                             savestate_callback = Taito.SaveStateBinary_opwolf;
                             loadstate_callback = Taito.LoadStateBinary_opwolf;
                             break;
+                        case "plumppop":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            savestate_callback = Taito.SaveStateBinary_drtoppel;
+                            loadstate_callback = Taito.LoadStateBinary_drtoppel;
+                            break;
+                        case "jpopnic":
+                            savestate_callback = Taito.SaveStateBinary_jpopnics;
+                            loadstate_callback = Taito.LoadStateBinary_jpopnics;
+                            break;
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                            savestate_callback = Taito.SaveStateBinary_kageki;
+                            loadstate_callback = Taito.LoadStateBinary_kageki;
+                            break;
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                            savestate_callback = Taito.SaveStateBinary_tnzs;
+                            loadstate_callback = Taito.LoadStateBinary_tnzs;
+                            break;
+                        case "tnzs":
+                        case "tnzsj":
+                            savestate_callback = Taito.SaveStateBinary_tnzsb;
+                            loadstate_callback = Taito.LoadStateBinary_tnzsb;
+                            break;
+                        case "kabukiz":
+                        case "kabukizj":
+                            savestate_callback = Taito.SaveStateBinary_kabukiz;
+                            loadstate_callback = Taito.LoadStateBinary_kabukiz;
+                            break;
                     }
                     break;
                 case "Taito B":

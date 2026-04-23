@@ -13,6 +13,7 @@ using cpu.m6800;
 using cpu.m6805;
 using cpu.m6809;
 using cpu.nec;
+using cpu.i8x41;
 using ui;
 
 namespace mame
@@ -46,9 +47,6 @@ namespace mame
     public class Cpuexec
     {
         public static byte SUSPEND_REASON_HALT = 0x01, SUSPEND_REASON_RESET = 0x02, SUSPEND_REASON_SPIN = 0x04, SUSPEND_REASON_TRIGGER = 0x08, SUSPEND_REASON_DISABLE = 0x10, SUSPEND_ANY_REASON = 0xff;
-        public static int iType, bLog, bLog0, bLog1, bLog2, bLog3,bLogS;
-        public static bool bLog02, bLog12, bLog22, bLog32;
-        public static bool b11 = true, b12 = true, b13 = true, b14 = true;
         public static int activecpu, icpu, ncpu;
         public static cpuexec_data[] cpu;
         public static Timer.emu_timer timedint_timer;
@@ -955,6 +953,97 @@ namespace mame
                             cpu[0].cycles_per_second = 8000000;
                             cpu[1].cycles_per_second = 4000000;
                             cpu[2].cycles_per_second = 4000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            cpu[2].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[2].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            break;
+                        case "plumppop":
+                        case "jpopnics":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            Z80A.nZ80 = 2;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[1] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.zz1[1].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = Z80A.zz1[0];
+                            cpu[1] = Z80A.zz1[1];
+                            cpu[0].cycles_per_second = 6000000;
+                            cpu[1].cycles_per_second = 6000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            break;
+                        case "tnzs":
+                        case "tnzsj":
+                        case "kabukiz":
+                        case "kabukizj":
+                            Z80A.nZ80 = 3;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[1] = new Z80A();
+                            Z80A.zz1[2] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.zz1[1].irq_callback = Cpuint.cpu_1_irq_callback;
+                            Z80A.zz1[2].irq_callback = Cpuint.cpu_2_irq_callback;
+                            ncpu = 3;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = Z80A.zz1[0];
+                            cpu[1] = Z80A.zz1[1];
+                            cpu[2] = Z80A.zz1[2];
+                            cpu[0].cycles_per_second = 6000000;
+                            cpu[1].cycles_per_second = 6000000;
+                            cpu[2].cycles_per_second = 6000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            cpu[2].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[2].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            break;
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                            Z80A.nZ80 = 2;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[1] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.zz1[1].irq_callback = Cpuint.cpu_1_irq_callback;
+                            I8x41.i8x41_init(I8x41.I8X41Type.TYPE_I8X42);
+                            I8x41.m1.irq_callback = Cpuint.cpu_2_irq_callback;
+                            ncpu = 3;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = Z80A.zz1[0];
+                            cpu[1] = Z80A.zz1[1];
+                            cpu[2] = I8x41.m1;
+                            cpu[0].cycles_per_second = 6000000;
+                            cpu[1].cycles_per_second = 6000000;
+                            cpu[2].cycles_per_second = 400000;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
                             cpu[2].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[2].cycles_per_second;
@@ -2583,6 +2672,180 @@ namespace mame
                             Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
                             Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
                             break;
+                        case "plumppop":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tnzs;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_tnzs;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_tnzs;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            break;
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_drtoppel;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_tnzs;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_tnzs;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            break;
+                        case "jpopnics":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_jpopnics;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_jpopnics;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_jpopnics;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_jpopnics;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            break;
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tnzs;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_kageki;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_kageki;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            break;
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tnzs;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_tnzs;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_tnzs;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            I8x41.m1.ROP = Taito.M2ReadMemory_i8742;
+                            I8x41.m1.ROP_ARG = Taito.M2ReadMemory_i8742;
+                            I8x41.m1.RM = Taito.M2ReadMemory_i8742;
+                            I8x41.m1.WM = Taito.M2WriteMemory_i8742;
+                            I8x41.m1.RP = Taito.M2ReadIO_i8742;
+                            I8x41.m1.WP = Taito.M2WriteIO_i8742_2;
+                            break;
+                        case "tnzs":
+                        case "tnzsj":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs_type2;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tnzs_type2;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_tnzsb;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_tnzsb;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[2].ReadOp = Taito.Z2ReadOp_tnzsb;
+                            Z80A.zz1[2].ReadOpArg = Taito.Z2ReadOp_tnzsb;
+                            Z80A.zz1[2].ReadMemory = Taito.Z2ReadMemory_tnzsb;
+                            Z80A.zz1[2].WriteMemory = Taito.Z2WriteMemory_tnzsb;
+                            Z80A.zz1[2].ReadHardware = Taito.Z2ReadHardware;
+                            Z80A.zz1[2].WriteHardware = Taito.Z2WriteHardware;
+                            break;
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tnzs;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_tnzs;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_tnzs;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            I8x41.m1.ROP = Taito.M2ReadMemory_i8742;
+                            I8x41.m1.ROP_ARG = Taito.M2ReadMemory_i8742;
+                            I8x41.m1.RM = Taito.M2ReadMemory_i8742;
+                            I8x41.m1.WM = Taito.M2WriteMemory_i8742;
+                            I8x41.m1.RP = Taito.M2ReadIO_i8742;
+                            I8x41.m1.WP = Taito.M2WriteIO_i8742;
+                            break;
+                        case "kabukiz":
+                        case "kabukizj":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs_type2;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tnzs_type2;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_kabukiz;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_kabukiz;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[2].ReadOp = Taito.Z2ReadMemory_kabukiz;
+                            Z80A.zz1[2].ReadOpArg = Taito.Z2ReadMemory_kabukiz;
+                            Z80A.zz1[2].ReadMemory = Taito.Z2ReadMemory_kabukiz;
+                            Z80A.zz1[2].WriteMemory = Taito.Z2WriteMemory_kabukiz;
+                            Z80A.zz1[2].ReadHardware = Taito.Z2ReadHardware;
+                            Z80A.zz1[2].WriteHardware = Taito.Z2WriteHardware;
+                            break;
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            Z80A.zz1[0].ReadOp = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadOpArg = Taito.Z0ReadOp_tnzs;
+                            Z80A.zz1[0].ReadMemory = Taito.Z0ReadMemory_tnzs;
+                            Z80A.zz1[0].WriteMemory = Taito.Z0WriteMemory_tnzs;
+                            Z80A.zz1[0].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taito.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadOpArg = Taito.Z1ReadOp_tnzs;
+                            Z80A.zz1[1].ReadMemory = Taito.Z1ReadMemory_insectx;
+                            Z80A.zz1[1].WriteMemory = Taito.Z1WriteMemory_insectx;
+                            Z80A.zz1[1].ReadHardware = Taito.Z0ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Taito.Z0WriteHardware;
+                            break;
                     }
                     break;
                 case "Taito B":
@@ -3423,6 +3686,10 @@ namespace mame
                         case "boblcave":
                         case "bublcave11":
                         case "bublcave10":
+                        case "tnzs":
+                        case "tnzsj":
+                        case "kabukiz":
+                        case "kabukizj":
                             z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                             Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                             Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
@@ -3447,6 +3714,41 @@ namespace mame
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
                             MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
                             MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
+                            z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
+                            Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                            Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                            Z80A.zz1[1].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                            Z80A.zz1[1].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                            break;
+                        case "plumppop":
+                        case "jpopnics":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
                             z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
                             Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
                             Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
@@ -3625,6 +3927,39 @@ namespace mame
                         case "boblcave":
                         case "bublcave11":
                         case "bublcave10":
+                        case "plumppop":
+                        case "jpopnics":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzs":
+                        case "tnzsj":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "kabukiz":
+                        case "kabukizj":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
                             timeslice_period = new Atime(0, Video.screenstate.frame_period / 100);
                             timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                             Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
@@ -3705,9 +4040,13 @@ namespace mame
                         if (Attotime.attotime_compare(cpu[icpu].localtime, target) < 0)
                         {
                             if (Attotime.attotime_compare(cpu[icpu].localtime, tbase) > 0)
+                            {
                                 target = cpu[icpu].localtime;
+                            }
                             else
+                            {
                                 target = tbase;
+                            }
                         }
                     }
                 }
@@ -3733,10 +4072,14 @@ namespace mame
         public static void cpu_boost_interleave(Atime timeslice_time, Atime boost_duration)
         {
             if (Attotime.attotime_compare(timeslice_time, perfect_interleave) < 0)
+            {
                 timeslice_time = perfect_interleave;
+            }
             Timer.timer_adjust_periodic(interleave_boost_timer, timeslice_time, timeslice_time);
             if (!Timer.timer_enabled(interleave_boost_timer_end) || Attotime.attotime_compare(Timer.timer_timeleft(interleave_boost_timer_end), boost_duration) < 0)
+            {
                 Timer.timer_adjust_periodic(interleave_boost_timer_end, boost_duration, Attotime.ATTOTIME_NEVER);
+            }
         }
         public static void activecpu_abort_timeslice(int cpunum)
         {
@@ -3780,6 +4123,11 @@ namespace mame
         {
             cpunum_suspend(cpunum, (byte)SUSPEND_REASON_TRIGGER, (byte)eatcycles);
             cpu[cpunum].trigger = trigger;
+        }
+        public static void cpu_yield()
+        {
+            int cpunum = activecpu;
+            cpunum_suspend_until_trigger(cpunum, -1000, 0);
         }
         public static void cpu_spin()
         {
@@ -3932,6 +4280,27 @@ namespace mame
                         case "bbredux":
                         case "bublboblb":
                         case "boblcave":
+                        case "jpopnics":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzs":
+                        case "tnzsj":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "kabukiz":
+                        case "kabukizj":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
                             if (!cpunum_is_suspended(0, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
                             {
                                 Cpuint.cpunum_set_input_line(0, 0, LineState.HOLD_LINE);
@@ -3987,6 +4356,27 @@ namespace mame
                                 Generic.irq0_line_hold(2);
                             }
                             Crosshair.animate_opwolf();
+                            break;
+                        case "plumppop":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                            if (!cpunum_is_suspended(0, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
+                            {
+                                Taito.arknoid2_interrupt();
+                            }
+                            if (!cpunum_is_suspended(1, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
+                            {
+                                Cpuint.cpunum_set_input_line(1, 0, LineState.HOLD_LINE);
+                            }
                             break;
                         default:
                             break;
@@ -4200,10 +4590,14 @@ namespace mame
                     smallest = cpu[cpunum].attoseconds_per_cycle;
                 }
                 else if (cpu[cpunum].attoseconds_per_cycle < perfect_interleave.attoseconds)
+                {
                     perfect_interleave.attoseconds = cpu[cpunum].attoseconds_per_cycle;
+                }
             }
             if (perfect_interleave.attoseconds == Attotime.ATTOSECONDS_PER_SECOND - 1)
+            {
                 perfect_interleave.attoseconds = cpu[0].attoseconds_per_cycle;
+            }
         }
         public static void SaveStateBinary(BinaryWriter writer)
         {

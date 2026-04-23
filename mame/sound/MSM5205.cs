@@ -152,9 +152,6 @@ namespace mame
             {
                 mm1[1].voice.stream.stream_update();
                 mm1[1].voice.signal = new_signal;
-                /*StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\23.txt", true);
-                sw2.WriteLine(Timer.global_basetime.seconds.ToString("x") + "\t" + Timer.global_basetime.attoseconds.ToString("x") + "\t" + new_signal.ToString("x"));
-                sw2.Close();*/
             }
         }
         public void msm5205_reset()

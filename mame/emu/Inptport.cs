@@ -50,7 +50,7 @@ namespace mame
         public static bool bReplayRead;
         public delegate void loop_delegate();
         public static loop_delegate loop_inputports_callback, record_port_callback, replay_port_callback;
-        public static analog_field_state analog_p0, analog_p1,analog_p1x,analog_p1y;
+        public static analog_field_state analog_p0, analog_p1, analog_p1x, analog_p1y, analog_p2x;
         public static input_port_private portdata;
         public static void input_port_init()
         {
@@ -344,43 +344,7 @@ namespace mame
                     break;
                 case "Taito":
                     record_port_callback = Taito.record_port_bublbobl;
-                    replay_port_callback = Taito.replay_port_bublbobl;
-                    analog_p1x = new analog_field_state();
-                    analog_p1x.adjdefvalue = 0x80;
-                    analog_p1x.adjmin = 0;
-                    analog_p1x.adjmax = 0xff;
-                    analog_p1x.sensitivity = 25;
-                    analog_p1x.reverse = false;
-                    analog_p1x.delta = 15;
-                    analog_p1x.minimum = -0x10000;
-                    analog_p1x.maximum = 0x10000;
-                    analog_p1x.absolute = true;
-                    analog_p1x.wraps = false;
-                    analog_p1x.interpolate = false;
-                    analog_p1x.single_scale = 0;
-                    analog_p1x.scalepos = 0x7f00;
-                    analog_p1x.scaleneg = 0x8000;
-                    analog_p1x.reverse_val = 0x200000;
-                    analog_p1x.keyscalepos = 0x0000000204081020;
-                    analog_p1x.keyscaleneg = 0x0000000200000000;
-                    analog_p1y = new analog_field_state();
-                    analog_p1y.adjdefvalue = 0x80;
-                    analog_p1y.adjmin = 0;
-                    analog_p1y.adjmax = 0xff;
-                    analog_p1y.sensitivity = 25;
-                    analog_p1y.reverse = false;
-                    analog_p1y.delta = 15;
-                    analog_p1y.minimum = -0x10000;
-                    analog_p1y.maximum = 0x10000;
-                    analog_p1y.absolute = true;
-                    analog_p1y.wraps = false;
-                    analog_p1y.interpolate = false;
-                    analog_p1y.single_scale = 0;
-                    analog_p1y.scalepos = 0x7f00;
-                    analog_p1y.scaleneg = 0x8000;
-                    analog_p1y.reverse_val = 0x200000;
-                    analog_p1y.keyscalepos = 0x0000000204081020;
-                    analog_p1y.keyscaleneg = 0x0000000200000000;
+                    replay_port_callback = Taito.replay_port_bublbobl;                    
                     break;
                 case "Taito B":
                     //loop_inputports_callback = Taitob.loop_inputports_taitob_pbobble;
@@ -503,14 +467,331 @@ namespace mame
                 case "opwolfj":
                 case "opwolfu":
                 case "opwolfb":
+                    analog_p1x = new analog_field_state();
+                    analog_p1x.adjdefvalue = 0x80;
+                    analog_p1x.adjmin = 0;
+                    analog_p1x.adjmax = 0xff;
+                    analog_p1x.sensitivity = 25;
+                    analog_p1x.reverse = false;
+                    analog_p1x.delta = 15;
+                    analog_p1x.minimum = -0x10000;
+                    analog_p1x.maximum = 0x10000;
+                    analog_p1x.absolute = true;
+                    analog_p1x.wraps = false;
+                    analog_p1x.interpolate = false;
+                    analog_p1x.single_scale = 0;
+                    analog_p1x.scalepos = 0x7f00;
+                    analog_p1x.scaleneg = 0x8000;
+                    analog_p1x.reverse_val = 0x200000;
+                    analog_p1x.keyscalepos = 0x0000000204081020;
+                    analog_p1x.keyscaleneg = 0x0000000200000000;
+                    analog_p1y = new analog_field_state();
+                    analog_p1y.adjdefvalue = 0x80;
+                    analog_p1y.adjmin = 0;
+                    analog_p1y.adjmax = 0xff;
+                    analog_p1y.sensitivity = 25;
+                    analog_p1y.reverse = false;
+                    analog_p1y.delta = 15;
+                    analog_p1y.minimum = -0x10000;
+                    analog_p1y.maximum = 0x10000;
+                    analog_p1y.absolute = true;
+                    analog_p1y.wraps = false;
+                    analog_p1y.interpolate = false;
+                    analog_p1y.single_scale = 0;
+                    analog_p1y.scalepos = 0x7f00;
+                    analog_p1y.scaleneg = 0x8000;
+                    analog_p1y.reverse_val = 0x200000;
+                    analog_p1y.keyscalepos = 0x0000000204081020;
+                    analog_p1y.keyscaleneg = 0x0000000200000000;
                     loop_inputports_callback = Taito.loop_inputports_taito_opwolf;
                     record_port_callback = Taito.record_port_opwolf;
                     replay_port_callback = Taito.replay_port_opwolf;
                     break;
                 case "opwolfp":
+                    analog_p1x = new analog_field_state();
+                    analog_p1x.adjdefvalue = 0x80;
+                    analog_p1x.adjmin = 0;
+                    analog_p1x.adjmax = 0xff;
+                    analog_p1x.sensitivity = 25;
+                    analog_p1x.reverse = false;
+                    analog_p1x.delta = 15;
+                    analog_p1x.minimum = -0x10000;
+                    analog_p1x.maximum = 0x10000;
+                    analog_p1x.absolute = true;
+                    analog_p1x.wraps = false;
+                    analog_p1x.interpolate = false;
+                    analog_p1x.single_scale = 0;
+                    analog_p1x.scalepos = 0x7f00;
+                    analog_p1x.scaleneg = 0x8000;
+                    analog_p1x.reverse_val = 0x200000;
+                    analog_p1x.keyscalepos = 0x0000000204081020;
+                    analog_p1x.keyscaleneg = 0x0000000200000000;
+                    analog_p1y = new analog_field_state();
+                    analog_p1y.adjdefvalue = 0x80;
+                    analog_p1y.adjmin = 0;
+                    analog_p1y.adjmax = 0xff;
+                    analog_p1y.sensitivity = 25;
+                    analog_p1y.reverse = false;
+                    analog_p1y.delta = 15;
+                    analog_p1y.minimum = -0x10000;
+                    analog_p1y.maximum = 0x10000;
+                    analog_p1y.absolute = true;
+                    analog_p1y.wraps = false;
+                    analog_p1y.interpolate = false;
+                    analog_p1y.single_scale = 0;
+                    analog_p1y.scalepos = 0x7f00;
+                    analog_p1y.scaleneg = 0x8000;
+                    analog_p1y.reverse_val = 0x200000;
+                    analog_p1y.keyscalepos = 0x0000000204081020;
+                    analog_p1y.keyscaleneg = 0x0000000200000000;
                     loop_inputports_callback = Taito.loop_inputports_taito_opwolfp;
                     record_port_callback = Taito.record_port_opwolfp;
                     replay_port_callback = Taito.replay_port_opwolfp;
+                    break;
+                case "plumppop":
+                    analog_p1x = new analog_field_state();
+                    analog_p1x.adjdefvalue = 0;
+                    analog_p1x.adjmin = 0;
+                    analog_p1x.adjmax = 0xffff;
+                    analog_p1x.sensitivity = 70;
+                    analog_p1x.reverse = false;
+                    analog_p1x.delta = 15;
+                    analog_p1x.minimum = 0;
+                    analog_p1x.maximum = 0x01fffe00;
+                    analog_p1x.absolute = false;
+                    analog_p1x.wraps = true;
+                    analog_p1x.interpolate = true;
+                    analog_p1x.single_scale = 0;
+                    analog_p1x.scalepos = 0x8000;
+                    analog_p1x.scaleneg = 0x8000;
+                    analog_p1x.reverse_val = 0x2000000;
+                    analog_p1x.keyscalepos = 0x0000000200000000;
+                    analog_p1x.keyscaleneg = 0x0000000200000000;
+                    analog_p2x = new analog_field_state();
+                    analog_p2x.adjdefvalue = 0;
+                    analog_p2x.adjmin = 0;
+                    analog_p2x.adjmax = 0xffff;
+                    analog_p2x.sensitivity = 70;
+                    analog_p2x.reverse = false;
+                    analog_p2x.delta = 15;
+                    analog_p2x.minimum = 0;
+                    analog_p2x.maximum = 0x01fffe00;
+                    analog_p2x.absolute = false;
+                    analog_p2x.wraps = true;
+                    analog_p2x.interpolate = true;
+                    analog_p2x.single_scale = 0;
+                    analog_p2x.scalepos = 0x8000;
+                    analog_p2x.scaleneg = 0x8000;
+                    analog_p2x.reverse_val = 0x2000000;
+                    analog_p2x.keyscalepos = 0x0000000200000000;
+                    analog_p2x.keyscaleneg = 0x0000000200000000;
+                    loop_inputports_callback = Taito.loop_inputports_taito_plumppop;
+                    record_port_callback = Taito.record_port_plumppop;
+                    replay_port_callback = Taito.replay_port_plumppop;
+                    break;
+                case "jpopnics":
+                    analog_p1x = new analog_field_state();
+                    analog_p1x.adjdefvalue = 0;
+                    analog_p1x.adjmin = 0;
+                    analog_p1x.adjmax = 0xffff;
+                    analog_p1x.sensitivity = 70;
+                    analog_p1x.reverse = false;
+                    analog_p1x.delta = 15;
+                    analog_p1x.minimum = 0;
+                    analog_p1x.maximum = 0x01fffe00;
+                    analog_p1x.absolute = false;
+                    analog_p1x.wraps = true;
+                    analog_p1x.interpolate = true;
+                    analog_p1x.single_scale = 0;
+                    analog_p1x.scalepos = 0x8000;
+                    analog_p1x.scaleneg = 0x8000;
+                    analog_p1x.reverse_val = 0x2000000;
+                    analog_p1x.keyscalepos = 0x0000000200000000;
+                    analog_p1x.keyscaleneg = 0x0000000200000000;
+                    analog_p2x = new analog_field_state();
+                    analog_p2x.adjdefvalue = 0;
+                    analog_p2x.adjmin = 0;
+                    analog_p2x.adjmax = 0xffff;
+                    analog_p2x.sensitivity = 70;
+                    analog_p2x.reverse = false;
+                    analog_p2x.delta = 15;
+                    analog_p2x.minimum = 0;
+                    analog_p2x.maximum = 0x01fffe00;
+                    analog_p2x.absolute = false;
+                    analog_p2x.wraps = true;
+                    analog_p2x.interpolate = true;
+                    analog_p2x.single_scale = 0;
+                    analog_p2x.scalepos = 0x8000;
+                    analog_p2x.scaleneg = 0x8000;
+                    analog_p2x.reverse_val = 0x2000000;
+                    analog_p2x.keyscalepos = 0x0000000200000000;
+                    analog_p2x.keyscaleneg = 0x0000000200000000;
+                    loop_inputports_callback = Taito.loop_inputports_taito_jpopnics;
+                    record_port_callback = Taito.record_port_jpopnics;
+                    replay_port_callback = Taito.replay_port_jpopnics;
+                    break;
+                case "extrmatn":
+                case "extrmatnu":
+                case "extrmatnur":
+                case "extrmatnj":
+                case "drtoppel":
+                case "drtoppelu":
+                case "drtoppelj":
+                case "chukatai":
+                case "chukataiu":
+                case "chukataij":
+                case "chukataija":
+                    analog_p1x = new analog_field_state();
+                    analog_p1x.adjdefvalue = 0;
+                    analog_p1x.adjmin = 0;
+                    analog_p1x.adjmax = 0xffff;
+                    analog_p1x.sensitivity = 70;
+                    analog_p1x.reverse = false;
+                    analog_p1x.delta = 15;
+                    analog_p1x.minimum = 0;
+                    analog_p1x.maximum = 0x01fffe00;
+                    analog_p1x.absolute = false;
+                    analog_p1x.wraps = true;
+                    analog_p1x.interpolate = true;
+                    analog_p1x.single_scale = 0;
+                    analog_p1x.scalepos = 0x8000;
+                    analog_p1x.scaleneg = 0x8000;
+                    analog_p1x.reverse_val = 0x2000000;
+                    analog_p1x.keyscalepos = 0x0000000200000000;
+                    analog_p1x.keyscaleneg = 0x0000000200000000;
+                    analog_p2x = new analog_field_state();
+                    analog_p2x.adjdefvalue = 0;
+                    analog_p2x.adjmin = 0;
+                    analog_p2x.adjmax = 0xffff;
+                    analog_p2x.sensitivity = 70;
+                    analog_p2x.reverse = false;
+                    analog_p2x.delta = 15;
+                    analog_p2x.minimum = 0;
+                    analog_p2x.maximum = 0x01fffe00;
+                    analog_p2x.absolute = false;
+                    analog_p2x.wraps = true;
+                    analog_p2x.interpolate = true;
+                    analog_p2x.single_scale = 0;
+                    analog_p2x.scalepos = 0x8000;
+                    analog_p2x.scaleneg = 0x8000;
+                    analog_p2x.reverse_val = 0x2000000;
+                    analog_p2x.keyscalepos = 0x0000000200000000;
+                    analog_p2x.keyscaleneg = 0x0000000200000000;
+                    loop_inputports_callback = Taito.loop_inputports_taito_extrmatn;
+                    record_port_callback = Taito.record_port_tnzso;
+                    replay_port_callback = Taito.replay_port_tnzso;
+                    break;
+                case "arknoid2":
+                case "arknoid2u":
+                case "arknoid2j":
+                case "arknoid2b":
+                    analog_p1x = new analog_field_state();
+                    analog_p1x.adjdefvalue = 0;
+                    analog_p1x.adjmin = 0;
+                    analog_p1x.adjmax = 0xfff;
+                    analog_p1x.sensitivity = 70;
+                    analog_p1x.reverse = false;
+                    analog_p1x.delta = 15;
+                    analog_p1x.minimum = 0;
+                    analog_p1x.maximum = 0x001ffe00;
+                    analog_p1x.absolute = false;
+                    analog_p1x.wraps = true;
+                    analog_p1x.interpolate = true;
+                    analog_p1x.single_scale = 0;
+                    analog_p1x.scalepos = 0x8000;
+                    analog_p1x.scaleneg = 0x8000;
+                    analog_p1x.reverse_val = 0x2000000;
+                    analog_p1x.keyscalepos = 0x0000000200000000;
+                    analog_p1x.keyscaleneg = 0x0000000200000000;
+                    analog_p2x = new analog_field_state();
+                    analog_p2x.adjdefvalue = 0;
+                    analog_p2x.adjmin = 0;
+                    analog_p2x.adjmax = 0xfff;
+                    analog_p2x.sensitivity = 70;
+                    analog_p2x.reverse = false;
+                    analog_p2x.delta = 15;
+                    analog_p2x.minimum = 0;
+                    analog_p2x.maximum = 0x001ffe00;
+                    analog_p2x.absolute = false;
+                    analog_p2x.wraps = true;
+                    analog_p2x.interpolate = true;
+                    analog_p2x.single_scale = 0;
+                    analog_p2x.scalepos = 0x8000;
+                    analog_p2x.scaleneg = 0x8000;
+                    analog_p2x.reverse_val = 0x2000000;
+                    analog_p2x.keyscalepos = 0x0000000200000000;
+                    analog_p2x.keyscaleneg = 0x0000000200000000;
+                    loop_inputports_callback = Taito.loop_inputports_taito_arknoid2;
+                    record_port_callback = Taito.record_port_arknoid2;
+                    replay_port_callback = Taito.replay_port_arknoid2;
+                    break;
+                case "kageki":
+                case "kagekiu":
+                case "kagekij":
+                case "kagekih":
+                case "tnzs":
+                case "tnzsj":
+                    loop_inputports_callback = Taito.loop_inputports_taito_tnzs;
+                    record_port_callback = Taito.record_port_tnzs;
+                    replay_port_callback = Taito.replay_port_tnzs;
+                    break;
+                case "tnzso":
+                case "tnzsjo":
+                case "tnzsuo":
+                case "tnzsoa":
+                case "tnzsop":
+                    analog_p1x = new analog_field_state();
+                    analog_p1x.adjdefvalue = 0;
+                    analog_p1x.adjmin = 0;
+                    analog_p1x.adjmax = 0xffff;
+                    analog_p1x.sensitivity = 70;
+                    analog_p1x.reverse = false;
+                    analog_p1x.delta = 15;
+                    analog_p1x.minimum = 0;
+                    analog_p1x.maximum = 0x01fffe00;
+                    analog_p1x.absolute = false;
+                    analog_p1x.wraps = true;
+                    analog_p1x.interpolate = true;
+                    analog_p1x.single_scale = 0;
+                    analog_p1x.scalepos = 0x8000;
+                    analog_p1x.scaleneg = 0x8000;
+                    analog_p1x.reverse_val = 0x2000000;
+                    analog_p1x.keyscalepos = 0x0000000200000000;
+                    analog_p1x.keyscaleneg = 0x0000000200000000;
+                    analog_p2x = new analog_field_state();
+                    analog_p2x.adjdefvalue = 0;
+                    analog_p2x.adjmin = 0;
+                    analog_p2x.adjmax = 0xffff;
+                    analog_p2x.sensitivity = 70;
+                    analog_p2x.reverse = false;
+                    analog_p2x.delta = 15;
+                    analog_p2x.minimum = 0;
+                    analog_p2x.maximum = 0x01fffe00;
+                    analog_p2x.absolute = false;
+                    analog_p2x.wraps = true;
+                    analog_p2x.interpolate = true;
+                    analog_p2x.single_scale = 0;
+                    analog_p2x.scalepos = 0x8000;
+                    analog_p2x.scaleneg = 0x8000;
+                    analog_p2x.reverse_val = 0x2000000;
+                    analog_p2x.keyscalepos = 0x0000000200000000;
+                    analog_p2x.keyscaleneg = 0x0000000200000000;
+                    loop_inputports_callback = Taito.loop_inputports_taito_tnzsjo;
+                    record_port_callback = Taito.record_port_tnzso;
+                    replay_port_callback = Taito.replay_port_tnzso;
+                    break;
+                case "kabukiz":
+                case "kabukizj":
+                    loop_inputports_callback = Taito.loop_inputports_taito_kabukiz;
+                    record_port_callback = Taito.record_port_tnzs;
+                    replay_port_callback = Taito.replay_port_tnzs;
+                    break;
+                case "insectx":
+                case "insectxj":
+                case "insectxbl":
+                    loop_inputports_callback = Taito.loop_inputports_taito_insectx;
+                    record_port_callback = Taito.record_port_tnzs;
+                    replay_port_callback = Taito.replay_port_tnzs;
                     break;
                 case "masterw":
                 case "masterwu":
@@ -677,14 +958,18 @@ namespace mame
         }
         public static int apply_analog_min_max(analog_field_state analog, int value)
         {
-            int adjmin = (analog.minimum * 100) / analog.sensitivity;
-            int adjmax = (analog.maximum * 100) / analog.sensitivity;
+            int adjmin = (int)(((long)analog.minimum * 100) / analog.sensitivity);
+            int adjmax = (int)(((long)analog.maximum * 100) / analog.sensitivity);
             if (!analog.wraps)
             {
                 if (value > adjmax)
+                {
                     value = adjmax;
+                }
                 else if (value < adjmin)
+                {
                     value = adjmin;
+                }
             }
             else
             {
@@ -693,16 +978,24 @@ namespace mame
                 if (analog.reverse)
                 {
                     while (value <= adjmin - adj1)
+                    {
                         value += adjdif;
+                    }
                     while (value > adjmax)
+                    {
                         value -= adjdif;
+                    }
                 }
                 else
                 {
                     while (value >= adjmax + adj1)
+                    {
                         value -= adjdif;
+                    }
                     while (value < adjmin)
+                    {
                         value += adjdif;
+                    }
                 }
             }
             return value;
@@ -721,21 +1014,21 @@ namespace mame
             result = (uint)apply_analog_settings(value, analog);
             return result;
         }
-        public static int apply_analog_settings(int value,analog_field_state analog)
+        public static int apply_analog_settings(int value, analog_field_state analog)
         {
             value = apply_analog_min_max(analog, value);
-            value = (int)((long)value * analog.sensitivity / 100);            
+            value = (int)((long)value * analog.sensitivity / 100);
             if (analog.reverse)
             {
                 value = analog.reverse_val - value;
             }
             if (value >= 0)
             {
-                value = (int)((long)(value * analog.scalepos)>>24);
+                value = (int)(((long)value * analog.scalepos) >> 24);
             }
             else
             {
-                value = (int)((long)(value * analog.scaleneg)>>24);
+                value = (int)(((long)value * analog.scaleneg) >> 24);
             }
             value += analog.adjdefvalue;
             return value;
@@ -820,7 +1113,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_forgottn_p1(analog_field_state analog)
         {
@@ -843,7 +1138,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_ecofghtr_p0(analog_field_state analog)
         {
@@ -866,7 +1163,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_ecofghtr_p1(analog_field_state analog)
         {
@@ -889,7 +1188,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_irrmaze_p0(analog_field_state analog)
         {
@@ -912,7 +1213,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_irrmaze_p1(analog_field_state analog)
         {
@@ -935,7 +1238,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_quester_p0(analog_field_state analog)
         {
@@ -958,7 +1263,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_quester_p1(analog_field_state analog)
         {
@@ -981,7 +1288,9 @@ namespace mame
             }
             analog.accum += delta;
             if (!keypressed)
+            {
                 analog.lastdigital = 0;
+            }
         }
         public static void frame_update_analog_field_opwolf_p1x(analog_field_state analog)
         {
@@ -1073,5 +1382,89 @@ namespace mame
                 analog.lastdigital = 0;
             }
         }
+        public static void frame_update_analog_field_plumppop_p1x(analog_field_state analog)
+        {
+            bool keypressed = false;
+            long keyscale;
+            int rawvalue;
+            int delta = 0;
+            int value2;
+            value2 = apply_analog_min_max(analog, analog.accum);
+            analog.previous = analog.accum = value2;
+            keyscale = (analog.accum >= 0) ? analog.keyscalepos : analog.keyscaleneg;
+            if (Keyboard.IsPressed(Key.A))
+            {
+                keypressed = true;
+                if (analog.delta != 0)
+                {
+                    delta -= (int)(((long)analog.delta * keyscale) >> 24);
+                }
+                else if (analog.lastdigital != 1)
+                {
+                    delta -= (int)(((long)1 * keyscale) >> 24);
+                }
+                analog.lastdigital = 1;
+            }
+            if (Keyboard.IsPressed(Key.D))
+            {
+                keypressed = true;
+                if (analog.delta != 0)
+                {
+                    delta += (int)(((long)analog.delta * keyscale) >> 24);
+                }
+                else if (analog.lastdigital != 2)
+                {
+                    delta += (int)(((long)1 * keyscale) >> 24);
+                }
+                analog.lastdigital = 2;
+            }
+            analog.accum += delta;
+            if (!keypressed)
+            {
+                analog.lastdigital = 0;
+            }
+        }
+        public static void frame_update_analog_field_plumppop_p2x(analog_field_state analog)
+        {
+            bool keypressed = false;
+            long keyscale;
+            int rawvalue;
+            int delta = 0;
+            int value2;
+            value2 = apply_analog_min_max(analog, analog.accum);
+            analog.previous = analog.accum = value2;
+            keyscale = (analog.accum >= 0) ? analog.keyscalepos : analog.keyscaleneg;
+            if (Keyboard.IsPressed(Key.Left))
+            {
+                keypressed = true;
+                if (analog.delta != 0)
+                {
+                    delta -= (int)(((long)analog.delta * keyscale) >> 24);
+                }
+                else if (analog.lastdigital != 1)
+                {
+                    delta -= (int)(((long)1 * keyscale) >> 24);
+                }
+                analog.lastdigital = 1;
+            }
+            if (Keyboard.IsPressed(Key.Right))
+            {
+                keypressed = true;
+                if (analog.delta != 0)
+                {
+                    delta += (int)(((long)analog.delta * keyscale) >> 24);
+                }
+                else if (analog.lastdigital != 2)
+                {
+                    delta += (int)(((long)1 * keyscale) >> 24);
+                }
+                analog.lastdigital = 2;
+            }
+            analog.accum += delta;
+            if (!keypressed)
+            {
+                analog.lastdigital = 0;
+            }
+        }        
     }
 }

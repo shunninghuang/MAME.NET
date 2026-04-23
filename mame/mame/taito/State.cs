@@ -7,6 +7,7 @@ using cpu.m68000;
 using cpu.z80;
 using cpu.m6800;
 using cpu.m6805;
+using cpu.i8x41;
 
 namespace mame
 {
@@ -475,7 +476,7 @@ namespace mame
             writer.Write(Inptport.portdata.last_frame_time.seconds);
             writer.Write(Inptport.portdata.last_frame_time.attoseconds);
             writer.Write(Inptport.portdata.last_delta_nsec);
-            writer.Write(basebanksnd);
+            writer.Write(basebankaudio);
             writer.Write(PC080SN_chips);
             for (i = 0; i < 8; i++)
             {
@@ -612,7 +613,7 @@ namespace mame
             Inptport.portdata.last_frame_time.seconds = reader.ReadInt32();
             Inptport.portdata.last_frame_time.attoseconds = reader.ReadInt64();
             Inptport.portdata.last_delta_nsec = reader.ReadInt64();
-            basebanksnd = reader.ReadInt32();
+            basebankaudio = reader.ReadInt32();
             PC080SN_chips = reader.ReadInt32();
             for (i = 0; i < 8; i++)
             {
@@ -732,6 +733,541 @@ namespace mame
             MSM5205.mm1[0].voice.stream.output_base_sampindex = reader.ReadInt32();
             MSM5205.mm1[1].voice.stream.output_sampindex = reader.ReadInt32();
             MSM5205.mm1[1].voice.stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
+        public static void SaveStateBinary_drtoppel(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dswa);
+            writer.Write(dswb);
+            writer.Write(basebankmain);
+            writer.Write(basebanksub);
+            writer.Write(tnzs_bank1, 0, 0x20000);
+            writer.Write(tnzs_bank2, 0, 0x8000);
+            writer.Write(tnzs_objram, 0, 0x2000);
+            writer.Write(tnzs_sharedram, 0, 0x2000);
+            writer.Write(tnzs_vdcram, 0, 0x200);
+            writer.Write(tnzs_scrollram, 0, 0x100);
+            writer.Write(tnzs_objctrl, 0, 4);
+            writer.Write(tnzs_bg_flag);
+            writer.Write(subram, 0, 0x1000);
+            writer.Write(Generic.paletteram, 0, 0x400);
+            for (i = 0; i < 0x200; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].SaveStateBinary(writer);
+            }
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            writer.Write(Video.screenstate.vblank_start_time.seconds);
+            writer.Write(Video.screenstate.vblank_start_time.attoseconds);
+            writer.Write(Video.screenstate.frame_number);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            AY8910.AA8910[0].SaveStateBinary(writer);
+            YM2203.FF2203[0].SaveStateBinary(writer);
+            writer.Write(AY8910.AA8910[0].stream.output_sampindex);
+            writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_drtoppel(BinaryReader reader)
+        {
+            int i;
+            dswa = reader.ReadByte();
+            dswb = reader.ReadByte();
+            basebankmain = reader.ReadInt32();
+            basebanksub = reader.ReadInt32();
+            tnzs_bank1 = reader.ReadBytes(0x20000);
+            tnzs_bank2 = reader.ReadBytes(0x8000);
+            tnzs_objram = reader.ReadBytes(0x2000);
+            tnzs_sharedram = reader.ReadBytes(0x2000);
+            tnzs_vdcram = reader.ReadBytes(0x200);
+            tnzs_scrollram = reader.ReadBytes(0x100);
+            tnzs_objctrl = reader.ReadBytes(4);
+            tnzs_bg_flag = reader.ReadByte();
+            subram = reader.ReadBytes(0x1000);
+            Generic.paletteram = reader.ReadBytes(0x400);
+            for (i = 0; i < 0x200; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].LoadStateBinary(reader);
+            }
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.screenstate.vblank_start_time.seconds = reader.ReadInt32();
+            Video.screenstate.vblank_start_time.attoseconds = reader.ReadInt64();
+            Video.screenstate.frame_number = reader.ReadInt64();
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            AY8910.AA8910[0].LoadStateBinary(reader);
+            YM2203.FF2203[0].LoadStateBinary(reader);
+            AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
+            AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
+        public static void SaveStateBinary_jpopnics(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dswa);
+            writer.Write(dswb);
+            writer.Write(basebankmain);
+            writer.Write(basebanksub);
+            writer.Write(tnzs_bank1, 0, 0x20000);
+            writer.Write(tnzs_bank2, 0, 0x8000);
+            writer.Write(tnzs_objram, 0, 0x2000);
+            writer.Write(tnzs_sharedram, 0, 0x2000);
+            writer.Write(tnzs_vdcram, 0, 0x200);
+            writer.Write(tnzs_scrollram, 0, 0x100);
+            writer.Write(tnzs_objctrl, 0, 4);
+            writer.Write(tnzs_bg_flag);
+            writer.Write(subram, 0, 0x1000);
+            writer.Write(Generic.paletteram, 0, 0x800);
+            for (i = 0; i < 0x400; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].SaveStateBinary(writer);
+            }
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            writer.Write(Video.screenstate.vblank_start_time.seconds);
+            writer.Write(Video.screenstate.vblank_start_time.attoseconds);
+            writer.Write(Video.screenstate.frame_number);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            YM2151.SaveStateBinary(writer);
+            writer.Write(Sound.ym2151stream.output_sampindex);
+            writer.Write(Sound.ym2151stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_jpopnics(BinaryReader reader)
+        {
+            int i;
+            dswa = reader.ReadByte();
+            dswb = reader.ReadByte();
+            basebankmain = reader.ReadInt32();
+            basebanksub = reader.ReadInt32();
+            tnzs_bank1 = reader.ReadBytes(0x20000);
+            tnzs_bank2 = reader.ReadBytes(0x8000);
+            tnzs_objram = reader.ReadBytes(0x2000);
+            tnzs_sharedram = reader.ReadBytes(0x2000);
+            tnzs_vdcram = reader.ReadBytes(0x200);
+            tnzs_scrollram = reader.ReadBytes(0x100);
+            tnzs_objctrl = reader.ReadBytes(4);
+            tnzs_bg_flag = reader.ReadByte();
+            subram = reader.ReadBytes(0x1000);
+            Generic.paletteram = reader.ReadBytes(0x800);
+            for (i = 0; i < 0x400; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].LoadStateBinary(reader);
+            }
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.screenstate.vblank_start_time.seconds = reader.ReadInt32();
+            Video.screenstate.vblank_start_time.attoseconds = reader.ReadInt64();
+            Video.screenstate.frame_number = reader.ReadInt64();
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            YM2151.LoadStateBinary(reader);
+            Sound.ym2151stream.output_sampindex = reader.ReadInt32();
+            Sound.ym2151stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
+        public static void SaveStateBinary_kageki(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dswa);
+            writer.Write(dswb);
+            writer.Write(basebankmain);
+            writer.Write(basebanksub);
+            writer.Write(tnzs_bank1, 0, 0x20000);
+            writer.Write(tnzs_bank2, 0, 0x8000);
+            writer.Write(tnzs_objram, 0, 0x2000);
+            writer.Write(tnzs_sharedram, 0, 0x2000);
+            writer.Write(tnzs_vdcram, 0, 0x200);
+            writer.Write(tnzs_scrollram, 0, 0x100);
+            writer.Write(tnzs_objctrl, 0, 4);
+            writer.Write(tnzs_bg_flag);
+            writer.Write(subram, 0, 0x1000);
+            writer.Write(Generic.paletteram, 0, 0x400);
+            for (i = 0; i < 0x200; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].SaveStateBinary(writer);
+            }
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            writer.Write(Video.screenstate.vblank_start_time.seconds);
+            writer.Write(Video.screenstate.vblank_start_time.attoseconds);
+            writer.Write(Video.screenstate.frame_number);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            AY8910.AA8910[0].SaveStateBinary(writer);
+            YM2203.FF2203[0].SaveStateBinary(writer);
+            Sample.SaveStateBinary(writer);
+            writer.Write(AY8910.AA8910[0].stream.output_sampindex);
+            writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_base_sampindex);
+            writer.Write(Sound.samplestream.output_sampindex);
+            writer.Write(Sound.samplestream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_kageki(BinaryReader reader)
+        {
+            int i;
+            dswa = reader.ReadByte();
+            dswb = reader.ReadByte();
+            basebankmain = reader.ReadInt32();
+            basebanksub = reader.ReadInt32();
+            tnzs_bank1 = reader.ReadBytes(0x20000);
+            tnzs_bank2 = reader.ReadBytes(0x8000);
+            tnzs_objram = reader.ReadBytes(0x2000);
+            tnzs_sharedram = reader.ReadBytes(0x2000);
+            tnzs_vdcram = reader.ReadBytes(0x200);
+            tnzs_scrollram = reader.ReadBytes(0x100);
+            tnzs_objctrl = reader.ReadBytes(4);
+            tnzs_bg_flag = reader.ReadByte();
+            subram = reader.ReadBytes(0x1000);
+            Generic.paletteram = reader.ReadBytes(0x400);
+            for (i = 0; i < 0x200; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].LoadStateBinary(reader);
+            }
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.screenstate.vblank_start_time.seconds = reader.ReadInt32();
+            Video.screenstate.vblank_start_time.attoseconds = reader.ReadInt64();
+            Video.screenstate.frame_number = reader.ReadInt64();
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            AY8910.AA8910[0].LoadStateBinary(reader);
+            YM2203.FF2203[0].LoadStateBinary(reader);
+            Sample.LoadStateBinary(reader);
+            AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
+            AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_base_sampindex = reader.ReadInt32();
+            Sound.samplestream.output_sampindex = reader.ReadInt32();
+            Sound.samplestream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
+        public static void SaveStateBinary_tnzs(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dswa);
+            writer.Write(dswb);
+            writer.Write(basebankmain);
+            writer.Write(basebanksub);
+            writer.Write(tnzs_bank1, 0, 0x20000);
+            writer.Write(tnzs_bank2, 0, 0x8000);
+            writer.Write(tnzs_objram, 0, 0x2000);
+            writer.Write(tnzs_sharedram, 0, 0x2000);
+            writer.Write(tnzs_vdcram, 0, 0x200);
+            writer.Write(tnzs_scrollram, 0, 0x100);
+            writer.Write(tnzs_objctrl, 0, 4);
+            writer.Write(tnzs_bg_flag);
+            writer.Write(subram, 0, 0x1000);
+            writer.Write(Generic.paletteram, 0, 0x400);
+            writer.Write(Memory.audioram, 0, 0x2000);
+            for (i = 0; i < 0x200; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].SaveStateBinary(writer);
+            }
+            I8x41.m1.SaveStateBinary(writer);
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            writer.Write(Video.screenstate.vblank_start_time.seconds);
+            writer.Write(Video.screenstate.vblank_start_time.attoseconds);
+            writer.Write(Video.screenstate.frame_number);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            AY8910.AA8910[0].SaveStateBinary(writer);
+            YM2203.FF2203[0].SaveStateBinary(writer);
+            writer.Write(AY8910.AA8910[0].stream.output_sampindex);
+            writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_tnzs(BinaryReader reader)
+        {
+            int i;
+            dswa = reader.ReadByte();
+            dswb = reader.ReadByte();
+            basebankmain = reader.ReadInt32();
+            basebanksub = reader.ReadInt32();
+            tnzs_bank1 = reader.ReadBytes(0x20000);
+            tnzs_bank2 = reader.ReadBytes(0x8000);
+            tnzs_objram = reader.ReadBytes(0x2000);
+            tnzs_sharedram = reader.ReadBytes(0x2000);
+            tnzs_vdcram = reader.ReadBytes(0x200);
+            tnzs_scrollram = reader.ReadBytes(0x100);
+            tnzs_objctrl = reader.ReadBytes(4);
+            tnzs_bg_flag = reader.ReadByte();
+            subram = reader.ReadBytes(0x1000);
+            Generic.paletteram = reader.ReadBytes(0x400);
+            Memory.audioram = reader.ReadBytes(0x2000);
+            for (i = 0; i < 0x200; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            for (i = 0; i < 2; i++)
+            {
+                Z80A.zz1[i].LoadStateBinary(reader);
+            }
+            I8x41.m1.LoadStateBinary(reader);
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.screenstate.vblank_start_time.seconds = reader.ReadInt32();
+            Video.screenstate.vblank_start_time.attoseconds = reader.ReadInt64();
+            Video.screenstate.frame_number = reader.ReadInt64();
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            AY8910.AA8910[0].LoadStateBinary(reader);
+            YM2203.FF2203[0].LoadStateBinary(reader);
+            AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
+            AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
+        public static void SaveStateBinary_tnzsb(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dswa);
+            writer.Write(dswb);
+            writer.Write(basebankmain);
+            writer.Write(basebanksub);
+            writer.Write(tnzs_bank1, 0, 0x20000);
+            writer.Write(tnzs_bank2, 0, 0x8000);
+            writer.Write(tnzs_objram, 0, 0x2000);
+            writer.Write(tnzs_sharedram, 0, 0x2000);
+            writer.Write(tnzs_vdcram, 0, 0x200);
+            writer.Write(tnzs_scrollram, 0, 0x100);
+            writer.Write(tnzs_objctrl, 0, 4);
+            writer.Write(tnzs_bg_flag);
+            writer.Write(subram, 0, 0x1000);            
+            writer.Write(Generic.paletteram, 0, 0x400);
+            writer.Write(Memory.audioram, 0, 0x2000);
+            for (i = 0; i < 0x200; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Z80A.zz1[i].SaveStateBinary(writer);
+            }
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            writer.Write(Video.screenstate.vblank_start_time.seconds);
+            writer.Write(Video.screenstate.vblank_start_time.attoseconds);
+            writer.Write(Video.screenstate.frame_number);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            AY8910.AA8910[0].SaveStateBinary(writer);
+            YM2203.FF2203[0].SaveStateBinary(writer);
+            writer.Write(Sound.latched_value[0]);
+            writer.Write(Sound.utempdata[0]);
+            writer.Write(AY8910.AA8910[0].stream.output_sampindex);
+            writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_tnzsb(BinaryReader reader)
+        {
+            int i;
+            dswa = reader.ReadByte();
+            dswb = reader.ReadByte();
+            basebankmain = reader.ReadInt32();
+            basebanksub = reader.ReadInt32();
+            tnzs_bank1 = reader.ReadBytes(0x20000);
+            tnzs_bank2 = reader.ReadBytes(0x8000);
+            tnzs_objram = reader.ReadBytes(0x2000);
+            tnzs_sharedram = reader.ReadBytes(0x2000);
+            tnzs_vdcram = reader.ReadBytes(0x200);
+            tnzs_scrollram = reader.ReadBytes(0x100);
+            tnzs_objctrl = reader.ReadBytes(4);
+            tnzs_bg_flag = reader.ReadByte();
+            subram = reader.ReadBytes(0x1000);
+            Generic.paletteram = reader.ReadBytes(0x400);
+            Memory.audioram = reader.ReadBytes(0x2000);
+            for (i = 0; i < 0x200; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Z80A.zz1[i].LoadStateBinary(reader);
+            }
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.screenstate.vblank_start_time.seconds = reader.ReadInt32();
+            Video.screenstate.vblank_start_time.attoseconds = reader.ReadInt64();
+            Video.screenstate.frame_number = reader.ReadInt64();
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            AY8910.AA8910[0].LoadStateBinary(reader);
+            YM2203.FF2203[0].LoadStateBinary(reader);
+            Sound.latched_value[0] = reader.ReadUInt16();
+            Sound.utempdata[0] = reader.ReadUInt16();
+            AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
+            AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
+        public static void SaveStateBinary_kabukiz(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dswa);
+            writer.Write(dswb);
+            writer.Write(basebankmain);
+            writer.Write(basebanksub);
+            writer.Write(tnzs_bank1, 0, 0x20000);
+            writer.Write(tnzs_bank2, 0, 0x8000);
+            writer.Write(tnzs_objram, 0, 0x2000);
+            writer.Write(tnzs_sharedram, 0, 0x2000);
+            writer.Write(tnzs_vdcram, 0, 0x200);
+            writer.Write(tnzs_scrollram, 0, 0x100);
+            writer.Write(tnzs_objctrl, 0, 4);
+            writer.Write(tnzs_bg_flag);
+            writer.Write(subram, 0, 0x1000);
+            writer.Write(Generic.paletteram, 0, 0x400);
+            writer.Write(Memory.audioram, 0, 0x2000);
+            for (i = 0; i < 0x200; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Z80A.zz1[i].SaveStateBinary(writer);
+            }
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            writer.Write(Video.screenstate.vblank_start_time.seconds);
+            writer.Write(Video.screenstate.vblank_start_time.attoseconds);
+            writer.Write(Video.screenstate.frame_number);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            AY8910.AA8910[0].SaveStateBinary(writer);
+            YM2203.FF2203[0].SaveStateBinary(writer);
+            DAC.SaveStateBinary(writer);
+            writer.Write(Sound.latched_value[0]);
+            writer.Write(Sound.utempdata[0]);
+            writer.Write(AY8910.AA8910[0].stream.output_sampindex);
+            writer.Write(AY8910.AA8910[0].stream.output_base_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_sampindex);
+            writer.Write(YM2203.FF2203[0].stream.output_base_sampindex);
+            writer.Write(Sound.dacstream.output_sampindex);
+            writer.Write(Sound.dacstream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_kabukiz(BinaryReader reader)
+        {
+            int i;
+            dswa = reader.ReadByte();
+            dswb = reader.ReadByte();
+            basebankmain = reader.ReadInt32();
+            basebanksub = reader.ReadInt32();
+            tnzs_bank1 = reader.ReadBytes(0x20000);
+            tnzs_bank2 = reader.ReadBytes(0x8000);
+            tnzs_objram = reader.ReadBytes(0x2000);
+            tnzs_sharedram = reader.ReadBytes(0x2000);
+            tnzs_vdcram = reader.ReadBytes(0x200);
+            tnzs_scrollram = reader.ReadBytes(0x100);
+            tnzs_objctrl = reader.ReadBytes(4);
+            tnzs_bg_flag = reader.ReadByte();
+            subram = reader.ReadBytes(0x1000);
+            Generic.paletteram = reader.ReadBytes(0x400);
+            Memory.audioram = reader.ReadBytes(0x2000);
+            for (i = 0; i < 0x200; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Z80A.zz1[i].LoadStateBinary(reader);
+            }
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.screenstate.vblank_start_time.seconds = reader.ReadInt32();
+            Video.screenstate.vblank_start_time.attoseconds = reader.ReadInt64();
+            Video.screenstate.frame_number = reader.ReadInt64();
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            AY8910.AA8910[0].LoadStateBinary(reader);
+            YM2203.FF2203[0].LoadStateBinary(reader);
+            Sound.latched_value[0] = reader.ReadUInt16();
+            Sound.utempdata[0] = reader.ReadUInt16();
+            AY8910.AA8910[0].stream.output_sampindex = reader.ReadInt32();
+            AY8910.AA8910[0].stream.output_base_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_sampindex = reader.ReadInt32();
+            YM2203.FF2203[0].stream.output_base_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
         }

@@ -149,6 +149,44 @@ namespace mame
                             Taito.video_start_opwolf();
                             machine_reset_callback = Taito.machine_reset_null;
                             break;
+                        case "plumppop":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "chukataija":
+                            Taito.palette_init_arknoid2(Taito.promsrom);
+                            machine_reset_callback = Taito.machine_reset_tnzs;
+                            break;
+                        case "jpopnics":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "tnzs":
+                        case "tnzsj":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "kabukiz":
+                        case "kabukizj":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            machine_reset_callback = Taito.machine_reset_tnzs;
+                            break;
                     }                    
                     break;
                 case "Taito B":

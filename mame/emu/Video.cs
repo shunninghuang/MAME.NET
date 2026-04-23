@@ -535,6 +535,75 @@ namespace mame
                             video_update_callback = Taito.video_update_opwolf;
                             video_eof_callback = Taito.video_eof_taito;
                             break;
+                        case "plumppop":
+                        case "jpopnics":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukataija":
+                        case "tnzs":
+                        case "tnzsj":
+                        case "kabukiz":
+                        case "kabukizj":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            screenstate.width = 0x100;
+                            screenstate.height = 0x100;
+                            screenstate.visarea.min_x = 0;
+                            screenstate.visarea.max_x = 255;
+                            screenstate.visarea.min_y = 16;
+                            screenstate.visarea.max_y = 240 - 1;
+                            fullwidth = 0x100;
+                            fullheight = 0x100;
+                            frame_update_time = new Atime(0, (long)(1e18 / 60));
+                            screenstate.vblank_period = 0;
+                            bitmapbase = new ushort[2][];
+                            bitmapbase[0] = new ushort[0x100 * 0x100];
+                            bitmapbase[1] = new ushort[0x100 * 0x100];
+                            bbmp = new Bitmap[1];
+                            bbmp[0] = new Bitmap(256, 224);
+                            video_update_callback = Taito.video_update_tnzs;
+                            video_eof_callback = Taito.video_eof_tnzs;
+                            break;
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                            screenstate.width = 0x100;
+                            screenstate.height = 0x100;
+                            screenstate.visarea.min_x = 0;
+                            screenstate.visarea.max_x = 255;
+                            screenstate.visarea.min_y = 16;
+                            screenstate.visarea.max_y = 240 - 1;
+                            fullwidth = 0x100;
+                            fullheight = 0x100;
+                            frame_update_time = new Atime(0, (long)(1e18 / 59.15));
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            bitmapbase = new ushort[2][];
+                            bitmapbase[0] = new ushort[0x100 * 0x100];
+                            bitmapbase[1] = new ushort[0x100 * 0x100];
+                            bbmp = new Bitmap[1];
+                            bbmp[0] = new Bitmap(256, 224);
+                            video_update_callback = Taito.video_update_tnzs;
+                            video_eof_callback = Taito.video_eof_tnzs;
+                            break;
                     }
                     break;
                 case "Taito B":
@@ -758,6 +827,10 @@ namespace mame
             vblank_begin_timer = Timer.timer_alloc_common(vblank_begin_callback, "vblank_begin_callback", false);
             Timer.timer_adjust_periodic(vblank_begin_timer, video_screen_get_time_until_vblank_start(), Attotime.ATTOTIME_NEVER);
             scanline0_timer = Timer.timer_alloc_common(scanline0_callback, "scanline0_callback", false);
+
+            screenstate.vblank_start_time = Attotime.ATTOTIME_ZERO;
+            screenstate.vblank_end_time = new Atime(0, screenstate.vblank_period);
+
             video_screen_configure(screenstate.width, screenstate.height, Video.screenstate.visarea, Video.screenstate.frame_period);
             vblank_end_timer = Timer.timer_alloc_common(vblank_end_callback, "vblank_end_callback", false);
             switch (Machine.sBoard)
@@ -869,9 +942,7 @@ namespace mame
                             break;
                     }
                     break;
-            }
-            screenstate.vblank_start_time = Attotime.ATTOTIME_ZERO;
-            screenstate.vblank_end_time = new Atime(0, screenstate.vblank_period);
+            }            
         }
         public static void video_screen_configure(int width, int height, RECT visarea, long frame_period)
         {
@@ -941,9 +1012,13 @@ namespace mame
             vpos %= screenstate.height;
             targetdelta = vpos * screenstate.scantime + hpos * screenstate.pixeltime;
             if (targetdelta <= curdelta + screenstate.pixeltime / 2)
+            {
                 targetdelta += screenstate.frame_period;
+            }
             while (targetdelta <= curdelta)
+            {
                 targetdelta += screenstate.frame_period;
+            }
             return new Atime(0, targetdelta - curdelta);
         }
         public static Atime video_screen_get_time_until_vblank_start()

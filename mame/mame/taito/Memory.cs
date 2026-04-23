@@ -11,7 +11,11 @@ namespace mame
     {
         public static sbyte sbyte0, sbyte1, sbyte2, sbyte3, sbyte4, sbyte5;
         public static sbyte sbyte0_old, sbyte1_old, sbyte2_old, sbyte3_old, sbyte4_old, sbyte5_old;
-        public static int p1x_accum_old, p1x_previous_old, p1y_accum_old, p1y_previous_old;
+        public static byte bcoin1, bcoin2;
+        public static byte bcoin1_old, bcoin2_old;
+        public static ushort up1h, up2h;
+        public static ushort up1h_old;
+        public static int p1x_accum_old, p1x_previous_old, p1y_accum_old, p1y_previous_old, p2x_accum_old, p2x_previous_old;
         public static byte Z0ReadMemory_tokio(ushort address)
         {
             byte result = 0;
@@ -701,11 +705,27 @@ namespace mame
         {
             byte result = 0;
             address &= 0xff;
+            if (address == 0x00)
+            {
+                result = YM2203.ym2203_status_port_0_r();
+            }
+            else if (address == 0x02)
+            {
+                result = (byte)Sound.soundlatch_r();
+            }
             return result;
         }
         public static void Z2WriteHardware(ushort address, byte value)
         {
             address &= 0xff;
+            if (address == 0x00)
+            {
+                YM2203.ym2203_control_port_0_w(value);
+            }
+            else if (address == 0x01)
+            {
+                YM2203.ym2203_write_port_0_w(value);
+            }
         }
         public static byte MReadOp_bublbobl(ushort address)
         {
@@ -2465,7 +2485,7 @@ namespace mame
             else if (address >= 0x4000 && address <= 0x7fff)
             {
                 int offset = address - 0x4000;
-                result = Memory.audiorom[basebanksnd + offset];
+                result = Memory.audiorom[basebankaudio + offset];
             }
             return result;
         }
@@ -2479,7 +2499,7 @@ namespace mame
             else if (address >= 0x4000 && address <= 0x7fff)
             {
                 int offset = address - 0x4000;
-                result = Memory.audiorom[basebanksnd + offset];
+                result = Memory.audiorom[basebankaudio + offset];
             }
             else if (address >= 0x8000 && address <= 0x8fff)
             {
@@ -2510,7 +2530,7 @@ namespace mame
             else if (address >= 0x4000 && address <= 0x7fff)
             {
                 int offset = address - 0x4000;
-                Memory.audiorom[basebanksnd + offset] = value;
+                Memory.audiorom[basebankaudio + offset] = value;
             }
             else if (address >= 0x8000 && address <= 0x8fff)
             {
@@ -2621,6 +2641,1007 @@ namespace mame
         public static void MWriteHardware(ushort address, byte value)
         {
             address &= 0xff;
+        }
+        public static byte Z0ReadOp_tnzs(ushort address)
+        {
+            byte result = 0;
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                result = Memory.mainrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank1[basebankmain + offset];
+            }
+            return result;
+        }
+        public static byte Z0ReadMemory_tnzs(ushort address)
+        {
+            byte result = 0;
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                result = Memory.mainrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank1[basebankmain + offset];
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                result = tnzs_objram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram_r(offset);
+            }
+            else if (address >= 0xf000 && address <= 0xf1ff)
+            {
+                int offset = address - 0xf000;
+                result = tnzs_vdcram[offset];
+            }
+            else if (address == 0xf600)
+            {
+                result = 0;
+            }
+            else if (address >= 0xf800 && address <= 0xfbff)
+            {
+                int offset = address - 0xf800;
+                result = Generic.paletteram[offset];
+            }
+            return result;
+        }
+        public static void Z0WriteMemory_tnzs(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                Memory.audiorom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank1[basebankmain + offset] = value;
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                tnzs_objram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+            else if (address >= 0xf000 && address <= 0xf1ff)
+            {
+                int offset = address - 0xf000;
+                tnzs_vdcram[offset] = value;
+            }
+            else if (address >= 0xf200 && address <= 0xf2ff)
+            {
+                int offset = address - 0xf200;
+                tnzs_scrollram[offset] = value;
+            }
+            else if (address >= 0xf300 && address <= 0xf3ff)
+            {
+                int add = address & 0x03;
+                tnzs_objctrl[add] = value;
+            }
+            else if (address == 0xf400)
+            {
+                tnzs_bg_flag = value;
+            }
+            else if (address == 0xf600)
+            {
+                tnzs_bankswitch_w(value);
+            }
+            else if (address >= 0xf800 && address <= 0xfbff)
+            {
+                int offset = address - 0xf800;
+                Generic.paletteram_xRRRRRGGGGGBBBBB_le_w(offset, value);
+            }
+        }
+        public static void Z0WriteMemory_drtoppel(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                Memory.audiorom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank1[basebankmain + offset] = value;
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                tnzs_objram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+            else if (address >= 0xf000 && address <= 0xf1ff)
+            {
+                int offset = address - 0xf000;
+                tnzs_vdcram[offset] = value;
+            }
+            else if (address >= 0xf200 && address <= 0xf2ff)
+            {
+                int offset = address - 0xf200;
+                tnzs_scrollram[offset] = value;
+            }
+            else if (address >= 0xf300 && address <= 0xf3ff)
+            {
+                int add = address & 0x03;
+                tnzs_objctrl[add] = value;
+            }
+            else if (address == 0xf400)
+            {
+                tnzs_bg_flag = value;
+            }
+            else if (address == 0xf600)
+            {
+                tnzs_bankswitch_w(value);
+            }
+        }
+        public static byte Z0ReadMemory_tnzs_type2(ushort address)
+        {
+            byte result = 0;
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                result = Memory.mainrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank1[basebankmain + offset];
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                result = tnzs_objram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram_r(offset);
+            }
+            else if (address >= 0xf000 && address <= 0xf1ff)
+            {
+                int offset = address - 0xf000;
+                result = tnzs_vdcram[offset];
+            }
+            else if (address == 0xf600)
+            {
+                result = 0;
+            }
+            return result;
+        }
+        public static void Z0WriteMemory_tnzs_type2(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                Memory.audiorom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank1[basebankmain + offset] = value;
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                tnzs_objram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+            else if (address >= 0xf000 && address <= 0xf1ff)
+            {
+                int offset = address - 0xf000;
+                tnzs_vdcram[offset] = value;
+            }
+            else if (address >= 0xf200 && address <= 0xf2ff)
+            {
+                int offset = address - 0xf200;
+                tnzs_scrollram[offset] = value;
+            }
+            else if (address >= 0xf300 && address <= 0xf3ff)
+            {
+                int add = address & 0x03;
+                tnzs_objctrl[add] = value;
+            }
+            else if (address == 0xf400)
+            {
+                tnzs_bg_flag = value;
+            }
+            else if (address == 0xf600)
+            {
+                tnzs_bankswitch_w(value);
+            }
+            else if (address >= 0xf800 && address <= 0xfbff)
+            {
+                int i1 = 1;
+            }
+        }
+        public static byte Z0ReadMemory_jpopnics(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = Memory.mainrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank1[basebankmain + offset];
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                result = tnzs_objram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram[offset];
+            }
+            else if (address >= 0xf000 && address <= 0xf1ff)
+            {
+                int offset = address - 0xf000;
+                result = tnzs_vdcram[offset];
+            }
+            else if (address >= 0xf200 && address <= 0xf2ff)
+            {
+                int offset = address - 0xf200;
+                result = tnzs_scrollram[offset];
+            }
+            else if (address >= 0xf300 && address <= 0xf3ff)
+            {
+                int add = address & 0x03;
+                result = tnzs_objctrl[add];
+            }
+            else if (address == 0xf400)
+            {
+                result = tnzs_bg_flag;
+            }
+            else if (address == 0xf600)
+            {
+                result = 0;
+            }
+            else if (address >= 0xf800 && address <= 0xffff)
+            {
+                int offset = address - 0xf800;
+                result = Generic.paletteram[offset];
+            }
+            return result;
+        }
+
+        public static void Z0WriteMemory_jpopnics(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {                
+                Memory.audiorom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank1[basebankmain + offset] = value;
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                tnzs_objram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram[offset] = value;
+            }
+            else if (address >= 0xf000 && address <= 0xf1ff)
+            {
+                int offset = address - 0xf000;
+                tnzs_vdcram[offset] = value;
+            }
+            else if (address >= 0xf200 && address <= 0xf2ff)
+            {
+                int offset = address - 0xf200;
+                tnzs_scrollram[offset] = value;
+            }
+            else if (address >= 0xf300 && address <= 0xf3ff)
+            {
+                int add = address & 0x03;
+                tnzs_objctrl[add] = value;
+            }
+            else if (address == 0xf400)
+            {
+                tnzs_bg_flag = value;
+            }
+            else if (address == 0xf600)
+            {
+                tnzs_bankswitch_w(value);
+            }
+            else if (address >= 0xf800 && address <= 0xffff)
+            {
+                int offset = address - 0xf800;
+                jpopnics_palette_w(offset, value);
+            }
+        }
+        public static byte Z1ReadOp_tnzs(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = subrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank2[basebanksub + offset];
+            }
+            return result;
+        }
+        public static byte Z1ReadMemory_tnzs(ushort address)
+        {
+            byte result = 0;
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                result = subrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank2[basebanksub + offset];
+            }
+            else if (address == 0xb000)
+            {
+                result = YM2203.ym2203_status_port_0_r();
+            }
+            else if (address == 0xb001)
+            {
+                result = YM2203.ym2203_read_port_0_r();
+            }
+            else if (address >= 0xc000 && address <= 0xc001)
+            {
+                int offset = address - 0xc000;
+                result = tnzs_mcu_r(offset);
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                result = subram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram_r(offset);
+            }
+            else if (address >= 0xf000 && address <= 0xf003)
+            {
+                int offset = address - 0xf000;
+                result = arknoid2_sh_f000_r(offset);
+            }
+            return result;
+        }
+        public static void Z1WriteMemory_tnzs(ushort address, byte value)
+        {
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                subrom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank2[basebanksub + offset] = value;
+            }
+            else if (address == 0xa000)
+            {
+                tnzs_bankswitch1_w(value);
+            }
+            else if (address == 0xb000)
+            {
+                YM2203.ym2203_control_port_0_w(value);
+            }
+            else if (address == 0xb001)
+            {
+                YM2203.ym2203_write_port_0_w(value);
+            }
+            else if (address >= 0xc000 && address <= 0xc001)
+            {
+                int offset = address - 0xc000;
+                tnzs_mcu_w(offset, value);
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                subram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+        }
+        public static byte Z1ReadMemory_jpopnics(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = subrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank2[basebanksub + offset];
+            }
+            else if (address == 0xb000)
+            {
+                result = (byte)sbyte0;
+            }
+            else if (address == 0xb001)
+            {
+                result = YM2151.ym2151_status_port_0_r();
+            }
+            else if (address == 0xc000)
+            {
+                result = (byte)sbyte1;
+            }
+            else if (address == 0xc001)
+            {
+                result = (byte)sbyte2;
+            }
+            else if (address == 0xc600)
+            {
+                result = dswa;
+            }
+            else if (address == 0xc601)
+            {
+                result = dswb;
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                result = subram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram[offset];
+            }
+            else if (address >= 0xf000 && address <= 0xf003)
+            {
+                int offset = address - 0xf000;
+                result = arknoid2_sh_f000_r(offset);
+            }
+            return result;
+        }
+        public static void Z1WriteMemory_jpopnics(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                subrom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank2[basebanksub + offset] = value;
+            }
+            else if (address == 0xa000)
+            {
+                jpopnics_subbankswitch_w(value);
+            }
+            else if (address == 0xb000)
+            {
+                YM2151.ym2151_register_port_0_w(value);
+            }
+            else if (address == 0xb001)
+            {
+                YM2151.ym2151_data_port_0_w(value);
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                subram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram[offset] = value;
+            }
+        }
+        public static byte Z1ReadMemory_kageki(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = subrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank2[basebanksub + offset];
+            }
+            else if (address == 0xb000)
+            {
+                result = YM2203.ym2203_status_port_0_r();
+            }
+            else if (address == 0xb001)
+            {
+                result = YM2203.ym2203_read_port_0_r();
+            }
+            else if (address == 0xc000)
+            {
+                result = (byte)sbyte0;
+            }
+            else if (address == 0xc001)
+            {
+                result = (byte)sbyte1;
+            }
+            else if (address == 0xc002)
+            {
+                result = (byte)sbyte2;
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                result = subram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram_r(offset);
+            }
+            return result;
+        }
+        public static void Z1WriteMemory_kageki(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                subrom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank2[basebanksub + offset] = value;
+            }
+            else if (address == 0xa000)
+            {
+                tnzs_bankswitch1_w(value);
+            }
+            else if (address == 0xb000)
+            {
+                YM2203.ym2203_control_port_0_w(value);
+            }
+            else if (address == 0xb001)
+            {
+                YM2203.ym2203_write_port_0_w(value);
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                subram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+        }
+        public static byte Z1ReadMemory_tnzsb(ushort address)
+        {
+            byte result = 0;
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                result = subrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank2[basebanksub + offset];
+            }
+            else if (address == 0xb002)
+            {
+                result = dswa;
+            }
+            else if (address == 0xb003)
+            {
+                result = dswb;
+            }
+            else if (address == 0xc000)
+            {
+                result = (byte)sbyte0;
+            }
+            else if (address == 0xc001)
+            {
+                result = (byte)sbyte1;
+            }
+            else if (address == 0xc002)
+            {
+                result = (byte)sbyte2;
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                result = subram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram_r(offset);
+            }
+            else if (address >= 0xf000 && address <= 0xf3ff)
+            {
+                int offset = address - 0xf000;
+                result = Generic.paletteram[offset];
+            }
+            return result;
+        }
+        public static void Z1WriteMemory_tnzsb(ushort address, byte value)
+        {
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                subrom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank2[basebanksub + offset] = value;
+            }
+            else if (address == 0xa000)
+            {
+                tnzs_bankswitch1_w(value);
+            }
+            else if (address == 0xb004)
+            {
+                tnzsb_sound_command_w(value);
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                subram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+            else if (address >= 0xf000 && address <= 0xf3ff)
+            {
+                int offset = address - 0xf000;
+                Generic.paletteram_xRRRRRGGGGGBBBBB_le_w(offset, value);
+            }
+        }
+        public static byte Z1ReadMemory_kabukiz(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = subrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank2[basebanksub + offset];
+            }
+            else if (address == 0xb002)
+            {
+                result = dswa;
+            }
+            else if (address == 0xb003)
+            {
+                result = dswb;
+            }
+            else if (address == 0xc000)
+            {
+                result = (byte)sbyte0;
+            }
+            else if (address == 0xc001)
+            {
+                result = (byte)sbyte1;
+            }
+            else if (address == 0xc002)
+            {
+                result = (byte)sbyte2;
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                result = subram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram_r(offset);
+            }
+            else if (address >= 0xf800 && address <= 0xfbff)
+            {
+                int offset = address - 0xf800;
+                result = Generic.paletteram[offset];
+            }
+            return result;
+        }
+        public static void Z1WriteMemory_kabukiz(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                subrom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank2[basebanksub + offset] = value;
+            }
+            else if (address == 0xa000)
+            {
+                tnzs_bankswitch1_w(value);
+            }
+            else if (address == 0xb004)
+            {
+                tnzsb_sound_command_w(value);
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                subram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+            else if (address >= 0xf800 && address <= 0xfbff)
+            {
+                int offset = address - 0xf800;
+                Generic.paletteram_xRRRRRGGGGGBBBBB_le_w(offset, value);
+            }
+        }
+        public static byte Z1ReadMemory_insectx(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = subrom[address];
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank2[basebanksub + offset];
+            }
+            else if (address == 0xb000)
+            {
+                result = YM2203.ym2203_status_port_0_r();
+            }
+            else if (address == 0xb001)
+            {
+                result = YM2203.ym2203_read_port_0_r();
+            }
+            else if (address == 0xc000)
+            {
+                result = (byte)sbyte0;
+            }
+            else if (address == 0xc001)
+            {
+                result = (byte)sbyte1;
+            }
+            else if (address == 0xc002)
+            {
+                result = (byte)sbyte2;
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                result = subram[offset];
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                result = tnzs_sharedram_r(offset);
+            }
+            return result;
+        }
+        public static void Z1WriteMemory_insectx(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                subrom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0x9fff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank2[basebanksub + offset] = value;
+            }
+            else if (address == 0xa000)
+            {
+                tnzs_bankswitch1_w(value);
+            }
+            else if (address == 0xb000)
+            {
+                YM2203.ym2203_control_port_0_w(value);
+            }
+            else if (address == 0xb001)
+            {
+                YM2203.ym2203_write_port_0_w(value);
+            }
+            else if (address >= 0xd000 && address <= 0xdfff)
+            {
+                int offset = address - 0xd000;
+                subram[offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xefff)
+            {
+                int offset = address - 0xe000;
+                tnzs_sharedram_w(offset, value);
+            }
+        }
+        public static byte Z2ReadOp_tnzsb(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = Memory.audiorom[address];
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                result = Memory.audioram[offset];
+            }
+            return result;
+        }
+        public static byte Z2ReadMemory_tnzsb(ushort address)
+        {
+            byte result = 0;
+            if (address>=0x0000&&address <= 0x7fff)
+            {
+                result = Memory.audiorom[address];
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                result = Memory.audioram[offset];
+            }
+            return result;
+        }
+        public static void Z2WriteMemory_tnzsb(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                Memory.audiorom[address] = value;
+            }
+            else if (address >= 0xc000 && address <= 0xdfff)
+            {
+                int offset = address - 0xc000;
+                Memory.audioram[offset] = value;
+            }
+        }
+        public static byte Z2ReadMemory_kabukiz(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                result = Memory.audiorom[address];
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                result = tnzs_bank3[basebankaudio + offset];
+            }
+            else if (address >= 0xe000 && address <= 0xffff)
+            {
+                int offset = address - 0xe000;
+                result = Memory.audioram[offset];
+            }
+            return result;
+        }
+        public static void Z2WriteMemory_kabukiz(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7fff)
+            {
+                Memory.audiorom[address] = value;
+            }
+            else if (address >= 0x8000 && address <= 0xbfff)
+            {
+                int offset = address - 0x8000;
+                tnzs_bank3[basebankaudio+offset] = value;
+            }
+            else if (address >= 0xe000 && address <= 0xffff)
+            {
+                int offset = address - 0xe000;
+                Memory.audioram[offset] = value;
+            }
+        }
+        public static byte Z2ReadHardware_tnzsb(ushort address)
+        {
+            address &= 0xff;
+            byte result = 0;
+            if (address == 0x00)
+            {
+                result = YM2203.ym2203_status_port_0_r();
+            }
+            else if (address == 0x02)
+            {
+                result = (byte)Sound.soundlatch_r();
+            }
+            return result;
+        }
+        public static void Z2WriteHardware_tnzsb(ushort address, byte value)
+        {
+            address &= 0xff;
+            if (address == 0x00)
+            {
+                YM2203.ym2203_control_port_0_w(value);
+            }
+            else if (address == 0x01)
+            {
+                YM2203.ym2203_write_port_0_w(value);
+            }
+        }
+        public static byte M2ReadMemory_i8742(ushort address)
+        {
+            byte result = 0;
+            if (address >= 0x0000 && address <= 0x7ff)
+            {
+                result = mcurom[address];
+            }
+            else if (address >= 0x0800 && address <= 0x08ff)
+            {
+                int offset = address - 0x0800;
+                result = mcuram[offset];
+            }
+            return result;
+        }
+        public static void M2WriteMemory_i8742(ushort address, byte value)
+        {
+            if (address >= 0x0000 && address <= 0x7ff)
+            {
+                mcurom[address] = value;
+            }
+            else if (address >= 0x0800 && address <= 0x08ff)
+            {
+                int offset = address - 0x0800;
+                mcuram[offset] = value;
+            }
+        }
+        public static byte M2ReadIO_i8742(int address)
+        {
+            byte result = 0;
+            if (address == 0x01)
+            {
+                result = tnzs_port1_r();
+            }
+            else if (address == 0x02)
+            {
+                result = tnzs_port2_r();
+            }
+            else if (address == 0x80)
+            {
+                result = bcoin1;
+            }
+            else if (address == 0x81)
+            {
+                result = bcoin2;
+            }
+            return result;
+        }
+        public static void M2WriteIO_i8742(int address, byte value)
+        {
+            if (address == 0x02)
+            {
+                tnzs_port2_w(value);
+            }
+        }
+        public static void M2WriteIO_i8742_2(int address,byte value)
+        {
+            if (address == 0x02)
+            {
+                tnzs_port2_w_2(value);
+            }
         }
     }
 }

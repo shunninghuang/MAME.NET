@@ -544,15 +544,12 @@ namespace cpu.m68000
         {
             //Console.WriteLine("IN INDEX PORTION - NOT VERIFIED!!!");
             // TODO kid chameleon triggers this in startup sequence
-
             short extension = ReadOpWord(PC); PC += 2;
-
             int da = (extension >> 15) & 0x1;
             int reg = (extension >> 12) & 0x7;
             int size = (extension >> 11) & 0x1;
             int scale = (extension >> 9) & 0x3;
             sbyte displacement = (sbyte)extension;
-
             int indexReg;
             switch (scale)
             {
@@ -562,25 +559,25 @@ namespace cpu.m68000
                 default: indexReg = 8; break;
             }
             if (da == 0)
+            {
                 indexReg *= size == 0 ? D[reg].s16 : D[reg].s32;
+            }
             else
+            {
                 indexReg *= size == 0 ? A[reg].s16 : A[reg].s32;
-
+            }
             return displacement + indexReg;
         }
 
         int PeekIndex()
         {
             //Console.WriteLine("IN INDEX PORTION - NOT VERIFIED!!!");
-
             short extension = ReadOpWord(PC);
-
             int da = (extension >> 15) & 0x1;
             int reg = (extension >> 12) & 0x7;
             int size = (extension >> 11) & 0x1;
             int scale = (extension >> 9) & 0x3;
             sbyte displacement = (sbyte)extension;
-
             int indexReg;
             switch (scale)
             {
@@ -590,10 +587,13 @@ namespace cpu.m68000
                 default: indexReg = 8; break;
             }
             if (da == 0)
+            {
                 indexReg *= size == 0 ? D[reg].s16 : D[reg].s32;
+            }
             else
+            {
                 indexReg *= size == 0 ? A[reg].s16 : A[reg].s32;
-
+            }
             return displacement + indexReg;
         }
 
@@ -604,7 +604,6 @@ namespace cpu.m68000
             int size = (extension >> 11) & 0x1;
             int scale = (extension >> 9) & 0x3;
             sbyte displacement = (sbyte)extension;
-
             string scaleFactor;
             switch (scale)
             {
@@ -613,7 +612,6 @@ namespace cpu.m68000
                 case 2: scaleFactor = "4"; break;
                 default: scaleFactor = "8"; break;
             }
-
             string offsetRegister = (d_a == 0) ? "D" : "A";
             string sizeStr = size == 0 ? ".w" : ".l";
             string displacementStr = displacement == 0 ? "" : ("," + (displacement >= 0 ? "$" + displacement.ToString("X") : "-$" + (-displacement).ToString("X")));

@@ -8,9 +8,9 @@ namespace mame
 {
     public partial class Taito
     {
-        public static int basebankmain, basebanksnd;
+        public static int basebankmain, basebanksub, basebankaudio;
         public static byte dswa, dswb, dswb_old;
-        public static byte[] bb1, bublbobl_mcu_sharedram, videoram, bublbobl_objectram, slaverom, mcurom, mcuram, mainram2, mainram3, subrom;
+        public static byte[] bb1, bublbobl_mcu_sharedram, videoram, bublbobl_objectram, slaverom, mcurom, mcuram, mainram2, mainram3, subrom, subram, samplesrom;
         public static void TaitoInit()
         {
             int i, n;
@@ -39,9 +39,9 @@ namespace mame
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
                     Drawgfx.spritecount = gfx1rom.Length / 0x40;
-                    prom = Machine.GetRom("proms.rom");
+                    promsrom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 1;
-                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || prom == null)
+                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || promsrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -79,9 +79,9 @@ namespace mame
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
                     Drawgfx.spritecount = gfx1rom.Length / 0x40;
-                    prom = Machine.GetRom("proms.rom");
+                    promsrom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 0;
-                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || mcurom == null || gfx1rom == null || prom == null)
+                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || mcurom == null || gfx1rom == null || promsrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -118,9 +118,9 @@ namespace mame
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
                     Drawgfx.spritecount = gfx1rom.Length / 0x40;
-                    prom = Machine.GetRom("proms.rom");
+                    promsrom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 0;
-                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || prom == null)
+                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || promsrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -151,9 +151,9 @@ namespace mame
                         gfx1rom[i * 2 + 1] = (byte)(gfx12rom[i] & 0x0f);
                     }
                     Drawgfx.spritecount = gfx1rom.Length / 0x40;
-                    prom = Machine.GetRom("proms.rom");
+                    promsrom = Machine.GetRom("proms.rom");
                     bublbobl_video_enable = 0;
-                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || prom == null)
+                    if (Memory.mainrom == null || slaverom == null || Memory.audiorom == null || gfx1rom == null || promsrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -284,6 +284,373 @@ namespace mame
                         dswb = 0xff;
                     }
                     break;
+                case "plumppop":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    promsrom = Machine.GetRom("proms.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_PLUMPOP;
+                    if (Memory.mainrom == null || subrom == null || gfx1rom == null || promsrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xff;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "jpopnics":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x800];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    if (Memory.mainrom == null || subrom == null || gfx1rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xff;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "extrmatn":
+                case "extrmatnu":
+                case "extrmatnur":
+                case "extrmatnj":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    promsrom = Machine.GetRom("proms.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_EXTRMATN;
+                    if (Memory.mainrom == null || subrom == null || gfx1rom == null || promsrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xff;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "arknoid2":
+                case "arknoid2u":
+                case "arknoid2j":
+                case "arknoid2b":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    promsrom = Machine.GetRom("proms.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_ARKANOID;
+                    if (Memory.mainrom == null || subrom == null || gfx1rom == null || promsrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0x7f;
+                    }
+                    break;
+                case "drtoppel":
+                case "drtoppelu":
+                case "drtoppelj":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    promsrom = Machine.GetRom("proms.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_DRTOPPEL;
+                    if (Memory.mainrom == null || subrom == null || gfx1rom == null || promsrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "kageki":
+                case "kagekiu":
+                case "kagekij":
+                case "kagekih":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    samplesrom = Machine.GetRom("samples.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_DRTOPPEL;
+                    kageki_csport_sel = 0;
+                    if (Memory.mainrom == null || subrom == null || gfx1rom == null || samplesrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "chukatai":
+                case "chukataiu":
+                case "chukataij":                
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    mcuram = new byte[0x100];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.audioram = new byte[0x2000];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    mcurom = Machine.GetRom("mcu.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_CHUKATAI;
+                    if (Memory.mainrom == null || subrom == null || mcurom == null || gfx1rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "chukataija":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    mcuram = new byte[0x100];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.audioram = new byte[0x2000];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    mcurom = Machine.GetRom("mcu.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    promsrom = Machine.GetRom("proms.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_CHUKATAI;
+                    if (Memory.mainrom == null || subrom == null || mcurom == null || gfx1rom == null || promsrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "tnzs":
+                case "tnzsj":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.audioram = new byte[0x2000];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_NONE_TNZSB;
+                    if (Memory.mainrom == null || subrom == null || Memory.audiorom == null || gfx1rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "tnzso":
+                case "tnzsjo":
+                case "tnzsuo":
+                case "tnzsoa":
+                case "tnzsop":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    mcuram = new byte[0x100];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.audioram = new byte[0x2000];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    mcurom = Machine.GetRom("mcu.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_TNZS;
+                    if (Memory.mainrom == null || subrom == null || mcurom == null || gfx1rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xff;
+                    }
+                    break;
+                case "kabukiz":
+                case "kabukizj":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_bank3 = new byte[0x20000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.audioram = new byte[0x2000];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.audiorom, 0x8000, tnzs_bank3, 0x8000, 0x18000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_NONE_KABUKIZ;
+                    if (Memory.mainrom == null || subrom == null || Memory.audiorom == null || gfx1rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xfe;
+                    }
+                    break;
+                case "insectx":
+                case "insectxj":
+                case "insectxbl":
+                    tnzs_bank1 = new byte[0x20000];
+                    tnzs_bank2 = new byte[0x8000];
+                    tnzs_objram = new byte[0x2000];
+                    tnzs_sharedram = new byte[0x2000];
+                    tnzs_vdcram = new byte[0x200];
+                    tnzs_scrollram = new byte[0x100];
+                    tnzs_objctrl = new byte[4];
+                    subram = new byte[0x1000];
+                    Generic.paletteram = new byte[0x400];
+                    Memory.audioram = new byte[0x2000];
+                    Memory.mainrom = Machine.GetRom("maincpu.rom");
+                    subrom = Machine.GetRom("sub.rom");
+                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    gfx1rom = Machine.GetRom("gfx1.rom");
+                    Drawgfx.spritecount = gfx1rom.Length / 0x100;
+                    mcu_type = MCU_NONE_INSECTX;
+                    if (Memory.mainrom == null || subrom == null || gfx1rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    if (Machine.bRom)
+                    {
+                        dswa = 0xfe;
+                        dswb = 0xff;
+                    }
+                    break;
             }
         }
         public static void machine_reset_null()
@@ -318,21 +685,21 @@ namespace mame
             opwolf_cchip_init();
             opwolf_gun_xoffs = 0xec - Memory.mainrom[0x03ffb1];
             opwolf_gun_yoffs = 0x1c - Memory.mainrom[0x03ffaf];
-            basebanksnd = 0x10000;
+            basebankaudio = 0x10000;
         }
         public static void driver_init_opwolfb()
         {
             opwolf_region = Memory.mainrom[0x03ffff];
             opwolf_gun_xoffs = -2;
             opwolf_gun_yoffs = 17;
-            basebanksnd = 0x10000;
+            basebankaudio = 0x10000;
         }
         public static void driver_init_opwolfp()
         {
             opwolf_region = Memory.mainrom[0x03ffff];
             opwolf_gun_xoffs = 5;
             opwolf_gun_yoffs = 30;
-            basebanksnd = 0x10000;
+            basebankaudio = 0x10000;
         }
     }
 }

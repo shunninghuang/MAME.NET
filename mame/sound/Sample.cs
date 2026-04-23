@@ -143,6 +143,12 @@ namespace mame
                 case "starfigh":
                     info.starthandler = SunA8.suna8_sh_start;
                     break;
+                case "kageki":
+                case "kagekiu":
+                case "kagekij":
+                case "kagekih":
+                    info.starthandler = Taito.kageki_init_samples;
+                    break;
                 case "tmnt":
                 case "tmntu":
                 case "tmntua":
@@ -162,7 +168,7 @@ namespace mame
                     info.starthandler = null;
                     break;
             }
-            if (info.starthandler!=null)
+            if (info.starthandler != null)
             {
                 info.starthandler();
             }

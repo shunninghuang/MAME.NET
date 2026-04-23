@@ -264,15 +264,16 @@ namespace cpu.m68000
             if (Interrupt > 0 && (Interrupt > InterruptMaskLevel || Interrupt > 7))
             {
                 stopped = false;
-                //int vector = Cpuint.cpu_irq_callback(cpunum, Interrupt);
+				int interrupt1 = Interrupt;
+                irq_callback(Interrupt);
                 short sr = (short)SR;                  // capture current SR.
                 S = true;                               // switch to supervisor mode, if not already in it.
                 A[7].s32 -= 4;                          // Push PC on stack
                 WriteLong(A[7].s32, PC);
                 A[7].s32 -= 2;                          // Push SR on stack
                 WriteWord(A[7].s32, sr);
-                PC = ReadLong((24 + Interrupt) * 4);    // Jump to interrupt vector
-                InterruptMaskLevel = Interrupt;         // Set interrupt mask to level currently being entered
+                PC = ReadLong((24 + interrupt1) * 4);   // Jump to interrupt vector
+                InterruptMaskLevel = interrupt1;        // Set interrupt mask to level currently being entered
                 Interrupt = 0;                          // "ack" interrupt. Note: this is wrong.
                 int_cycles += 0x2c;
             }

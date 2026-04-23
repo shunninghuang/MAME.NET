@@ -277,9 +277,6 @@ namespace mame
             int newbank = (data & 0xe0) >> 5;
             ddragon_scrollx_hi = (ushort)((data & 0x01) << 8);
             ddragon_scrolly_hi = (ushort)((data & 0x02) << 7);
-            /*StreamWriter sw1 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\25.txt", true);
-            sw1.WriteLine(Timer.global_basetime.seconds.ToString("x") + "\t" + Timer.global_basetime.attoseconds.ToString("x") + "\t" + oldbank.ToString("x") + "\t" + newbank.ToString("x"));
-            sw1.Close();*/
             if ((data & 0x10) != 0)
             {
                 dd_sub_cpu_busy = 0;

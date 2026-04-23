@@ -573,7 +573,7 @@ namespace mame
             Upd7759.upd7759_reset_w(0, (byte)(data & 2));
             if ((data & 0x04) != 0)
             {
-                if (Sample.sample_playing(0)==0)
+                if (Sample.sample_playing(0) == 0)
                 {
                     Sample.sample_start_raw(0, sampledata, 0x40000, 20000, 0);
                 }

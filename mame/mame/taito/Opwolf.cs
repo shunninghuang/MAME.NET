@@ -14,7 +14,7 @@ namespace mame
         public static byte[] adpcm_b = new byte[0x08];
         public static byte[] adpcm_c = new byte[0x08];
         public static int opwolf_gun_xoffs, opwolf_gun_yoffs;
-        public static byte p1x, p1y;
+        public static byte p1x, p1y,p2x;
         public static int[] adpcm_pos = new int[2], adpcm_end = new int[2];
         public static int[] adpcm_data = new int[2];
         public static ushort m_sprite_ctrl;
@@ -465,7 +465,7 @@ namespace mame
         }
         public static void sound_bankswitch_w(int offset, byte data)
         {
-            basebanksnd = 0x10000 + 0x4000 * ((data - 1) & 0x03);
+            basebankaudio = 0x10000 + 0x4000 * ((data - 1) & 0x03);
         }
         public static void machine_reset_opwolf()
         {

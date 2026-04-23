@@ -1292,19 +1292,10 @@ namespace cpu.nec
         }
         public int v33_execute(int cycles)
         {
-            StreamWriter sw2 = null;
-            if (Cpuexec.bLog0 == 1)
-            {
-                sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\20.txt", true);
-            }
             pendingCycles = cycles;
             while (pendingCycles > 0)
             {
                 int prevCycles = pendingCycles;
-                if (Cpuexec.bLog0 == 2 && pendingCycles == 0x1b8)
-                {
-                    int i1 = 1;
-                }
                 if (I.pending_irq != 0 && I.no_interrupt == 0)
                 {
                     if ((I.pending_irq & NMI_IRQ) != 0)
@@ -1324,18 +1315,6 @@ namespace cpu.nec
                 nec_instruction[iNOP]();
                 int delta = prevCycles - pendingCycles;
                 totalExecutedCycles += (ulong)delta;
-                if (Cpuexec.bLog0 == 1)
-                {
-                    sw2.WriteLine(I.ip.ToString("x") + "\t" + iNOP.ToString("x") + "\t" + pendingCycles.ToString("x"));
-                    sw2.WriteLine((I.regs.b[0] + I.regs.b[1] * 0x100).ToString("x") + "\t" + (I.regs.b[2] + I.regs.b[3] * 0x100).ToString("x") + "\t" + (I.regs.b[4] + I.regs.b[5] * 0x100).ToString("x") + "\t" + (I.regs.b[6] + I.regs.b[7] * 0x100).ToString("x") + "\t" + (I.regs.b[8] + I.regs.b[9] * 0x100).ToString("x") + "\t" + (I.regs.b[10] + I.regs.b[11] * 0x100).ToString("x") + "\t" + (I.regs.b[12] + I.regs.b[13] * 0x100).ToString("x") + "\t" + (I.regs.b[14] + I.regs.b[15] * 0x100).ToString("x"));
-                    sw2.WriteLine(I.SignVal.ToString("x") + "\t" + I.AuxVal.ToString("x") + "\t" + I.OverVal.ToString("x") + "\t" + I.ZeroVal.ToString("x") + "\t" + I.CarryVal.ToString("x") + "\t" + I.ParityVal.ToString("x") + "\t" + I.pending_irq.ToString("x"));
-                    sw2.WriteLine(I.sregs[0].ToString("x") + "\t" + I.sregs[1].ToString("x") + "\t" + I.sregs[2].ToString("x") + "\t" + I.sregs[3].ToString("x"));
-                    //sw2.WriteLine(M72.protection_ram[0xfe0].ToString("x") + "\t" + M72.protection_ram[0xfe1].ToString("x"));
-                }
-            }
-            if (Cpuexec.bLog0 == 1)
-            {
-                sw2.Close();
             }
             return cycles - pendingCycles;
         }

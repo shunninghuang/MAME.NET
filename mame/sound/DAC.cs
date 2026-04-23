@@ -25,6 +25,15 @@ namespace mame
                 Sound.dacstream.streamoutput[0][offset + i] = out1;
             }
         }
+        public static void dac_data_w(int num, byte data)
+        {
+            short out1 = dac1.UnsignedVolTable[data];
+            if (dac1.output != out1)
+            {
+                Sound.dacstream.stream_update();
+                dac1.output = out1;
+            }
+        }
         public static void dac_signed_data_w(int num, byte data)
         {
             short out1 = dac1.SignedVolTable[data];
@@ -51,6 +60,10 @@ namespace mame
                 dac1.UnsignedVolTable[i] = (short)(i * 0x101 / 2);
                 dac1.SignedVolTable[i] = (short)(i * 0x101 - 0x8000);
             }
+        }
+        public static void dac_0_data_w(int offset, byte data)
+        {
+            dac_data_w(0, data);
         }
         public static void dac_start()
         {

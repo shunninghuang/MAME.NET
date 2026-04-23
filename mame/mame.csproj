@@ -55,6 +55,10 @@
   <ItemGroup>
     <Compile Include="cpu\hd6309\Hd6309.cs" />
     <Compile Include="cpu\hd6309\Hd6309op.cs" />
+    <Compile Include="cpu\i8039\8039dasm.cs" />
+    <Compile Include="cpu\i8039\i8039.cs" />
+    <Compile Include="cpu\i8x41\8x41dasm.cs" />
+    <Compile Include="cpu\i8x41\i8x41.cs" />
     <Compile Include="cpu\m6502\Ill02.cs" />
     <Compile Include="cpu\m6502\M6502.cs" />
     <Compile Include="cpu\m6502\M6502op.cs" />
@@ -219,6 +223,7 @@
     <Compile Include="mame\taito\Taito.cs" />
     <Compile Include="mame\taito\Taitoic.cs" />
     <Compile Include="mame\taito\Tilemap.cs" />
+    <Compile Include="mame\taito\tnzs.cs" />
     <Compile Include="mame\taito\Video.cs" />
     <Compile Include="mame\technos\Ddragon.cs" />
     <Compile Include="mame\technos\Drawgfx.cs" />

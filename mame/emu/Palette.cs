@@ -150,6 +150,45 @@ namespace mame
                             trans_color = Color.Black;
                             numcolors = 0x2000;
                             break;
+                        case "plumppop":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzs":
+                        case "tnzsj":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "kabukiz":
+                        case "kabukizj":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            trans_color = Color.Black;
+                            numcolors = 0x200;
+                            break;
+                        case "jpopnics":
+                            trans_color = Color.Black;
+                            numcolors = 0x400;
+                            break;
                     }
                     trans_uint = (uint)trans_color.ToArgb();
                     palette_set_callback = palette_entry_set_color2;

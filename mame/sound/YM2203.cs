@@ -113,7 +113,51 @@ namespace mame
                             FF2203[sndindex].OPN.ST.IRQ_Handler = Taito.irqhandler;
                             FF2203[sndindex].OPN.ST.SSG.set_clock = AY8910.AA8910[sndindex].ay8910_set_clock_ym;
                             FF2203[sndindex].OPN.ST.SSG.write = AY8910.AA8910[sndindex].ay8910_write_ym;
+                            FF2203[sndindex].OPN.ST.SSG.read = AY8910.AA8910[sndindex].ay8910_read_ym;
+                            FF2203[sndindex].OPN.ST.SSG.reset = AY8910.AA8910[sndindex].ay8910_reset_ym;
+                            break;
+                        case "tnzs":
+                        case "tnzsj":
+                        case "kabukiz":
+                        case "kabukizj":
+                            FF2203[sndindex].OPN.ST.IRQ_Handler = Taito.irqhandler_tnzs;
+                            FF2203[sndindex].OPN.ST.SSG.set_clock = AY8910.AA8910[sndindex].ay8910_set_clock_ym;
+                            FF2203[sndindex].OPN.ST.SSG.write = AY8910.AA8910[sndindex].ay8910_write_ym;
                             FF2203[sndindex].OPN.ST.SSG.read= AY8910.AA8910[sndindex].ay8910_read_ym;
+                            FF2203[sndindex].OPN.ST.SSG.reset = AY8910.AA8910[sndindex].ay8910_reset_ym;
+                            break;
+                        case "plumppop":
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                        case "insectx":
+                        case "insectxj":
+                        case "insectxbl":
+                            FF2203[sndindex].OPN.ST.IRQ_Handler = null;
+                            FF2203[sndindex].OPN.ST.SSG.set_clock = AY8910.AA8910[sndindex].ay8910_set_clock_ym;
+                            FF2203[sndindex].OPN.ST.SSG.write = AY8910.AA8910[sndindex].ay8910_write_ym;
+                            FF2203[sndindex].OPN.ST.SSG.read = AY8910.AA8910[sndindex].ay8910_read_ym;
                             FF2203[sndindex].OPN.ST.SSG.reset = AY8910.AA8910[sndindex].ay8910_reset_ym;
                             break;
                     }

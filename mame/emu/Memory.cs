@@ -153,6 +153,8 @@ namespace mame
                     M92.ushort2 = 0xffff;
                     break;
                 case "Taito":
+                    Taito.up1h = 0;
+                    Taito.up2h = 0;
                     Taito.sbyte0 = unchecked((sbyte)0xf3);
                     Taito.sbyte1 = -1;
                     Taito.sbyte2 = -1;
@@ -173,6 +175,70 @@ namespace mame
                         case "opwolfp":
                             Taito.sbyte2 = 0x3e;
                             Taito.sbyte3 = 0;
+                            break;
+                        case "plumppop":
+                            Taito.bcoin1 = 0;
+                            Taito.bcoin2 = 0;
+                            Taito.sbyte0 = -1;
+                            Taito.sbyte1 = -1;
+                            Taito.sbyte2 = unchecked((sbyte)0xcf);
+                            break;
+                        case "jpopnics":
+                            Taito.bcoin1 = 0xff;
+                            Taito.bcoin2 = 0xff;
+                            Taito.sbyte0 = -1;
+                            Taito.sbyte1 = -1;
+                            Taito.sbyte2 = -1;
+                            break;
+                        case "extrmatn":
+                        case "extrmatnu":
+                        case "extrmatnur":
+                        case "extrmatnj":
+                        case "drtoppel":
+                        case "drtoppelu":
+                        case "drtoppelj":
+                        case "kageki":
+                        case "kagekiu":
+                        case "kagekij":
+                        case "kagekih":
+                        case "chukatai":
+                        case "chukataiu":
+                        case "chukataij":
+                        case "chukataija":
+                            Taito.bcoin1 = 0;
+                            Taito.bcoin2 = 0;
+                            Taito.sbyte0 = -1;
+                            Taito.sbyte1 = -1;
+                            Taito.sbyte2 = -1;
+                            break;
+                        case "arknoid2":
+                        case "arknoid2u":
+                        case "arknoid2j":
+                        case "arknoid2b":
+                            Taito.up1h = 0xd000;
+                            Taito.up2h = 0xf000;
+                            Taito.bcoin1 = 0;
+                            Taito.bcoin2 = 0;
+                            Taito.sbyte0 = -1;
+                            Taito.sbyte1 = -1;
+                            Taito.sbyte2 = -1;
+                            break;
+                        case "tnzs":
+                        case "tnzsj":
+                            Taito.sbyte0 = -1;
+                            Taito.sbyte1 = -1;
+                            Taito.sbyte2 = -1;
+                            break;
+                        case "tnzso":
+                        case "tnzsjo":
+                        case "tnzsuo":
+                        case "tnzsoa":
+                        case "tnzsop":
+                            Taito.bcoin1 = 1;
+                            Taito.bcoin2 = 1;
+                            Taito.sbyte0 = -1;
+                            Taito.sbyte1 = -1;
+                            Taito.sbyte2 = -1;
                             break;
                     }
                     break;
@@ -354,6 +420,8 @@ namespace mame
                     M92.ushort2_old = 0;
                     break;
                 case "Taito":
+                    Taito.bcoin1_old = 0;
+                    Taito.bcoin2_old = 0;
                     Taito.sbyte0_old = 0;
                     Taito.sbyte1_old = 0;
                     Taito.sbyte2_old = 0;
