@@ -12,7 +12,7 @@ namespace mame
     {
         public static void SaveStateBinary_z(BinaryWriter writer)
         {
-            int i,j;
+            int i, j;
             writer.Write(dsw1);
             writer.Write(dsw2);
             for (i = 0; i < 0x400; i++)
@@ -38,15 +38,15 @@ namespace mame
             writer.Write(megasys1_sprite_flag);
             writer.Write(ip_latched);
             writer.Write(megasys1_bits_per_color_code);
-            for(i=0;i<3;i++)
+            for (i = 0; i < 3; i++)
             {
                 writer.Write(megasys1_scrollx[i]);
             }
-            for(i=0;i<3;i++)
+            for (i = 0; i < 3; i++)
             {
                 writer.Write(megasys1_scrolly[i]);
             }
-            for(i=0;i<3;i++)
+            for (i = 0; i < 3; i++)
             {
                 writer.Write(megasys1_scroll_flag[i]);
             }
@@ -79,7 +79,7 @@ namespace mame
         }
         public static void LoadStateBinary_z(BinaryReader reader)
         {
-            int i,j;
+            int i, j;
             dsw1 = reader.ReadByte();
             dsw2 = reader.ReadByte();
             for (i = 0; i < 0x400; i++)

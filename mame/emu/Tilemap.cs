@@ -213,12 +213,12 @@ namespace mame
         {
             scrollcols = scroll_cols;
         }
-        public void tilemap_set_scrolldx(int _dx,int _dx2)
+        public void tilemap_set_scrolldx(int _dx, int _dx2)
         {
             dx = _dx;
             dx_flipped = _dx2;
         }
-        public void tilemap_set_scrolldy(int _dy,int _dy2)
+        public void tilemap_set_scrolldy(int _dy, int _dy2)
         {
             dy = _dy;
             dy_flipped = _dy2;
@@ -374,7 +374,7 @@ namespace mame
             }
             tilemap_mark_all_tiles_dirty(this);
         }
-        public byte tile_draw(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base,byte category, byte group, byte flags)
+        public byte tile_draw(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, byte category, byte group, byte flags)
         {
             byte andmask = 0xff, ormask = 0;
             int dx0 = 1, dy0 = 1;
@@ -456,7 +456,7 @@ namespace mame
         public static List<Tmap> lsTmap = new List<Tmap>();
         public static byte[,] priority_bitmap;
         public static byte[,] bb00;
-        public static byte[] bb0F,bbFF;
+        public static byte[] bb0F, bbFF;
         public static int screen_width, screen_height;
         private static int INVALID_LOGICAL_INDEX = -1;
         public static byte TILEMAP_PIXEL_TRANSPARENT = 0x00;
@@ -507,6 +507,11 @@ namespace mame
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
                     break;
+                case "Kaneko":
+                    screen_width = 0x100;
+                    screen_height = 0x100;
+                    priority_bitmap = new byte[0x100, 0x100];
+                    break;
                 case "Namco System 1":
                     screen_width = 0x200;
                     screen_height = 0x200;
@@ -548,7 +553,7 @@ namespace mame
                     screen_height = 0x200;
                     priority_bitmap = new byte[0x200, 0x200];
                     break;
-            }            
+            }
             switch (Machine.sBoard)
             {
                 case "CPS-1":
@@ -558,8 +563,9 @@ namespace mame
                 case "Data East":
                 case "Tehkan":
                 case "Technos":
-                case "Tad":                
+                case "Tad":
                 case "Gaelco":
+                case "Kaneko":
                 case "Namco System 1":
                 case "PGM":
                 case "M72":

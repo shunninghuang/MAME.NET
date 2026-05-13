@@ -604,14 +604,11 @@ namespace mame
         }
         public static byte Z1ReadHardware(ushort address)
         {
-            byte result = 0;
-            address &= 0xff;
-            return result;
+            return 0;
         }
         public static void Z1WriteHardware(ushort address, byte value)
         {
-            address &= 0xff;
-
+            
         }
         public static byte Z2ReadOp_bublbobl(ushort address)
         {

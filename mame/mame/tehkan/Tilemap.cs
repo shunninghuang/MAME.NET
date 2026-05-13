@@ -5,10 +5,6 @@ using System.Text;
 
 namespace mame
 {
-    public partial class Tehkan
-    {
-        public static Tmap bg_tilemap, fg_tilemap;
-    }
     public partial class Tmap
     {
         public void tile_update_pbaction_bg(int logindex, int col, int row)

@@ -36,7 +36,7 @@ namespace mame
                 fg_tilemap.pen_to_flags[0, i] = 0x10;
             }
             fg_tilemap.pen_to_flags[0, 3] = 0;
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_gng;
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_sf;
             fg_tilemap.tile_update3 = fg_tilemap.tile_update_capcom_fg_gng;
             bg_tilemap.total_elements = gfx2rom.Length / 0x100;
             bg_tilemap.pen_to_flags = new byte[2, 16];
@@ -57,7 +57,7 @@ namespace mame
             {
                 bg_tilemap.pen_to_flags[1, i] = 0x30;
             }
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_gng;
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
             bg_tilemap.tile_update3 = bg_tilemap.tile_update_capcom_bg_gng;
             Tilemap.lsTmap = new List<Tmap>();
             Tilemap.lsTmap.Add(bg_tilemap);

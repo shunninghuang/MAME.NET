@@ -5,10 +5,6 @@ using System.Text;
 
 namespace mame
 {
-    public partial class Gaelco
-    {
-        public static Tmap[] gaelco_tilemap;
-    }
     public partial class Tmap
     {
         public void tile_update_gaelco_screen0(int logindex, int col, int row)

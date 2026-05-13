@@ -31,6 +31,7 @@ namespace mame
         public static IntPtr handle1, handle2, handle3, handle4;
         public static bool is_foreground;
         public static bool paused, exit_pending;
+        public static uint rand_seed;
         public static Timer.emu_timer soft_reset_timer;
         public static BinaryReader brRecord = null;
         public static BinaryWriter bwRecord = null;
@@ -135,6 +136,11 @@ namespace mame
                 handle_replay();
             }
         }
+        public static uint mame_rand()
+        {
+            rand_seed = 1664525 * rand_seed + 1013904223;
+            return (rand_seed >> 16) | (rand_seed << 16);
+        }
         public static void init_machine(mainForm form)
         {
             //fileio_init();
@@ -147,7 +153,7 @@ namespace mame
             //ui_init();
 
             Generic.generic_machine_init();
-
+            rand_seed = 0x9d14abd7;
             Timer.timer_init();
             soft_reset_timer = Timer.timer_alloc_common(soft_reset, "soft_reset", false);
 
@@ -592,6 +598,12 @@ namespace mame
                 case "Gaelco":
                     Gaelco.gaelco_tilemap[0].all_tiles_dirty = true;
                     Gaelco.gaelco_tilemap[1].all_tiles_dirty = true;
+                    break;
+                case "Kaneko":
+                    Kaneko.bg_tilemap.all_tiles_dirty = true;
+                    Kaneko.fg_tilemap.all_tiles_dirty = true;
+                    AY8910.AA8910[0].ay8910_postload();
+                    YM2203.FF2203[0].ym2203_postload();
                     break;
                 case "Namco System 1":
                     for (i = 0; i < 6; i++)

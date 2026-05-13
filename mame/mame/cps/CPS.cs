@@ -54,6 +54,7 @@ namespace mame
             Memory.audioram = new byte[0x800];
             Machine.bRom = true;
             Memory.mainrom = Machine.GetRom("maincpu.rom");
+            Memory.audiorom = Machine.GetRom("audiocpu.rom");
             gfxrom = Machine.GetRom("gfx.rom");
             n = gfxrom.Length;
             gfx1rom = new byte[n * 2];
@@ -62,8 +63,7 @@ namespace mame
                 gfx1rom[i * 2] = (byte)(gfxrom[i] & 0x0f);
                 gfx1rom[i * 2 + 1] = (byte)(gfxrom[i] >> 4);
             }
-            Drawgfx.spritecount = n / 0x80;
-            Memory.audiorom = Machine.GetRom("audiocpu.rom");
+            Drawgfx.spritecount = n / 0x80;            
             switch (Machine.sBoard)
             {
                 case "CPS-1":
@@ -89,6 +89,286 @@ namespace mame
                     }
                     break;
                 case "CPS2":
+                    cps_version = 2;
+                    cps2_objram1 = new ushort[0x1000];
+                    cps2_objram2 = new ushort[0x1000];
+                    cps2_output = new ushort[0x06];
+                    cps2networkpresent = 0;
+                    cps2_objram_bank = 0;
+                    scancount = 0;
+                    cps1_scanline1 = 262;
+                    cps1_scanline2 = 262;
+                    cps1_scancalls = 0;
+                    qsound_sharedram1 = new byte[0x1000];
+                    qsound_sharedram2 = new byte[0x1000];
+                    switch (Machine.sName)
+                    {
+                        case "ssf2":
+                        case "ssf2r1":
+                        case "ssf2u":
+                        case "ssf2a":
+                        case "ssf2ar1":
+                        case "ssf2j":
+                        case "ssf2jr1":
+                        case "ssf2jr2":
+                        case "ssf2h":
+                        case "ssf2tb":
+                        case "ssf2tbr1":
+                        case "ssf2tbj":
+                        case "ssf2tbj1":
+                        case "ssf2tbh":
+                        case "ecofghtr":
+                        case "ecofghtru":
+                        case "ecofghtru1":
+                        case "uecology":
+                        case "ecofghtra":
+                        case "ecofghtrh":
+                        case "ddtod":
+                        case "ddtodr1":
+                        case "ddtodu":
+                        case "ddtodur1":
+                        case "ddtodj":
+                        case "ddtodjr1":
+                        case "ddtodjr2":
+                        case "ddtoda":
+                        case "ddtodar1":
+                        case "ddtodh":
+                        case "ddtodhr1":
+                        case "ddtodhr2":
+                        case "ssf2t":
+                        case "ssf2ta":
+                        case "ssf2th":
+                        case "ssf2tu":
+                        case "ssf2tur1":
+                        case "ssf2xj":
+                        case "ssf2xjr1":
+                        case "ssf2xjr1r":
+                        case "avsp":
+                        case "avspu":
+                        case "avspj":
+                        case "avspa":
+                        case "avsph":
+                        case "dstlk":
+                        case "dstlku":
+                        case "dstlkur1":
+                        case "dstlka":
+                        case "dstlkh":
+                        case "vampj":
+                        case "vampja":
+                        case "vampjr1":
+                        case "ringdest":
+                        case "ringdesta":
+                        case "ringdesth":
+                        case "smbomb":
+                        case "smbombr1":
+                        case "armwar":
+                        case "armwarr1":
+                        case "armwaru":
+                        case "armwaru1":
+                        case "pgear":
+                        case "pgearr1":
+                        case "armwara":
+                        case "armwarar1":
+                        case "xmcota":
+                        case "xmcotar1":
+                        case "xmcotau":
+                        case "xmcotah":
+                        case "xmcotahr1":
+                        case "xmcotaj":
+                        case "xmcotaj1":
+                        case "xmcotaj2":
+                        case "xmcotaj3":
+                        case "xmcotajr":
+                        case "xmcotaa":
+                        case "xmcotaar1":
+                        case "nwarr":
+                        case "nwarru":
+                        case "nwarrh":
+                        case "nwarrb":
+                        case "nwarra":
+                        case "vhuntj":
+                        case "vhuntjr1s":
+                        case "vhuntjr1":
+                        case "vhuntjr2":
+                        case "cybots":
+                        case "cybotsu":
+                        case "cybotsj":
+                        case "sfa":
+                        case "sfar1":
+                        case "sfar2":
+                        case "sfar3":
+                        case "sfau":
+                        case "sfza":
+                        case "sfzar1":
+                        case "sfzj":
+                        case "sfzjr1":
+                        case "sfzjr2":
+                        case "sfzh":
+                        case "sfzhr1":
+                        case "sfzb":
+                        case "sfzbr1":
+                        case "mmancp2u":
+                        case "mmancp2ur1":
+                        case "rmancp2j":
+                        case "msh":
+                        case "mshu":
+                        case "mshj":
+                        case "mshjr1":
+                        case "msha":
+                        case "mshh":
+                        case "mshb":
+                        case "19xx":
+                        case "19xxa":
+                        case "19xxar1":
+                        case "19xxj":
+                        case "19xxjr1":
+                        case "19xxjr2":
+                        case "19xxh":
+                        case "19xxb":
+                        case "ddsom":
+                        case "ddsomr1":
+                        case "ddsomr2":
+                        case "ddsomr3":
+                        case "ddsomu":
+                        case "ddsomur1":
+                        case "ddsomj":
+                        case "ddsomjr1":
+                        case "ddsoma":
+                        case "ddsomar1":
+                        case "ddsomh":
+                        case "ddsomb":
+                        case "sfa2":
+                        case "sfa2u":
+                        case "sfa2ur1":
+                        case "sfz2j":
+                        case "sfz2jr1":
+                        case "sfz2a":
+                        case "sfz2b":
+                        case "sfz2br1":
+                        case "sfz2h":
+                        case "sfz2n":
+                        case "sfz2al":
+                        case "sfz2alj":
+                        case "sfz2alh":
+                        case "sfz2alb":
+                        case "spf2t":
+                        case "spf2tu":
+                        case "spf2xj":
+                        case "spf2ta":
+                        case "spf2th":
+                        case "megaman2":
+                        case "megaman2a":
+                        case "rockman2j":
+                        case "megaman2h":
+                        case "qndream":
+                        case "xmvsf":
+                        case "xmvsfr1":
+                        case "xmvsfu":
+                        case "xmvsfur1":
+                        case "xmvsfur2":
+                        case "xmvsfj":
+                        case "xmvsfjr1":
+                        case "xmvsfjr2":
+                        case "xmvsfjr3":
+                        case "xmvsfa":
+                        case "xmvsfar1":
+                        case "xmvsfar2":
+                        case "xmvsfar3":
+                        case "xmvsfh":
+                        case "xmvsfb":
+                        case "batcir":
+                        case "batcira":
+                        case "batcirj":
+                        case "vsav":
+                        case "vsavu":
+                        case "vsavj":
+                        case "vsava":
+                        case "vsavh":
+                        case "mshvsf":
+                        case "mshvsfu":
+                        case "mshvsfu1":
+                        case "mshvsfj":
+                        case "mshvsfj1":
+                        case "mshvsfj2":
+                        case "mshvsfh":
+                        case "mshvsfa":
+                        case "mshvsfa1":
+                        case "mshvsfb":
+                        case "mshvsfb1":
+                        case "csclub":
+                        case "csclub1":
+                        case "cscluba":
+                        case "csclubj":
+                        case "csclubjy":
+                        case "csclubh":
+                        case "sgemf":
+                        case "pfghtj":
+                        case "sgemfa":
+                        case "sgemfh":
+                        case "vhunt2":
+                        case "vhunt2r1":
+                        case "vsav2":
+                        case "mvsc":
+                        case "mvscr1":
+                        case "mvscu":
+                        case "mvscur1":
+                        case "mvscj":
+                        case "mvscjr1":
+                        case "mvscjsing":
+                        case "mvsca":
+                        case "mvschr1":
+                        case "mvsch":
+                        case "mvscb":
+                        case "sfa3":
+                        case "sfa3u":
+                        case "sfa3ur1":
+                        case "sfa3us":
+                        case "sfa3h":
+                        case "sfa3hr1":
+                        case "sfa3b":
+                        case "sfz3j":
+                        case "sfz3jr1":
+                        case "sfz3jr2":
+                        case "sfz3a":
+                        case "sfz3ar1":
+                        case "jyangoku":
+                        case "hsf2":
+                        case "hsf2a":
+                        case "hsf2j":
+                        case "hsf2j1":
+                        case "gigawing":
+                        case "gigawingj":
+                        case "gigawinga":
+                        case "gigawingh":
+                        case "gigawingb":
+                        case "mmatrix":
+                        case "mmatrixj":
+                        case "mpang":
+                        case "mpangr1":
+                        case "mpangu":
+                        case "mpangj":
+                        case "pzloop2":
+                        case "pzloop2j":
+                        case "pzloop2jr1":
+                        case "choko":
+                        case "dimahoo":
+                        case "dimahoou":
+                        case "gmahou":
+                        case "1944":
+                        case "1944j":
+                        case "progear":
+                        case "progearj":
+                        case "progeara":
+                            mainromop = Machine.GetRom("maincpuop.rom");
+                            break;
+                    }
+                    audioromop = Machine.GetRom("audiocpu.rom");
+                    QSound.qsoundrom = ByteToSbyte(Machine.GetRom("qsound.rom"));
+                    if (Memory.mainrom == null || audioromop == null || gfxrom == null || Memory.audiorom == null || QSound.qsoundrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
                 case "CPS2turbo":
                     cps_version = 2;
                     cps2_objram1 = new ushort[0x1000];
@@ -102,13 +382,9 @@ namespace mame
                     cps1_scancalls = 0;
                     qsound_sharedram1 = new byte[0x1000];
                     qsound_sharedram2 = new byte[0x1000];
-                    if (Machine.sManufacturer != "bootleg")
-                    {
-                        mainromop = Machine.GetRom("maincpuop.rom");
-                    }
                     audioromop = Machine.GetRom("audiocpu.rom");
                     QSound.qsoundrom = ByteToSbyte(Machine.GetRom("qsound.rom"));
-                    if (Memory.mainrom == null || (Machine.sManufacturer != "bootleg" && mainromop == null) || audioromop == null || gfxrom == null || Memory.audiorom == null || QSound.qsoundrom == null)
+                    if (Memory.mainrom == null || audioromop == null || gfxrom == null || Memory.audiorom == null || QSound.qsoundrom == null)
                     {
                         Machine.bRom = false;
                     }

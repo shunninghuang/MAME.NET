@@ -192,7 +192,7 @@ namespace mame
             int xdir, ydir, offx, offy;
             int x, y, ex, ey;
             int iByte1, iByte2, iByte3, iByte4;
-            Color c11 = new Color(), c12 = new Color(), c13 = new Color(), c14 = new Color();
+            Color c1 = new Color();
             bm1 = new Bitmap(512, 512);
             for (i = 0x800 - 4 - 1; i >= 3; i -= 4)
             {
@@ -260,8 +260,8 @@ namespace mame
                                 iByte1 = gfx1rom[(number + x_offset[ex] + y_offset[ey]) * 0x40 + i5 + i6 * 8];
                                 if (iByte1 != 0)
                                 {
-                                    c11 = Color.FromArgb((int)Palette.entry_color[0x10 * color + iByte1]);
-                                    bm1.SetPixel(sx - 0x0f + x * 8 + offx + xdir * i5, sy + y * 8 + offy + ydir * i6, c11);
+                                    c1 = Color.FromArgb((int)Palette.entry_color[0x10 * color + iByte1]);
+                                    bm1.SetPixel(sx - 0x0f + x * 8 + offx + xdir * i5, sy + y * 8 + offy + ydir * i6, c1);
                                 }
                             }
                         }

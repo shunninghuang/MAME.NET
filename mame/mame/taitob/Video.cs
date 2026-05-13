@@ -154,11 +154,7 @@ namespace mame
             Tilemap.lsTmap.Add(fg_tilemap);
             Tilemap.lsTmap.Add(tx_tilemap);
 
-
-
-            pixel_bitmap = null;  /* only hitice needs this */
-
-            
+            pixel_bitmap = null;  /* only hitice needs this */            
         }
         public static void video_start_taitob_color_order0()
         {

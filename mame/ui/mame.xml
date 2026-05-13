@@ -4298,82 +4298,82 @@
     <year>1998</year>
     <manufacturer>Capcom</manufacturer>
   </game>
-  <game name="sfz3mix" board="CPS2turbo">
+  <game name="sfz3mix13" board="CPS2">
     <parent>sfa3</parent>
     <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.31) (bootleg)</description>
-    <year>2024</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix30" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.30) (bootleg)</description>
-    <year>2024</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix29" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.29) (bootleg)</description>
-    <year>2024</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix28" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.28) (bootleg)</description>
-    <year>2024</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix27" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.27) (bootleg)</description>
-    <year>2024</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix26" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.26) (bootleg)</description>
-    <year>2024</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix25" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.25) (bootleg)</description>
-    <year>2024</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix24" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.24) (bootleg)</description>
-    <year>2023</year>
-    <manufacturer>bootleg</manufacturer>
-  </game>
-  <game name="sfz3mix23" board="CPS2turbo">
-    <parent>sfa3</parent>
-    <direction></direction>
-    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.23) (bootleg)</description>
-    <year>2023</year>
-    <manufacturer>bootleg</manufacturer>
+    <description>Street Fighter Zero 3 MIX (Ver. 0.13) (bootleg)</description>
+    <year>2022</year>
+    <manufacturer>Zero800</manufacturer>
   </game>
   <game name="sfz3mix22" board="CPS2turbo">
     <parent>sfa3</parent>
     <direction></direction>
     <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.22) (bootleg)</description>
     <year>2023</year>
-    <manufacturer>bootleg</manufacturer>
+    <manufacturer>Zero800</manufacturer>
   </game>
-  <game name="sfz3mix13" board="CPS2">
+  <game name="sfz3mix23" board="CPS2turbo">
     <parent>sfa3</parent>
     <direction></direction>
-    <description>Street Fighter Zero 3 MIX (Ver. 0.13) (bootleg)</description>
-    <year>2022</year>
-    <manufacturer>bootleg</manufacturer>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.23) (bootleg)</description>
+    <year>2023</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix24" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.24) (bootleg)</description>
+    <year>2023</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix25" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.25) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix26" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.26) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix27" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.27) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix28" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.28) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix29" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.29) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix30" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.30) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>Zero800</manufacturer>
+  </game>
+  <game name="sfz3mix" board="CPS2turbo">
+    <parent>sfa3</parent>
+    <direction></direction>
+    <description>Street Fighter Zero 3 Turbo MIX (Ver. 0.31) (bootleg)</description>
+    <year>2024</year>
+    <manufacturer>Zero800</manufacturer>
   </game>
   <game name="jyangoku" board="CPS2">
     <parent></parent>
@@ -4885,6 +4885,13 @@
     <description>Hyper Street Fighter II: The Anniversary Edition (Asia 040202 Phoenix Edition) (bootleg)</description>
     <year>2004</year>
     <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="sf2prime" board="CPS2">
+    <parent>hsf2</parent>
+    <direction></direction>
+    <description>Street Fighter II': Prime (v0.75)</description>
+    <year>2026</year>
+    <manufacturer>Zero800</manufacturer>
   </game>
   <game name="pcktgal" board="Data East">
     <parent></parent>
@@ -7769,6 +7776,27 @@
     <description>Thunder Hoop (Ver. 1)</description>
     <year>1992</year>
     <manufacturer>Gaelco</manufacturer>
+  </game>
+  <game name="airbustr" board="Kaneko">
+    <parent></parent>
+    <direction></direction>
+    <description>Air Buster: Trouble Specialty Raid Unit (World)</description>
+    <year>1990</year>
+    <manufacturer>Kaneko (Namco license)</manufacturer>
+  </game>
+  <game name="airbustrj" board="Kaneko">
+    <parent>airbustr</parent>
+    <direction></direction>
+    <description>Air Buster: Trouble Specialty Raid Unit (Japan)</description>
+    <year>1990</year>
+    <manufacturer>Kaneko (Namco license)</manufacturer>
+  </game>
+  <game name="airbustrb" board="Kaneko">
+    <parent>airbustr</parent>
+    <direction></direction>
+    <description>Air Buster: Trouble Specialty Raid Unit (bootleg)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
   </game>
   <!--<game name="starfigh" board="SunA8">
     <parent></parent>

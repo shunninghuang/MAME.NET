@@ -203,6 +203,17 @@ namespace mame
                             break;
                     }
                     break;
+                case "Kaneko":
+                    switch (Machine.sName)
+                    {
+                        case "airbustr":
+                        case "airbustrj":
+                        case "airbustrb":
+                            savestate_callback = Kaneko.SaveStateBinary_airbustr;
+                            loadstate_callback = Kaneko.LoadStateBinary_airbustr;
+                            break;
+                    }
+                    break;
                 case "Namco System 1":
                     savestate_callback = Namcos1.SaveStateBinary;
                     loadstate_callback = Namcos1.LoadStateBinary;

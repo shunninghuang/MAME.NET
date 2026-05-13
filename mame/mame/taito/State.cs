@@ -1183,8 +1183,10 @@ namespace mame
             writer.Write(dswb);
             writer.Write(basebankmain);
             writer.Write(basebanksub);
+            writer.Write(basebankaudio);
             writer.Write(tnzs_bank1, 0, 0x20000);
             writer.Write(tnzs_bank2, 0, 0x8000);
+            writer.Write(tnzs_bank3, 0, 0x20000);
             writer.Write(tnzs_objram, 0, 0x2000);
             writer.Write(tnzs_sharedram, 0, 0x2000);
             writer.Write(tnzs_vdcram, 0, 0x200);
@@ -1232,8 +1234,10 @@ namespace mame
             dswb = reader.ReadByte();
             basebankmain = reader.ReadInt32();
             basebanksub = reader.ReadInt32();
+            basebankaudio = reader.ReadInt32();
             tnzs_bank1 = reader.ReadBytes(0x20000);
             tnzs_bank2 = reader.ReadBytes(0x8000);
+            tnzs_bank3 = reader.ReadBytes(0x20000);
             tnzs_objram = reader.ReadBytes(0x2000);
             tnzs_sharedram = reader.ReadBytes(0x2000);
             tnzs_vdcram = reader.ReadBytes(0x200);

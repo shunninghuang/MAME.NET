@@ -45,7 +45,10 @@ namespace ui
                 case "Tehkan":
                 case "Neo Geo":
                 case "Technos":
+                case "Tad":
+                case "Megasys1":
                 case "Gaelco":
+                case "Kaneko":
                 case "Taito B":
                 case "Konami 68000":
                 case "Capcom":

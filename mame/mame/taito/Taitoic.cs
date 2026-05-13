@@ -82,7 +82,7 @@ namespace mame
                         {
                             PC080SN_tilemap[i][j].pen_to_flags[0, k] = 0x10;
                         }
-                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_taito_opwolf;
+                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_cps;
                     }
                     else
                     {
@@ -94,7 +94,7 @@ namespace mame
                         {
                             PC080SN_tilemap[i][j].pen_to_flags[0, k] = 0x10;
                         }
-                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_taito_opwolf;
+                        PC080SN_tilemap[i][j].tilemap_draw_instance3 = PC080SN_tilemap[i][j].tilemap_draw_instance_cps;
                     }
                 }
                 PC080SN_tilemap[i][0].tile_update3 = PC080SN_tilemap[i][0].tile_update_taito_bg_opwolf;

@@ -634,6 +634,35 @@ namespace mame
                             break;
                     }                    
                     break;
+                case "Kaneko":
+                    switch (Machine.sName)
+                    {
+                        case "airbustr":
+                        case "airbustrj":
+                        case "airbustrb":
+                            Z80A.nZ80 = 3;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[1] = new Z80A();
+                            Z80A.zz1[2] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.zz1[1].irq_callback = Cpuint.cpu_1_irq_callback;
+                            Z80A.zz1[2].irq_callback = Cpuint.cpu_2_irq_callback;
+                            ncpu = 3;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = Z80A.zz1[0];
+                            cpu[1] = Z80A.zz1[1];
+                            cpu[2] = Z80A.zz1[2];
+                            cpu[0].cycles_per_second = 6000000;
+                            cpu[1].cycles_per_second = 6000000;
+                            cpu[2].cycles_per_second = 6000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            cpu[2].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[2].cycles_per_second;
+                            vblank_interrupts_per_frame = 2;
+                            break;
+                    }
+                    break;
                 case "SunA8":
                     Z80A.nZ80 = 2;
                     Z80A.zz1 = new Z80A[Z80A.nZ80];
@@ -1510,6 +1539,7 @@ namespace mame
                         case "progearjd":
                         case "progearjbl":
                         case "hsf2d":
+                        case "sf2prime":
                             MC68000.mm1[0].ReadOpByte = CPS.MReadOpByte_cps2_dead;
                             MC68000.mm1[0].ReadByte = CPS.MReadByte_cps2_dead;
                             MC68000.mm1[0].ReadOpWord = CPS.MReadOpWord_cps2_dead;
@@ -2102,6 +2132,52 @@ namespace mame
                             MC68000.mm1[0].WriteByte = Gaelco.MWriteByte_thoop;
                             MC68000.mm1[0].WriteWord = Gaelco.MWriteWord_thoop;
                             MC68000.mm1[0].WriteLong = Gaelco.MWriteLong_thoop;
+                            break;
+                    }
+                    break;
+                case "Kaneko":
+                    switch (Machine.sName)
+                    {
+                        case "airbustr":
+                        case "airbustrj":
+                            Z80A.zz1[0].ReadOp = Kaneko.Z0ReadOp_airbustr;
+                            Z80A.zz1[0].ReadOpArg = Kaneko.Z0ReadOp_airbustr;
+                            Z80A.zz1[0].ReadMemory = Kaneko.Z0ReadMemory_airbustr;
+                            Z80A.zz1[0].WriteMemory = Kaneko.Z0WriteMemory_airbustr;
+                            Z80A.zz1[0].ReadHardware = Kaneko.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Kaneko.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Kaneko.Z1ReadOp_airbustr;
+                            Z80A.zz1[1].ReadOpArg = Kaneko.Z1ReadOp_airbustr;
+                            Z80A.zz1[1].ReadMemory = Kaneko.Z1ReadMemory_airbustr;
+                            Z80A.zz1[1].WriteMemory = Kaneko.Z1WriteMemory_airbustr;
+                            Z80A.zz1[1].ReadHardware = Kaneko.Z1ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Kaneko.Z1WriteHardware;
+                            Z80A.zz1[2].ReadOp = Kaneko.Z2ReadOp_airbustr;
+                            Z80A.zz1[2].ReadOpArg = Kaneko.Z2ReadOp_airbustr;
+                            Z80A.zz1[2].ReadMemory = Kaneko.Z2ReadMemory_airbustr;
+                            Z80A.zz1[2].WriteMemory = Kaneko.Z2WriteMemory_airbustr;
+                            Z80A.zz1[2].ReadHardware = Kaneko.Z2ReadHardware;
+                            Z80A.zz1[2].WriteHardware = Kaneko.Z2WriteHardware;
+                            break;
+                        case "airbustrb":
+                            Z80A.zz1[0].ReadOp = Kaneko.Z0ReadOp_airbustr;
+                            Z80A.zz1[0].ReadOpArg = Kaneko.Z0ReadOp_airbustr;
+                            Z80A.zz1[0].ReadMemory = Kaneko.Z0ReadMemory_airbustrb;
+                            Z80A.zz1[0].WriteMemory = Kaneko.Z0WriteMemory_airbustr;
+                            Z80A.zz1[0].ReadHardware = Kaneko.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Kaneko.Z0WriteHardware;
+                            Z80A.zz1[1].ReadOp = Kaneko.Z1ReadOp_airbustr;
+                            Z80A.zz1[1].ReadOpArg = Kaneko.Z1ReadOp_airbustr;
+                            Z80A.zz1[1].ReadMemory = Kaneko.Z1ReadMemory_airbustr;
+                            Z80A.zz1[1].WriteMemory = Kaneko.Z1WriteMemory_airbustr;
+                            Z80A.zz1[1].ReadHardware = Kaneko.Z1ReadHardware;
+                            Z80A.zz1[1].WriteHardware = Kaneko.Z1WriteHardware;
+                            Z80A.zz1[2].ReadOp = Kaneko.Z2ReadOp_airbustr;
+                            Z80A.zz1[2].ReadOpArg = Kaneko.Z2ReadOp_airbustr;
+                            Z80A.zz1[2].ReadMemory = Kaneko.Z2ReadMemory_airbustr;
+                            Z80A.zz1[2].WriteMemory = Kaneko.Z2WriteMemory_airbustr;
+                            Z80A.zz1[2].ReadHardware = Kaneko.Z2ReadHardware;
+                            Z80A.zz1[2].WriteHardware = Kaneko.Z2WriteHardware;
                             break;
                     }
                     break;
@@ -3632,6 +3708,15 @@ namespace mame
                             break;
                     }
                     break;
+                case "Kaneko":
+                    z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
+                    Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                    Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                    Z80A.zz1[1].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                    Z80A.zz1[1].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                    Z80A.zz1[2].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                    Z80A.zz1[2].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                    break;
                 case "IGS011":
                     m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
                     MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
@@ -3857,12 +3942,26 @@ namespace mame
         {
             switch (Machine.sBoard)
             {
+                case "CPS1":
+                case "Tad":
+                case "Namco System 1":
+                    break;
                 case "CPS-1(QSound)":
+                    timedint_period = new Atime(0, (long)(1e18 / 250));
+                    timedint_timer = Timer.timer_alloc_common(Generic.irq_1_0_line_hold, "irq_1_0_line_hold", false);
+                    Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
+                    break;
                 case "CPS2":
                 case "CPS2turbo":
                     timedint_period = new Atime(0, (long)(1e18 / 250));
                     timedint_timer = Timer.timer_alloc_common(Generic.irq_1_0_line_hold, "irq_1_0_line_hold", false);
                     Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
+                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 262);
+                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                    break;
+                case "Tehkan":
+                    Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
+                    Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
                     break;
                 case "Neo Geo":
                     interleave_boost_timer = Timer.timer_alloc_common(null_callback, "boost_callback", false);
@@ -3878,14 +3977,29 @@ namespace mame
                     timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                     Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                     break;
-                case "CPS1":
-                case "Tad":
-                case "Namco System 1":
+                case "Kaneko":
+                    timeslice_period = new Atime(0, Video.screenstate.frame_period / 100);
+                    timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                    Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                    if (Cpuexec.cpu[0].partial_frame_timer != null)
+                    {
+                        Timer.timer_list_remove(Cpuexec.cpu[0].partial_frame_timer);
+                    }
+                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
+                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
                     break;
                 case "Megasys1":
                     timeslice_period = new Atime(0, Video.screenstate.frame_period / 2000);
                     timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                     Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 263);
+                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                    break;
+                case "SunA8":
+                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 0x100);
+                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                    Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 4);
+                    Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger2, "trigger2", false);
                     break;
                 case "IGS011":
                     /*switch (Machine.sName)
@@ -3896,11 +4010,47 @@ namespace mame
                             Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                             break;
                     }*/
+                    switch (Machine.sName)
+                    {
+                        case "drgnwrld":
+                        case "drgnwrldv30":
+                        case "drgnwrldv21":
+                        case "drgnwrldv21j":
+                        case "drgnwrldv20j":
+                        case "drgnwrldv10c":
+                        case "drgnwrldv11h":
+                        case "drgnwrldv40k":
+                        case "lhb2":
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 5);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            break;
+                        case "lhb":
+                        case "lhbv33c":
+                        case "dbc":
+                        case "ryukobou":
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 4);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            break;
+                    }
                     break;
                 case "PGM":
+                    switch (Machine.sName)
+                    {
+                        case "drgw2":
+                        case "dw2v100x":
+                        case "drgw2j":
+                        case "drgw2c":
+                        case "drgw2hk":
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            break;
+                    }
+                    break;
                 case "M72":
-                case "M92":
-                case "Konami 68000":
+                    Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 128);
+                    Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                    break;
+                case "M92":                
                     break;
                 case "Taito":
                     switch (Machine.sName)
@@ -3919,7 +4069,6 @@ namespace mame
                         case "sboblboblb":
                         case "sboblbobld":
                         case "sboblboblc":
-                        case "bub68705":
                         case "dland":
                         case "bbredux":
                         case "bublboblb":
@@ -3974,12 +4123,28 @@ namespace mame
                             timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                             Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                             break;
+                        case "bub68705":
+                            timeslice_period = new Atime(0, Video.screenstate.frame_period / 100);
+                            timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                            Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                            Cpuexec.cpu[3].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
+                            Cpuexec.cpu[3].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            break;
                     }
                     break;
                 case "Taito B":
                     timeslice_period = new Atime(0, Video.screenstate.frame_period / 10);
                     timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                     Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                    break;
+                case "Konami 68000":
+                    switch (Machine.sName)
+                    {
+                        case "cuebrick":
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 10);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            break;
+                    }
                     break;
                 case "Capcom":
                     switch (Machine.sName)
@@ -3995,6 +4160,8 @@ namespace mame
                         case "makaimurc":
                         case "makaimurg":
                         case "diamond":
+                            Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 4);
+                            Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
                             break;
                         case "sf":
                         case "sfua":
@@ -4190,6 +4357,29 @@ namespace mame
                     break;
                 case "Gaelco":
                     Generic.irq_0_6_line_assert();
+                    break;
+                case "Kaneko":
+                    switch (Machine.sName)
+                    {
+                        case "airbustr":
+                        case "airbustrj":
+                        case "airbustrb":
+                            Cpuexec.cpu[0].iloops = 0;
+                            if (!cpunum_is_suspended(0, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
+                            {
+                                Kaneko.master_interrupt();
+                            }
+                            if (!cpunum_is_suspended(1, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
+                            {
+                                Kaneko.slave_interrupt();
+                            }
+                            if (!cpunum_is_suspended(2, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
+                            {
+                                Generic.irq_2_0_line_hold();
+                            }
+                            Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                            break;
+                    }
                     break;
                 case "SunA8":
                     Cpuexec.cpu[0].iloops = 0;
@@ -4496,6 +4686,26 @@ namespace mame
                     if (Cpuexec.cpu[0].iloops > 1)
                     {
                         Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                    }
+                    break;
+                case "Kaneko":
+                    switch (Machine.sName)
+                    {
+                        case "airbustr":
+                        case "airbustrj":
+                        case "airbustrb":
+                            if (Cpuexec.cpu[0].iloops == 0)
+                            {
+                                Cpuexec.cpu[0].iloops = vblank_interrupts_per_frame;
+                            }
+                            Cpuexec.cpu[0].iloops--;
+                            Kaneko.master_interrupt();
+                            Kaneko.slave_interrupt();
+                            if (Cpuexec.cpu[0].iloops > 1)
+                            {
+                                Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                            }
+                            break;
                     }
                     break;
                 case "SunA8":

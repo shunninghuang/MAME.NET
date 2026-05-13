@@ -41,7 +41,7 @@ namespace mame
                 text_layer.pen_to_flags[0, j] = 0x10;
             }
             text_layer.pen_to_flags[0, 15] = 0;
-            text_layer.tilemap_draw_instance3 = text_layer.tilemap_draw_instance_capcom_gng;
+            text_layer.tilemap_draw_instance3 = text_layer.tilemap_draw_instance_capcom_sf;
             text_layer.tile_update3 = text_layer.tile_update_tad_text;
 
             background_layer = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 16, 16, 32, 32);
@@ -52,7 +52,7 @@ namespace mame
                 background_layer.pen_to_flags[0, j] = 0x10;
             }
             background_layer.pen_to_flags[0, 15] = 0;
-            background_layer.tilemap_draw_instance3 = background_layer.tilemap_draw_instance_capcom_gng;
+            background_layer.tilemap_draw_instance3 = background_layer.tilemap_draw_instance_capcom_sf;
             background_layer.tile_update3 = background_layer.tile_update_tad_back;
 
             foreground_layer = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 16, 16, 32, 32);
@@ -63,7 +63,7 @@ namespace mame
                 foreground_layer.pen_to_flags[0, j] = 0x10;
             }
             foreground_layer.pen_to_flags[0, 15] = 0;
-            foreground_layer.tilemap_draw_instance3 = foreground_layer.tilemap_draw_instance_capcom_gng;
+            foreground_layer.tilemap_draw_instance3 = foreground_layer.tilemap_draw_instance_capcom_sf;
             foreground_layer.tile_update3 = foreground_layer.tile_update_tad_fore;
             
             Tilemap.lsTmap = new List<Tmap>();

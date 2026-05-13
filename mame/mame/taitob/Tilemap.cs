@@ -34,7 +34,7 @@ namespace mame
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             byte flags;
-            int tile_index = 0, memindex;
+            int memindex;
             int tile, code, color;
             int pen_data_offset, palette_base;
             memindex = logical_to_memory[logindex];
@@ -51,27 +51,11 @@ namespace mame
             int x0 = tilewidth * col;
             int y0 = tileheight * row;
             byte flags;
-            int tile_index = 0, memindex;
+            int memindex;
             int tile, code, color;
             int pen_data_offset, palette_base;
-            if (attributes == 0)
-            {
-                tile_index = row * cols + col;
-            }
-            else if (attributes == 3)
-            {
-                tile_index = 0x7ff - (row * cols + col);
-            }
-            else
-            {
-                int i1 = 1;
-            }
             memindex = logical_to_memory[logindex];
-            if (memindex != tile_index)
-            {
-                int i1 = 1;
-            }
-            tile = Taitob.TC0180VCU_ram[tile_index + Taitob.tx_rambank];
+            tile = Taitob.TC0180VCU_ram[memindex + Taitob.tx_rambank];
             code = ((tile & 0x07ff) | ((Taitob.TC0180VCU_ctrl[4 + ((tile & 0x800) >> 11)] >> 8) << 11)) % total_elements;
             color = Taitob.b_tx_color_base + ((tile >> 12) & 0x0f);
             pen_data_offset = code * 0x40;

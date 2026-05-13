@@ -31,3 +31,4 @@ E:\VS2008\mame_1\mame\obj\Debug\mame.Properties.Resources.resources
 E:\VS2008\mame_1\mame\obj\Debug\mame.csproj.GenerateResource.Cache
 E:\VS2008\mame_1\mame\obj\Debug\mame.exe
 E:\VS2008\mame_1\mame\obj\Debug\mame.pdb
+E:\VS2008\mame_1\mame\obj\Debug\ui.kanekoForm.resources

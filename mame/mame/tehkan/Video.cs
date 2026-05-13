@@ -8,6 +8,7 @@ namespace mame
 {
     public partial class Tehkan
     {
+        public static Tmap bg_tilemap, fg_tilemap;
         public static byte[] pbaction_videoram2, pbaction_colorram2;
         public static int scroll;        
         public static RECT cliprect;
@@ -55,7 +56,7 @@ namespace mame
             {
                 bg_tilemap.pen_to_flags[0, i] = 0x10;
             }
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_gng;
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
             bg_tilemap.tile_update3 = bg_tilemap.tile_update_pbaction_bg;
 
             fg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 32, 32);
@@ -66,7 +67,7 @@ namespace mame
             {
                 fg_tilemap.pen_to_flags[0, i] = 0x10;
             }
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_gng;
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_sf;
             fg_tilemap.tile_update3 = fg_tilemap.tile_update_pbaction_fg;
             Tilemap.lsTmap = new List<Tmap>();
             Tilemap.lsTmap.Add(bg_tilemap);

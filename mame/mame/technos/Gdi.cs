@@ -42,7 +42,7 @@ namespace mame
                 {
                     for (i4 = 0; i4 < rows; i4++)
                     {
-                        tile_index = background_scan(i3, i4);
+                        tile_index = background_scan(i3, i4, cols, rows);
                         attr = ddragon_bgvideoram[2 * tile_index];
                         code = (ddragon_bgvideoram[2 * tile_index + 1] + ((attr & 0x07) << 8)) % bg_tilemap.total_elements;
                         color = (attr >> 3) & 0x07;

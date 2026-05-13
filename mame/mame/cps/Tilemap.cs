@@ -138,7 +138,9 @@ namespace mame
             y1 = Math.Max(ypos, cliprect.min_y);
             y2 = Math.Min(ypos + height, cliprect.max_y + 1);
             if (x1 >= x2 || y1 >= y2)
+            {
                 return;
+            }
             x1 -= xpos;
             y1 -= ypos;
             x2 -= xpos;
@@ -225,7 +227,9 @@ namespace mame
                     prev_trans = cur_trans;
                 }
                 if (nexty == y2)
+                {
                     break;
+                }
                 offsety1 += (nexty - y);
                 y = nexty;
                 nexty += tileheight;

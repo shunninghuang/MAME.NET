@@ -16,7 +16,6 @@ namespace mame
         private static int cpsb_addr, cpsb_value, mult_factor1, mult_factor2, mult_result_lo, mult_result_hi;
         public static int layercontrol, layer_control, palette_control, in2_addr, in3_addr, out2_addr, bootleg_kludge;
         public static int[] priority, layer_enable_mask;
-        public static int total_elements;
         public static uint[] primasks;
         private static int CPS1_OBJ_BASE = 0;    /* Base address of objects */
         private static int CPS1_SCROLL1_BASE = (0x02 / 2);   /* Base address of scroll 1 */
@@ -661,20 +660,9 @@ namespace mame
         }
         private static void cps2_render_sprites()
         {
-            int i, x, y, priority, code, colour, col, cps2_last_sprite_offset;
+            int i, x, y, priority, code, colour, col;
             int xoffs = 64 - cps2_port(0x08);
-            int yoffs = 16 - cps2_port(0x0a);
-            cps2_last_sprite_offset = 0x3ff;
-            for (i = 0; i < 0x400; i++)
-            {
-                y = cps2_buffered_obj[i * 4 + 1];
-                colour = cps2_buffered_obj[i * 4 + 3];
-                if (y >= 0x8000 || colour >= 0xff00)
-                {
-                    cps2_last_sprite_offset = i - 1;
-                    break;
-                }
-            }
+            int yoffs = 16 - cps2_port(0x0a);            
             for (i = cps2_last_sprite_offset; i >= 0; i -= 4)
             {
                 x = cps2_buffered_obj[i];

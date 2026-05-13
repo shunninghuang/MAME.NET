@@ -1072,19 +1072,6 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
-        private static void streams_update_technos_ddragon2()
-        {
-            Atime curtime = Timer.global_basetime;
-            bool second_tick = false;
-            if (curtime.seconds != last_update_second)
-            {
-                second_tick = true;
-            }
-            ym2151stream.adjuststream(second_tick);
-            OKI6295.oo1[0].OKI.stream.adjuststream(second_tick);
-            mixerstream.adjuststream(second_tick);
-            last_update_second = curtime.seconds;
-        }
         private static void streams_update_technos_toffy()
         {
             Atime curtime = Timer.global_basetime;

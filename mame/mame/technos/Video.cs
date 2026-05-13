@@ -7,6 +7,7 @@ namespace mame
 {
     public partial class Technos
     {
+        public static Tmap bg_tilemap, fg_tilemap;
         public static int background_scan(int col, int row, int num_cols, int num_rows)
         {
             return (col & 0x0f) + ((row & 0x0f) << 4) + ((col & 0x10) << 4) + ((row & 0x10) << 5);
@@ -16,14 +17,13 @@ namespace mame
             int i;
             bg_tilemap = Tmap.tilemap_create(background_scan, 16, 16, 32, 32);
             fg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 32, 32);
-
             bg_tilemap.total_elements = gfx2rom.Length / 0x40;
             bg_tilemap.pen_to_flags = new byte[1, 16];
             for (i = 0; i < 16; i++)
             {
                 bg_tilemap.pen_to_flags[0, i] = 0x10;
             }
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_ddragon;
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
             bg_tilemap.tile_update3 = bg_tilemap.tile_update_ddragon_bg;
 
             fg_tilemap.total_elements = gfx1rom.Length / 0x40;
@@ -33,12 +33,11 @@ namespace mame
             {
                 fg_tilemap.pen_to_flags[0, i] = 0x10;
             }
-            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_ddragon;
+            fg_tilemap.tilemap_draw_instance3 = fg_tilemap.tilemap_draw_instance_capcom_sf;
             fg_tilemap.tile_update3 = fg_tilemap.tile_update_ddragon_fg;
             Tilemap.lsTmap = new List<Tmap>();
             Tilemap.lsTmap.Add(bg_tilemap);
             Tilemap.lsTmap.Add(fg_tilemap);
-
             gfxtotalelement = gfx2rom.Length / 0x100;
             fg_tilemap.tilemap_set_scrolldx(0, 384 - 256);
             bg_tilemap.tilemap_set_scrolldx(0, 384 - 256);

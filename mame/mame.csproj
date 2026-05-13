@@ -122,6 +122,14 @@
     <Compile Include="mame\igs011\Memory2.cs" />
     <Compile Include="mame\igs011\State.cs" />
     <Compile Include="mame\igs011\Video.cs" />
+    <Compile Include="mame\kaneko\airbustr.cs" />
+    <Compile Include="mame\kaneko\Drawgfx.cs" />
+    <Compile Include="mame\kaneko\Gdi.cs" />
+    <Compile Include="mame\kaneko\Input.cs" />
+    <Compile Include="mame\kaneko\kan_pand.cs" />
+    <Compile Include="mame\kaneko\Memory.cs" />
+    <Compile Include="mame\kaneko\State.cs" />
+    <Compile Include="mame\kaneko\Tilemap.cs" />
     <Compile Include="mame\konami68000\Drawgfx.cs" />
     <Compile Include="mame\konami68000\Gdi.cs" />
     <Compile Include="mame\konami68000\Input.cs" />
@@ -311,6 +319,12 @@
     </Compile>
     <Compile Include="ui\gaelcoForm.Designer.cs">
       <DependentUpon>gaelcoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ui\kanekoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ui\kanekoForm.Designer.cs">
+      <DependentUpon>kanekoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ui\megasys1Form.cs">
       <SubType>Form</SubType>
@@ -502,6 +516,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ui\ipsForm.resx">
       <DependentUpon>ipsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\kanekoForm.resx">
+      <DependentUpon>kanekoForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\konami68000Form.resx">

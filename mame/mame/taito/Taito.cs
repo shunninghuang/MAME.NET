@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using cpu.m68000;
 
 namespace mame
 {
@@ -26,7 +25,6 @@ namespace mame
                     Memory.mainram = new byte[0x1800];
                     Memory.audioram = new byte[0x1000];
                     Generic.paletteram = new byte[0x200];
-                    //bublbobl_mcu_sharedram = new byte[0x400];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     slaverom = Machine.GetRom("slave.rom");
                     Memory.audiorom = Machine.GetRom("audiocpu.rom");

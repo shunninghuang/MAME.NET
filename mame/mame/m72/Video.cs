@@ -79,8 +79,6 @@ namespace mame
             Tilemap.lsTmap = new List<Tmap>();
             Tilemap.lsTmap.Add(bg_tilemap);
             Tilemap.lsTmap.Add(fg_tilemap);
-
-
             uuB200 = new ushort[0x200 * 0x200];
             Video.new_clip = new RECT();
             spriteram_size = 0x400;

@@ -343,11 +343,31 @@ namespace mame
                             break;
                     }
                     break;
+                case "Kaneko":
+                    screenstate.width = 0x100;
+                    screenstate.height = 0x100;
+                    screenstate.visarea.min_x = 0;
+                    screenstate.visarea.max_x = 0xff;
+                    screenstate.visarea.min_y = 0x10;
+                    screenstate.visarea.max_y = 0xef;
+                    fullwidth = 0x100;
+                    fullheight = 0x100;
+                    frame_update_time = new Atime(0, (long)(1e18 / 60));
+                    screenstate.vblank_period = 0;
+                    UI.ui_update_callback = UI.ui_update_cps;
+                    bitmapbase = new ushort[2][];
+                    bitmapbase[0] = new ushort[0x100 * 0x100];
+                    bitmapbase[1] = new ushort[0x100 * 0x100];
+                    bbmp = new Bitmap[1];
+                    bbmp[0] = new Bitmap(256, 224);
+                    video_update_callback = Kaneko.video_update_airbustr;
+                    video_eof_callback = Kaneko.video_eof_airbustr;
+                    break;
                 case "SunA8":
                     screenstate.width = 0x100;
                     screenstate.height = 0x100;
                     screenstate.visarea.min_x = 0;
-                    screenstate.visarea.min_x = 0xff;
+                    screenstate.visarea.max_x = 0xff;
                     screenstate.visarea.min_y = 0x10;
                     screenstate.visarea.max_y = 0xef;
                     fullwidth = 0x100;
@@ -833,116 +853,6 @@ namespace mame
 
             video_screen_configure(screenstate.width, screenstate.height, Video.screenstate.visarea, Video.screenstate.frame_period);
             vblank_end_timer = Timer.timer_alloc_common(vblank_end_callback, "vblank_end_callback", false);
-            switch (Machine.sBoard)
-            {
-                case "CPS-1":
-                case "CPS-1(QSound)":
-                case "Namco System 1":
-                case "M92":
-                case "Taito B":                
-                    break;
-                case "CPS2":
-                case "CPS2turbo":
-                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 262);
-                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                    break;
-                case "Tehkan":
-                    Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
-                    Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                    break;
-                case "Neo Geo":
-                case "Technos":
-                case "Tad":
-                    break;
-                case "Megasys1":
-                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 263);
-                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                    break;
-                case "SunA8":
-                    Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 0x100);
-                    Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                    Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 4);
-                    Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger2, "trigger2", false);
-                    break;
-                case "IGS011":
-                    switch (Machine.sName)
-                    {
-                        case "drgnwrld":
-                        case "drgnwrldv30":
-                        case "drgnwrldv21":
-                        case "drgnwrldv21j":
-                        case "drgnwrldv20j":
-                        case "drgnwrldv10c":
-                        case "drgnwrldv11h":
-                        case "drgnwrldv40k":
-                        case "lhb2":
-                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 5);
-                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                            break;
-                        case "lhb":
-                        case "lhbv33c":
-                        case "dbc":
-                        case "ryukobou":
-                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 4);
-                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                            break;
-                    }                    
-                    break;
-                case "PGM":
-                    switch (Machine.sName)
-                    {
-                        case "drgw2":
-                        case "dw2v100x":
-                        case "drgw2j":
-                        case "drgw2c":
-                        case "drgw2hk":
-                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
-                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                            break;
-                    }
-                    break;
-                case "M72":
-                    Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 128);
-                    Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                    break;
-                case "Taito":
-                    switch (Machine.sName)
-                    {
-                        case "bub68705":
-                            Cpuexec.cpu[3].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
-                            Cpuexec.cpu[3].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                            break;
-                    }
-                    break;
-                case "Konami 68000":
-                    switch (Machine.sName)
-                    {
-                        case "cuebrick":
-                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 10);
-                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                            break;
-                    }
-                    break;
-                case "Capcom":
-                    switch (Machine.sName)
-                    {
-                        case "gng":
-                        case "gnga":
-                        case "gngbl":
-                        case "gngprot":
-                        case "gngblita":
-                        case "gngc":
-                        case "gngt":
-                        case "makaimur":
-                        case "makaimurc":
-                        case "makaimurg":
-                        case "diamond":
-                            Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 4);
-                            Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
-                            break;
-                    }
-                    break;
-            }            
         }
         public static void video_screen_configure(int width, int height, RECT visarea, long frame_period)
         {

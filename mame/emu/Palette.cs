@@ -77,6 +77,12 @@ namespace mame
                     numcolors = 0x400;
                     palette_set_callback = palette_entry_set_color2;
                     break;
+                case "Kaneko":
+                    trans_color = Color.Magenta;
+                    trans_uint = (uint)trans_color.ToArgb();
+                    numcolors = 0x300;
+                    palette_set_callback = palette_entry_set_color2;
+                    break;
                 case "SunA8":
                     trans_color = Color.Black;
                     trans_uint = (uint)trans_color.ToArgb();

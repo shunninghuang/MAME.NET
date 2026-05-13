@@ -67,6 +67,10 @@ namespace mame
                     Gaelco.video_start_gaelco();
                     machine_reset_callback = Gaelco.machine_reset_gaelco;
                     break;
+                case "Kaneko":
+                    Kaneko.video_start_airbustr();
+                    machine_reset_callback = Kaneko.machine_reset_airbustr;
+                    break;
                 case "SunA8":
                     switch (Machine.sName)
                     {

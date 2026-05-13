@@ -35,6 +35,7 @@ namespace ui
         public tadForm tadform;
         public megasys1Form megasys1form;
         public gaelcoForm gaelcoform;
+        public kanekoForm kanekoform;
         public igs011Form igs011form;
         public namcos1Form namcos1form;
         public pgmForm pgmform;
@@ -93,6 +94,7 @@ namespace ui
             InitTadForm();
             InitMegasys1Form();
             InitGaelcoForm();
+            InitKanekoForm();
             InitSunA8Form();
             InitNamcos1Form();
             InitIGS011Form();
@@ -127,6 +129,7 @@ namespace ui
             tadToolStripMenuItem.Enabled = false;
             megasys1ToolStripMenuItem.Enabled = false;
             gaelcoToolStripMenuItem.Enabled = false;
+			kanekoToolStripMenuItem.Enabled = false;
             //suna8ToolStripMenuItem.Enabled = false;
             namcos1ToolStripMenuItem.Enabled = false;
             igs011ToolStripMenuItem.Enabled = false;
@@ -324,6 +327,24 @@ namespace ui
                     gaelcoToolStripMenuItem.Enabled = true;
                     Gaelco.GaelcoInit();
                     Gaelco.GDIInit();
+                    break;
+                case "Kaneko":
+                    Video.nMode = 1;
+                    itemSize = new ToolStripMenuItem[Video.nMode];
+                    for (i = 0; i < Video.nMode; i++)
+                    {
+                        itemSize[i] = new ToolStripMenuItem();
+                        itemSize[i].Size = new Size(152, 22);
+                        itemSize[i].Click += new EventHandler(itemsizeToolStripMenuItem_Click);
+                    }
+                    itemSize[0].Text = "320x224";
+                    resetToolStripMenuItem.DropDownItems.Clear();
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
+                    itemSelect();
+                    kanekoToolStripMenuItem.Enabled = true;
+                    Kaneko.KanekoInit();
+                    Kaneko.GDIInit();
                     break;
                 case "SunA8":
                     Video.nMode = 1;
@@ -685,6 +706,10 @@ namespace ui
         {
             gaelcoform = new gaelcoForm(this);
         }
+        public void InitKanekoForm()
+        {
+            kanekoform = new kanekoForm(this);
+        }
         private void InitSunA8Form()
         {
             
@@ -912,6 +937,10 @@ namespace ui
         private void gaelcoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             gaelcoform.Show();
+        }
+        private void kanekoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            kanekoform.Show();
         }
         private void suna8ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1165,6 +1194,15 @@ namespace ui
                         Video.offsety = 16;
                         Video.width = 320;
                         Video.height = 240;
+                    }
+                    break;
+                case "Kaneko":
+                    if (Video.iMode == 0)
+                    {
+                        Video.offsetx = 0;
+                        Video.offsety = 16;
+                        Video.width = 256;
+                        Video.height = 224;
                     }
                     break;
                 case "SunA8":

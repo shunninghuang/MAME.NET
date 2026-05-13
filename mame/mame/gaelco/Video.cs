@@ -7,6 +7,7 @@ namespace mame
 {
     public partial class Gaelco
     {
+        public static Tmap[] gaelco_tilemap;
         public static ushort[] gaelco_vregs, gaelco_videoram, gaelco_spriteram, gaelco_screen;
         public static int[] x_offset = new int[2] { 0x0, 0x2 };
         public static int[] y_offset = new int[2] { 0x0, 0x1 };

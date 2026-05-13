@@ -261,6 +261,18 @@ namespace mame
                             break;
                     }
                     break;
+                case "Kaneko":
+                    switch (Machine.sName)
+                    {
+                        case "airbustr":
+                        case "airbustrj":
+                        case "airbustrb":
+                            loop_inputports_callback = Kaneko.loop_inputports_airbustr;
+                            record_port_callback = Kaneko.record_port_airbustr;
+                            replay_port_callback = Kaneko.replay_port_airbustr;
+                            break;
+                    }
+                    break;
                 case "SunA8":
                     loop_inputports_callback = SunA8.loop_inputports_suna8_starfigh;
                     record_port_callback = SunA8.record_port_starfigh;

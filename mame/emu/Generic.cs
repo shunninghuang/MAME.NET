@@ -55,7 +55,7 @@ namespace mame
             {
                 return;
             }
-            coinlockedout[num] =(uint) on;
+            coinlockedout[num] = (uint)on;
         }
         public static void coin_lockout_global_w(int on)
         {
@@ -88,15 +88,6 @@ namespace mame
                     Namcos1.nvram_handler_save_namcos1();
                     break;*/
             }
-        }
-        public static void watchdog_reset16_w()
-        {
-            Watchdog.watchdog_reset();
-        }
-        public static ushort watchdog_reset16_r()
-        {
-            Watchdog.watchdog_reset();
-            return 0xffff;
         }
         public static void nmi_0_line_pulse()
         {
@@ -133,7 +124,21 @@ namespace mame
         public static void watchdog_reset_w()
         {
             Watchdog.watchdog_reset();
-        }        
+        }
+        public static byte watchdog_reset_r()
+        {
+            Watchdog.watchdog_reset();
+            return 0xff;
+        }
+        public static void watchdog_reset16_w()
+        {
+            Watchdog.watchdog_reset();
+        }
+        public static ushort watchdog_reset16_r()
+        {
+            Watchdog.watchdog_reset();
+            return 0xffff;
+        }
         public static void interrupt_reset()
         {
             int cpunum;
@@ -144,7 +149,7 @@ namespace mame
         }
         public static void clear_all_lines()
         {
-            int inputcount=0;
+            int inputcount = 0;
             int line;
             if (objcpunum == 0 && MC68000.mm1 != null && Cpuexec.cpu[0] == MC68000.mm1[0])
             {
@@ -226,7 +231,7 @@ namespace mame
         }
         public static ushort paletteram16_be(int offset)
         {
-	        return (ushort)(paletteram[offset | 1] | (paletteram[offset & ~1] << 8));
+            return (ushort)(paletteram[offset | 1] | (paletteram[offset & ~1] << 8));
         }
         public static void set_color_444(int color, int rshift, int gshift, int bshift, ushort data)
         {
@@ -367,7 +372,7 @@ namespace mame
             paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
             set_color_444(offset, 12, 8, 4, paletteram16[offset]);
         }
-        public static void paletteram16_xBBBBBGGGGGRRRRR_word_w(int offset,ushort data)
+        public static void paletteram16_xBBBBBGGGGGRRRRR_word_w(int offset, ushort data)
         {
             paletteram16[offset] = data;
             set_color_555(offset, 0, 5, 10, paletteram16[offset]);
@@ -423,6 +428,6 @@ namespace mame
             paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
             ushort data1 = paletteram16[offset];
             Palette.palette_set_callback(offset, (uint)((Palette.pal5bit((byte)(((data1 >> 11) & 0x1e) | ((data1 >> 3) & 0x01))) << 16) | (Palette.pal5bit((byte)(((data >> 7) & 0x1e) | ((data >> 2) & 0x01))) << 8) | Palette.pal5bit((byte)(((data >> 3) & 0x1e) | ((data >> 1) & 0x01)))));
-        }        
+        }
     }
 }

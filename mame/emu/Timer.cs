@@ -514,6 +514,11 @@ namespace mame
                             lt.Remove(lt[i]);
                             lt.Add(Cpuexec.cpu[0].partial_frame_timer);
                             break;
+                        case "Kaneko":
+                            Cpuexec.cpu[0].partial_frame_timer = lt[i];
+                            lt.Remove(lt[i]);
+                            lt.Add(Cpuexec.cpu[0].partial_frame_timer);
+                            break;
                         case "M72":
                             Cpuexec.cpu[1].partial_frame_timer = lt[i];
                             lt.Remove(lt[i]);

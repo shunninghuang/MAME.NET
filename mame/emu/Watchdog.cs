@@ -33,12 +33,24 @@ namespace mame
                     break;
                 case "Neo Geo":
                     watchdog_time = new Atime(0, (long)128762e12);
-                    break;                
+                    break;
+                case "Kaneko":
+                    switch (Machine.sName)
+                    {
+                        case "airbustr":
+                        case "airbustrj":
+                            watchdog_time = new Atime(3, 0);
+                            break;
+                        case "airbustrb":
+                            watchdog_time = Attotime.ATTOTIME_ZERO;
+                            break;
+                    }
+                    break;
             }
         }
         public static void watchdog_internal_reset()
         {
-            watchdog_enabled = false;
+            watchdog_enabled = (false || Attotime.attotime_compare(watchdog_time, Attotime.ATTOTIME_ZERO) != 0);
             watchdog_reset();
             watchdog_enabled = true;
         }

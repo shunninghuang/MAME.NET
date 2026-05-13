@@ -93,6 +93,11 @@ namespace mame
                     Gaelco.sbyte2 = -1;
                     Gaelco.bytes = 0xff;
                     break;
+                case "Kaneko":
+                    Kaneko.byte1 = 0xff;
+                    Kaneko.byte2 = 0xff;
+                    Kaneko.bytes = 0xff;
+                    break;
                 case "Namco System 1":
                     Namcos1.byte0 = 0xff;
                     Namcos1.byte1 = 0xff;
@@ -391,6 +396,11 @@ namespace mame
                 case "Gaelco":
                     Gaelco.sbyte1_old = 0;
                     Gaelco.sbyte2_old = 0;
+                    break;
+                case "Kaneko":
+                    Kaneko.byte1_old = 0;
+                    Kaneko.byte2_old = 0;
+                    Kaneko.bytes_old = 0;
                     break;
                 case "Namco System 1":
                     Namcos1.byte0_old = 0;

@@ -54,7 +54,7 @@ namespace mame
             {
                 bg_tilemap.pen_to_flags[0, i] = 0x10;
             }
-            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_gng;
+            bg_tilemap.tilemap_draw_instance3 = bg_tilemap.tilemap_draw_instance_capcom_sf;
             bg_tilemap.tile_update3 = bg_tilemap.tile_update_pcktgal_bg;
             Tilemap.lsTmap = new List<Tmap>();
             Tilemap.lsTmap.Add(bg_tilemap);
