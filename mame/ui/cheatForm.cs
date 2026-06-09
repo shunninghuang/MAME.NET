@@ -47,13 +47,16 @@ namespace ui
                 case "Technos":
                 case "Tad":
                 case "Megasys1":
-                case "Gaelco":
-                case "Kaneko":
+                case "Gaelco":                
                 case "Taito B":
-                case "Konami 68000":
+                case "Konami":
                 case "Capcom":
                     CheatReadByte = (int i1) => { return Memory.mainram[i1]; };
                     CheatWriteByte = (int i1, byte b1) => { Memory.mainram[i1] = b1; };
+                    break;
+                case "Kaneko":
+                    CheatReadByte = (int i1) => { return Kaneko.Z0ReadMemory_airbustr((ushort)i1); };
+                    CheatWriteByte = (int i1, byte b1) => { Kaneko.Z0WriteMemory_airbustr((ushort)i1, b1); };
                     break;
                 case "Namco System 1":
                     CheatReadByte = (int i1) => { return Namcos1.N0ReadMemory((ushort)i1); };

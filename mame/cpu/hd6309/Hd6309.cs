@@ -12,7 +12,7 @@ namespace cpu.hd6309
         public static Hd6309[] mm1;
         public Action[] hd6309_main, hd6309_page01, hd6309_page11;
         public byte[] cycle_counts_page0,cycle_counts_page01,cycle_counts_page11,index_cycle;
-        public Register pc, ppc, d, w, dp, u, s, x, y, v, ea;
+        public RegisterPair pc, ppc, d, w, dp, u, s, x, y, v, ea;
         public byte z8, dummy_byte;
         public ushort z16;
         public byte cc, md, ireg;
@@ -423,16 +423,16 @@ native 6309 */
             pc.LowWord++;
             return b;
         }
-        private Register IMMWORD()
+        private RegisterPair IMMWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             w.d = (uint)((ReadOpArg(pc.LowWord) << 8) | ReadOpArg((ushort)((pc.LowWord + 1) & 0xffff)));
             pc.LowWord += 2;
             return w;
         }
-        private Register IMMLONG()
+        private RegisterPair IMMLONG()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             w.d = (uint)((ReadOpArg(pc.LowWord) << 24) + (ReadOpArg((ushort)(pc.LowWord + 1)) << 16) + (ReadOpArg((ushort)(pc.LowWord + 2)) << 8) + (ReadOpArg((ushort)(pc.LowWord + 3))));
             pc.LowWord += 4;
             return w;
@@ -442,7 +442,7 @@ native 6309 */
             --s.LowWord;
             WM(s.LowWord, b);
         }
-        private void PUSHWORD(Register w)
+        private void PUSHWORD(RegisterPair w)
         {
             --s.LowWord;
             WM(s.LowWord, w.LowByte);
@@ -469,7 +469,7 @@ native 6309 */
         {
             --u.LowWord; WM(u.LowWord, b);
         }
-        private void PSHUWORD(Register w)
+        private void PSHUWORD(RegisterPair w)
         {
             --u.LowWord;
             WM(u.LowWord, w.LowByte);
@@ -721,16 +721,16 @@ native 6309 */
             DIRECT();
             return RM(ea.LowWord);
         }
-        private Register DIRWORD()
+        private RegisterPair DIRWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             DIRECT();
             w.LowWord = RM16(ea.LowWord);
             return w;
         }
-        private Register DIRLONG()
+        private RegisterPair DIRLONG()
         {
-            Register lng = new Register();
+            RegisterPair lng = new RegisterPair();
             DIRECT();
             lng.HighWord = RM16(ea.LowWord);
             lng.LowWord = RM16((ushort)(ea.LowWord + 2));
@@ -741,16 +741,16 @@ native 6309 */
             EXTENDED();
             return RM(ea.LowWord);
         }
-        private Register EXTWORD()
+        private RegisterPair EXTWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             EXTENDED();
             w.LowWord = RM16(ea.LowWord);
             return w;
         }
-        private Register EXTLONG()
+        private RegisterPair EXTLONG()
         {
-            Register lng = new Register();
+            RegisterPair lng = new RegisterPair();
             EXTENDED();
             lng.HighWord = RM16(ea.LowWord);
             lng.LowWord = RM16((ushort)(ea.LowWord + 2));
@@ -766,7 +766,7 @@ native 6309 */
         }
         private void LBRANCH(bool f)
         {
-            Register t = IMMWORD();
+            RegisterPair t = IMMWORD();
             if (f)
             {
                 if ((md & MD_EM) == 0)
@@ -789,12 +789,12 @@ native 6309 */
             result += (uint)RM((ushort)(Addr + 3));
             return result;
         }
-        private void WM16(ushort Addr, Register p)
+        private void WM16(ushort Addr, RegisterPair p)
         {
             WM(Addr, p.HighByte);
             WM((ushort)((Addr + 1) & 0xffff), p.LowByte);
         }
-        private void WM32(ushort Addr, Register p)
+        private void WM32(ushort Addr, RegisterPair p)
         {
             WM(Addr, p.HighByte3);
             WM((ushort)((Addr + 1) & 0xffff), p.HighByte2);

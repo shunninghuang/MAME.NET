@@ -12,7 +12,6 @@ namespace cpu.m68000
             int dstReg = ((op >> 9) & 0x07);
             int srcMode = ((op >> 3) & 0x07);
             int srcReg = (op & 0x07);
-
             int value = 0;
             switch (size)
             {
@@ -49,7 +48,6 @@ namespace cpu.m68000
             int dstReg = ((op >> 9) & 0x07);
             int srcMode = ((op >> 3) & 0x07);
             int srcReg = (op & 0x07);
-
             switch (size)
             {
                 case 1:
@@ -78,7 +76,6 @@ namespace cpu.m68000
             int dstReg = ((op >> 9) & 0x07);
             int srcMode = ((op >> 3) & 0x07);
             int srcReg = (op & 0x07);
-
             if (size == 3) // Word
             {
                 A[dstReg].s32 = ReadValueW(srcMode, srcReg);
@@ -138,7 +135,6 @@ namespace cpu.m68000
             int dstReg = ((op >> 9) & 0x07);
             int srcMode = ((op >> 3) & 0x07);
             int srcReg = (op & 0x07);
-
             if (size == 3)
             {
                 info.Mnemonic = "movea.w";
@@ -307,11 +303,9 @@ namespace cpu.m68000
             int size = (op >> 6) & 1;
             int dstMode = (op >> 3) & 7;
             int dstReg = (op >> 0) & 7;
-
             ushort registers = (ushort)ReadOpWord(PC); PC += 2;
             int address = ReadAddress(dstMode, dstReg);
             int regCount = 0;
-
             if (size == 0)
             {
                 // word-assign
@@ -416,7 +410,6 @@ namespace cpu.m68000
                 }
                 pendingCycles -= regCount * 8;
             }
-
             switch (dstMode)
             {
                 case 2: pendingCycles -= 8; break;
@@ -440,10 +433,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             ushort registers = (ushort)ReadOpWord(pc); pc += 2;
             string address = DisassembleAddress(mode, reg, ref pc);
-
             info.Mnemonic = size == 0 ? "movem.w" : "movem.l";
             info.Args = DisassembleRegisterList0(registers) + ", " + address;
             info.Length = pc - info.PC;
@@ -455,11 +446,9 @@ namespace cpu.m68000
             int size = (op >> 6) & 1;
             int srcMode = (op >> 3) & 7;
             int srcReg = (op >> 0) & 7;
-
             ushort registers = (ushort)ReadOpWord(PC); PC += 2;
             int address = ReadAddress(srcMode, srcReg);
             int regCount = 0;
-
             if (size == 0)
             {
                 // word-assign
@@ -499,7 +488,9 @@ namespace cpu.m68000
                 }
                 pendingCycles -= regCount * 4;
                 if (srcMode == 3)
+                {
                     A[srcReg].s32 = address;
+                }
             }
             else
             {
@@ -540,9 +531,10 @@ namespace cpu.m68000
                 }
                 pendingCycles -= regCount * 8;
                 if (srcMode == 3)
+                {
                     A[srcReg].s32 = address;
+                }
             }
-
             switch (srcMode)
             {
                 case 2: pendingCycles -= 12; break;
@@ -568,10 +560,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             ushort registers = (ushort)ReadOpWord(pc); pc += 2;
             string address = DisassembleAddress(mode, reg, ref pc);
-
             info.Mnemonic = size == 0 ? "movem.w" : "movem.l";
             info.Args = address + ", " + DisassembleRegisterList1(registers);
             info.Length = pc - info.PC;
@@ -582,7 +572,6 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int sReg = (op >> 0) & 7;
             int dReg = (op >> 9) & 7;
-
             A[dReg].u32 = (uint)ReadAddress(mode, sReg);
             switch (mode)
             {
@@ -607,11 +596,9 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int sReg = (op >> 0) & 7;
             int dReg = (op >> 9) & 7;
-
             info.Mnemonic = "lea";
             info.Args = DisassembleAddress(mode, sReg, ref pc);
             info.Args += ", A" + dReg;
-
             info.Length = pc - info.PC;
         }
 
@@ -620,7 +607,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: WriteValueB(mode, reg, 0); pendingCycles -= mode == 0 ? 4 : 8 + EACyclesBW[mode, reg]; break;
@@ -629,7 +615,6 @@ namespace cpu.m68000
                     pendingCycles -= mode == 0 ? 4 : 8 + EACyclesBW[mode, reg]; break;
                 case 2: WriteValueL(mode, reg, 0); pendingCycles -= mode == 0 ? 6 : 12 + EACyclesL[mode, reg]; break;
             }
-
             N = V = C = false;
             Z = true;
         }
@@ -640,7 +625,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: info.Mnemonic = "clr.b"; info.Args = DisassembleValue(mode, reg, 1, ref pc); break;
@@ -678,7 +662,6 @@ namespace cpu.m68000
         {
             int size = (op >> 6) & 1;
             int reg = op & 7;
-
             switch (size)
             {
                 case 0: info.Mnemonic = "ext.w"; info.Args = "D" + reg; break;
@@ -691,10 +674,8 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
             int ea = ReadAddress(mode, reg);
-
             A[7].s32 -= 4;
             WriteLong(A[7].s32, ea);
-
             switch (mode)
             {
                 case 2: pendingCycles -= 12; break;
@@ -717,7 +698,6 @@ namespace cpu.m68000
             int pc = info.PC + 2;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             info.Mnemonic = "pea";
             info.Args = DisassembleAddress(mode, reg, ref pc);
             info.Length = pc - info.PC;

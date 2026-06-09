@@ -12,7 +12,7 @@ namespace cpu.m6809
     {
         public static M6809[] mm1;
         public Action[] insn;
-        public Register PC, PPC, D, DP, U, S, X, Y, EA;
+        public RegisterPair PC, PPC, D, DP, U, S, X, Y, EA;
         public byte CC, ireg;
         public LineState[] irq_state = new LineState[2];
         public int extra_cycles; /* cycles used up by interrupts */
@@ -210,9 +210,9 @@ namespace cpu.m6809
             PC.LowWord++;
             return b;
         }
-        private Register IMMWORD()
+        private RegisterPair IMMWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             w.d = (uint)((ReadOpArg(PC.LowWord) << 8) | ReadOpArg((ushort)((PC.LowWord + 1) & 0xffff)));
             PC.LowWord += 2;
             return w;
@@ -222,7 +222,7 @@ namespace cpu.m6809
             --S.LowWord;
             WM(S.LowWord, b);
         }
-        private void PUSHWORD(Register w)
+        private void PUSHWORD(RegisterPair w)
         {
             --S.LowWord;
             WM(S.LowWord, w.LowByte);
@@ -249,7 +249,7 @@ namespace cpu.m6809
         {
             --U.LowWord; WM(U.LowWord, b);
         }
-        private void PSHUWORD(Register w)
+        private void PSHUWORD(RegisterPair w)
         {
             --U.LowWord;
             WM(U.LowWord, w.LowByte);
@@ -453,9 +453,9 @@ namespace cpu.m6809
             DIRECT();
             return RM(EA.LowWord);
         }
-        private Register DIRWORD()
+        private RegisterPair DIRWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             DIRECT();
             w.LowWord = RM16(EA.LowWord);
             return w;
@@ -465,9 +465,9 @@ namespace cpu.m6809
             EXTENDED();
             return RM(EA.LowWord);
         }
-        private Register EXTWORD()
+        private RegisterPair EXTWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             EXTENDED();
             w.LowWord = RM16(EA.LowWord);
             return w;
@@ -482,7 +482,7 @@ namespace cpu.m6809
         }
         private void LBRANCH(bool f)
         {
-            Register t = IMMWORD();
+            RegisterPair t = IMMWORD();
             if (f)
             {
                 pendingCycles -= 1;
@@ -498,7 +498,7 @@ namespace cpu.m6809
             ushort result = (ushort)(RM(Addr) << 8);
             return (ushort)(result | RM((ushort)((Addr + 1) &0xffff)));
         }
-        private void WM16(ushort Addr, Register p)
+        private void WM16(ushort Addr, RegisterPair p)
         {
             WM(Addr, p.HighByte);
             WM((ushort)((Addr + 1) & 0xffff), p.LowByte);

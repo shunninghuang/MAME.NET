@@ -8,7 +8,7 @@ using System.IO;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Konami
     {
         private static string[] sde2 = new string[] { "," }, sde6 = new string[] { "-" };
         public static bool bTile0, bTile1, bTile2, bSprite;
@@ -166,7 +166,7 @@ namespace mame
                             for (i2 = 0; i2 < tileheight; i2++)
                             {
                                 iOffset = pen_data_offset + i2 * 0x08 + i1;
-                                iByte = gfx12rom[iOffset];
+                                iByte = gfx1rom[iOffset];
                                 if (iByte == 0)
                                 {
                                     c1 = Color.Transparent;
@@ -268,7 +268,7 @@ namespace mame
                             for (i2 = 0; i2 < tileheight; i2++)
                             {
                                 iOffset = pen_data_offset + i2 * 0x08 + i1;
-                                iByte = gfx12rom[iOffset];
+                                iByte = gfx1rom[iOffset];
                                 if (iByte == 0)
                                 {
                                     c1 = Color.Transparent;
@@ -370,7 +370,7 @@ namespace mame
                             for (i2 = 0; i2 < tileheight; i2++)
                             {
                                 iOffset = pen_data_offset + i2 * 0x08 + i1;
-                                iByte = gfx12rom[iOffset];
+                                iByte = gfx1rom[iOffset];
                                 if (iByte == 0)
                                 {
                                     c1 = Color.Transparent;
@@ -592,7 +592,6 @@ namespace mame
                             }
                             if (zoomx == 0x10000 && zoomy == 0x10000)
                             {
-                                //common_drawgfx_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, (uint)(pri2 | (1 << 31)));
                                 int xdir, ydir, offx, offy;
                                 int eax = 0x80;
                                 if (fy != 0)
@@ -619,7 +618,7 @@ namespace mame
                                 {
                                     for (x1 = 0; x1 < 0x10; x1++)
                                     {
-                                        col = gfx22rom[c * 0x100 + 0x10 * y1 + x1];
+                                        col = gfx2rom[c * 0x100 + 0x10 * y1 + x1];
                                         if (col != 0)
                                         {
                                             if (sy + offy + y1 * ydir >= 0 && sy + offy + y1 * ydir < 0x100 && sx + offx + x1 * xdir >= 0 && sx + offx + x1 * xdir < 0x200)
@@ -728,7 +727,7 @@ namespace mame
                                             {
                                                 srcoffset = ((y_index + dy * y2) >> 16) * 0x10 + ((x_index_base + dx * x2) >> 16);
                                                 dstoffset = (sy + y2) * 0x200 + sx + x2;
-                                                col = gfx22rom[source_baseoffset + srcoffset];
+                                                col = gfx2rom[source_baseoffset + srcoffset];
                                                 if (col != 0)
                                                 {
                                                     c1 = Color.FromArgb((int)Palette.entry_color2[color2 * 0x10 + col]);
@@ -752,7 +751,7 @@ namespace mame
                                             {
                                                 srcoffset = ((y_index + dy * y2) >> 16) * 0x10 + ((x_index_base + dx * x2) >> 16);
                                                 dstoffset = (sy + y2) * 0x200 + sx + x2;
-                                                col = gfx22rom[source_baseoffset + srcoffset];
+                                                col = gfx2rom[source_baseoffset + srcoffset];
                                                 if (col != 0)
                                                 {
                                                     c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]);
@@ -922,7 +921,7 @@ namespace mame
                                     {
                                         for (x1 = 0; x1 < 0x10; x1++)
                                         {
-                                            col = gfx22rom[c * 0x100 + 0x10 * y1 + x1];
+                                            col = gfx2rom[c * 0x100 + 0x10 * y1 + x1];
                                             if (col == 0)
                                             {
                                                 c1 = Color.Transparent;
@@ -1082,7 +1081,7 @@ namespace mame
                     for (i4 = 0; i4 < 0x10; i4++)
                     {
                         iCode = 0x5300+ i4 * 0x10 + i3;
-                        iColor = Konami68000.K052109_ram[Konami68000.K052109_colorram_B_offset + 0];
+                        iColor = Konami.K052109_ram[Konami.K052109_colorram_B_offset + 0];
                         pen_data_offset = iCode * 0x40;
                         palette_base = 0x10 * iColor;
                         for (i1 = 0; i1 < 8; i1++)
@@ -1090,7 +1089,7 @@ namespace mame
                             for (i2 = 0; i2 < 8; i2++)
                             {
                                 iOffset = pen_data_offset + i2 * 0x08 + i1;
-                                iByte = gfx12rom[iOffset];
+                                iByte = gfx1rom[iOffset];
                                 if (iByte == 0)
                                 {
                                     c1 = Color.Transparent;
@@ -1117,7 +1116,7 @@ namespace mame
             string[] ss1, ss2, ss3;
             int i1, i2, i3, i4, n1, n2;
             lSprite.Clear();
-            ss1 = Machine.FORM.konami68000form.tbSprite.Text.Split(sde2, StringSplitOptions.RemoveEmptyEntries);
+            ss1 = Machine.FORM.konamiform.tbSprite.Text.Split(sde2, StringSplitOptions.RemoveEmptyEntries);
             n1 = ss1.Length;
             for (i1 = 0; i1 < n1; i1++)
             {

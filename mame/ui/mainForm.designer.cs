@@ -44,9 +44,11 @@
             this.tehkanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.neogeoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.technosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seibuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.megasys1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gaelcoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kanekoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.namcos1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.igs011ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pgmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +56,7 @@
             this.m92ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.taitoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.taitobToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.konami68000ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.konamiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.capcomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m68000ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.z80ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +65,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.kanekoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -164,6 +165,7 @@
             this.tehkanToolStripMenuItem,
             this.neogeoToolStripMenuItem,
             this.technosToolStripMenuItem,
+            this.seibuToolStripMenuItem,
             this.tadToolStripMenuItem,
             this.megasys1ToolStripMenuItem,
             this.gaelcoToolStripMenuItem,
@@ -175,7 +177,7 @@
             this.m92ToolStripMenuItem,
             this.taitoToolStripMenuItem,
             this.taitobToolStripMenuItem,
-            this.konami68000ToolStripMenuItem,
+            this.konamiToolStripMenuItem,
             this.capcomToolStripMenuItem});
             this.boardToolStripMenuItem.Name = "boardToolStripMenuItem";
             this.boardToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
@@ -212,9 +214,16 @@
             // technosToolStripMenuItem
             // 
             this.technosToolStripMenuItem.Name = "technosToolStripMenuItem";
-            this.technosToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.technosToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.technosToolStripMenuItem.Text = "Technos debugger";
             this.technosToolStripMenuItem.Click += new System.EventHandler(this.technosToolStripMenuItem_Click);
+            // 
+            // seibuToolStripMenuItem
+            // 
+            this.seibuToolStripMenuItem.Name = "seibuToolStripMenuItem";
+            this.seibuToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.seibuToolStripMenuItem.Text = "Seibu debugger";
+            this.seibuToolStripMenuItem.Click += new System.EventHandler(this.seibuToolStripMenuItem_Click);
             // 
             // tadToolStripMenuItem
             // 
@@ -236,6 +245,13 @@
             this.gaelcoToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.gaelcoToolStripMenuItem.Text = "Gaelco debugger";
             this.gaelcoToolStripMenuItem.Click += new System.EventHandler(this.gaelcoToolStripMenuItem_Click);
+            // 
+            // kanekoToolStripMenuItem
+            // 
+            this.kanekoToolStripMenuItem.Name = "kanekoToolStripMenuItem";
+            this.kanekoToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.kanekoToolStripMenuItem.Text = "Kaneko debugger";
+            this.kanekoToolStripMenuItem.Click += new System.EventHandler(this.kanekoToolStripMenuItem_Click);
             // 
             // namcos1ToolStripMenuItem
             // 
@@ -286,12 +302,12 @@
             this.taitobToolStripMenuItem.Text = "TaitoB debugger";
             this.taitobToolStripMenuItem.Click += new System.EventHandler(this.taitobToolStripMenuItem_Click);
             // 
-            // konami68000ToolStripMenuItem
+            // konamiToolStripMenuItem
             // 
-            this.konami68000ToolStripMenuItem.Name = "konami68000ToolStripMenuItem";
-            this.konami68000ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.konami68000ToolStripMenuItem.Text = "Konami68000 debugger";
-            this.konami68000ToolStripMenuItem.Click += new System.EventHandler(this.konami68000ToolStripMenuItem_Click);
+            this.konamiToolStripMenuItem.Name = "konamiToolStripMenuItem";
+            this.konamiToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.konamiToolStripMenuItem.Text = "Konami debugger";
+            this.konamiToolStripMenuItem.Click += new System.EventHandler(this.konamiToolStripMenuItem_Click);
             // 
             // capcomToolStripMenuItem
             // 
@@ -410,7 +426,7 @@
         private System.Windows.Forms.ToolStripMenuItem m72ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m92ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem taitobToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem konami68000ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem konamiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem capcomToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem taitoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem igs011ToolStripMenuItem;
@@ -421,5 +437,6 @@
         private System.Windows.Forms.ToolStripMenuItem tadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem megasys1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem kanekoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem seibuToolStripMenuItem;
     }
 }

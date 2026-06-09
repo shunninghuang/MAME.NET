@@ -59,6 +59,12 @@ namespace mame
                     numcolors = 0x180;
                     palette_set_callback = palette_entry_set_color2;
                     break;
+                case "Seibu":
+                    trans_color = Color.Magenta;
+                    trans_uint = (uint)trans_color.ToArgb();
+                    numcolors = 0x100;
+                    palette_set_callback = palette_entry_set_color2;
+                    break;
                 case "Tad":
                     trans_color = Color.Magenta;
                     trans_uint = (uint)trans_color.ToArgb();
@@ -205,7 +211,7 @@ namespace mame
                     numcolors = 0x1000;
                     palette_set_callback = palette_entry_set_color2;
                     break;
-                case "Konami 68000":
+                case "Konami":
                     trans_color = Color.Black;
                     trans_uint = (uint)trans_color.ToArgb();
                     numcolors = 0x800;
@@ -213,6 +219,18 @@ namespace mame
                     Video.video_attributes = 0x34;
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            Video.video_attributes = 0x10;
+                            break;
                         case "mia":
                         case "mia2":
                         case "tmnt":
@@ -335,7 +353,7 @@ namespace mame
                 case "Taito B":
                     entry_color[0] = trans_uint;
                     break;
-                case "Konami 68000":
+                case "Konami":
                     entry_color[0] = trans_uint;
                     break;
                 case "Capcom":

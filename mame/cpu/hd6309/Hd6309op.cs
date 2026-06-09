@@ -201,7 +201,7 @@ namespace cpu.hd6309
         }
         void sexw()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             q.d = SIGNED_16(w.LowWord);
             d.LowWord = q.HighWord;
             w.LowWord = q.LowWord;
@@ -2524,7 +2524,7 @@ namespace cpu.hd6309
         void subd_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = d.LowWord;
             r = d1 - b.d;
@@ -2535,7 +2535,7 @@ namespace cpu.hd6309
         void subw_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = w.LowWord;
             r = d1 - b.d;
@@ -2546,7 +2546,7 @@ namespace cpu.hd6309
         void cmpd_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = d.LowWord;
             r = d1 - b.d;
@@ -2556,7 +2556,7 @@ namespace cpu.hd6309
         void cmpw_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = w.LowWord;
             r = d1 - b.d;
@@ -2566,7 +2566,7 @@ namespace cpu.hd6309
         void cmpu_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = u.LowWord;
             r = d1 - b.d;
@@ -2634,7 +2634,7 @@ namespace cpu.hd6309
         void cmpx_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = x.LowWord;
             r = d1 - b.d;
@@ -2644,7 +2644,7 @@ namespace cpu.hd6309
         void cmpy_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = y.LowWord;
             r = d1 - b.d;
@@ -2654,7 +2654,7 @@ namespace cpu.hd6309
         void cmps_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = s.LowWord;
             r = d1 - b.d;
@@ -2676,7 +2676,7 @@ namespace cpu.hd6309
         }
         void ldq_im()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             q = IMMLONG();
             d.LowWord = q.HighWord;
             w.LowWord = q.LowWord;
@@ -2692,7 +2692,7 @@ namespace cpu.hd6309
         }
         void muld_im()
         {
-            Register t = new Register(), q = new Register();
+            RegisterPair t = new RegisterPair(), q = new RegisterPair();
             t = IMMWORD();
             q.d = (uint)((short)d.LowWord * (short)t.LowWord);
             d.LowWord = q.HighWord;
@@ -2739,7 +2739,7 @@ namespace cpu.hd6309
         }
         void divq_im()
         {
-            Register t = new Register(), q = new Register(), oldQ = new Register();
+            RegisterPair t = new RegisterPair(), q = new RegisterPair(), oldQ = new RegisterPair();
             int v;
             t = IMMWORD();
             q.HighWord = d.LowWord;
@@ -2811,7 +2811,7 @@ namespace cpu.hd6309
         void subd_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = d.LowWord;
             r = d1 - b.d;
@@ -2823,7 +2823,7 @@ namespace cpu.hd6309
         void subw_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = w.LowWord;
             r = d1 - b.d;
@@ -2835,7 +2835,7 @@ namespace cpu.hd6309
         void cmpd_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = d.LowWord;
             r = d1 - b.d;
@@ -2846,7 +2846,7 @@ namespace cpu.hd6309
         void cmpw_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = w.LowWord;
             r = d1 - b.d;
@@ -2857,7 +2857,7 @@ namespace cpu.hd6309
         void cmpu_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = u.LowWord;
             r = d1 - b.d;
@@ -2932,7 +2932,7 @@ namespace cpu.hd6309
         void cmpx_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = x.LowWord;
             r = d1 - b.d;
@@ -2942,7 +2942,7 @@ namespace cpu.hd6309
         void cmpy_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = y.LowWord;
             r = d1 - b.d;
@@ -2952,7 +2952,7 @@ namespace cpu.hd6309
         void cmps_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = s.LowWord;
             r = d1 - b.d;
@@ -2973,7 +2973,7 @@ namespace cpu.hd6309
         }
         void muld_di()
         {
-            Register t = new Register(), q = new Register();
+            RegisterPair t = new RegisterPair(), q = new RegisterPair();
             t = DIRWORD();
             q.d = (uint)((short)d.LowWord * (short)t.LowWord);
             d.LowWord = q.HighWord;
@@ -3020,7 +3020,7 @@ namespace cpu.hd6309
         }
         void divq_di()
         {
-            Register t = new Register(), q = new Register(), oldQ = new Register();
+            RegisterPair t = new RegisterPair(), q = new RegisterPair(), oldQ = new RegisterPair();
             int v;
             t = DIRWORD();
             q.HighWord = d.LowWord;
@@ -3063,7 +3063,7 @@ namespace cpu.hd6309
         }
         void ldq_di()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             q = DIRLONG();
             d.LowWord = q.HighWord;
             w.LowWord = q.LowWord;
@@ -3086,7 +3086,7 @@ namespace cpu.hd6309
         }
         void stq_di()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             q.HighWord = d.LowWord;
             q.LowWord = w.LowWord;
             DIRECT();
@@ -3134,7 +3134,7 @@ namespace cpu.hd6309
         void subd_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = d.LowWord;
@@ -3146,7 +3146,7 @@ namespace cpu.hd6309
         void subw_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = w.LowWord;
@@ -3158,7 +3158,7 @@ namespace cpu.hd6309
         void cmpd_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = d.LowWord;
@@ -3169,7 +3169,7 @@ namespace cpu.hd6309
         void cmpw_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = w.LowWord;
@@ -3180,7 +3180,7 @@ namespace cpu.hd6309
         void cmpu_ix()
         {
             uint r;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             r = u.LowWord - b.d;
@@ -3255,7 +3255,7 @@ namespace cpu.hd6309
         void cmpx_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = x.LowWord;
@@ -3266,7 +3266,7 @@ namespace cpu.hd6309
         void cmpy_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = y.LowWord;
@@ -3277,7 +3277,7 @@ namespace cpu.hd6309
         void cmps_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = s.LowWord;
@@ -3300,7 +3300,7 @@ namespace cpu.hd6309
         }
         void muld_ix()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             ushort t;
             fetch_effective_address();
             t = RM16((ushort)ea.d);
@@ -3351,7 +3351,7 @@ namespace cpu.hd6309
         }
         void divq_ix()
         {
-            Register t = new Register(), q = new Register(), oldQ = new Register();
+            RegisterPair t = new RegisterPair(), q = new RegisterPair(), oldQ = new RegisterPair();
             int v;
             fetch_effective_address();
             t.LowWord = RM16((ushort)ea.d);
@@ -3395,7 +3395,7 @@ namespace cpu.hd6309
         }
         void ldq_ix()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             fetch_effective_address();
             q.d = RM32((ushort)ea.d);
             d.LowWord = q.HighWord;
@@ -3420,7 +3420,7 @@ namespace cpu.hd6309
         }
         void stq_ix()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             q.HighWord = d.LowWord;
             q.LowWord = w.LowWord;
             fetch_effective_address();
@@ -3465,7 +3465,7 @@ namespace cpu.hd6309
         void subd_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = d.LowWord;
             r = d1 - b.d;
@@ -3476,7 +3476,7 @@ namespace cpu.hd6309
         void subw_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = w.LowWord;
             r = d1 - b.d;
@@ -3487,7 +3487,7 @@ namespace cpu.hd6309
         void cmpd_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = d.LowWord;
             r = d1 - b.d;
@@ -3497,7 +3497,7 @@ namespace cpu.hd6309
         void cmpw_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = w.LowWord;
             r = d1 - b.d;
@@ -3507,7 +3507,7 @@ namespace cpu.hd6309
         void cmpu_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = u.LowWord;
             r = d1 - b.d;
@@ -3582,7 +3582,7 @@ namespace cpu.hd6309
         void cmpx_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = x.LowWord;
             r = d1 - b.d;
@@ -3592,7 +3592,7 @@ namespace cpu.hd6309
         void cmpy_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = y.LowWord;
             r = d1 - b.d;
@@ -3602,7 +3602,7 @@ namespace cpu.hd6309
         void cmps_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = s.LowWord;
             r = d1 - b.d;
@@ -3623,7 +3623,7 @@ namespace cpu.hd6309
         }
         void muld_ex()
         {
-            Register t = new Register(), q = new Register();
+            RegisterPair t = new RegisterPair(), q = new RegisterPair();
             t = EXTWORD();
             q.d = (uint)((short)d.LowWord * (short)t.LowWord);
             d.LowWord = q.HighWord;
@@ -3670,7 +3670,7 @@ namespace cpu.hd6309
         }
         void divq_ex()
         {
-            Register t = new Register(), q = new Register(), oldQ = new Register();
+            RegisterPair t = new RegisterPair(), q = new RegisterPair(), oldQ = new RegisterPair();
             int v;
             t = EXTWORD();
             q.HighWord = d.LowWord;
@@ -3713,7 +3713,7 @@ namespace cpu.hd6309
         }
         void ldq_ex()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             q = EXTLONG();
             d.LowWord = q.HighWord;
             w.LowWord = q.LowWord;
@@ -3736,7 +3736,7 @@ namespace cpu.hd6309
         }
         void stq_ex()
         {
-            Register q = new Register();
+            RegisterPair q = new RegisterPair();
             q.HighWord = d.LowWord;
             q.LowWord = w.LowWord;
             EXTENDED();
@@ -3814,7 +3814,7 @@ namespace cpu.hd6309
         }
         void sbcd_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             uint r;
             t = IMMWORD();
             r = (uint)(d.LowWord - t.LowWord - (cc & CC_C));
@@ -3825,7 +3825,7 @@ namespace cpu.hd6309
         void addd_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = d.LowWord;
             r = d1 + b.d;
@@ -3836,7 +3836,7 @@ namespace cpu.hd6309
         void addw_im()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = IMMWORD();
             d1 = w.LowWord;
             r = d1 + b.d;
@@ -3874,7 +3874,7 @@ namespace cpu.hd6309
         }
         void andd_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = IMMWORD();
             d.LowWord &= t.LowWord;
             CLR_NZV();
@@ -3890,7 +3890,7 @@ namespace cpu.hd6309
         }
         void bitd_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             ushort r;
             t = IMMWORD();
             r = (ushort)(d.LowByte & t.LowWord);
@@ -3939,7 +3939,7 @@ namespace cpu.hd6309
         }
         void eord_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = IMMWORD();
             d.LowWord ^= t.LowWord;
             CLR_NZV();
@@ -3957,7 +3957,7 @@ namespace cpu.hd6309
         }
         void adcd_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             uint r;
             t = IMMWORD();
             r = (uint)(d.LowWord + t.LowWord + (cc & CC_C));
@@ -3975,7 +3975,7 @@ namespace cpu.hd6309
         }
         void ord_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = IMMWORD();
             d.LowWord |= t.LowWord;
             CLR_NZV();
@@ -3993,7 +3993,7 @@ namespace cpu.hd6309
         }
         void ldd_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = IMMWORD();
             d.LowWord = t.LowWord;
             CLR_NZV();
@@ -4001,7 +4001,7 @@ namespace cpu.hd6309
         }
         void ldw_im()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = IMMWORD();
             w.LowWord = t.LowWord;
             CLR_NZV();
@@ -4082,7 +4082,7 @@ namespace cpu.hd6309
         }
         void sbcd_di()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             uint r;
             t = DIRWORD();
             r = (uint)(d.LowWord - t.LowWord - (cc & CC_C));
@@ -4093,7 +4093,7 @@ namespace cpu.hd6309
         void addd_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = d.LowWord;
             r = d1 + b.d;
@@ -4104,7 +4104,7 @@ namespace cpu.hd6309
         void addw_di()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = DIRWORD();
             d1 = w.LowWord;
             r = d1 + b.d;
@@ -4142,7 +4142,7 @@ namespace cpu.hd6309
         }
         void andd_di()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = DIRWORD();
             d.LowWord &= t.LowWord;
             CLR_NZV();
@@ -4158,7 +4158,7 @@ namespace cpu.hd6309
         }
         void bitd_di()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             ushort r;
             t = DIRWORD();
             r = (ushort)(d.LowByte & t.LowWord);
@@ -4214,7 +4214,7 @@ namespace cpu.hd6309
         }
         void eord_di()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = DIRWORD();
             d.LowWord ^= t.LowWord;
             CLR_NZV();
@@ -4233,7 +4233,7 @@ namespace cpu.hd6309
         void adcd_di()
         {
             uint r;
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = DIRWORD();
             r = (uint)(d.LowWord + t.LowWord + (cc & CC_C));
             CLR_NZVC();
@@ -4250,7 +4250,7 @@ namespace cpu.hd6309
         }
         void ord_di()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = DIRWORD();
             d.LowWord |= t.LowWord;
             CLR_NZV();
@@ -4268,7 +4268,7 @@ namespace cpu.hd6309
         }
         void ldd_di()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = DIRWORD();
             d.LowWord = t.LowWord;
             CLR_NZV();
@@ -4276,7 +4276,7 @@ namespace cpu.hd6309
         }
         void ldw_di()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = DIRWORD();
             w.LowWord = t.LowWord;
             CLR_NZV();
@@ -4403,7 +4403,7 @@ namespace cpu.hd6309
         void addd_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = d.LowWord;
@@ -4415,7 +4415,7 @@ namespace cpu.hd6309
         void addw_ix()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16((ushort)ea.d);
             d1 = w.LowWord;
@@ -4546,7 +4546,7 @@ namespace cpu.hd6309
         void adcd_ix()
         {
             uint r;
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             fetch_effective_address();
             t.d = RM16((ushort)ea.d);
             r = (uint)(d.LowWord + t.d + (cc & CC_C));
@@ -4698,7 +4698,7 @@ namespace cpu.hd6309
         }
         void sbcd_ex()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             uint r;
             t = EXTWORD();
             r = (uint)(d.LowWord - t.LowWord - (cc & CC_C));
@@ -4709,7 +4709,7 @@ namespace cpu.hd6309
         void addd_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = d.LowWord;
             r = d1 + b.d;
@@ -4720,7 +4720,7 @@ namespace cpu.hd6309
         void addw_ex()
         {
             uint r, d1;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             b = EXTWORD();
             d1 = w.LowWord;
             r = d1 + b.d;
@@ -4758,7 +4758,7 @@ namespace cpu.hd6309
         }
         void andd_ex()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = EXTWORD();
             d.LowWord &= t.LowWord;
             CLR_NZV();
@@ -4774,7 +4774,7 @@ namespace cpu.hd6309
         }
         void bitd_ex()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             byte r;
             t = EXTWORD();
             r = (byte)(d.LowByte & t.LowWord);
@@ -4830,7 +4830,7 @@ namespace cpu.hd6309
         }
         void eord_ex()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = EXTWORD();
             d.LowWord ^= t.LowWord;
             CLR_NZV();
@@ -4849,7 +4849,7 @@ namespace cpu.hd6309
         void adcd_ex()
         {
             uint r;
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = EXTWORD();
             r = (uint)(d.LowWord + t.LowWord + (cc & CC_C));
             CLR_NZVC();
@@ -4866,7 +4866,7 @@ namespace cpu.hd6309
         }
         void ord_ex()
         {
-            Register t = new Register();
+            RegisterPair t = new RegisterPair();
             t = EXTWORD();
             d.LowWord |= t.LowWord;
             CLR_NZV();

@@ -118,7 +118,7 @@ namespace ui
                 case "M92":
                     break;
                 case "Taito B":
-                case "Konami 68000":
+                case "Konami":
                 case "Capcom":
                     break;
             }
@@ -188,7 +188,7 @@ namespace ui
                 case "M92":
                     break;
                 case "Taito B":
-                case "Konami 68000":
+                case "Konami":
                 case "Capcom":
                     break;
             }

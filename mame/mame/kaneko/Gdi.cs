@@ -136,7 +136,7 @@ namespace mame
             Color c1 = new Color();
             ushort u1;
             Bitmap bm1;
-            bm1 = new Bitmap(0x100, 0x100);            
+            bm1 = new Bitmap(0x100, 0x100);
             for (i1 = 0; i1 < 0x100; i1++)
             {
                 for (i2 = 0; i2 < 0x100; i2++)

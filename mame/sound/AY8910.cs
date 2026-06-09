@@ -374,7 +374,7 @@ namespace mame
                     }
                 }
             }
-            for (i = 0; i < length; i++)
+            for (j = 0; j < length; j++)
             {
                 for (chan = 0; chan < 3; chan++)
                 {
@@ -440,20 +440,19 @@ namespace mame
                         if (TONE_ENVELOPE(chan) != 0)
                         {
                             int i1 = ay8910info.env_table[chan][ay8910info.vol_enabled[chan] != 0 ? ay8910info.env_volume : 0];
-                            stream.streamoutput[chan][offset] = ay8910info.env_table[chan][ay8910info.vol_enabled[chan] != 0 ? ay8910info.env_volume : 0];
+                            stream.streamoutput[chan][offset + j] = ay8910info.env_table[chan][ay8910info.vol_enabled[chan] != 0 ? ay8910info.env_volume : 0];
                         }
                         else
                         {
                             int i1 = ay8910info.vol_table[chan][ay8910info.vol_enabled[chan] != 0 ? TONE_VOLUME(chan) : 0];
-                            stream.streamoutput[chan][offset] = ay8910info.vol_table[chan][ay8910info.vol_enabled[chan] != 0 ? TONE_VOLUME(chan) : 0];
+                            stream.streamoutput[chan][offset + j] = ay8910info.vol_table[chan][ay8910info.vol_enabled[chan] != 0 ? TONE_VOLUME(chan) : 0];
                         }
                     }
                 }
                 else
                 {
-                    stream.streamoutput[0][offset] = mix_3D();
+                    stream.streamoutput[0][offset + j] = mix_3D();
                 }
-                offset++;
             }
         }
         public void build_mixer_table()

@@ -164,6 +164,11 @@ namespace mame
                     record_port_callback = Technos.record_port_ddragon;
                     replay_port_callback = Technos.replay_port_ddragon;
                     break;
+                case "Seibu":
+                    loop_inputports_callback = Seibu.loop_inputports_kncljoe;
+                    record_port_callback = Seibu.record_port_kncljoe;
+                    replay_port_callback = Seibu.replay_port_kncljoe;
+                    break;
                 case "Tad":
                     switch (Machine.sName)
                     {
@@ -363,10 +368,7 @@ namespace mame
                     record_port_callback = Taitob.record_port;
                     replay_port_callback = Taitob.replay_port;
                     break;
-                case "Konami 68000":
-                    //loop_inputports_callback = Konami68000.loop_inputports_konami68000_ssriders;
-                    record_port_callback = Konami68000.record_port;
-                    replay_port_callback = Konami68000.replay_port;
+                case "Konami":
                     break;
                 case "Capcom":
                     break;
@@ -859,6 +861,20 @@ namespace mame
                 case "realpunc":
                     loop_inputports_callback = Taitob.loop_inputports_taitob_realpunc;
                     break;
+                case "scontra":
+                case "scontraa":
+                case "scontraj":
+                case "thunderx":
+                case "thunderxa":
+                case "thunderxb":
+                case "thunderxj":
+                case "gbusters":
+                case "gbustersa":
+                case "crazycop":
+                    loop_inputports_callback = Konami.loop_inputports_konami_scontra;
+                    record_port_callback = Konami.record_port_scontra;
+                    replay_port_callback = Konami.replay_port_scontra;
+                    break;
                 case "cuebrick":
                 case "mia":
                 case "mia2":
@@ -866,41 +882,58 @@ namespace mame
                 case "lgtnfghta":
                 case "lgtnfghtu":
                 case "trigon":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_cuebrick;
+                    loop_inputports_callback = Konami.loop_inputports_konami_cuebrick;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
                     break;
                 case "tmnt":
                 case "tmntu":
                 case "tmntua":
                 case "tmntub":
+                case "tmntuc":
                 case "tmht":
                 case "tmhta":
                 case "tmhtb":
                 case "tmntj":
                 case "tmnta":
-                case "punkshot":
-                case "punkshot2":
-                case "punkshotj":
+                case "punkshot":                
                 case "tmnt2":
                 case "ssriders":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_tmnt;
+                    loop_inputports_callback = Konami.loop_inputports_konami_tmnt;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
+                    break;
+                case "punkshot2":
+                case "punkshot2e":
+                case "punkshotj":
+                case "punkshot2a":
+                    loop_inputports_callback = Konami.loop_inputports_konami_punkshot2;
+                    record_port_callback = Konami.record_port_punkshot2;
+                    replay_port_callback = Konami.replay_port_punkshot2;
                     break;
                 case "blswhstl":
                 case "blswhstla":
                 case "detatwin":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_blswhstl;
+                    loop_inputports_callback = Konami.loop_inputports_konami_blswhstl;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
                     break;
                 case "glfgreat":
                 case "glfgreatj":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_glfgreat;
+                    loop_inputports_callback = Konami.loop_inputports_konami_glfgreat;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
                     break;
                 case "tmht2p":
                 case "tmht2pa":
                 case "tmnt2pj":
                 case "tmnt2po":
                 case "tmnt2a":
+                case "tmnt2o":
                 case "tmht22pe":
                 case "tmht24pe":
                 case "tmnt22pu":
+                case "tmnt24pu":
                 case "ssriderseaa":
                 case "ssridersebd":
                 case "ssridersebc":
@@ -913,21 +946,27 @@ namespace mame
                 case "ssridersjad":
                 case "ssridersjac":
                 case "ssridersjbd":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_ssriders;
+                    loop_inputports_callback = Konami.loop_inputports_konami_ssriders;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
                     break;
                 case "qgakumon":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_qgakumon;
+                    loop_inputports_callback = Konami.loop_inputports_konami_qgakumon;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
                     break;
                 case "thndrx2":
                 case "thndrx2a":
                 case "thndrx2j":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_thndrx2;
+                    loop_inputports_callback = Konami.loop_inputports_konami_thndrx2;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
                     break;
                 case "prmrsocr":
                 case "prmrsocrj":
-                    loop_inputports_callback = Konami68000.loop_inputports_konami68000_prmrsocr;
-                    record_port_callback = Konami68000.record_port_prmrsocr;
-                    replay_port_callback = Konami68000.replay_port_prmrsocr;
+                    loop_inputports_callback = Konami.loop_inputports_konami_prmrsocr;
+                    record_port_callback = Konami.record_port_prmrsocr;
+                    replay_port_callback = Konami.replay_port_prmrsocr;
                     break;
                 case "gng":
                 case "gnga":

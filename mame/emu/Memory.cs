@@ -48,6 +48,11 @@ namespace mame
                     Technos.byte2 = 0xff;
                     Technos.bytee = 0xe7;
                     break;
+                case "Seibu":
+                    Seibu.bytes = 0xff;
+                    Seibu.byte1 = 0xff;
+                    Seibu.byte2 = 0xff;
+                    break;
                 case "Tad":
                     switch (Machine.sName)
                     {
@@ -266,24 +271,33 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
-                    Konami68000.sbyte0 = -1;
-                    Konami68000.sbyte1 = -1;
-                    Konami68000.sbyte2 = -1;
-                    Konami68000.sbyte3 = -1;
-                    Konami68000.sbyte4 = -1;
+                case "Konami":
+                    Konami.bytes = 0xff;
+                    Konami.byte1 = 0xff;
+                    Konami.byte2 = 0xff;
+                    Konami.sbyte0 = -1;
+                    Konami.sbyte1 = -1;
+                    Konami.sbyte2 = -1;
+                    Konami.sbyte3 = -1;
+                    Konami.sbyte4 = -1;
                     switch (Machine.sName)
                     {
+                        case "punkshot2":
+                        case "punkshot2e":
+                        case "punkshotj":
+                        case "punkshot2a":
+                            Konami.dsw3 = 0xff;
+                            break;
                         case "lgtnfght":
                         case "lgtnfghta":
                         case "lgtnfghtu":
                         case "trigon":
-                            Konami68000.sbyte0 = unchecked((sbyte)0xfb);
+                            Konami.sbyte0 = unchecked((sbyte)0xfb);
                             break;
                         case "prmrsocr":
                         case "prmrsocrj":
-                            Konami68000.sbyte0 = unchecked((sbyte)0xef);
-                            Konami68000.bytee = 0xfe;
+                            Konami.sbyte0 = unchecked((sbyte)0xef);
+                            Konami.bytee = 0xfe;
                             break;
                     }
                     break;
@@ -367,6 +381,11 @@ namespace mame
                     Technos.byte2_old = 0;
                     Technos.bytee_old = 0;
                     break;
+                case "Seibu":
+                    Seibu.bytes_old = 0;
+                    Seibu.byte1_old = 0;
+                    Seibu.byte2_old = 0;
+                    break;
                 case "Tad":
                     switch (Machine.sName)
                     {
@@ -446,17 +465,26 @@ namespace mame
                     Taito.sbyte4_old = 0;
                     Taito.sbyte5_old = 0;
                     break;
-                case "Konami 68000":
-                    Konami68000.sbyte0_old = 0;
-                    Konami68000.sbyte1_old = 0;
-                    Konami68000.sbyte2_old = 0;
-                    Konami68000.sbyte3_old = 0;
-                    Konami68000.sbyte4_old = 0;
+                case "Konami":
+                    Konami.bytes_old = 0;
+                    Konami.byte1_old = 0;
+                    Konami.byte2_old = 0;
+                    Konami.sbyte0_old = 0;
+                    Konami.sbyte1_old = 0;
+                    Konami.sbyte2_old = 0;
+                    Konami.sbyte3_old = 0;
+                    Konami.sbyte4_old = 0;
                     switch (Machine.sName)
                     {
+                        case "punkshot2":
+                        case "punkshot2e":
+                        case "punkshotj":
+                        case "punkshot2a":
+                            Konami.dsw3_old = 0;
+                            break;
                         case "prmrsocr":
                         case "prmrsocrj":
-                            Konami68000.bytee = 0;
+                            Konami.bytee_old = 0;
                             break;
                     }
                     break;

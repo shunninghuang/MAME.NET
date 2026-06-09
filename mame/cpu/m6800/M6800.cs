@@ -13,8 +13,8 @@ namespace cpu.m6800
         public static M6800 m1;
         public static Action action_rx, action_tx;
         public Action[] insn, m6800_insn, hd63701_insn, m6803_insn;
-        public Register PPC, PC;
-        public Register S, X, D, EA;
+        public RegisterPair PPC, PC;
+        public RegisterPair S, X, D, EA;
         public byte[] cycles;
         public byte cc, wai_state, ic_eddge;
         public byte[] irq_state = new byte[2];
@@ -24,7 +24,7 @@ namespace cpu.m6800
         public irq_delegate irq_callback;
         public byte port1_ddr, port2_ddr, port3_ddr, port4_ddr, port1_data, port2_data, port3_data, port4_data;
         public byte tcsr, pending_tcsr, irq2, ram_ctrl;
-        public Register counter, output_compare, timer_over;
+        public RegisterPair counter, output_compare, timer_over;
         public ushort input_capture;
         public int clock;
         public byte trcsr, rmcr, rdr, tdr, rsr, tsr;
@@ -209,6 +209,75 @@ namespace cpu.m6800
                 subb_ex,cmpb_ex,sbcb_ex,illegal,andb_ex,bitb_ex,ldb_ex, stb_ex,
                 eorb_ex,adcb_ex,orb_ex, addb_ex,illegal,illegal,ldx_ex, stx_ex
             };
+            m6803_insn = new Action[256]{
+                illegal,nop,    illegal,illegal,lsrd,   asld,   tap,    tpa,
+                inx,    dex,    CLV,    SEV,    CLC,    SEC,    cli,    sei,
+                sba,    cba,    illegal,illegal,illegal,illegal,tab,    tba,
+                illegal,daa,    illegal,aba,    illegal,illegal,illegal,illegal,
+                bra,    brn,    bhi,    bls,    bcc,    bcs,    bne,    beq,
+                bvc,    bvs,    bpl,    bmi,    bge,    blt,    bgt,    ble,
+                tsx,    ins,    pula,   pulb,   des,    txs,    psha,   pshb,
+                pulx,   rts,    abx,    rti,    pshx,   mul,    wai,    swi,
+                nega,   illegal,illegal,coma,   lsra,   illegal,rora,   asra,
+                asla,   rola,   deca,   illegal,inca,   tsta,   illegal,clra,
+                negb,   illegal,illegal,comb,   lsrb,   illegal,rorb,   asrb,
+                aslb,   rolb,   decb,   illegal,incb,   tstb,   illegal,clrb,
+                neg_ix, illegal,illegal,com_ix, lsr_ix, illegal,ror_ix, asr_ix,
+                asl_ix, rol_ix, dec_ix, illegal,inc_ix, tst_ix, jmp_ix, clr_ix,
+                neg_ex, illegal,illegal,com_ex, lsr_ex, illegal,ror_ex, asr_ex,
+                asl_ex, rol_ex, dec_ex, illegal,inc_ex, tst_ex, jmp_ex, clr_ex,
+                suba_im,cmpa_im,sbca_im,subd_im,anda_im,bita_im,lda_im, sta_im,
+                eora_im,adca_im,ora_im, adda_im,cpx_im, bsr,    lds_im, sts_im,
+                suba_di,cmpa_di,sbca_di,subd_di,anda_di,bita_di,lda_di, sta_di,
+                eora_di,adca_di,ora_di, adda_di,cpx_di, jsr_di, lds_di, sts_di,
+                suba_ix,cmpa_ix,sbca_ix,subd_ix,anda_ix,bita_ix,lda_ix, sta_ix,
+                eora_ix,adca_ix,ora_ix, adda_ix,cpx_ix, jsr_ix, lds_ix, sts_ix,
+                suba_ex,cmpa_ex,sbca_ex,subd_ex,anda_ex,bita_ex,lda_ex, sta_ex,
+                eora_ex,adca_ex,ora_ex, adda_ex,cpx_ex, jsr_ex, lds_ex, sts_ex,
+                subb_im,cmpb_im,sbcb_im,addd_im,andb_im,bitb_im,ldb_im, stb_im,
+                eorb_im,adcb_im,orb_im, addb_im,ldd_im, std_im, ldx_im, stx_im,
+                subb_di,cmpb_di,sbcb_di,addd_di,andb_di,bitb_di,ldb_di, stb_di,
+                eorb_di,adcb_di,orb_di, addb_di,ldd_di, std_di, ldx_di, stx_di,
+                subb_ix,cmpb_ix,sbcb_ix,addd_ix,andb_ix,bitb_ix,ldb_ix, stb_ix,
+                eorb_ix,adcb_ix,orb_ix, addb_ix,ldd_ix, std_ix, ldx_ix, stx_ix,
+                subb_ex,cmpb_ex,sbcb_ex,addd_ex,andb_ex,bitb_ex,ldb_ex, stb_ex,
+                eorb_ex,adcb_ex,orb_ex, addb_ex,ldd_ex, std_ex, ldx_ex, stx_ex
+            };
+            hd63701_insn = new Action[]
+            {
+                trap,   nop,	trap,   trap,   lsrd,	asld,	tap,	tpa,
+                inx,	dex,	clv,	sev,	clc,	sec,	cli,	sei,
+                sba,	cba,	undoc1, undoc2, trap,   trap,   tab,	tba,
+                xgdx,	daa,	slp,    aba,	trap,   trap,   trap,   trap,
+                bra,	brn,	bhi,	bls,	bcc,	bcs,	bne,	beq,
+                bvc,	bvs,	bpl,	bmi,	bge,	blt,	bgt,	ble,
+                tsx,	ins,	pula,	pulb,	des,	txs,	psha,	pshb,
+                pulx,	rts,	abx,	rti,	pshx,	mul,	wai,	swi,
+                nega,	trap,   trap,   coma,	lsra,	trap,   rora,	asra,
+                asla,	rola,	deca,	trap,   inca,	tsta,	trap,   clra,
+                negb,	trap,   trap,   comb,	lsrb,	trap,   rorb,	asrb,
+                aslb,	rolb,	decb,	trap,   incb,	tstb,	trap,   clrb,
+                neg_ix, aim_ix, oim_ix, com_ix, lsr_ix, eim_ix, ror_ix, asr_ix,
+                asl_ix, rol_ix, dec_ix, tim_ix, inc_ix, tst_ix, jmp_ix, clr_ix,
+                neg_ex, aim_di, oim_di, com_ex, lsr_ex, eim_di, ror_ex, asr_ex,
+                asl_ex, rol_ex, dec_ex, tim_di, inc_ex, tst_ex, jmp_ex, clr_ex,
+                suba_im,cmpa_im,sbca_im,subd_im,anda_im,bita_im,lda_im, sta_im,
+                eora_im,adca_im,ora_im, adda_im,cpx_im ,bsr,	lds_im, sts_im,
+                suba_di,cmpa_di,sbca_di,subd_di,anda_di,bita_di,lda_di, sta_di,
+                eora_di,adca_di,ora_di, adda_di,cpx_di ,jsr_di, lds_di, sts_di,
+                suba_ix,cmpa_ix,sbca_ix,subd_ix,anda_ix,bita_ix,lda_ix, sta_ix,
+                eora_ix,adca_ix,ora_ix, adda_ix,cpx_ix ,jsr_ix, lds_ix, sts_ix,
+                suba_ex,cmpa_ex,sbca_ex,subd_ex,anda_ex,bita_ex,lda_ex, sta_ex,
+                eora_ex,adca_ex,ora_ex, adda_ex,cpx_ex ,jsr_ex, lds_ex, sts_ex,
+                subb_im,cmpb_im,sbcb_im,addd_im,andb_im,bitb_im,ldb_im, stb_im,
+                eorb_im,adcb_im,orb_im, addb_im,ldd_im, std_im, ldx_im, stx_im,
+                subb_di,cmpb_di,sbcb_di,addd_di,andb_di,bitb_di,ldb_di, stb_di,
+                eorb_di,adcb_di,orb_di, addb_di,ldd_di, std_di, ldx_di, stx_di,
+                subb_ix,cmpb_ix,sbcb_ix,addd_ix,andb_ix,bitb_ix,ldb_ix, stb_ix,
+                eorb_ix,adcb_ix,orb_ix, addb_ix,ldd_ix, std_ix, ldx_ix, stx_ix,
+                subb_ex,cmpb_ex,sbcb_ex,addd_ex,andb_ex,bitb_ex,ldb_ex, stb_ex,
+                eorb_ex,adcb_ex,orb_ex, addb_ex,ldd_ex, std_ex, ldx_ex, stx_ex
+            };
             insn = m6800_insn;
             cycles = cycles_6800;
             clock = 1536000;
@@ -225,9 +294,9 @@ namespace cpu.m6800
             PC.LowWord++;
             return b;
         }
-        private Register IMMWORD()
+        private RegisterPair IMMWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             w.d = (uint)((ReadOpArg(PC.LowWord) << 8) | ReadOpArg((ushort)((PC.LowWord + 1) & 0xffff)));
             PC.LowWord += 2;
             return w;
@@ -237,7 +306,7 @@ namespace cpu.m6800
             WriteMemory(S.LowWord, b);
             --S.LowWord;
         }
-        private void PUSHWORD(Register w)
+        private void PUSHWORD(RegisterPair w)
         {
             WriteMemory(S.LowWord, w.LowByte);
             --S.LowWord;
@@ -249,9 +318,9 @@ namespace cpu.m6800
             S.LowWord++;
             return ReadMemory(S.LowWord);
         }
-        private Register PULLWORD()
+        private RegisterPair PULLWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             S.LowWord++;
             w.d = (uint)(ReadMemory(S.LowWord) << 8);
             S.LowWord++;
@@ -537,9 +606,9 @@ namespace cpu.m6800
             DIRECT();
             return ReadMemory(EA.LowWord);
         }
-        private Register DIRWORD()
+        private RegisterPair DIRWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             DIRECT();
             w.LowWord = RM16(EA.LowWord);
             return w;
@@ -549,9 +618,9 @@ namespace cpu.m6800
             EXTENDED();
             return ReadMemory(EA.LowWord);
         }
-        private Register EXTWORD()
+        private RegisterPair EXTWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             EXTENDED();
             w.LowWord = RM16(EA.LowWord);
             return w;
@@ -561,9 +630,9 @@ namespace cpu.m6800
             INDEXED();
             return ReadMemory(EA.LowWord);
         }
-        private Register IDXWORD()
+        private RegisterPair IDXWORD()
         {
-            Register w = new Register();
+            RegisterPair w = new RegisterPair();
             INDEXED();
             w.LowWord = RM16(EA.LowWord);
             return w;
@@ -585,7 +654,7 @@ namespace cpu.m6800
             ushort result = (ushort)(ReadMemory(Addr) << 8);
             return (ushort)(result | ReadMemory((ushort)(Addr + 1)));
         }
-        private void WM16(ushort Addr, Register p)
+        private void WM16(ushort Addr, RegisterPair p)
         {
             WriteMemory(Addr, p.HighByte);
             WriteMemory((ushort)(Addr + 1), p.LowByte);
@@ -823,6 +892,37 @@ namespace cpu.m6800
             txstate = M6800_TX_STATE.INIT;
             txbits = rxbits = 0;
             trcsr_read = 0;
+        }
+        public int m6803_execute(int cycles)
+        {
+            byte ireg;
+            pendingCycles = cycles;
+            CLEANUP_conters();
+            INCREMENT_COUNTER(extra_cycles);
+            extra_cycles = 0;
+            do
+            {
+                int prevCycles = pendingCycles;
+                if ((wai_state & M6800_WAI) != 0)
+                {
+                    EAT_CYCLES();
+                }
+                else
+                {
+                    PPC = PC;
+                    //debugger_instruction_hook(Machine, PCD);
+                    ireg = ReadOp(PC.LowWord);
+                    PC.LowWord++;
+                    m6803_insn[ireg]();
+                    INCREMENT_COUNTER(cycles_6803[ireg]);
+                    int delta = prevCycles - pendingCycles;
+                    totalExecutedCycles += (ulong)delta;
+                }
+            }
+            while (pendingCycles > 0);
+            INCREMENT_COUNTER(extra_cycles);
+            extra_cycles = 0;
+            return cycles - pendingCycles;
         }
         public override void set_irq_line(int irqline, LineState state)
         {
@@ -1283,41 +1383,7 @@ namespace cpu.m6800
     public class M6801 : M6800
     {
         public M6801()
-        {
-            m6803_insn = new Action[256]{
-                illegal,nop,    illegal,illegal,lsrd,   asld,   tap,    tpa,
-                inx,    dex,    CLV,    SEV,    CLC,    SEC,    cli,    sei,
-                sba,    cba,    illegal,illegal,illegal,illegal,tab,    tba,
-                illegal,daa,    illegal,aba,    illegal,illegal,illegal,illegal,
-                bra,    brn,    bhi,    bls,    bcc,    bcs,    bne,    beq,
-                bvc,    bvs,    bpl,    bmi,    bge,    blt,    bgt,    ble,
-                tsx,    ins,    pula,   pulb,   des,    txs,    psha,   pshb,
-                pulx,   rts,    abx,    rti,    pshx,   mul,    wai,    swi,
-                nega,   illegal,illegal,coma,   lsra,   illegal,rora,   asra,
-                asla,   rola,   deca,   illegal,inca,   tsta,   illegal,clra,
-                negb,   illegal,illegal,comb,   lsrb,   illegal,rorb,   asrb,
-                aslb,   rolb,   decb,   illegal,incb,   tstb,   illegal,clrb,
-                neg_ix, illegal,illegal,com_ix, lsr_ix, illegal,ror_ix, asr_ix,
-                asl_ix, rol_ix, dec_ix, illegal,inc_ix, tst_ix, jmp_ix, clr_ix,
-                neg_ex, illegal,illegal,com_ex, lsr_ex, illegal,ror_ex, asr_ex,
-                asl_ex, rol_ex, dec_ex, illegal,inc_ex, tst_ex, jmp_ex, clr_ex,
-                suba_im,cmpa_im,sbca_im,subd_im,anda_im,bita_im,lda_im, sta_im,
-                eora_im,adca_im,ora_im, adda_im,cpx_im, bsr,    lds_im, sts_im,
-                suba_di,cmpa_di,sbca_di,subd_di,anda_di,bita_di,lda_di, sta_di,
-                eora_di,adca_di,ora_di, adda_di,cpx_di, jsr_di, lds_di, sts_di,
-                suba_ix,cmpa_ix,sbca_ix,subd_ix,anda_ix,bita_ix,lda_ix, sta_ix,
-                eora_ix,adca_ix,ora_ix, adda_ix,cpx_ix, jsr_ix, lds_ix, sts_ix,
-                suba_ex,cmpa_ex,sbca_ex,subd_ex,anda_ex,bita_ex,lda_ex, sta_ex,
-                eora_ex,adca_ex,ora_ex, adda_ex,cpx_ex, jsr_ex, lds_ex, sts_ex,
-                subb_im,cmpb_im,sbcb_im,addd_im,andb_im,bitb_im,ldb_im, stb_im,
-                eorb_im,adcb_im,orb_im, addb_im,ldd_im, std_im, ldx_im, stx_im,
-                subb_di,cmpb_di,sbcb_di,addd_di,andb_di,bitb_di,ldb_di, stb_di,
-                eorb_di,adcb_di,orb_di, addb_di,ldd_di, std_di, ldx_di, stx_di,
-                subb_ix,cmpb_ix,sbcb_ix,addd_ix,andb_ix,bitb_ix,ldb_ix, stb_ix,
-                eorb_ix,adcb_ix,orb_ix, addb_ix,ldd_ix, std_ix, ldx_ix, stx_ix,
-                subb_ex,cmpb_ex,sbcb_ex,addd_ex,andb_ex,bitb_ex,ldb_ex, stb_ex,
-                eorb_ex,adcb_ex,orb_ex, addb_ex,ldd_ex, std_ex, ldx_ex, stx_ex
-            };
+        {            
             insn = m6803_insn;
             cycles = cycles_6803;
             clock = 1000000;
@@ -1326,79 +1392,28 @@ namespace cpu.m6800
         }
         public override int ExecuteCycles(int cycles)
         {
-            return m6801_execute(cycles);
+            return m6803_execute(cycles);
         }
-        public int m6801_execute(int cycles)
+    }
+    public class M6803 : M6800
+    {
+        public M6803()
+        {            
+            insn = m6803_insn;
+            cycles = cycles_6803;
+            clock = 1000000;
+            m6800_rx_timer = Timer.timer_alloc_common(m6800_rx_tick, "m6800_rx_tick", false);
+            m6800_tx_timer = Timer.timer_alloc_common(m6800_tx_tick, "m6800_tx_tick", false);
+        }
+        public override int ExecuteCycles(int cycles)
         {
-            byte ireg;
-            pendingCycles = cycles;
-            CLEANUP_conters();
-            INCREMENT_COUNTER(extra_cycles);
-            extra_cycles = 0;
-            do
-            {
-                int prevCycles = pendingCycles;
-                if ((wai_state & M6800_WAI) != 0)
-                {
-                    EAT_CYCLES();
-                }
-                else
-                {
-                    PPC = PC;
-                    //debugger_instruction_hook(Machine, PCD);
-                    ireg = ReadOp(PC.LowWord);
-                    PC.LowWord++;
-                    m6803_insn[ireg]();
-                    INCREMENT_COUNTER(cycles_6803[ireg]);
-                    int delta = prevCycles - pendingCycles;
-                    totalExecutedCycles += (ulong)delta;
-                }
-            }
-            while (pendingCycles > 0);
-            INCREMENT_COUNTER(extra_cycles);
-            extra_cycles = 0;
-            return cycles - pendingCycles;
-        }
+            return m6803_execute(cycles);
+        }        
     }
     public class HD63701 : M6800
     {
         public HD63701()
-        {
-            hd63701_insn = new Action[]
-            {
-                trap,   nop,	trap	,trap	,lsrd,	asld,	tap,	tpa,
-                inx,	dex,	clv,	sev,	clc,	sec,	cli,	sei,
-                sba,	cba,	undoc1, undoc2, trap	,trap	,tab,	tba,
-                xgdx,	daa,	slp		,aba,	trap	,trap	,trap	,trap	,
-                bra,	brn,	bhi,	bls,	bcc,	bcs,	bne,	beq,
-                bvc,	bvs,	bpl,	bmi,	bge,	blt,	bgt,	ble,
-                tsx,	ins,	pula,	pulb,	des,	txs,	psha,	pshb,
-                pulx,	rts,	abx,	rti,	pshx,	mul,	wai,	swi,
-                nega,	trap	,trap	,coma,	lsra,	trap	,rora,	asra,
-                asla,	rola,	deca,	trap	,inca,	tsta,	trap	,clra,
-                negb,	trap	,trap	,comb,	lsrb,	trap	,rorb,	asrb,
-                aslb,	rolb,	decb,	trap	,incb,	tstb,	trap	,clrb,
-                neg_ix, aim_ix, oim_ix, com_ix, lsr_ix, eim_ix, ror_ix, asr_ix,
-                asl_ix, rol_ix, dec_ix, tim_ix, inc_ix, tst_ix, jmp_ix, clr_ix,
-                neg_ex, aim_di, oim_di, com_ex, lsr_ex, eim_di, ror_ex, asr_ex,
-                asl_ex, rol_ex, dec_ex, tim_di, inc_ex, tst_ex, jmp_ex, clr_ex,
-                suba_im,cmpa_im,sbca_im,subd_im,anda_im,bita_im,lda_im, sta_im,
-                eora_im,adca_im,ora_im, adda_im,cpx_im ,bsr,	lds_im, sts_im,
-                suba_di,cmpa_di,sbca_di,subd_di,anda_di,bita_di,lda_di, sta_di,
-                eora_di,adca_di,ora_di, adda_di,cpx_di ,jsr_di, lds_di, sts_di,
-                suba_ix,cmpa_ix,sbca_ix,subd_ix,anda_ix,bita_ix,lda_ix, sta_ix,
-                eora_ix,adca_ix,ora_ix, adda_ix,cpx_ix ,jsr_ix, lds_ix, sts_ix,
-                suba_ex,cmpa_ex,sbca_ex,subd_ex,anda_ex,bita_ex,lda_ex, sta_ex,
-                eora_ex,adca_ex,ora_ex, adda_ex,cpx_ex ,jsr_ex, lds_ex, sts_ex,
-                subb_im,cmpb_im,sbcb_im,addd_im,andb_im,bitb_im,ldb_im, stb_im,
-                eorb_im,adcb_im,orb_im, addb_im,ldd_im, std_im, ldx_im, stx_im,
-                subb_di,cmpb_di,sbcb_di,addd_di,andb_di,bitb_di,ldb_di, stb_di,
-                eorb_di,adcb_di,orb_di, addb_di,ldd_di, std_di, ldx_di, stx_di,
-                subb_ix,cmpb_ix,sbcb_ix,addd_ix,andb_ix,bitb_ix,ldb_ix, stb_ix,
-                eorb_ix,adcb_ix,orb_ix, addb_ix,ldd_ix, std_ix, ldx_ix, stx_ix,
-                subb_ex,cmpb_ex,sbcb_ex,addd_ex,andb_ex,bitb_ex,ldb_ex, stb_ex,
-                eorb_ex,adcb_ex,orb_ex, addb_ex,ldd_ex, std_ex, ldx_ex, stx_ex
-            };
+        {            
             insn = hd63701_insn;
             cycles = cycles_63701;
             clock = 1536000;

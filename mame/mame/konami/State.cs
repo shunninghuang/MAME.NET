@@ -3,13 +3,166 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using cpu.konami;
 using cpu.m68000;
 using cpu.z80;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Konami
     {
+        public static void SaveStateBinary_scontra(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dsw1);
+            writer.Write(dsw2);
+            writer.Write(dsw3);
+            writer.Write(palette_selected);
+            writer.Write(m_priority);
+            writer.Write(basebankmain);
+            writer.Write(m_1f98_latch);
+            writer.Write(ram, 0, 0x800);
+            SaveStateBinary_K052109(writer);
+            SaveStateBinary_K051960(writer);
+            writer.Write(Generic.paletteram, 0, 0x800);
+            for (i = 0; i < 0x400; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            writer.Write(Memory.mainram, 0, 0x1800);
+            writer.Write(Memory.audioram, 0, 0x800);
+            KonamiCpu.k1.SaveStateBinary(writer);
+            Z80A.zz1[0].SaveStateBinary(writer);
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            Video.SaveStateBinary(writer);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            YM2151.SaveStateBinary(writer);
+            K007232.SaveStateBinary(writer);
+            writer.Write(Sound.ym2151stream.output_sampindex);
+            writer.Write(Sound.ym2151stream.output_base_sampindex);
+            writer.Write(Sound.k007232stream.output_sampindex);
+            writer.Write(Sound.k007232stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_scontra(BinaryReader reader)
+        {
+            int i;
+            dsw1 = reader.ReadByte();
+            dsw2 = reader.ReadByte();
+            dsw3 = reader.ReadByte();
+            palette_selected = reader.ReadInt32();
+            m_priority = reader.ReadInt32();
+            basebankmain = reader.ReadInt32();
+            m_1f98_latch = reader.ReadByte();
+            ram = reader.ReadBytes(0x800);
+            LoadStateBinary_K052109(reader);
+            LoadStateBinary_K051960(reader);
+            Generic.paletteram = reader.ReadBytes(0x800);
+            for (i = 0; i < 0x400; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            Memory.mainram = reader.ReadBytes(0x1800);
+            Memory.audioram = reader.ReadBytes(0x800);
+            KonamiCpu.k1.LoadStateBinary(reader);
+            Z80A.zz1[0].LoadStateBinary(reader);
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.LoadStateBinary(reader);
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            YM2151.LoadStateBinary(reader);
+            K007232.LoadStateBinary(reader);
+            Sound.ym2151stream.output_sampindex = reader.ReadInt32();
+            Sound.ym2151stream.output_base_sampindex = reader.ReadInt32();
+            Sound.k007232stream.output_sampindex = reader.ReadInt32();
+            Sound.k007232stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
+        public static void SaveStateBinary_thunderx(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dsw1);
+            writer.Write(dsw2);
+            writer.Write(dsw3);
+            writer.Write(palette_selected);
+            writer.Write(m_priority);
+            writer.Write(basebankmain);
+            writer.Write(m_1f98_latch);
+            writer.Write(rambank);
+            writer.Write(pmcbank);
+            writer.Write(ram, 0, 0x800);
+            writer.Write(pmcram, 0, 0x800);
+            SaveStateBinary_K052109(writer);
+            SaveStateBinary_K051960(writer);
+            writer.Write(Generic.paletteram, 0, 0x800);
+            for (i = 0; i < 0x400; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            writer.Write(Memory.mainram, 0, 0x1800);
+            writer.Write(Memory.audioram, 0, 0x800);
+            KonamiCpu.k1.SaveStateBinary(writer);
+            Z80A.zz1[0].SaveStateBinary(writer);
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            Video.SaveStateBinary(writer);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            YM2151.SaveStateBinary(writer);
+            writer.Write(Sound.ym2151stream.output_sampindex);
+            writer.Write(Sound.ym2151stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+        }
+        public static void LoadStateBinary_thunderx(BinaryReader reader)
+        {
+            int i;
+            dsw1 = reader.ReadByte();
+            dsw2 = reader.ReadByte();
+            dsw3 = reader.ReadByte();
+            palette_selected = reader.ReadInt32();
+            m_priority = reader.ReadInt32();
+            basebankmain = reader.ReadInt32();
+            m_1f98_latch = reader.ReadByte();
+            rambank = reader.ReadInt32();
+            pmcbank = reader.ReadInt32();
+            ram = reader.ReadBytes(0x800);
+            pmcram = reader.ReadBytes(0x800);
+            LoadStateBinary_K052109(reader);
+            LoadStateBinary_K051960(reader);
+            Generic.paletteram = reader.ReadBytes(0x800);
+            for (i = 0; i < 0x400; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            Memory.mainram = reader.ReadBytes(0x1800);
+            Memory.audioram = reader.ReadBytes(0x800);
+            KonamiCpu.k1.LoadStateBinary(reader);
+            Z80A.zz1[0].LoadStateBinary(reader);
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.LoadStateBinary(reader);
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            YM2151.LoadStateBinary(reader);
+            Sound.ym2151stream.output_sampindex = reader.ReadInt32();
+            Sound.ym2151stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+        }
         public static void SaveStateBinary_cuebrick(BinaryWriter writer)
         {
             int i;

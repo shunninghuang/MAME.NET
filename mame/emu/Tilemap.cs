@@ -237,6 +237,12 @@ namespace mame
                 colscroll[which] = value;
             }
         }
+        public unsafe ushort[] tilemap_get_pixmap()
+        {
+            pixmap_update(null);
+            return pixmap;
+        }
+
         public RECT sect_rect(RECT dst, RECT src)
         {
             RECT dst2 = dst;
@@ -320,6 +326,22 @@ namespace mame
                 int i1 = 1;
             }
         }
+        public void tilemap_draw_roz_primask(RECT cliprect, uint startx, uint starty, int incxx, int incxy, int incyx, int incyy, int wraparound, int flags, byte priority, byte priority_mask)
+        {
+            if (!enable)
+            {
+                return;
+            }
+            if (incxx == (1 << 16) && incxy == 0 && incyx == 0 && incyy == (1 << 16) && wraparound != 0)
+            {
+                tilemap_set_scrollx(0, (int)(startx >> 16));
+                tilemap_set_scrolly(0, (int)(starty >> 16));
+                tilemap_draw_primask(cliprect, flags, priority);
+                return;
+            }
+            tilemap_get_pixmap();
+            tilemap_draw_roz_core(cliprect, startx, starty, incxx, incxy, incyx, incyy, wraparound, flags, priority);
+        }
         public static int tilemap_scan_rows(int col, int row, int num_cols, int num_rows)
         {
             return row * num_cols + col;
@@ -327,6 +349,10 @@ namespace mame
         public static int tilemap_scan_cols(int col, int row, int num_cols, int num_rows)
         {
             return col * num_rows + row;
+        }
+        public static int TILE_FLIPXY(int XY)
+        {
+            return ((((XY) & 2) >> 1) | (((XY) & 1) << 1));
         }
         public void mappings_create()
         {
@@ -373,6 +399,48 @@ namespace mame
                 logical_to_memory[flipped_logindex] = memindex;
             }
             tilemap_mark_all_tiles_dirty(this);
+        }
+        public unsafe void pixmap_update(RECT *cliprect)
+        {
+            int mincol, maxcol, minrow, maxrow;
+            int row, col;
+            if (all_tiles_clean)
+            {
+                return;
+            }
+            if (cliprect != null)
+            {
+                mincol = cliprect->min_x / tilewidth;
+                maxcol = cliprect->max_x / tilewidth;
+                minrow = cliprect->min_y / tileheight;
+                maxrow = cliprect->max_y / tileheight;
+            }
+            else
+            {
+                mincol = minrow = 0;
+                maxcol = cols - 1;
+                maxrow = rows - 1;
+            }
+            if (all_tiles_dirty)
+            {
+                Array.Copy(Tilemap.bbFF, tileflags, max_logical_index);
+                all_tiles_dirty = false;
+            }
+            for (row = minrow; row <= maxrow; row++)
+            {
+                int logindex = row * cols;
+                for (col = mincol; col <= maxcol; col++)
+                {
+                    if (tileflags[logindex + col] == Tilemap.TILE_FLAG_DIRTY)
+                    {
+                        tile_update3(logindex + col, col, row);
+                    }
+                }
+            }
+            if (mincol == 0 && minrow == 0 && maxcol == cols - 1 && maxcol == rows - 1)
+            {
+                all_tiles_clean = true;
+            }
         }
         public byte tile_draw(byte[] bb1, int pen_data_offset, int x0, int y0, int palette_base, byte category, byte group, byte flags)
         {
@@ -450,6 +518,110 @@ namespace mame
             }
             return (byte)(andmask ^ ormask);
         }
+        public void tilemap_draw_roz_core(RECT cliprect, uint startx, uint starty, int incxx, int incxy, int incyx, int incyy, int wraparound, int flags, byte priority)
+        {
+            int xmask = width - 1;
+            int ymask = height - 1;
+            int widthshifted = width << 16;
+            int heightshifted = height << 16;
+            byte mask = (byte)(0x0f | flags);
+            byte value = (byte)flags;
+            uint cx;
+            uint cy;
+            int x;
+            int sx;
+            int sy;
+            int ex;
+            int ey;
+            startx += (uint)(cliprect.min_x * incxx + cliprect.min_y * incyx);
+            starty += (uint)(cliprect.min_x * incxy + cliprect.min_y * incyy);
+            sx = cliprect.min_x;
+            sy = cliprect.min_y;
+            ex = cliprect.max_x;
+            ey = cliprect.max_y;
+            if (incxy == 0 && incyx == 0 && wraparound == 0)
+            {
+                while (startx >= widthshifted && sx <= ex)
+                {
+                    startx += (uint)incxx;
+                    sx++;
+                }
+                if (sx > ex)
+                {
+                    return;
+                }
+                while (sy <= ey)
+                {
+                    if (starty < heightshifted)
+                    {
+                        x = sx;
+                        cx = startx;
+                        cy = starty >> 16;
+                        while (x <= ex && cx < widthshifted)
+                        {
+                            if ((flagsmap[cy, cx >> 16] & mask) == value)
+                            {
+                                Video.bitmapbase[Video.curbitmap][sy * Video.fullwidth + x] = pixmap[cy * width + (cx >> 16)];
+                                Tilemap.priority_bitmap[sy, x] = (byte)(Tilemap.priority_bitmap[sy, x] | priority);
+                            }
+                            cx += (uint)incxx;
+                            x++;
+                        }
+                    }
+                    starty += (uint)incyy;
+                    sy++;
+                }
+            }
+            else if (wraparound != 0)
+            {
+                while (sy <= ey)
+                {
+                    x = sx;
+                    cx = startx;
+                    cy = starty;
+                    while (x <= ex)
+                    {
+                        if ((flagsmap[(cy >> 16) & ymask, (cx >> 16) & xmask] & mask) == value)
+                        {
+                            Video.bitmapbase[Video.curbitmap][sy * Video.fullwidth + x] = pixmap[((cy >> 16) & ymask) * width + ((cx >> 16) & xmask)];
+                            Tilemap.priority_bitmap[sy, x] = (byte)(Tilemap.priority_bitmap[sy, x] | priority);
+                        }
+                        cx += (uint)incxx;
+                        cy += (uint)incxy;
+                        x++;
+                    }
+                    startx += (uint)incyx;
+                    starty += (uint)incyy;
+                    sy++;
+                }
+            }
+            else
+            {
+                while (sy <= ey)
+                {
+                    x = sx;
+                    cx = startx;
+                    cy = starty;
+                    while (x <= ex)
+                    {
+                        if (cx < widthshifted && cy < heightshifted)
+                        {
+                            if ((flagsmap[cy >> 16, cx >> 16] & mask) == value)
+                            {
+                                Video.bitmapbase[Video.curbitmap][sy * Video.fullwidth + x] = pixmap[(cy >> 16) * width + (cx >> 16)];
+                                Tilemap.priority_bitmap[sy, x] = (byte)(Tilemap.priority_bitmap[sy, x] | priority);
+                            }
+                        }
+                        cx += (uint)incxx;
+                        cy += (uint)incxy;
+                        x++;
+                    }
+                    startx += (uint)incyx;
+                    starty += (uint)incyy;
+                    sy++;
+                }
+            }
+        }
     }
     public class Tilemap
     {
@@ -493,6 +665,10 @@ namespace mame
                     screen_width = 0x180;
                     screen_height = 0x110;
                     break;
+                case "Seibu":
+                    screen_width = 0x100;
+                    screen_height = 0x100;
+                    break;
                 case "Tad":
                     screen_width = 0x100;
                     screen_height = 0x100;
@@ -510,7 +686,6 @@ namespace mame
                 case "Kaneko":
                     screen_width = 0x100;
                     screen_height = 0x100;
-                    priority_bitmap = new byte[0x100, 0x100];
                     break;
                 case "Namco System 1":
                     screen_width = 0x200;
@@ -543,15 +718,15 @@ namespace mame
                     screen_height = 0x100;
                     priority_bitmap = new byte[0x100, 0x200];
                     break;
-                case "Konami 68000":
+                case "Konami":
                     screen_width = 0x200;
-                    screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
+                    screen_height = 0x100;
+                    priority_bitmap = new byte[0x100, 0x200];
                     break;
                 case "Capcom":
                     screen_width = 0x200;
-                    screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
+                    screen_height = 0x100;
+                    priority_bitmap = new byte[0x100, 0x200];
                     break;
             }
             switch (Machine.sBoard)
@@ -563,6 +738,7 @@ namespace mame
                 case "Data East":
                 case "Tehkan":
                 case "Technos":
+                case "Seibu":
                 case "Tad":
                 case "Gaelco":
                 case "Kaneko":
@@ -571,10 +747,10 @@ namespace mame
                 case "M72":
                 case "Taito":
                 case "Taito B":
-                case "Konami 68000":
+                case "Konami":
                     bb0F = new byte[0x400];
-                    bbFF = new byte[0x2000];
-                    for (i = 0; i < 0x2000; i++)
+                    bbFF = new byte[0x4000000];
+                    for (i = 0; i < 0x4000000; i++)
                     {
                         bbFF[i] = 0xff;
                     }

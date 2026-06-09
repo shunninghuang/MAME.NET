@@ -6,7 +6,7 @@ using System.IO;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Konami
     {
         private static byte[] K052109_memory_region;
         public static int K052109_videoram_F_offset, K052109_videoram2_F_offset, K052109_colorram_F_offset, K052109_videoram_A_offset, K052109_videoram2_A_offset, K052109_colorram_A_offset, K052109_videoram_B_offset, K052109_videoram2_B_offset, K052109_colorram_B_offset;
@@ -45,9 +45,10 @@ namespace mame
         public static K051960_delegate K051960_callback;
         public delegate void K053245_delegate(int code, int color,out int code2,out int color2,out int priority_mask);
         public static K053245_delegate K053245_callback;
-        public static void K052109_vh_start()
+        public static void K052109_vh_start(K052109_delegate _K052109_callback)
         {
             int i,j;
+            K052109_callback = _K052109_callback;
             K052109_RMRD_line = LineState.CLEAR_LINE;
             K052109_irq_enabled = 0;
             has_extra_video_ram = 0;
@@ -84,12 +85,12 @@ namespace mame
                 for (j = 1; j < 16; j++)
                 {
                     K052109_tilemap[i].pen_to_flags[0, j] = 0x10;
-                }                
-                K052109_tilemap[i].total_elements = gfx12rom.Length / 0x40;
+                }
+                K052109_tilemap[i].total_elements = gfx1rom.Length / 0x40;
             }
-            K052109_tilemap[0].tile_update3 = K052109_tilemap[0].tile_update_konami68000_0;
-            K052109_tilemap[1].tile_update3 = K052109_tilemap[1].tile_update_konami68000_1;
-            K052109_tilemap[2].tile_update3 = K052109_tilemap[2].tile_update_konami68000_2;
+            K052109_tilemap[0].tile_update3 = K052109_tilemap[0].tile_update_konami_0;
+            K052109_tilemap[1].tile_update3 = K052109_tilemap[1].tile_update_konami_1;
+            K052109_tilemap[2].tile_update3 = K052109_tilemap[2].tile_update_konami_2;
             for (i = 0; i < 3; i++)
             {
                 K052109_dx[i] = K052109_dy[i] = 0;
@@ -453,7 +454,7 @@ namespace mame
             reader.ReadByte();
             reader.ReadInt32();
         }
-        public static void K051960_vh_start()
+        public static void K051960_vh_start(K051960_delegate _K051960_callback)
         {
             int i;
             Drawgfx.gfx_drawmode_table[0] = 0;
@@ -463,6 +464,7 @@ namespace mame
             }
             Drawgfx.gfx_drawmode_table[15] = 2;
             K051960_dx = K051960_dy = 0;
+            K051960_callback = _K051960_callback;
             K051960_ram = new byte[0x400];
             K051960_spriterombank = new byte[3];
         }
@@ -637,23 +639,11 @@ namespace mame
                             }
                             if (max_priority == -1)
                             {
-                                Drawgfx.common_drawgfx_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect,shadow, (uint)(pri | (1 << 31)));
-                                /*pdrawgfx(bitmap, K051960_gfx,
-                                        c,
-                                        color,
-                                        flipx, flipy,
-                                        sx & 0x1ff, sy,
-                                        cliprect, shadow ? TRANSPARENCY_PEN_TABLE : TRANSPARENCY_PEN, 0, pri);*/
+                                Drawgfx.common_drawgfx_konami(gfx2rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect,shadow, (uint)(pri | (1 << 31)));
                             }
                             else
                             {
-                                Drawgfx.common_drawgfx_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0);
-                                /*drawgfx(bitmap, K051960_gfx,
-                                        c,
-                                        color,
-                                        flipx, flipy,
-                                        sx & 0x1ff, sy,
-                                        cliprect, shadow ? TRANSPARENCY_PEN_TABLE : TRANSPARENCY_PEN, 0);*/
+                                Drawgfx.common_drawgfx_konami(gfx2rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0);
                             }
                         }
                     }
@@ -685,29 +675,52 @@ namespace mame
                             }
                             if (max_priority == -1)
                             {
-                                Drawgfx.common_drawgfxzoom_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri | (1 << 31)));
-                                /*pdrawgfxzoom(bitmap, K051960_gfx,
-                                        c,
-                                        color,
-                                        flipx, flipy,
-                                        sx & 0x1ff, sy,
-                                        cliprect, shadow ? TRANSPARENCY_PEN_TABLE : TRANSPARENCY_PEN, 0,
-                                        (zw << 16) / 16, (zh << 16) / 16, pri);*/
+                                Drawgfx.common_drawgfxzoom_konami(gfx2rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri | (1 << 31)));
                             }
                             else
                             {
-                                Drawgfx.common_drawgfxzoom_konami68000(gfx22rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16);
-                                /*drawgfxzoom(bitmap, K051960_gfx,
-                                        c,
-                                        color,
-                                        flipx, flipy,
-                                        sx & 0x1ff, sy,
-                                        cliprect, shadow ? TRANSPARENCY_PEN_TABLE : TRANSPARENCY_PEN, 0,
-                                        (zw << 16) / 16, (zh << 16) / 16);*/
+                                Drawgfx.common_drawgfxzoom_konami(gfx2rom, c, color, flipx, flipy, sx & 0x1ff, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16);
                             }
                         }
                     }
                 }
+            }
+        }
+        public static byte K052109_051960_r(int offset)
+        {
+            if (K052109_RMRD_line == LineState.CLEAR_LINE)
+            {
+                if (offset >= 0x3800 && offset < 0x3808)
+                {
+                    return K051937_r(offset - 0x3800);
+                }
+                else if (offset < 0x3c00)
+                {
+                    return K052109_r(offset);
+                }
+                else
+                {
+                    return K051960_r(offset - 0x3c00);
+                }
+            }
+            else
+            {
+                return K052109_r(offset);
+            }
+        }
+        public static void K052109_051960_w(int offset, byte data)
+        {
+            if (offset >= 0x3800 && offset < 0x3808)
+            {
+                K051937_w(offset - 0x3800, data);
+            }
+            else if (offset < 0x3c00)
+            {
+                K052109_w(offset, data);
+            }
+            else
+            {
+                K051960_w(offset - 0x3c00, data);
             }
         }
         public static void SaveStateBinary_K051960(BinaryWriter writer)
@@ -734,23 +747,11 @@ namespace mame
             K051960_irq_enabled = reader.ReadInt32();
             K051960_nmi_enabled = reader.ReadInt32();
         }
-        public static void LoadStateBinary_K051960_2(BinaryReader reader)
-        {
-            reader.ReadInt32();
-            reader.ReadInt32();
-            reader.ReadInt32();
-            reader.ReadBytes(3);
-            reader.ReadBytes(0x400);
-            reader.ReadInt32();
-            reader.ReadInt32();
-            reader.ReadInt32();
-            reader.ReadInt32();
-        }
         public static void K05324x_set_z_rejection(int zcode)
         {
             K05324x_z_rejection = zcode;
         }
-        public static void K053245_vh_start()
+        public static void K053245_vh_start(K053245_delegate _K053245_callback)
         {
             int i;
             Drawgfx.gfx_drawmode_table[0] = 0;
@@ -760,6 +761,7 @@ namespace mame
             }
             Drawgfx.gfx_drawmode_table[15] = 2;
             K05324x_z_rejection = -1;
+            K053245_callback = _K053245_callback;
             K053244_rombank[0] = 0;
             K053245_ramsize[0] = 0x800;
             K053245_ram[0] = new byte[K053245_ramsize[0]];
@@ -1045,11 +1047,11 @@ namespace mame
                         c = (c & 0x3f) | (code2 & ~0x3f);
                         if (zoomx == 0x10000 && zoomy == 0x10000)
                         {
-                            Drawgfx.common_drawgfx_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, shadow, (uint)(pri2 | (1 << 31)));
+                            Drawgfx.common_drawgfx_konami(gfx2rom, c, color2, fx, fy, sx, sy, cliprect, shadow, (uint)(pri2 | (1 << 31)));
                         }
                         else
                         {
-                            Drawgfx.common_drawgfxzoom_konami68000(gfx22rom, c, color2, fx, fy, sx, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri2 | 1 << 31));
+                            Drawgfx.common_drawgfxzoom_konami(gfx2rom, c, color2, fx, fy, sx, sy, cliprect, shadow, 0, (zw << 16) / 16, (zh << 16) / 16, (uint)(pri2 | 1 << 31));
                         }
                     }
                 }
@@ -1150,7 +1152,6 @@ namespace mame
                     starty = (uint)(256 * (short)(linectrl[lineaddr_offset + 1] + ctrl[0x01]));
                     incxx = (short)(linectrl[lineaddr_offset + 2]);
                     incxy = (short)(linectrl[lineaddr_offset + 3]);
-
                     if ((ctrl[0x06] & 0x8000) != 0)
                     {
                         incxx *= 256;
@@ -1161,7 +1162,7 @@ namespace mame
                     }
                     startx -= (uint)(K053936_offset[chip][0] * incxx);
                     starty -= (uint)(K053936_offset[chip][0] * incxy);
-                    //tilemap_draw_roz(bitmap,&my_clip,tmap,startx << 5,starty << 5,incxx << 5,incxy << 5,0,0,K053936_wraparound[chip],flags,priority);
+                    tmap.tilemap_draw_roz_primask(my_clip, (uint)(startx << 5), (uint)(starty << 5), incxx << 5, incxy << 5, 0, 0, K053936_wraparound[chip], flags, (byte)priority, 0xff);
                     y++;
                 }
             }
@@ -1187,7 +1188,7 @@ namespace mame
                 starty -= (uint)(K053936_offset[chip][1] * incyy);
                 startx -= (uint)(K053936_offset[chip][0] * incxx);
                 starty -= (uint)(K053936_offset[chip][0] * incxy);
-                //tilemap_draw_roz(bitmap,cliprect,tmap,startx << 5,starty << 5,incxx << 5,incxy << 5,incyx << 5,incyy << 5,K053936_wraparound[chip],flags,priority);
+                tmap.tilemap_draw_roz_primask(cliprect, (uint)(startx << 5), (uint)(starty << 5), incxx << 5, incxy << 5, 0, 0, K053936_wraparound[chip], flags, (byte)priority, 0xff);
             }
         }
         public static void K053936_0_zoom_draw(RECT cliprect, Tmap tmap, int flags, uint priority)

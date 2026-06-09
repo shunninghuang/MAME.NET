@@ -372,6 +372,16 @@ namespace mame
             paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
             set_color_444(offset, 12, 8, 4, paletteram16[offset]);
         }
+        public static void paletteram_xBBBBBGGGGGRRRRR_le_w(int offset, byte data)
+        {
+            paletteram[offset] = data;
+            set_color_555(offset / 2, 0, 5, 10, paletteram16_le(offset));
+        }
+        public static void paletteram_xBBBBBGGGGGRRRRR_be_w(int offset, byte data)
+        {
+            paletteram[offset] = data;
+            set_color_555(offset / 2, 0, 5, 10, paletteram16_be(offset));
+        }
         public static void paletteram16_xBBBBBGGGGGRRRRR_word_w(int offset, ushort data)
         {
             paletteram16[offset] = data;

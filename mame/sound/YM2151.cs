@@ -1019,14 +1019,14 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
                         case "cuebrick":
-                            PSG.irqhandler = Konami68000.cuebrick_irq_handler;
+                            PSG.irqhandler = Konami.cuebrick_irq_handler;
                             break;
                         default:
-                            PSG.irqhandler = Konami68000.konami68000_ym2151_irq_handler;
+                            PSG.irqhandler = Konami.konami_ym2151_irq_handler;
                             break;
                     }
                     break;

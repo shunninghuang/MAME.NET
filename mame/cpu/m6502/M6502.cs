@@ -12,7 +12,7 @@ namespace cpu.m6502
         public static M6502[] mm1;
         public Action[] insn,insn6502;
         public byte subtype;
-        public Register ppc,pc,sp,zp,ea;
+        public RegisterPair ppc,pc,sp,zp,ea;
         public byte p,a,x,y,pending_irq,after_cli,nmi_state,irq_state,so_state;
         public delegate int irq_delegate(int i);
         public irq_delegate irq_callback;

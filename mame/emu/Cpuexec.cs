@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using cpu.m68000;
 using cpu.z80;
 using cpu.hd6309;
+using cpu.konami;
 using cpu.m6502;
 using cpu.m6800;
 using cpu.m6805;
@@ -20,6 +21,27 @@ namespace mame
 {
     public class cpuexec_data
     {
+        [StructLayout(LayoutKind.Explicit)]
+        [Serializable()]
+        public struct RegisterPair
+        {
+            [FieldOffset(0)]
+            public uint d;
+            [FieldOffset(0)]
+            public int sd;
+            [FieldOffset(0)]
+            public ushort LowWord;
+            [FieldOffset(2)]
+            public ushort HighWord;
+            [FieldOffset(0)]
+            public byte LowByte;
+            [FieldOffset(1)]
+            public byte HighByte;
+            [FieldOffset(2)]
+            public byte HighByte2;
+            [FieldOffset(3)]
+            public byte HighByte3;
+        }
         public byte suspend;
         public byte nextsuspend;
         public byte eatcycles;
@@ -415,6 +437,31 @@ namespace mame
                             break;
                     }
                     vblank_interrupts_per_frame = 0;
+                    break;
+                case "Seibu":
+                    switch (Machine.sName)
+                    {
+                        case "kncljoe":
+                        case "kncljoea":
+                        case "bcrusher":
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            M6800.m1 = new M6803();
+                            M6800.action_rx = M6800.m1.m6800_rx_tick;
+                            M6800.action_tx = M6800.m1.m6800_tx_tick;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = Z80A.zz1[0];
+                            cpu[1] = M6800.m1;
+                            cpu[0].cycles_per_second = 6000000;
+                            cpu[1].cycles_per_second = 894886;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            break;
+                    }
                     break;
                 case "Tad":
                     switch (Machine.sName)
@@ -1186,28 +1233,84 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
-                    MC68000.nMC68000 = 1;
-                    MC68000.mm1 = new MC68000[MC68000.nMC68000];
-                    MC68000.mm1[0] = new MC68000();
-                    MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
-                    Z80A.nZ80 = 1;
-                    Z80A.zz1 = new Z80A[Z80A.nZ80];
-                    Z80A.zz1[0] = new Z80A();
-                    Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
-                    ncpu = 2;
-                    cpu = new cpuexec_data[ncpu];
-                    cpu[0] = MC68000.mm1[0];
-                    cpu[1] = Z80A.zz1[0];
-                    vblank_interrupts_per_frame = 1;
+                case "Konami":
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                            KonamiCpu.k1 = new KonamiCpu();
+                            KonamiCpu.k1.irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = KonamiCpu.k1;
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 3000000;
+                            cpu[1].cycles_per_second = 3579545;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.scontra_interrupt;
+                            break;
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                            KonamiCpu.k1 = new KonamiCpu();
+                            KonamiCpu.k1.irq_callback = Cpuint.cpu_0_irq_callback;
+                            KonamiCpu.k1.setlines_callback = Konami.thunderx_banking;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = KonamiCpu.k1;
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 3000000;
+                            cpu[1].cycles_per_second = 3579545;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.scontra_interrupt;
+                            break;
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            KonamiCpu.k1 = new KonamiCpu();
+                            KonamiCpu.k1.irq_callback = Cpuint.cpu_0_irq_callback;
+                            KonamiCpu.k1.setlines_callback = Konami.gbusters_banking;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = KonamiCpu.k1;
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 3000000;
+                            cpu[1].cycles_per_second = 3579545;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.scontra_interrupt;
+                            break;
                         case "cuebrick":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
                             ncpu = 1;
                             cpu[0].cycles_per_second = 8000000;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             vblank_interrupts_per_frame = 10;
-                            vblank_interrupt = Konami68000.cuebrick_interrupt;
+                            vblank_interrupt = Konami.cuebrick_interrupt;
                             break;
                         case "mia":
                         case "mia2":
@@ -1215,6 +1318,7 @@ namespace mame
                         case "tmntu":
                         case "tmntua":
                         case "tmntub":
+                        case "tmntuc":
                         case "tmht":
                         case "tmhta":
                         case "tmhtb":
@@ -1224,23 +1328,51 @@ namespace mame
                         case "tmht2pa":
                         case "tmnt2pj":
                         case "tmnt2po":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 8000000;
                             cpu[1].cycles_per_second = 3579545;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
                             vblank_interrupt = Generic.irq5_line_hold0;
                             break;
                         case "punkshot":
                         case "punkshot2":
+                        case "punkshot2e":
                         case "punkshotj":
+                        case "punkshot2a":
                         case "thndrx2":
                         case "thndrx2a":
                         case "thndrx2j":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 12000000;
                             cpu[1].cycles_per_second = 3579545;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
-                            vblank_interrupt = Konami68000.punkshot_interrupt;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.punkshot_interrupt;
                             break;
                         case "lgtnfght":
                         case "lgtnfghta":
@@ -1248,32 +1380,73 @@ namespace mame
                         case "trigon":
                         case "glfgreat":
                         case "glfgreatj":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 12000000;
                             cpu[1].cycles_per_second = 3579545;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
-                            vblank_interrupt = Konami68000.lgtnfght_interrupt;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.lgtnfght_interrupt;
                             break;
                         case "blswhstl":
                         case "blswhstla":
                         case "detatwin":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 16000000;
                             cpu[1].cycles_per_second = 3579545;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
-                            vblank_interrupt = Konami68000.punkshot_interrupt;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.punkshot_interrupt;
                             break;
                         case "tmnt2":
                         case "tmnt2a":
+                        case "tmnt2o":
                         case "tmht22pe":
                         case "tmht24pe":
                         case "tmnt22pu":
+                        case "tmnt24pu":
                         case "qgakumon":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 16000000;
                             cpu[1].cycles_per_second = 8000000;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
-                            vblank_interrupt = Konami68000.punkshot_interrupt;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.punkshot_interrupt;
                             break;
                         case "ssriders":
                         case "ssriderseaa":
@@ -1288,19 +1461,45 @@ namespace mame
                         case "ssridersjad":
                         case "ssridersjac":
                         case "ssridersjbd":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 16000000;
                             cpu[1].cycles_per_second = 4000000;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
-                            vblank_interrupt = Konami68000.punkshot_interrupt;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.punkshot_interrupt;
                             break;
                         case "prmrsocr":
                         case "prmrsocrj":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
                             cpu[0].cycles_per_second = 12000000;
                             cpu[1].cycles_per_second = 8000000;
                             cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
-                            vblank_interrupt = Konami68000.lgtnfght_interrupt;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.lgtnfght_interrupt;
                             break;
                     }
                     break;
@@ -1906,6 +2105,27 @@ namespace mame
                             M6809.mm1[0].ReadOpArg = Technos.M2ReadOp_ddragon;
                             M6809.mm1[0].RM = Technos.M2ReadByte_ddragon;
                             M6809.mm1[0].WM = Technos.M2WriteByte_ddragon;
+                            break;
+                    }
+                    break;
+                case "Seibu":
+                    switch (Machine.sName)
+                    {
+                        case "kncljoe":
+                        case "kncljoea":
+                        case "bcrusher":
+                            Z80A.zz1[0].ReadOp = Seibu.Z0ReadOp_kncljoe;
+                            Z80A.zz1[0].ReadOpArg = Seibu.Z0ReadOp_kncljoe;
+                            Z80A.zz1[0].ReadMemory = Seibu.Z0ReadMemory_kncljoe;
+                            Z80A.zz1[0].WriteMemory = Seibu.Z0WriteMemory_kncljoe;
+                            Z80A.zz1[0].ReadHardware = Tehkan.Z0ReadHardware;
+                            Z80A.zz1[0].WriteHardware = Tehkan.Z0WriteHardware;
+                            M6800.m1.ReadOp = Seibu.M1ReadByte_kncljoe;
+                            M6800.m1.ReadOpArg = Seibu.M1ReadByte_kncljoe;
+                            M6800.m1.ReadMemory = Seibu.M1ReadByte_kncljoe;
+                            M6800.m1.WriteMemory = Seibu.M1WriteByte_kncljoe;
+                            M6800.m1.ReadIO = Seibu.M1ReadIO_kncljoe;
+                            M6800.m1.WriteIO = Seibu.M1WriteIO_kncljoe;
                             break;
                     }
                     break;
@@ -3221,42 +3441,86 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
-                    Z80A.zz1[0].ReadHardware = Konami68000.ZReadHardware;
-                    Z80A.zz1[0].WriteHardware = Konami68000.ZWriteHardware;
+                case "Konami":                    
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                            KonamiCpu.k1.ROP = Konami.KReadOp_scontra;
+                            KonamiCpu.k1.ROP_ARG = Konami.KReadOp_scontra;
+                            KonamiCpu.k1.RM = Konami.KReadMemory_scontra;
+                            KonamiCpu.k1.WM = Konami.KWriteMemory_scontra;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_scontra;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_scontra;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_scontra;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_scontra;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
+                            break;
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                            KonamiCpu.k1.ROP = Konami.KReadOp_scontra;
+                            KonamiCpu.k1.ROP_ARG = Konami.KReadOp_scontra;
+                            KonamiCpu.k1.RM = Konami.KReadMemory_thunderx;
+                            KonamiCpu.k1.WM = Konami.KWriteMemory_thunderx;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_scontra;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_scontra;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_thunderx;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_thunderx;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
+                            break;
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            KonamiCpu.k1.ROP = Konami.KReadOp_scontra;
+                            KonamiCpu.k1.ROP_ARG = Konami.KReadOp_scontra;
+                            KonamiCpu.k1.RM = Konami.KReadMemory_scontra;
+                            KonamiCpu.k1.WM = Konami.KWriteMemory_gbusters;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_scontra;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_scontra;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_scontra;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_gbusters;
+                            Z80A.zz1[0].ReadHardware = Taitob.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Taitob.ZWriteHardware;
+                            break;
                         case "cuebrick":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_cuebrick;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_cuebrick;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_cuebrick;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_cuebrick;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_cuebrick;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_cuebrick;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_cuebrick;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_cuebrick;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_cuebrick;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_cuebrick;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_cuebrick;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_cuebrick;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_cuebrick;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_cuebrick;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_cuebrick;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_cuebrick;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_cuebrick;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_cuebrick;
                             break;
                         case "mia":
                         case "mia2":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_mia;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_mia;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_mia;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_mia;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_mia;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_mia;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_mia;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_mia;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_mia;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_mia;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_mia;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_mia;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_mia;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_mia;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_mia;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_mia;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_mia;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_mia;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_mia;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_mia;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_mia;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_mia;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_mia;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mia;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mia;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_mia;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "tmnt":
                         case "tmntu":
                         case "tmntua":
                         case "tmntub":
+                        case "tmntuc":
                         case "tmht":
                         case "tmhta":
                         case "tmhtb":
@@ -3266,107 +3530,123 @@ namespace mame
                         case "tmht2pa":
                         case "tmnt2pj":
                         case "tmnt2po":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_tmnt;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_tmnt;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_tmnt;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_tmnt;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_tmnt;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_tmnt;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_tmnt;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_tmnt;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_tmnt;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_tmnt;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_tmnt;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_tmnt;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_tmnt;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_tmnt;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_tmnt;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_tmnt;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_tmnt;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_tmnt;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_tmnt;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_tmnt;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_tmnt;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_tmnt;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_tmnt;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_tmnt;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_tmnt;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_tmnt;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "punkshot":
                         case "punkshot2":
+                        case "punkshot2e":
                         case "punkshotj":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_punkshot;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_punkshot;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_punkshot;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_punkshot;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_punkshot;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_punkshot;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_punkshot;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_punkshot;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_punkshot;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_punkshot;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_punkshot;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_punkshot;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_punkshot;
+                        case "punkshot2a":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_punkshot;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_punkshot;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_punkshot;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_punkshot;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_punkshot;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_punkshot;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_punkshot;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_punkshot;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_punkshot;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_punkshot;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_punkshot;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_punkshot;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_punkshot;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "lgtnfght":
                         case "lgtnfghta":
                         case "lgtnfghtu":
                         case "trigon":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_lgtnfght;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_lgtnfght;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_lgtnfght;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_lgtnfght;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_lgtnfght;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_lgtnfght;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_lgtnfght;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_lgtnfght;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_lgtnfght;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_lgtnfght;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_lgtnfght;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_lgtnfght;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_lgtnfght;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_lgtnfght;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_lgtnfght;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_lgtnfght;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_lgtnfght;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_lgtnfght;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_lgtnfght;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_lgtnfght;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_lgtnfght;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_lgtnfght;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_lgtnfght;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_lgtnfght;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_lgtnfght;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_lgtnfght;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "blswhstl":
                         case "blswhstla":
                         case "detatwin":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_blswhstl;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_blswhstl;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_blswhstl;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_blswhstl;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_blswhstl;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_blswhstl;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_blswhstl;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_blswhstl;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_blswhstl;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_ssriders;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_ssriders;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_ssriders;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_ssriders;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_blswhstl;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_blswhstl;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_blswhstl;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_blswhstl;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_blswhstl;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_blswhstl;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_blswhstl;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_blswhstl;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_blswhstl;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_ssriders;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_ssriders;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_ssriders;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_ssriders;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "glfgreat":
                         case "glfgreatj":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_glfgreat;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_glfgreat;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_glfgreat;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_glfgreat;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_glfgreat;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_glfgreat;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_glfgreat;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_glfgreat;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_glfgreat;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_glfgreat;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_glfgreat;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_glfgreat;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_glfgreat;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_glfgreat;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_glfgreat;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_glfgreat;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_glfgreat;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_glfgreat;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_glfgreat;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_glfgreat;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_glfgreat;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_glfgreat;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_glfgreat;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_glfgreat;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_glfgreat;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_glfgreat;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "tmnt2":
                         case "tmnt2a":
+                        case "tmnt2o":
                         case "tmht22pe":
                         case "tmht24pe":
                         case "tmnt22pu":
+                        case "tmnt24pu":
                         case "qgakumon":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_tmnt2;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_tmnt2;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_tmnt2;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_tmnt2;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_tmnt2;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_tmnt2;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_tmnt2;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_tmnt2;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_tmnt2;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_ssriders;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_ssriders;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_ssriders;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_ssriders;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_tmnt2;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_tmnt2;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_tmnt2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_tmnt2;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_tmnt2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_tmnt2;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_tmnt2;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_tmnt2;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_tmnt2;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_ssriders;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_ssriders;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_ssriders;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_ssriders;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "ssriders":
                         case "ssriderseaa":
@@ -3381,52 +3661,58 @@ namespace mame
                         case "ssridersjad":
                         case "ssridersjac":
                         case "ssridersjbd":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_ssriders;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_ssriders;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_ssriders;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_ssriders;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_ssriders;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_ssriders;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_ssriders;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_ssriders;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_ssriders;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_ssriders;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_ssriders;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_ssriders;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_ssriders;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_ssriders;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_ssriders;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_ssriders;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_ssriders;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_ssriders;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_ssriders;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_ssriders;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_ssriders;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_ssriders;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_ssriders;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_ssriders;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_ssriders;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_ssriders;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "thndrx2":
                         case "thndrx2a":
                         case "thndrx2j":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_thndrx2;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_thndrx2;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_thndrx2;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_thndrx2;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_thndrx2;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_thndrx2;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_thndrx2;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_thndrx2;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_thndrx2;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_thndrx2;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_thndrx2;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_thndrx2;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_thndrx2;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_thndrx2;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_thndrx2;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_thndrx2;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_thndrx2;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_thndrx2;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_thndrx2;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_thndrx2;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_thndrx2;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_thndrx2;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_thndrx2;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_thndrx2;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_thndrx2;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_thndrx2;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                         case "prmrsocr":
                         case "prmrsocrj":
-                            MC68000.mm1[0].ReadOpByte = Konami68000.MReadOpByte_prmrsocr;
-                            MC68000.mm1[0].ReadByte = Konami68000.MReadByte_prmrsocr;
-                            MC68000.mm1[0].ReadOpWord = Konami68000.MReadOpWord_prmrsocr;
-                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami68000.MReadWord_prmrsocr;
-                            MC68000.mm1[0].ReadOpLong = Konami68000.MReadOpLong_prmrsocr;
-                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami68000.MReadLong_prmrsocr;
-                            MC68000.mm1[0].WriteByte = Konami68000.MWriteByte_prmrsocr;
-                            MC68000.mm1[0].WriteWord = Konami68000.MWriteWord_prmrsocr;
-                            MC68000.mm1[0].WriteLong = Konami68000.MWriteLong_prmrsocr;
-                            Z80A.zz1[0].ReadOp = Konami68000.ZReadOp_prmrsocr;
-                            Z80A.zz1[0].ReadOpArg = Konami68000.ZReadOp_prmrsocr;
-                            Z80A.zz1[0].ReadMemory = Konami68000.ZReadMemory_prmrsocr;
-                            Z80A.zz1[0].WriteMemory = Konami68000.ZWriteMemory_prmrsocr;
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_prmrsocr;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_prmrsocr;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_prmrsocr;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_prmrsocr;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_prmrsocr;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_prmrsocr;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_prmrsocr;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_prmrsocr;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_prmrsocr;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_prmrsocr;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_prmrsocr;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_prmrsocr;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_prmrsocr;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
                     }
                     break;
@@ -3610,6 +3896,11 @@ namespace mame
                             Z80A.zz1[1].debugger_stop_cpu_hook_callback = null_callback;
                             break;                        
                     }
+                    break;
+                case "Seibu":
+                    z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
+                    Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                    Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
                     break;
                 case "Tad":
                     m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
@@ -3842,9 +4133,23 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            z80Form.z80State = z80Form.Z80AState.Z80A_RUN;
+                            Z80A.zz1[0].debugger_start_cpu_hook_callback = Machine.FORM.z80form.z80_start_debug;
+                            Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
+                            break;
                         case "cuebrick":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
                             MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
@@ -3971,6 +4276,11 @@ namespace mame
                     timeslice_period = new Atime(0, Video.screenstate.frame_period / 1000);
                     timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                     Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                    break;
+                case "Seibu":
+                    timedint_period = new Atime(0, (long)(1e18 / 3970));
+                    timedint_timer = Timer.timer_alloc_common(Seibu.sound_nmi, "sound_nmi", false);
+                    Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
                     break;
                 case "Gaelco":
                     timeslice_period = new Atime(0, Video.screenstate.frame_period / 10);
@@ -4137,7 +4447,7 @@ namespace mame
                     timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                     Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                     break;
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
                         case "cuebrick":
@@ -4346,6 +4656,9 @@ namespace mame
                     break;
                 case "Neo Geo":
                 case "Technos":
+                    break;
+                case "Seibu":
+                    Generic.irq_0_0_line_hold();
                     break;
                 case "Tad":
                     Generic.irq_0_1_line_hold();
@@ -4575,7 +4888,7 @@ namespace mame
                 case "Taito B":
                     vblank_interrupt();
                     break;
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
                         case "cuebrick":
@@ -4631,7 +4944,7 @@ namespace mame
                 case "CPS2":
                 case "CPS2turbo":
                 case "IGS011":
-                case "Konami 68000":
+                case "Konami":
                     if (Cpuexec.cpu[0].iloops == 0)
                     {
                         Cpuexec.cpu[0].iloops = vblank_interrupts_per_frame;

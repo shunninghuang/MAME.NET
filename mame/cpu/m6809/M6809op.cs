@@ -1016,7 +1016,7 @@ namespace cpu.m6809
         void subd_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1027,7 +1027,7 @@ namespace cpu.m6809
         void cmpd_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1037,7 +1037,7 @@ namespace cpu.m6809
         void cmpu_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = U.LowWord;
             r = d - b.d;
@@ -1112,7 +1112,7 @@ namespace cpu.m6809
         void cmpx_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1122,7 +1122,7 @@ namespace cpu.m6809
         void cmpy_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = Y.LowWord;
             r = d - b.d;
@@ -1132,7 +1132,7 @@ namespace cpu.m6809
         void cmps_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = S.LowWord;
             r = d - b.d;
@@ -1202,7 +1202,7 @@ namespace cpu.m6809
         void subd_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1213,7 +1213,7 @@ namespace cpu.m6809
         void cmpd_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1223,7 +1223,7 @@ namespace cpu.m6809
         void cmpu_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = U.LowWord;
             r = d - b.d;
@@ -1298,7 +1298,7 @@ namespace cpu.m6809
         void cmpx_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1308,7 +1308,7 @@ namespace cpu.m6809
         void cmpy_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = Y.LowWord;
             r = d - b.d;
@@ -1318,7 +1318,7 @@ namespace cpu.m6809
         void cmps_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = S.LowWord;
             r = d - b.d;
@@ -1390,7 +1390,7 @@ namespace cpu.m6809
         void subd_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             fetch_effective_address();
             b.d = RM16(EA.LowWord);
             d = D.LowWord;
@@ -1402,7 +1402,7 @@ namespace cpu.m6809
         void cmpd_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             fetch_effective_address();
             b.d = RM16(EA.LowWord);
             d = D.LowWord;
@@ -1413,7 +1413,7 @@ namespace cpu.m6809
         void cmpu_ix()
         {
             uint r;
-            Register b = new Register();
+            RegisterPair b = new RegisterPair();
             fetch_effective_address();
             b.d = RM16(EA.LowWord);
             r = U.LowWord - b.d;
@@ -1488,7 +1488,7 @@ namespace cpu.m6809
         void cmpx_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             fetch_effective_address();
             b.d = RM16(EA.LowWord);
             d = X.LowWord;
@@ -1499,7 +1499,7 @@ namespace cpu.m6809
         void cmpy_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             fetch_effective_address();
             b.d = RM16(EA.LowWord);
             d = Y.LowWord;
@@ -1510,7 +1510,7 @@ namespace cpu.m6809
         void cmps_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             fetch_effective_address();
             b.d = RM16(EA.LowWord);
             d = S.LowWord;
@@ -1582,7 +1582,7 @@ namespace cpu.m6809
         void subd_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1593,7 +1593,7 @@ namespace cpu.m6809
         void cmpd_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1603,7 +1603,7 @@ namespace cpu.m6809
         void cmpu_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = U.LowWord;
             r = d - b.d;
@@ -1677,7 +1677,7 @@ namespace cpu.m6809
         void cmpx_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1687,7 +1687,7 @@ namespace cpu.m6809
         void cmpy_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = Y.LowWord;
             r = d - b.d;
@@ -1697,7 +1697,7 @@ namespace cpu.m6809
         void cmps_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = S.LowWord;
             r = d - b.d;
@@ -1766,7 +1766,7 @@ namespace cpu.m6809
         void addd_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = D.LowWord;
             r = d + b.d;
@@ -1908,7 +1908,7 @@ namespace cpu.m6809
         void addd_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = D.LowWord;
             r = d + b.d;
@@ -2053,7 +2053,7 @@ namespace cpu.m6809
         void addd_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             fetch_effective_address();
             b.d = RM16(EA.LowWord);
             d = D.LowWord;
@@ -2199,7 +2199,7 @@ namespace cpu.m6809
         void addd_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = D.LowWord;
             r = d + b.d;

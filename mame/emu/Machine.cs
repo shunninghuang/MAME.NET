@@ -53,6 +53,11 @@ namespace mame
                     Technos.video_start_ddragon();
                     machine_reset_callback = Technos.machine_reset_ddragon;
                     break;
+                case "Seibu":
+                    Seibu.video_start_kncljoe();
+                    Seibu.palette_init_kncljoe(Seibu.promsrom);
+                    machine_reset_callback = Gaelco.machine_reset_gaelco;
+                    break;
                 case "Tad":
                     Tad.video_start_toki();
                     machine_reset_callback = Tad.machine_reset_seibu_sound;
@@ -257,18 +262,37 @@ namespace mame
                             break;                        
                     }
                     break;
-                case "Konami 68000":
+                case "Konami":
                     Eeprom.eeprom_init();
-                    machine_reset_callback = Konami68000.machine_reset_konami68000;
+                    machine_reset_callback = Konami.machine_reset_konami;
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                            Konami.video_start_scontra();
+                            break;
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            Konami.video_start_gbusters();
+                            break;
                         case "cuebrick":
+                            Konami.video_start_cuebrick();
+                            break;
                         case "mia":
                         case "mia2":
+                            Konami.video_start_mia();
+                            break;
                         case "tmnt":
                         case "tmntu":
                         case "tmntua":
                         case "tmntub":
+                        case "tmntuc":
                         case "tmht":
                         case "tmhta":
                         case "tmhtb":
@@ -278,12 +302,14 @@ namespace mame
                         case "tmht2pa":
                         case "tmnt2pj":
                         case "tmnt2po":
-                            Konami68000.video_start_tmnt();
+                            Konami.video_start_tmnt();
                             break;
                         case "punkshot":
                         case "punkshot2":
+                        case "punkshot2e":
                         case "punkshotj":
-                            Konami68000.video_start_punkshot();
+                        case "punkshot2a":
+                            Konami.video_start_punkshot();
                             break;
                         case "lgtnfght":
                         case "lgtnfghta":
@@ -291,9 +317,11 @@ namespace mame
                         case "trigon":
                         case "tmnt2":
                         case "tmnt2a":
+                        case "tmnt2o":
                         case "tmht22pe":
                         case "tmht24pe":
                         case "tmnt22pu":
+                        case "tmnt24pu":
                         case "qgakumon":
                         case "ssriders":
                         case "ssriderseaa":
@@ -308,25 +336,25 @@ namespace mame
                         case "ssridersjad":
                         case "ssridersjac":
                         case "ssridersjbd":
-                            Konami68000.video_start_lgtnfght();
+                            Konami.video_start_lgtnfght();
                             break;
                         case "blswhstl":
                         case "blswhstla":
                         case "detatwin":
-                            Konami68000.video_start_blswhstl();
+                            Konami.video_start_blswhstl();
                             break;
                         case "glfgreat":
                         case "glfgreatj":
-                            Konami68000.video_start_glfgreat();
+                            Konami.video_start_glfgreat();
                             break;
                         case "thndrx2":
                         case "thndrx2a":
                         case "thndrx2j":
-                            Konami68000.video_start_thndrx2();
+                            Konami.video_start_thndrx2();
                             break;
                         case "prmrsocr":
                         case "prmrsocrj":
-                            Konami68000.video_start_prmrsocr();
+                            Konami.video_start_prmrsocr();
                             break;
                     }
                     break;

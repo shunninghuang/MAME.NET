@@ -47,7 +47,7 @@ namespace cpu.z80
 
         private void Halt()
         {
-            RegPC.Word--;
+            RegPC.LowWord--;
             Halted = true;
         }
     }

@@ -6,7 +6,7 @@ using cpu.z80;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Konami
     {
         public static sbyte MReadOpByte_blswhstl(int address)
         {

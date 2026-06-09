@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using mame;
-using cpu.m68000;
 
 namespace ui
 {

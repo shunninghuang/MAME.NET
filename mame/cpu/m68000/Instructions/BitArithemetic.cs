@@ -10,10 +10,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int srcMode = (op >> 3) & 0x07;
             int srcReg = op & 0x07;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // Byte
@@ -50,9 +48,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int srcMode = (op >> 3) & 0x07;
             int srcReg = op & 0x07;
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -68,7 +64,6 @@ namespace cpu.m68000
                     info.Args = string.Format("{0}, D{1}", DisassembleValue(srcMode, srcReg, 4, ref pc), dstReg);
                     break;
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -78,10 +73,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int dstMode = (op >> 3) & 0x07;
             int dstReg = op & 0x07;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // Byte
@@ -123,9 +116,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int dstMode = (op >> 3) & 0x07;
             int dstReg = op & 0x07;
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -141,7 +132,6 @@ namespace cpu.m68000
                     info.Args = string.Format("D{0}, {1}", srcReg, DisassembleValue(dstMode, dstReg, 4, ref pc));
                     break;
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -150,10 +140,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int dstMode = (op >> 3) & 0x07;
             int dstReg = op & 0x07;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // Byte
@@ -197,9 +185,7 @@ namespace cpu.m68000
             int size = ((op >> 6) & 0x03);
             int dstMode = ((op >> 3) & 0x07);
             int dstReg = (op & 0x07);
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -227,7 +213,6 @@ namespace cpu.m68000
                         break;
                     }
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -253,10 +238,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int dstMode = (op >> 3) & 0x07;
             int dstReg = op & 0x07;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // Byte
@@ -298,9 +281,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int dstMode = (op >> 3) & 0x07;
             int dstReg = op & 0x07;
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -325,10 +306,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -370,7 +349,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -395,7 +373,6 @@ namespace cpu.m68000
                         break;
                     }
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -422,10 +399,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int srcMode = (op >> 3) & 0x07;
             int srcReg = op & 0x07;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // Byte
@@ -462,9 +437,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int srcMode = (op >> 3) & 0x07;
             int srcReg = op & 0x07;
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -480,7 +453,6 @@ namespace cpu.m68000
                     info.Args = string.Format("{0}, D{1}", DisassembleValue(srcMode, srcReg, 4, ref pc), dstReg);
                     break;
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -490,10 +462,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int dstMode = (op >> 3) & 0x07;
             int dstReg = op & 0x07;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // Byte
@@ -535,9 +505,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int dstMode = (op >> 3) & 0x07;
             int dstReg = op & 0x07;
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -562,10 +530,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -607,7 +573,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -632,7 +597,6 @@ namespace cpu.m68000
                         break;
                     }
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -657,10 +621,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // Byte
@@ -701,9 +663,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -719,7 +679,6 @@ namespace cpu.m68000
                     info.Args = DisassembleValue(mode, reg, 4, ref pc);
                     break;
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -729,13 +688,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -778,18 +740,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "lsl.b"; break;
                 case 1: info.Mnemonic = "lsl.w"; break;
                 case 2: info.Mnemonic = "lsl.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 
@@ -832,13 +800,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -881,18 +852,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "lsr.b"; break;
                 case 1: info.Mnemonic = "lsr.w"; break;
                 case 2: info.Mnemonic = "lsr.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 
@@ -936,13 +913,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -991,18 +971,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "asl.b"; break;
                 case 1: info.Mnemonic = "asl.w"; break;
                 case 2: info.Mnemonic = "asl.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 
@@ -1046,13 +1032,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -1101,18 +1090,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "asr.b"; break;
                 case 1: info.Mnemonic = "asr.w"; break;
                 case 2: info.Mnemonic = "asr.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 
@@ -1159,13 +1154,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -1208,18 +1206,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "rol.b"; break;
                 case 1: info.Mnemonic = "rol.w"; break;
                 case 2: info.Mnemonic = "rol.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 
@@ -1262,13 +1266,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             V = false;
             C = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -1311,18 +1318,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "ror.b"; break;
                 case 1: info.Mnemonic = "ror.w"; break;
                 case 2: info.Mnemonic = "ror.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 
@@ -1365,13 +1378,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             C = X;
             V = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -1417,18 +1433,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "roxl.b"; break;
                 case 1: info.Mnemonic = "roxl.w"; break;
                 case 2: info.Mnemonic = "roxl.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 
@@ -1473,13 +1495,16 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-            else if (m == 1) rot = D[rot].s32 & 63;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
+            else if (m == 1)
+            {
+                rot = D[rot].s32 & 63;
+            }
             C = X;
             V = false;
-
             switch (size)
             {
                 case 0: // byte
@@ -1525,18 +1550,24 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int m = (op >> 5) & 1;
             int reg = op & 7;
-
-            if (m == 0 && rot == 0) rot = 8;
-
+            if (m == 0 && rot == 0)
+            {
+                rot = 8;
+            }
             switch (size)
             {
                 case 0: info.Mnemonic = "roxr.b"; break;
                 case 1: info.Mnemonic = "roxr.w"; break;
                 case 2: info.Mnemonic = "roxr.l"; break;
             }
-            if (m == 0) info.Args = rot + ", D" + reg;
-            else info.Args = "D" + rot + ", D" + reg;
-
+            if (m == 0)
+            {
+                info.Args = rot + ", D" + reg;
+            }
+            else
+            {
+                info.Args = "D" + rot + ", D" + reg;
+            }
             info.Length = pc - info.PC;
         }
 

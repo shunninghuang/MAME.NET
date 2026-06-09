@@ -534,6 +534,10 @@ namespace mame
                     }
                     YM2151.ym2151_postload();
                     break;
+                case "Seibu":
+                    Seibu.bg_tilemap.all_tiles_dirty = true;
+                    AY8910.AA8910[0].ay8910_postload();
+                    break;
                 case "Tad":
                     Tad.background_layer.all_tiles_dirty = true;
                     Tad.foreground_layer.all_tiles_dirty = true;
@@ -698,10 +702,10 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
-                    Konami68000.K052109_tilemap[0].all_tiles_dirty = true;
-                    Konami68000.K052109_tilemap[1].all_tiles_dirty = true;
-                    Konami68000.K052109_tilemap[2].all_tiles_dirty = true;
+                case "Konami":
+                    Konami.K052109_tilemap[0].all_tiles_dirty = true;
+                    Konami.K052109_tilemap[1].all_tiles_dirty = true;
+                    Konami.K052109_tilemap[2].all_tiles_dirty = true;
                     for (i = 0; i < 0x800; i++)
                     {
                         Palette.update_adjusted_color(0, i);

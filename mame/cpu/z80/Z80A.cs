@@ -49,14 +49,14 @@ namespace cpu.z80
             InitialiseTables();
             // Clear main registers
             PPC = 0;
-            RegAF = 0x0040; RegBC = 0; RegDE = 0; RegHL = 0;
+            RegAF.LowWord = 0x0040; RegBC.LowWord = 0; RegDE.LowWord = 0; RegHL.LowWord = 0;
             // Clear alternate registers
-            RegAltAF = 0; RegAltBC = 0; RegAltDE = 0; RegAltHL = 0;
+            RegAltAF.LowWord = 0; RegAltBC.LowWord = 0; RegAltDE.LowWord = 0; RegAltHL.LowWord = 0;
             // Clear special purpose registers
             RegI = 0; RegR = 0; RegR2 = 0;
-            RegIX.Word = 0xffff; RegIY.Word = 0xffff;
-            RegSP.Word = 0; RegPC.Word = 0;
-            RegWZ.Word = 0;
+            RegIX.LowWord = 0xffff; RegIY.LowWord = 0xffff;
+            RegSP.LowWord = 0; RegPC.LowWord = 0;
+            RegWZ.LowWord = 0;
             IFF1 = IFF2 = false;
             Halted = false;
             InterruptMode = 0;
@@ -197,20 +197,20 @@ namespace cpu.z80
         public void SaveStateText(TextWriter writer)
         {
             writer.WriteLine("[Z80]");
-            writer.WriteLine("AF {0:X4}", RegAF.Word);
-            writer.WriteLine("BC {0:X4}", RegBC.Word);
-            writer.WriteLine("DE {0:X4}", RegDE.Word);
-            writer.WriteLine("HL {0:X4}", RegHL.Word);
-            writer.WriteLine("ShadowAF {0:X4}", RegAltAF.Word);
-            writer.WriteLine("ShadowBC {0:X4}", RegAltBC.Word);
-            writer.WriteLine("ShadowDE {0:X4}", RegAltDE.Word);
-            writer.WriteLine("ShadowHL {0:X4}", RegAltHL.Word);
+            writer.WriteLine("AF {0:X4}", RegAF.LowWord);
+            writer.WriteLine("BC {0:X4}", RegBC.LowWord);
+            writer.WriteLine("DE {0:X4}", RegDE.LowWord);
+            writer.WriteLine("HL {0:X4}", RegHL.LowWord);
+            writer.WriteLine("ShadowAF {0:X4}", RegAltAF.LowWord);
+            writer.WriteLine("ShadowBC {0:X4}", RegAltBC.LowWord);
+            writer.WriteLine("ShadowDE {0:X4}", RegAltDE.LowWord);
+            writer.WriteLine("ShadowHL {0:X4}", RegAltHL.LowWord);
             writer.WriteLine("I {0:X2}", RegI);
             writer.WriteLine("R {0:X2}", RegR);
-            writer.WriteLine("IX {0:X4}", RegIX.Word);
-            writer.WriteLine("IY {0:X4}", RegIY.Word);
-            writer.WriteLine("SP {0:X4}", RegSP.Word);
-            writer.WriteLine("PC {0:X4}", RegPC.Word);
+            writer.WriteLine("IX {0:X4}", RegIX.LowWord);
+            writer.WriteLine("IY {0:X4}", RegIY.LowWord);
+            writer.WriteLine("SP {0:X4}", RegSP.LowWord);
+            writer.WriteLine("PC {0:X4}", RegPC.LowWord);
             writer.WriteLine("IRQ {0}", interrupt);
             writer.WriteLine("NMI {0}", nonMaskableInterrupt);
             writer.WriteLine("NMIPending {0}", nonMaskableInterruptPending);
@@ -232,33 +232,33 @@ namespace cpu.z80
                 if (args[0].Trim() == "") continue;
                 if (args[0] == "[/Z80]") break;
                 if (args[0] == "AF")
-                    RegAF.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegAF.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "BC")
-                    RegBC.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegBC.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "DE")
-                    RegDE.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegDE.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "HL")
-                    RegHL.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegHL.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "ShadowAF")
-                    RegAltAF.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegAltAF.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "ShadowBC")
-                    RegAltBC.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegAltBC.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "ShadowDE")
-                    RegAltDE.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegAltDE.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "ShadowHL")
-                    RegAltHL.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegAltHL.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "I")
                     RegI = byte.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "R")
                     RegR = byte.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "IX")
-                    RegIX.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegIX.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "IY")
-                    RegIY.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegIY.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "SP")
-                    RegSP.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegSP.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "PC")
-                    RegPC.Word = ushort.Parse(args[1], NumberStyles.HexNumber);
+                    RegPC.LowWord = ushort.Parse(args[1], NumberStyles.HexNumber);
                 else if (args[0] == "IRQ")
                     interrupt = bool.Parse(args[1]);
                 else if (args[0] == "NMI")

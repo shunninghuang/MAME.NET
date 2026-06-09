@@ -6,7 +6,7 @@ using System.IO;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Konami
     {
         private static int[] layer_colorbase;
         private static int sprite_colorbase, bg_colorbase;
@@ -15,7 +15,7 @@ namespace mame
         private static int lastdim, lasten,last;
         private static int[] layerpri, sorted_layer;
         private static int blswhstl_rombank, glfgreat_pixel;
-        private static int glfgreat_roz_rom_bank, glfgreat_roz_char_bank, glfgreat_roz_rom_mode, prmrsocr_sprite_bank;
+        public static int glfgreat_roz_rom_bank, glfgreat_roz_char_bank, glfgreat_roz_rom_mode, prmrsocr_sprite_bank;
         private static Tmap roz_tilemap;
         public static void mia_tile_callback(int layer, int bank, int code, int color, int flags, int priority, out int code2, out int color2, out int flags2)
         {
@@ -179,21 +179,38 @@ namespace mame
             code2 = code | (prmrsocr_sprite_bank << 14);
             color2 = sprite_colorbase + (color & 0x1f);
         }
-
+        public static void video_start_mia()
+        {
+            layer_colorbase[0] = 0;
+            layer_colorbase[1] = 32;
+            layer_colorbase[2] = 40;
+            sprite_colorbase = 16;
+            K052109_vh_start(mia_tile_callback);
+            K051960_vh_start(mia_sprite_callback);
+        }
+        public static void video_start_cuebrick()
+        {
+            layer_colorbase[0] = 0;
+            layer_colorbase[1] = 32;
+            layer_colorbase[2] = 40;
+            sprite_colorbase = 16;
+            K052109_vh_start(cuebrick_tile_callback);
+            K051960_vh_start(mia_sprite_callback);
+        }
         public static void video_start_tmnt()
         {
             layer_colorbase[0] = 0;
             layer_colorbase[1] = 32;
             layer_colorbase[2] = 40;
             sprite_colorbase = 16;
-            K052109_vh_start();
-            K051960_vh_start();
+            K052109_vh_start(tmnt_tile_callback);
+            K051960_vh_start(tmnt_sprite_callback);
         }
         public static void video_start_punkshot()
         {
             K053251_vh_start();
-            K052109_vh_start();
-            K051960_vh_start();
+            K052109_vh_start(tmnt_tile_callback);
+            K051960_vh_start(punkshot_sprite_callback);
         }
         public static void video_start_lgtnfght()
         {
@@ -210,51 +227,56 @@ namespace mame
                 }
             }
             K053251_vh_start();
-            K052109_vh_start();
-            K053245_vh_start();
+            K052109_vh_start(tmnt_tile_callback);
+            K053245_vh_start(lgtnfght_sprite_callback);
             K05324x_set_z_rejection(0);
             dim_c = dim_v = lastdim = lasten = 0;            
         }
         public static void video_start_blswhstl()
         {
             K053251_vh_start();
-            K052109_vh_start();
-            K053245_vh_start();
+            K052109_vh_start(blswhstl_tile_callback);
+            K053245_vh_start(blswhstl_sprite_callback);
         }
         public static void video_start_glfgreat()
         {
+            int j;
             K053251_vh_start();
-            K052109_vh_start();
-            K053245_vh_start();
-            roz_tilemap = new Tmap();
-            roz_tilemap.rows = 512;
-            roz_tilemap.cols = 512;
-            roz_tilemap.tilewidth = 16;
-            roz_tilemap.tileheight = 16;
-            roz_tilemap.width = roz_tilemap.cols * roz_tilemap.tilewidth;
-            roz_tilemap.height = roz_tilemap.rows * roz_tilemap.tileheight;
-            roz_tilemap.enable = true;
-            roz_tilemap.all_tiles_dirty = true;
-            roz_tilemap.scrollrows = 1;
-            roz_tilemap.scrollcols = 1;
-            //roz_tilemap = tilemap_create(glfgreat_get_roz_tile_info,tilemap_scan_rows,16,16,512,512);
-            //tilemap_set_transparent_pen(roz_tilemap,0);
+            K052109_vh_start(tmnt_tile_callback);
+            K053245_vh_start(lgtnfght_sprite_callback);
+            roz_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows,16,16,512,512);
+            roz_tilemap.pen_to_flags = new byte[1, 16];
+            roz_tilemap.pen_to_flags[0, 0] = 0;
+            for (j = 1; j < 16; j++)
+            {
+                roz_tilemap.pen_to_flags[0, j] = 0x10;
+            }
+            roz_tilemap.tile_update3 = roz_tilemap.tile_update_roz_glfgreat;
+            roz_tilemap.tilemap_draw_instance3 = roz_tilemap.tilemap_draw_instance_cps;
             K053936_wraparound_enable(0, 1);
             K053936_set_offset(0, 85, 0);
         }
         public static void video_start_thndrx2()
         {
             K053251_vh_start();
-            K052109_vh_start();// "k052109", NORMAL_PLANE_ORDER, tmnt_tile_callback);
-            K051960_vh_start();//, "k051960", NORMAL_PLANE_ORDER, thndrx2_sprite_callback);
+            K052109_vh_start(tmnt_tile_callback);
+            K051960_vh_start(thndrx2_sprite_callback);
         }
         public static void video_start_prmrsocr()
         {
+            int j;
             K053251_vh_start();
-            K052109_vh_start();//, "k052109", NORMAL_PLANE_ORDER, tmnt_tile_callback);
-            K053245_vh_start();//, 0, "k053245", NORMAL_PLANE_ORDER, prmrsocr_sprite_callback);
-            //roz_tilemap = tilemap_create(prmrsocr_get_roz_tile_info, tilemap_scan_rows, 16, 16, 512, 256);
-            //tilemap_set_transparent_pen(roz_tilemap, 0);
+            K052109_vh_start(tmnt_tile_callback);
+            K053245_vh_start(prmrsocr_sprite_callback);
+            roz_tilemap =Tmap.tilemap_create(Tmap.tilemap_scan_rows, 16, 16, 512, 256);
+            roz_tilemap.pen_to_flags = new byte[1, 16];
+            roz_tilemap.pen_to_flags[0, 0] = 0;
+            for (j = 1; j < 16; j++)
+            {
+                roz_tilemap.pen_to_flags[0, j] = 0x10;
+            }
+            roz_tilemap.tile_update3 = roz_tilemap.tile_update_roz_prmrsocr;
+            roz_tilemap.tilemap_draw_instance3 = roz_tilemap.tilemap_draw_instance_cps;
             K053936_wraparound_enable(0, 0);
             K053936_set_offset(0, 85, 1);
         }
@@ -262,11 +284,9 @@ namespace mame
         {
             ushort data1;
             Generic.paletteram16[offset] = data;
-            //COMBINE_DATA(paletteram16 + offset);
             offset &= ~1;
             data1 = (ushort)((Generic.paletteram16[offset] << 8) | Generic.paletteram16[offset + 1]);
             Palette.palette_set_callback(offset / 2, Palette.make_rgb(Palette.pal5bit((byte)(data1 >> 0)), Palette.pal5bit((byte)(data1 >> 5)), Palette.pal5bit((byte)(data1 >> 10))));
-            //palette_set_color_rgb(machine,offset / 2,pal5bit(data >> 0),pal5bit(data >> 5),pal5bit(data >> 10));
         }
         public static void tmnt_paletteram_word_w1(int offset, byte data)
         {
@@ -402,11 +422,11 @@ namespace mame
             }
             else if (offset < 0x40000)
             {
-                return (ushort)(user1rom[offset + 0x80000 + glfgreat_roz_rom_bank * 0x40000] + 256 * user1rom[offset + glfgreat_roz_rom_bank * 0x40000]);
+                return (ushort)(zoomtmaprom[offset + 0x80000 + glfgreat_roz_rom_bank * 0x40000] + 256 * zoomtmaprom[offset + glfgreat_roz_rom_bank * 0x40000]);
             }
             else
             {
-                return user1rom[((offset & 0x3ffff) >> 2) + 0x100000 + glfgreat_roz_rom_bank * 0x10000];
+                return zoomtmaprom[((offset & 0x3ffff) >> 2) + 0x100000 + glfgreat_roz_rom_bank * 0x10000];
             }
         }
         public static void glfgreat_122000_w(ushort data)
@@ -493,7 +513,7 @@ namespace mame
             }
             else
             {
-                result = (ushort)(user1rom[offset] * 0x100 + user1rom[offset + 0x20000]);
+                result = (ushort)(zoomtmaprom[offset] * 0x100 + zoomtmaprom[offset + 0x20000]);
             }
             return result;
         }
@@ -506,7 +526,7 @@ namespace mame
             }
             else
             {
-                result = user1rom[offset];
+                result = zoomtmaprom[offset];
             }
             return result;
         }
@@ -519,7 +539,7 @@ namespace mame
             }
             else
             {
-                result = user1rom[offset + 0x20000];
+                result = zoomtmaprom[offset + 0x20000];
             }
             return result;
         }
@@ -640,7 +660,7 @@ namespace mame
             sorted_layer[2] = 2;
             layerpri[2] = K053251_get_priority(4);
             sortlayers(sorted_layer, layerpri);
-            Array.Clear(Tilemap.priority_bitmap, 0, 0x40000);
+            Array.Clear(Tilemap.priority_bitmap, 0, 0x20000);
             for (i = 0; i < 0x20000; i++)
             {
                 Video.bitmapbase[Video.curbitmap][i] = (ushort)(16 * bg_colorbase);
@@ -648,24 +668,23 @@ namespace mame
             K052109_tilemap[sorted_layer[0]].tilemap_draw_primask(Video.screenstate.visarea, 0x10, 1);
             if (layerpri[0] >= 0x30 && layerpri[1] < 0x30)
             {
-                //K053936_0_zoom_draw(Video.screenstate.visarea, roz_tilemap, 0, 1);
-                //glfgreat_pixel = *BITMAP_ADDR16(bitmap, 0x80, 0x105);
+                K053936_0_zoom_draw(Video.screenstate.visarea, roz_tilemap, 0x10, 1);
+                glfgreat_pixel = Video.bitmapbase[Video.curbitmap][0x80 * 0x200 + 0x105];
             }
             K052109_tilemap[sorted_layer[1]].tilemap_draw_primask(Video.screenstate.visarea, 0x10, 2);
             if (layerpri[1] >= 0x30 && layerpri[2] < 0x30)
             {
-                //K053936_0_zoom_draw(Video.screenstate.visarea, roz_tilemap, 0, 1);
-                //glfgreat_pixel = *BITMAP_ADDR16(bitmap, 0x80, 0x105);
+                K053936_0_zoom_draw(Video.screenstate.visarea, roz_tilemap, 0x10, 1);
+                glfgreat_pixel = Video.bitmapbase[Video.curbitmap][0x80 * 0x200 + 0x105];
             }
             K052109_tilemap[sorted_layer[2]].tilemap_draw_primask(Video.screenstate.visarea, 0x10, 4);
             if (layerpri[2] >= 0x30)
             {
-                //K053936_0_zoom_draw(Video.screenstate.visarea, roz_tilemap, 0, 1);
-                //glfgreat_pixel = *BITMAP_ADDR16(bitmap, 0x80, 0x105);
+                K053936_0_zoom_draw(Video.screenstate.visarea, roz_tilemap, 0x10, 1);
+                glfgreat_pixel = Video.bitmapbase[Video.curbitmap][0x80 * 0x200 + 0x105];
             }
             K053245_sprites_draw(Video.screenstate.visarea);
         }
-
         public static void video_update_tmnt2()
         {
             double brt;

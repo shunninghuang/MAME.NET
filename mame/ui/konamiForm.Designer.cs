@@ -1,6 +1,6 @@
 ﻿namespace ui
 {
-    partial class konami68000Form
+    partial class konamiForm
     {
         /// <summary>
         /// Required designer variable.
@@ -38,6 +38,7 @@
             this.cbSprite = new System.Windows.Forms.CheckBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.tbSprite = new System.Windows.Forms.TextBox();
+            this.btnDump = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -134,11 +135,22 @@
             this.tbSprite.Size = new System.Drawing.Size(100, 21);
             this.tbSprite.TabIndex = 5;
             // 
-            // konami68000Form
+            // btnDump
+            // 
+            this.btnDump.Location = new System.Drawing.Point(12, 347);
+            this.btnDump.Name = "btnDump";
+            this.btnDump.Size = new System.Drawing.Size(70, 21);
+            this.btnDump.TabIndex = 6;
+            this.btnDump.Text = "dump";
+            this.btnDump.UseVisualStyleBackColor = true;
+            this.btnDump.Click += new System.EventHandler(this.btnDump_Click);
+            // 
+            // konamiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(683, 485);
+            this.Controls.Add(this.btnDump);
             this.Controls.Add(this.tbSprite);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.cbSprite);
@@ -148,10 +160,10 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnDraw);
             this.Controls.Add(this.pictureBox1);
-            this.Name = "konami68000Form";
-            this.Text = "konami68000Form";
-            this.Load += new System.EventHandler(this.konami68000Form_Load);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.konami68000Form_FormClosing);
+            this.Name = "konamiForm";
+            this.Text = "konamiForm";
+            this.Load += new System.EventHandler(this.konamiForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.konamiForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -172,5 +184,6 @@
         private System.Windows.Forms.CheckBox cbSprite;
         private System.Windows.Forms.Button btnSave;
         public System.Windows.Forms.TextBox tbSprite;
+        private System.Windows.Forms.Button btnDump;
     }
 }

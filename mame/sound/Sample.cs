@@ -153,6 +153,7 @@ namespace mame
                 case "tmntu":
                 case "tmntua":
                 case "tmntub":
+                case "tmntuc":
                 case "tmht":
                 case "tmhta":
                 case "tmhtb":
@@ -162,7 +163,7 @@ namespace mame
                 case "tmht2pa":
                 case "tmnt2pj":
                 case "tmnt2po":
-                    info.starthandler = Konami68000.tmnt_decode_sample;
+                    info.starthandler = Konami.tmnt_decode_sample;
                     break;
                 default:
                     info.starthandler = null;

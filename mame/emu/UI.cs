@@ -111,7 +111,7 @@ namespace mame
                 }
             }
         }
-        public static void ui_update_konami68000()
+        public static void ui_update_konami()
         {
             int i;
             int red, green, blue;

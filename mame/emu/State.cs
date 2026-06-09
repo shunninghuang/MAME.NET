@@ -101,6 +101,17 @@ namespace mame
                             break;
                     }
                     break;
+                case "Seibu":
+                    switch (Machine.sName)
+                    {
+                        case "kncljoe":
+                        case "kncljoea":
+                        case "bcrusher":
+                            savestate_callback = Seibu.SaveStateBinary_kncljoe;
+                            loadstate_callback = Seibu.LoadStateBinary_kncljoe;
+                            break;
+                    }
+                    break;
                 case "Tad":
                     switch (Machine.sName)
                     {
@@ -388,16 +399,32 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            savestate_callback = Konami.SaveStateBinary_scontra;
+                            loadstate_callback = Konami.LoadStateBinary_scontra;
+                            break;
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                            savestate_callback = Konami.SaveStateBinary_thunderx;
+                            loadstate_callback = Konami.LoadStateBinary_thunderx;
+                            break;
                         case "cuebrick"://ym K052109 K051960
-                            savestate_callback = Konami68000.SaveStateBinary_cuebrick;
-                            loadstate_callback = Konami68000.LoadStateBinary_cuebrick;
+                            savestate_callback = Konami.SaveStateBinary_cuebrick;
+                            loadstate_callback = Konami.LoadStateBinary_cuebrick;
                             break;
                         case "mia"://ym k007232 K052109 K051960
-                            savestate_callback = Konami68000.SaveStateBinary_mia;
-                            loadstate_callback = Konami68000.LoadStateBinary_mia;
+                            savestate_callback = Konami.SaveStateBinary_mia;
+                            loadstate_callback = Konami.LoadStateBinary_mia;
                             break;
                         case "tmnt":
                         case "tmntu":
@@ -412,32 +439,32 @@ namespace mame
                         case "tmht2pa":
                         case "tmnt2pj":
                         case "tmnt2po"://ym k007232 upd samples K052109 K051960
-                            savestate_callback = Konami68000.SaveStateBinary_tmnt;
-                            loadstate_callback = Konami68000.LoadStateBinary_tmnt;
+                            savestate_callback = Konami.SaveStateBinary_tmnt;
+                            loadstate_callback = Konami.LoadStateBinary_tmnt;
                             break;
                         case "punkshot":
                         case "punkshot2":
                         case "punkshotj"://ym k053260 K052109 K051960
-                            savestate_callback = Konami68000.SaveStateBinary_punkshot;
-                            loadstate_callback = Konami68000.LoadStateBinary_punkshot;
+                            savestate_callback = Konami.SaveStateBinary_punkshot;
+                            loadstate_callback = Konami.LoadStateBinary_punkshot;
                             break;                        
                         case "lgtnfght":
                         case "lgtnfghta":
                         case "lgtnfghtu":
                         case "trigon"://ym k053260 K052109 K053245
-                            savestate_callback = Konami68000.SaveStateBinary_lgtnfght;
-                            loadstate_callback = Konami68000.LoadStateBinary_lgtnfght;
+                            savestate_callback = Konami.SaveStateBinary_lgtnfght;
+                            loadstate_callback = Konami.LoadStateBinary_lgtnfght;
                             break;
                         case "blswhstl":
                         case "blswhstla":
                         case "detatwin"://ym k053260 K052109 K053245 eeprom bytee
-                            savestate_callback = Konami68000.SaveStateBinary_blswhstl;
-                            loadstate_callback = Konami68000.LoadStateBinary_blswhstl;
+                            savestate_callback = Konami.SaveStateBinary_blswhstl;
+                            loadstate_callback = Konami.LoadStateBinary_blswhstl;
                             break;
                         case "glfgreat":
                         case "glfgreatj"://k053260 K052109 K053245
-                            savestate_callback = Konami68000.SaveStateBinary_glfgreat;
-                            loadstate_callback = Konami68000.LoadStateBinary_glfgreat;
+                            savestate_callback = Konami.SaveStateBinary_glfgreat;
+                            loadstate_callback = Konami.LoadStateBinary_glfgreat;
                             break;
                         case "tmnt2":
                         case "tmnt2a":
@@ -445,8 +472,8 @@ namespace mame
                         case "tmht24pe":
                         case "tmnt22pu":
                         case "qgakumon"://ym k053260 K052109 K053245 eeprom tmnt2_1c0800
-                            savestate_callback = Konami68000.SaveStateBinary_tmnt2;
-                            loadstate_callback = Konami68000.LoadStateBinary_tmnt2;
+                            savestate_callback = Konami.SaveStateBinary_tmnt2;
+                            loadstate_callback = Konami.LoadStateBinary_tmnt2;
                             break;
                         case "ssriders":
                         case "ssriderseaa":
@@ -461,19 +488,19 @@ namespace mame
                         case "ssridersjad":
                         case "ssridersjac":
                         case "ssridersjbd"://ym k053260 K052109 K053245 eeprom
-                            savestate_callback = Konami68000.SaveStateBinary_ssriders;
-                            loadstate_callback = Konami68000.LoadStateBinary_ssriders;
+                            savestate_callback = Konami.SaveStateBinary_ssriders;
+                            loadstate_callback = Konami.LoadStateBinary_ssriders;
                             break;                        
                         case "thndrx2":
                         case "thndrx2a":
                         case "thndrx2j"://ym k053260 K052109 K051960 eeprom
-                            savestate_callback = Konami68000.SaveStateBinary_thndrx2;
-                            loadstate_callback = Konami68000.LoadStateBinary_thndrx2;
+                            savestate_callback = Konami.SaveStateBinary_thndrx2;
+                            loadstate_callback = Konami.LoadStateBinary_thndrx2;
                             break;
                         case "prmrsocr":
                         case "prmrsocrj"://k054539 K052109 K053245 eeprom
-                            savestate_callback = Konami68000.SaveStateBinary_prmrsocr;
-                            loadstate_callback = Konami68000.LoadStateBinary_prmrsocr;
+                            savestate_callback = Konami.SaveStateBinary_prmrsocr;
+                            loadstate_callback = Konami.LoadStateBinary_prmrsocr;
                             break;
                     }
                     break;

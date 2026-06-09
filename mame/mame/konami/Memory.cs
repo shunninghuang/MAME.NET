@@ -6,11 +6,12 @@ using cpu.z80;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Konami
     {
         public static sbyte sbyte0, sbyte1, sbyte2, sbyte3, sbyte4;
         public static sbyte sbyte0_old, sbyte1_old, sbyte2_old, sbyte3_old, sbyte4_old;
-        public static byte bytee_old;
+        public static byte bytes, byte1, byte2, bytee;
+        public static byte bytes_old, byte1_old, byte2_old, bytee_old;
         public static sbyte MReadOpByte_cuebrick(int address)
         {
             address &= 0xffffff;

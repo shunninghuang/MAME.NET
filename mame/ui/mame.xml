@@ -4970,378 +4970,490 @@
     <year>1989</year>
     <manufacturer>Tehkan</manufacturer>
   </game>
-  <game name="cuebrick" board="Konami 68000">
+  <game name="scontra" board="Konami">
+    <parent></parent>
+    <direction>90</direction>
+    <description>Super Contra (set 1)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="scontraa" board="Konami">
+    <parent>scontra</parent>
+    <direction>90</direction>
+    <description>Super Contra (set 2)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="scontraj" board="Konami">
+    <parent>scontra</parent>
+    <direction>90</direction>
+    <description>Super Contra: Alien no Gyakushuu (Japan)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="thunderx" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Thunder Cross (set 1)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="thunderxa" board="Konami">
+    <parent>thunderx</parent>
+    <direction></direction>
+    <description>Thunder Cross (set 2)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="thunderxb" board="Konami">
+    <parent>thunderx</parent>
+    <direction></direction>
+    <description>Thunder Cross (set 3)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="thunderxj" board="Konami">
+    <parent>thunderx</parent>
+    <direction></direction>
+    <description>Thunder Cross (Japan)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="gbusters" board="Konami">
+    <parent></parent>
+    <direction>90</direction>
+    <description>Gang Busters (set 1)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="gbustersa" board="Konami">
+    <parent>gbusters</parent>
+    <direction>90</direction>
+    <description>Gang Busters (set 2)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="crazycop" board="Konami">
+    <parent>gbusters</parent>
+    <direction>90</direction>
+    <description>Crazy Cop (Japan)</description>
+    <year>1988</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="cuebrick" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Cue Brick (World, version D)</description>
     <year>1985</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="mia" board="Konami 68000">
+  <game name="mia" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>M.I.A. - Missing in Action (version T)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="mia2" board="Konami 68000">
+  <game name="mia2" board="Konami">
     <parent>mia</parent>
     <direction></direction>
     <description>M.I.A. - Missing in Action (version S)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmnt" board="Konami 68000">
+  <game name="tmnt" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (World 4 Players, version X)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmntu" board="Konami 68000">
+  <game name="tmntu" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (US 4 Players, version R)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmntua" board="Konami 68000">
+  <game name="tmntua" board="Konami">
+    <parent>tmnt</parent>
+    <direction></direction>
+    <description>Teenage Mutant Ninja Turtles (US 4 Players, version N)</description>
+    <year>1989</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="tmntub" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (US 4 Players, version J)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmntub" board="Konami 68000">
+  <game name="tmntuc" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (US 4 Players, version H)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmht" board="Konami 68000">
+  <!--<game name="tmntucbl" board="Konami">
+    <parent>tmnt</parent>
+    <direction></direction>
+    <description>Teenage Mutant Ninja Turtles (bootleg, US 4 Players, version H)</description>
+    <year>1989</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
+  <game name="tmht" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Hero Turtles (UK 4 Players, version F)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmhta" board="Konami 68000">
+  <game name="tmhta" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Hero Turtles (UK 4 Players, version S)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmhtb" board="Konami 68000">
+  <game name="tmhtb" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Hero Turtles (UK 4 Players, version ?)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmntj" board="Konami 68000">
+  <game name="tmntj" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (Japan 4 Players, version 2)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmnta" board="Konami 68000">
+  <game name="tmnta" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (Asia 4 Players, version ?)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmht2p" board="Konami 68000">
+  <game name="tmht2p" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Hero Turtles (UK 2 Players, version U)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmht2pa" board="Konami 68000">
+  <game name="tmht2pa" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Hero Turtles (UK 2 Players, version ?)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmnt2pj" board="Konami 68000">
+  <game name="tmnt2pj" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (Japan 2 Players, version 1)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmnt2po" board="Konami 68000">
+  <game name="tmnt2po" board="Konami">
     <parent>tmnt</parent>
     <direction></direction>
     <description>Teenage Mutant Ninja Turtles (Oceania 2 Players, version ?)</description>
     <year>1989</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="punkshot" board="Konami 68000">
+  <game name="punkshot" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Punk Shot (US 4 Players)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="punkshot2" board="Konami 68000">
+  <game name="punkshot2" board="Konami">
     <parent>punkshot</parent>
     <direction></direction>
     <description>Punk Shot (US 2 Players)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="punkshotj" board="Konami 68000">
+  <game name="punkshot2e" board="Konami">
+    <parent>punkshot</parent>
+    <direction></direction>
+    <description>Punk Shot (World 2 Players)</description>
+    <year>1990</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="punkshotj" board="Konami">
     <parent>punkshot</parent>
     <direction></direction>
     <description>Punk Shot (Japan 2 Players)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="lgtnfght" board="Konami 68000">
+  <game name="punkshot2a" board="Konami">
+    <parent>punkshot</parent>
+    <direction></direction>
+    <description>Punk Shot (Asia 2 Players, hacked?)</description>
+    <year>1990</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="lgtnfght" board="Konami">
     <parent></parent>
     <direction>90</direction>
     <description>Lightning Fighters (World)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="lgtnfghta" board="Konami 68000">
+  <game name="lgtnfghta" board="Konami">
     <parent>lgtnfght</parent>
     <direction>90</direction>
     <description>Lightning Fighters (Asia)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="lgtnfghtu" board="Konami 68000">
+  <game name="lgtnfghtu" board="Konami">
     <parent>lgtnfght</parent>
     <direction>90</direction>
     <description>Lightning Fighters (US)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="trigon" board="Konami 68000">
+  <game name="trigon" board="Konami">
     <parent>lgtnfght</parent>
     <direction>90</direction>
     <description>Trigon (Japan)</description>
     <year>1990</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="blswhstl" board="Konami 68000">
+  <game name="blswhstl" board="Konami">
     <parent></parent>
     <direction>90</direction>
     <description>Bells &amp; Whistles (World, version L)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="blswhstla" board="Konami 68000">
+  <game name="blswhstla" board="Konami">
     <parent>blswhstl</parent>
     <direction>90</direction>
     <description>Bells &amp; Whistles (Asia, version M)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="detatwin" board="Konami 68000">
+  <game name="detatwin" board="Konami">
     <parent>blswhstl</parent>
     <direction>90</direction>
     <description>Detana!! Twin Bee (Japan, version J)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="glfgreat" board="Konami 68000">
+  <game name="glfgreat" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Golfing Greats</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="glfgreatj" board="Konami 68000">
+  <game name="glfgreatj" board="Konami">
     <parent>glfgreat</parent>
     <direction></direction>
     <description>Golfing Greats (Japan)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmnt2" board="Konami 68000">
+  <game name="tmnt2" board="Konami">
     <parent></parent>
     <direction></direction>
-    <description>Teenage Mutant Ninja Turtles - Turtles in Time (4 Players ver UAA)</description>
+    <description>Teenage Mutant Ninja Turtles: Turtles in Time (4 Players ver UAA)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmnt2a" board="Konami 68000">
+  <game name="tmnt2a" board="Konami">
     <parent>tmnt2</parent>
     <direction></direction>
-    <description>Teenage Mutant Ninja Turtles - Turtles in Time (4 Players ver ADA)</description>
+    <description>Teenage Mutant Ninja Turtles: Turtles in Time (4 Players ver ADA)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmht22pe" board="Konami 68000">
+  <game name="tmnt2o" board="Konami">
     <parent>tmnt2</parent>
     <direction></direction>
-    <description>Teenage Mutant Hero Turtles - Turtles in Time (2 Players ver EBA)</description>
+    <description>Teenage Mutant Ninja Turtles: Turtles in Time (4 Players ver OAA)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmht24pe" board="Konami 68000">
+  <game name="tmht22pe" board="Konami">
     <parent>tmnt2</parent>
     <direction></direction>
-    <description>Teenage Mutant Hero Turtles - Turtles in Time (4 Players ver EAA)</description>
+    <description>Teenage Mutant Hero Turtles: Turtles in Time (2 Players ver EBA)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="tmnt22pu" board="Konami 68000">
+  <game name="tmht24pe" board="Konami">
     <parent>tmnt2</parent>
     <direction></direction>
-    <description>Teenage Mutant Ninja Turtles - Turtles in Time (2 Players ver UDA)</description>
+    <description>Teenage Mutant Hero Turtles: Turtles in Time (4 Players ver EAA)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="qgakumon" board="Konami 68000">
+  <game name="tmnt22pu" board="Konami">
+    <parent>tmnt2</parent>
+    <direction></direction>
+    <description>Teenage Mutant Ninja Turtles: Turtles in Time (2 Players ver UDA)</description>
+    <year>1991</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="tmnt24pu" board="Konami">
+    <parent>tmnt2</parent>
+    <direction></direction>
+    <description>Teenage Mutant Ninja Turtles: Turtles in Time (4 Players ver UEA)</description>
+    <year>1991</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="qgakumon" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Quiz Gakumon no Susume (Japan ver. JA2 Type L)</description>
     <year>1993</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssriders" board="Konami 68000">
+  <game name="ssriders" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver EAC)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssriderseaa" board="Konami 68000">
+  <game name="ssriderseaa" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver EAA)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersebd" board="Konami 68000">
+  <game name="ssridersebd" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (2 Players ver EBD)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersebc" board="Konami 68000">
+  <game name="ssridersebc" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (2 Players ver EBC)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersuda" board="Konami 68000">
+  <game name="ssridersuda" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver UDA)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersuac" board="Konami 68000">
+  <game name="ssridersuac" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver UAC)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersuab" board="Konami 68000">
+  <game name="ssridersuab" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver UAB)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersubc" board="Konami 68000">
+  <game name="ssridersubc" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (2 Players ver UBC)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersadd" board="Konami 68000">
+  <game name="ssridersadd" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver ADD)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersabd" board="Konami 68000">
+  <game name="ssridersabd" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (2 Players ver ABD)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersjad" board="Konami 68000">
+  <game name="ssridersjad" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver JAD)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersjac" board="Konami 68000">
+  <game name="ssridersjac" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (4 Players ver JAC)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="ssridersjbd" board="Konami 68000">
+  <game name="ssridersjbd" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (2 Players ver JBD)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <!--<game name="ssridersb" board="Konami 68000">
+  <!--<game name="ssridersb" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders (bootleg 4 Players ver ADD)</description>
     <year>1991</year>
     <manufacturer>bootleg</manufacturer>
   </game>
-  <game name="ssriders2" board="Konami 68000">
+  <game name="ssriders2" board="Konami">
     <parent>ssriders</parent>
     <direction></direction>
     <description>Sunset Riders 2 (bootleg 4 Players ver ADD)</description>
     <year>1991</year>
     <manufacturer>bootleg</manufacturer>
   </game>-->
-  <game name="thndrx2" board="Konami 68000">
+  <game name="thndrx2" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Thunder Cross II (World)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="thndrx2a" board="Konami 68000">
+  <game name="thndrx2a" board="Konami">
     <parent>thndrx2</parent>
     <direction></direction>
     <description>Thunder Cross II (Asia)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="thndrx2j" board="Konami 68000">
+  <game name="thndrx2j" board="Konami">
     <parent>thndrx2</parent>
     <direction></direction>
     <description>Thunder Cross II (Japan)</description>
     <year>1991</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="prmrsocr" board="Konami 68000">
+  <game name="prmrsocr" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Premier Soccer (ver EAB)</description>
     <year>1993</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <game name="prmrsocrj" board="Konami 68000">
+  <game name="prmrsocrj" board="Konami">
     <parent>prmrsocr</parent>
     <direction></direction>
     <description>Premier Soccer (ver JAB)</description>
@@ -7356,6 +7468,27 @@
     <description>Super Toffy (Unico license)</description>
     <year>1994</year>
     <manufacturer>Midas (Unico license)</manufacturer>
+  </game>
+  <game name="kncljoe" board="Seibu">
+    <parent></parent>
+    <direction></direction>
+    <description>Knuckle Joe (set 1)</description>
+    <year>1985</year>
+    <manufacturer>Seibu Kaihatsu (Taito license)</manufacturer>
+  </game>
+  <game name="kncljoea" board="Seibu">
+    <parent>kncljoe</parent>
+    <direction></direction>
+    <description>Knuckle Joe (set 2)</description>
+    <year>1985</year>
+    <manufacturer>Seibu Kaihatsu (Taito license)</manufacturer>
+  </game>
+  <game name="bcrusher" board="Seibu">
+    <parent>kncljoe</parent>
+    <direction></direction>
+    <description>Bone Crusher</description>
+    <year>1985</year>
+    <manufacturer>bootleg</manufacturer>
   </game>
   <game name="toki" board="Tad">
     <parent></parent>

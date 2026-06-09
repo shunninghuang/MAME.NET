@@ -147,7 +147,7 @@ namespace mame
             lt2.Add(new emu_timer2(40, M92.m92_scanline_interrupt, "m92_scanline_interrupt"));
             lt2.Add(new emu_timer2(41, Cpuexec.cpu_timeslicecallback, "cpu_timeslicecallback"));
             lt2.Add(new emu_timer2(42, Cpuexec.vblank_interrupt2, "vblank_interrupt2"));
-            lt2.Add(new emu_timer2(43, Konami68000.nmi_callback, "nmi_callback"));
+            lt2.Add(new emu_timer2(43, Konami.nmi_callback, "nmi_callback"));
             lt2.Add(new emu_timer2(44, Upd7759.upd7759_slave_update, "upd7759_slave_update"));
             lt2.Add(new emu_timer2(45, Generic.irq_2_0_line_hold, "irq_2_0_line_hold"));
             lt2.Add(new emu_timer2(46, MSM5205.MSM5205_vclk_callback0, "msm5205_vclk_callback0"));
@@ -161,6 +161,7 @@ namespace mame
             lt2.Add(new emu_timer2(54, K054539.k054539_irq, "k054539_irq"));
             lt2.Add(new emu_timer2(55, Taito.cchip_timer, "cchip_timer"));
             lt2.Add(new emu_timer2(56, Technos.ddragon_scanline_callback, "ddragon_scanline_callback"));
+            lt2.Add(new emu_timer2(57, Seibu.sound_nmi, "sound_nmi"));
         }
         public static Atime get_current_time()
         {
@@ -484,10 +485,19 @@ namespace mame
                         case "CPS2":
                         case "CPS2turbo":
                         case "IGS011":
-                        case "Konami68000":
                             Cpuexec.cpu[0].partial_frame_timer = lt[i];
                             lt.Remove(lt[i]);
                             lt.Add(Cpuexec.cpu[0].partial_frame_timer);
+                            break;
+                        case "Konami":
+                            switch (Machine.sName)
+                            {
+                                case "cuebrick":
+                                    Cpuexec.cpu[0].partial_frame_timer = lt[i];
+                                    lt.Remove(lt[i]);
+                                    lt.Add(Cpuexec.cpu[0].partial_frame_timer);
+                                    break;
+                            }
                             break;
                         case "PGM":
                             switch (Machine.sName)

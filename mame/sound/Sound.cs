@@ -74,7 +74,7 @@ namespace mame
                     AY8910.ay8910_interface generic_ay8910 = new AY8910.ay8910_interface();
                     generic_ay8910.flags = 1;
                     generic_ay8910.res_load = new int[3] { 1000, 1000, 1000 };
-                    generic_ay8910.portAread = null;
+                    generic_ay8910.portAread = Sound.soundlatch_r;
                     generic_ay8910.portBread = null;
                     generic_ay8910.portAwrite = null;
                     generic_ay8910.portBwrite = null;
@@ -139,6 +139,29 @@ namespace mame
                             YM2151.ym2151_init(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             mixerstream = new sound_stream(48000, 2, 0, null);
+                            break;
+                    }
+                    break;
+                case "Seibu":
+                    switch (Machine.sName)
+                    {
+                        case "kncljoe":
+                        case "kncljoea":
+                        case "bcrusher":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            sound_update = sound_update_seibu_kncljoe;
+                            AY8910.ay8910_interface seibu_ay8910 = new AY8910.ay8910_interface();
+                            seibu_ay8910.flags = 1;
+                            seibu_ay8910.res_load = new int[3] { 1000, 1000, 1000 };
+                            seibu_ay8910.portAread = Sound.soundlatch_r;
+                            seibu_ay8910.portBread = null;
+                            seibu_ay8910.portAwrite = null;
+                            seibu_ay8910.portBwrite = Seibu.unused_w;
+                            AY8910.ay8910_start_ym(6, 0, 894886, seibu_ay8910);
+                            SN76496.ss1[0] = new SN76496(3579545, 0x4000, 3, true);
+                            SN76496.ss1[1] = new SN76496(3579545, 0x4000, 3, true);
+                            mixerstream = new sound_stream(48000, 5, 0, null);
                             break;
                     }
                     break;
@@ -618,15 +641,12 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
-                        case "cuebrick":
-                            YM2151.ym2151_init(3579545);
-                            ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
-                            sound_update = sound_update_konami68000_cuebrick;
-                            mixerstream = new sound_stream(48000, 2, 0, null);
-                            break;
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
                         case "mia":
                         case "mia2":
                             latched_value = new ushort[1];
@@ -635,13 +655,43 @@ namespace mame
                             K007232.k007232_start(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             k007232stream = new sound_stream(27965, 0, 2, K007232.KDAC_A_update);
-                            sound_update = sound_update_konami68000_mia;
+                            sound_update = sound_update_konami_mia;
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            YM2151.ym2151_init(3579545);
+                            ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
+                            sound_update = sound_update_konami_cuebrick;
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            latched_value = new ushort[1];
+                            utempdata = new ushort[1];
+                            YM2151.ym2151_init(3579545);
+                            K007232.k007232_start(3579545);
+                            ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
+                            k007232stream = new sound_stream(27965, 0, 2, K007232.KDAC_A_update);
+                            sound_update = sound_update_konami_gbusters;
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "cuebrick":
+                            YM2151.ym2151_init(3579545);
+                            ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
+                            sound_update = sound_update_konami_cuebrick;
+                            mixerstream = new sound_stream(48000, 2, 0, null);
+                            break;                        
                         case "tmnt":
                         case "tmntu":
                         case "tmntua":
                         case "tmntub":
+                        case "tmntuc":
                         case "tmht":
                         case "tmhta":
                         case "tmhtb":
@@ -661,12 +711,14 @@ namespace mame
                             k007232stream = new sound_stream(27965, 0, 2, K007232.KDAC_A_update);
                             upd7759stream = new sound_stream(160000, 0, 1, Upd7759.upd7759_update);
                             samplestream = new sound_stream(48000, 0, 1, Sample.sample_update_sound);
-                            sound_update = sound_update_konami68000_tmnt;
+                            sound_update = sound_update_konami_tmnt;
                             mixerstream = new sound_stream(48000, 6, 0, null);
                             break;
                         case "punkshot":
                         case "punkshot2":
+                        case "punkshot2e":
                         case "punkshotj":
+                        case "punkshot2a":
                         case "lgtnfght":
                         case "lgtnfghta":
                         case "lgtnfghtu":
@@ -688,7 +740,7 @@ namespace mame
                             K053260.k053260_start(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             k053260stream = new sound_stream(111860, 0, 2, K053260.k053260_update);
-                            sound_update = sound_update_konami68000_ssriders;
+                            sound_update = sound_update_konami_ssriders;
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                         case "blswhstl":
@@ -698,27 +750,29 @@ namespace mame
                             K053260.k053260_start(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             k053260stream = new sound_stream(111860, 0, 2, K053260.k053260_update);
-                            sound_update = sound_update_konami68000_blswhstl;
+                            sound_update = sound_update_konami_blswhstl;
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                         case "glfgreat":
                         case "glfgreatj":
                             K053260.k053260_start(3579545);
                             k053260stream = new sound_stream(111860, 0, 2, K053260.k053260_update);
-                            sound_update = sound_update_konami68000_glfgreat;
+                            sound_update = sound_update_konami_glfgreat;
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
                         case "tmnt2":
                         case "tmnt2a":
+                        case "tmnt2o":
                         case "tmht22pe":
                         case "tmht24pe":
                         case "tmnt22pu":
+                        case "tmnt24pu":
                         case "qgakumon":
                             YM2151.ym2151_init(3579545);
                             K053260.k053260_start(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             k053260stream = new sound_stream(111860, 0, 2, K053260.k053260_update);
-                            sound_update = sound_update_konami68000_tmnt2;
+                            sound_update = sound_update_konami_tmnt2;
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                         case "thndrx2":
@@ -728,7 +782,7 @@ namespace mame
                             K053260.k053260_start(3579545);
                             ym2151stream = new sound_stream(55930, 0, 2, YM2151.ym2151_update_one);
                             k053260stream = new sound_stream(111860, 0, 2, K053260.k053260_update);
-                            sound_update = sound_update_konami68000_thndrx2;
+                            sound_update = sound_update_konami_thndrx2;
                             mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                         case "prmrsocr":
@@ -737,7 +791,7 @@ namespace mame
                             utempdata = new ushort[3];
                             K054539.k054539_start(48000);
                             k054539stream = new sound_stream(48000, 0, 2, K054539.k054539_update);
-                            sound_update = sound_update_konami68000_prmrsocr;
+                            sound_update = sound_update_konami_prmrsocr;
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
                     }
@@ -839,6 +893,9 @@ namespace mame
                             YM2151.ym2151_reset_chip();
                             break;
                     }
+                    break;
+                case "Seibu":
+                    AY8910.AA8910[0].ay8910_reset_ym();
                     break;
                 case "Tad":
                     switch (Machine.sName)
@@ -1071,9 +1128,19 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
                         case "cuebrick":
                         case "mia":
                         case "mia2":
@@ -1427,6 +1494,36 @@ namespace mame
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_technos_toffy();
+        }
+        public static void sound_update_seibu_kncljoe()
+        {
+            int sampindex;
+            AY8910.AA8910[0].stream.stream_update();
+            SN76496.ss1[0].Channel.stream_update();
+            SN76496.ss1[1].Channel.stream_update();
+            generate_resampled_data_ay8910_3(0, 0x4c, 0);
+            generate_resampled_data_sn76496(0, 0x4c, 3);
+            generate_resampled_data_sn76496(1, 0x4c, 4);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex] + mixerstream.streaminput[4][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_seibu_kncljoe();
         }
         public static void sound_update_tad_tokib()
         {
@@ -2200,7 +2297,44 @@ namespace mame
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_neogeo();
         }
-        public static void sound_update_konami68000_cuebrick()
+        public static void sound_update_konami_gbusters()
+        {
+            int sampindex;
+            ym2151stream.stream_update();
+            k007232stream.stream_update();
+            generate_resampled_data_ym2151(0x99);
+            generate_resampled_data_k007232(0x4c);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int sampL, sampR;
+                sampL = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (sampL < -32768)
+                {
+                    sampL = -32768;
+                }
+                else if (sampL > 32767)
+                {
+                    sampL = 32767;
+                }
+                sampR = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (sampR < -32768)
+                {
+                    sampR = -32768;
+                }
+                else if (sampR > 32767)
+                {
+                    sampR = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)sampL;
+                finalmixb[sampindex * 4 + 1] = (byte)((sampL & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)sampR;
+                finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_konami_mia();
+        }
+        public static void sound_update_konami_cuebrick()
         {
             int sampindex;
             ym2151stream.stream_update();
@@ -2233,9 +2367,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_cuebrick();
+            streams_update_konami_cuebrick();
         }
-        public static void sound_update_konami68000_mia()
+        public static void sound_update_konami_mia()
         {
             int sampindex;
             ym2151stream.stream_update();
@@ -2270,9 +2404,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_mia();
+            streams_update_konami_mia();
         }
-        public static void sound_update_konami68000_tmnt()
+        public static void sound_update_konami_tmnt()
         {
             int sampindex;
             ym2151stream.stream_update();
@@ -2311,9 +2445,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_tmnt();
+            streams_update_konami_tmnt();
         }
-        public static void sound_update_konami68000_blswhstl()
+        public static void sound_update_konami_blswhstl()
         {
             int sampindex;
             ym2151stream.stream_update();
@@ -2348,9 +2482,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_ssriders();
+            streams_update_konami_ssriders();
         }
-        public static void sound_update_konami68000_glfgreat()
+        public static void sound_update_konami_glfgreat()
         {
             int sampindex;
             k053260stream.stream_update();
@@ -2383,9 +2517,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_glfgreat();
+            streams_update_konami_glfgreat();
         }
-        public static void sound_update_konami68000_tmnt2()
+        public static void sound_update_konami_tmnt2()
         {
             int sampindex;
             ym2151stream.stream_update();
@@ -2420,9 +2554,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_ssriders();
+            streams_update_konami_ssriders();
         }
-        public static void sound_update_konami68000_ssriders()
+        public static void sound_update_konami_ssriders()
         {
             int sampindex;
             ym2151stream.stream_update();
@@ -2457,9 +2591,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_ssriders();
+            streams_update_konami_ssriders();
         }
-        public static void sound_update_konami68000_thndrx2()
+        public static void sound_update_konami_thndrx2()
         {
             int sampindex;
             ym2151stream.stream_update();
@@ -2494,9 +2628,9 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_ssriders();
+            streams_update_konami_ssriders();
         }
-        public static void sound_update_konami68000_prmrsocr()
+        public static void sound_update_konami_prmrsocr()
         {
             int sampindex;
             k054539stream.stream_update();
@@ -2529,7 +2663,7 @@ namespace mame
                 finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
-            streams_update_konami68000_prmrsocr();
+            streams_update_konami_prmrsocr();
         }
         public static void sound_update_capcom_gng()
         {
@@ -2645,6 +2779,10 @@ namespace mame
         public static ushort soundlatch_r()
         {
             return latched_value[0];
+        }
+        public static byte soundlatch_r(int offset)
+        {
+            return (byte)latched_value[0];
         }
         public static ushort soundlatch2_r()
         {

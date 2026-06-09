@@ -2649,7 +2649,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank1[basebankmain + offset];
+                result = bank1[basebankmain + offset];
             }
             return result;
         }
@@ -2663,7 +2663,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank1[basebankmain + offset];
+                result = bank1[basebankmain + offset];
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -2700,7 +2700,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank1[basebankmain + offset] = value;
+                bank1[basebankmain + offset] = value;
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -2750,7 +2750,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank1[basebankmain + offset] = value;
+                bank1[basebankmain + offset] = value;
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -2796,7 +2796,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank1[basebankmain + offset];
+                result = bank1[basebankmain + offset];
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -2828,7 +2828,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank1[basebankmain + offset] = value;
+                bank1[basebankmain + offset] = value;
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -2878,7 +2878,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank1[basebankmain + offset];
+                result = bank1[basebankmain + offset];
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -2930,7 +2930,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank1[basebankmain + offset] = value;
+                bank1[basebankmain + offset] = value;
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -2981,7 +2981,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank2[basebanksub + offset];
+                result = bank2[basebanksub + offset];
             }
             return result;
         }
@@ -2995,7 +2995,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank2[basebanksub + offset];
+                result = bank2[basebanksub + offset];
             }
             else if (address == 0xb000)
             {
@@ -3036,7 +3036,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank2[basebanksub + offset] = value;
+                bank2[basebanksub + offset] = value;
             }
             else if (address == 0xa000)
             {
@@ -3076,7 +3076,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank2[basebanksub + offset];
+                result = bank2[basebanksub + offset];
             }
             else if (address == 0xb000)
             {
@@ -3128,7 +3128,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank2[basebanksub + offset] = value;
+                bank2[basebanksub + offset] = value;
             }
             else if (address == 0xa000)
             {
@@ -3163,7 +3163,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank2[basebanksub + offset];
+                result = bank2[basebanksub + offset];
             }
             else if (address == 0xb000)
             {
@@ -3206,7 +3206,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank2[basebanksub + offset] = value;
+                bank2[basebanksub + offset] = value;
             }
             else if (address == 0xa000)
             {
@@ -3241,7 +3241,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank2[basebanksub + offset];
+                result = bank2[basebanksub + offset];
             }
             else if (address == 0xb002)
             {
@@ -3289,7 +3289,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank2[basebanksub + offset] = value;
+                bank2[basebanksub + offset] = value;
             }
             else if (address == 0xa000)
             {
@@ -3325,7 +3325,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank2[basebanksub + offset];
+                result = bank2[basebanksub + offset];
             }
             else if (address == 0xb002)
             {
@@ -3373,7 +3373,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank2[basebanksub + offset] = value;
+                bank2[basebanksub + offset] = value;
             }
             else if (address == 0xa000)
             {
@@ -3409,7 +3409,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank2[basebanksub + offset];
+                result = bank2[basebanksub + offset];
             }
             else if (address == 0xb000)
             {
@@ -3452,7 +3452,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0x9fff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank2[basebanksub + offset] = value;
+                bank2[basebanksub + offset] = value;
             }
             else if (address == 0xa000)
             {
@@ -3527,7 +3527,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = tnzs_bank3[basebankaudio + offset];
+                result = bank3[basebankaudio + offset];
             }
             else if (address >= 0xe000 && address <= 0xffff)
             {
@@ -3545,7 +3545,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                tnzs_bank3[basebankaudio+offset] = value;
+                bank3[basebankaudio+offset] = value;
             }
             else if (address >= 0xe000 && address <= 0xffff)
             {

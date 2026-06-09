@@ -283,8 +283,8 @@ namespace mame
                     }
                     break;
                 case "plumppop":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -294,8 +294,8 @@ namespace mame
                     Generic.paletteram = new byte[0x400];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     promsrom = Machine.GetRom("proms.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
@@ -311,8 +311,8 @@ namespace mame
                     }
                     break;
                 case "jpopnics":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -322,8 +322,8 @@ namespace mame
                     Generic.paletteram = new byte[0x800];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
                     if (Memory.mainrom == null || subrom == null || gfx1rom == null)
@@ -340,8 +340,8 @@ namespace mame
                 case "extrmatnu":
                 case "extrmatnur":
                 case "extrmatnj":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -351,8 +351,8 @@ namespace mame
                     Generic.paletteram = new byte[0x400];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     promsrom = Machine.GetRom("proms.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
@@ -371,8 +371,8 @@ namespace mame
                 case "arknoid2u":
                 case "arknoid2j":
                 case "arknoid2b":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -382,8 +382,8 @@ namespace mame
                     Generic.paletteram = new byte[0x400];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     promsrom = Machine.GetRom("proms.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
@@ -401,8 +401,8 @@ namespace mame
                 case "drtoppel":
                 case "drtoppelu":
                 case "drtoppelj":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -412,8 +412,8 @@ namespace mame
                     Generic.paletteram = new byte[0x400];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     promsrom = Machine.GetRom("proms.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
@@ -432,8 +432,8 @@ namespace mame
                 case "kagekiu":
                 case "kagekij":
                 case "kagekih":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -443,8 +443,8 @@ namespace mame
                     Generic.paletteram = new byte[0x400];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     samplesrom = Machine.GetRom("samples.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
@@ -463,8 +463,8 @@ namespace mame
                 case "chukatai":
                 case "chukataiu":
                 case "chukataij":                
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -477,8 +477,8 @@ namespace mame
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
                     mcurom = Machine.GetRom("mcu.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
                     mcu_type = MCU_CHUKATAI;
@@ -493,8 +493,8 @@ namespace mame
                     }
                     break;
                 case "chukataija":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -507,8 +507,8 @@ namespace mame
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
                     mcurom = Machine.GetRom("mcu.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     promsrom = Machine.GetRom("proms.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
@@ -525,8 +525,8 @@ namespace mame
                     break;
                 case "tnzs":
                 case "tnzsj":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -538,8 +538,8 @@ namespace mame
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
                     Memory.audiorom = Machine.GetRom("audiocpu.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
                     mcu_type = MCU_NONE_TNZSB;
@@ -558,8 +558,8 @@ namespace mame
                 case "tnzsuo":
                 case "tnzsoa":
                 case "tnzsop":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -572,8 +572,8 @@ namespace mame
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
                     mcurom = Machine.GetRom("mcu.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
                     mcu_type = MCU_TNZS;
@@ -589,9 +589,9 @@ namespace mame
                     break;
                 case "kabukiz":
                 case "kabukizj":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
-                    tnzs_bank3 = new byte[0x20000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
+                    bank3 = new byte[0x20000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -603,9 +603,9 @@ namespace mame
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
                     Memory.audiorom = Machine.GetRom("audiocpu.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
-                    Array.Copy(Memory.audiorom, 0x8000, tnzs_bank3, 0x8000, 0x18000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
+                    Array.Copy(Memory.audiorom, 0x8000, bank3, 0x8000, 0x18000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
                     mcu_type = MCU_NONE_KABUKIZ;
@@ -622,8 +622,8 @@ namespace mame
                 case "insectx":
                 case "insectxj":
                 case "insectxbl":
-                    tnzs_bank1 = new byte[0x20000];
-                    tnzs_bank2 = new byte[0x8000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x8000];
                     tnzs_objram = new byte[0x2000];
                     tnzs_sharedram = new byte[0x2000];
                     tnzs_vdcram = new byte[0x200];
@@ -634,8 +634,8 @@ namespace mame
                     Memory.audioram = new byte[0x2000];
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
                     subrom = Machine.GetRom("sub.rom");
-                    Array.Copy(Memory.mainrom, 0x8000, tnzs_bank1, 0x8000, 0x18000);
-                    Array.Copy(subrom, 0x8000, tnzs_bank2, 0, 0x8000);
+                    Array.Copy(Memory.mainrom, 0x8000, bank1, 0x8000, 0x18000);
+                    Array.Copy(subrom, 0x8000, bank2, 0, 0x8000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     Drawgfx.spritecount = gfx1rom.Length / 0x100;
                     mcu_type = MCU_NONE_INSECTX;

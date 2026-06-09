@@ -543,11 +543,11 @@ namespace mame
             irq = null;
             switch (Machine.sBoard)
             {
-                case "Konami 68000":
+                case "Konami":
                     switch (Machine.sName)
                     {
                         case "prmrsocr":
-                            irq = Konami68000.sound_nmi;
+                            irq = Konami.sound_nmi;
                             break;
                     }
                     break;

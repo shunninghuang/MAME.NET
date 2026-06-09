@@ -809,7 +809,7 @@ namespace cpu.m6800
         protected void subd_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -885,7 +885,7 @@ namespace cpu.m6800
         protected void cmpx_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -896,7 +896,7 @@ namespace cpu.m6800
         protected void cpx_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -953,7 +953,7 @@ namespace cpu.m6800
         protected void subd_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1029,7 +1029,7 @@ namespace cpu.m6800
         protected void cmpx_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1040,7 +1040,7 @@ namespace cpu.m6800
         protected void cpx_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1096,7 +1096,7 @@ namespace cpu.m6800
         protected void subd_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IDXWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1172,7 +1172,7 @@ namespace cpu.m6800
         protected void cmpx_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IDXWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1183,7 +1183,7 @@ namespace cpu.m6800
         protected void cpx_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IDXWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1239,7 +1239,7 @@ namespace cpu.m6800
         protected void subd_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = D.LowWord;
             r = d - b.d;
@@ -1313,7 +1313,7 @@ namespace cpu.m6800
         protected void cmpx_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1324,7 +1324,7 @@ namespace cpu.m6800
         protected void cpx_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = X.LowWord;
             r = d - b.d;
@@ -1380,7 +1380,7 @@ namespace cpu.m6800
         protected void addd_im()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IMMWORD();
             d = D.LowWord;
             r = d + b.d;
@@ -1508,7 +1508,7 @@ namespace cpu.m6800
         protected void addd_di()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = DIRWORD();
             d = D.LowWord;
             r = d + b.d;
@@ -1636,7 +1636,7 @@ namespace cpu.m6800
         protected void addd_ix()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = IDXWORD();
             d = D.LowWord;
             r = d + b.d;
@@ -1773,7 +1773,7 @@ namespace cpu.m6800
         protected void addd_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = D.LowWord;
             r = d + b.d;
@@ -1854,7 +1854,7 @@ namespace cpu.m6800
         protected void addx_ex()
         {
             uint r, d;
-            Register b;
+            RegisterPair b;
             b = EXTWORD();
             d = X.LowWord;
             r = d + b.d;

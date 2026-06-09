@@ -98,7 +98,7 @@ namespace mame
         {
             int i;
             info = new kdacApcm();
-            info.portwritehandler = Konami68000.volume_callback;
+            info.portwritehandler = Konami.volume_callback;
             info.pcmbuf_offset = new int[2];
             info.addr = new uint[2];
             info.start = new uint[2];

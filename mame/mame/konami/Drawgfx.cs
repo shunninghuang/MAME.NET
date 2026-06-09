@@ -7,7 +7,7 @@ namespace mame
 {
     public partial class Drawgfx
     {
-        public static void common_drawgfxzoom_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, int transparent_color, int scalex, int scaley)
+        public static void common_drawgfxzoom_konami(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, int transparent_color, int scalex, int scaley)
         {
             if ((scalex == 0) || (scaley == 0))
             {
@@ -15,7 +15,7 @@ namespace mame
             }
             if (scalex == 0x10000 && scaley == 0x10000)
             {
-                common_drawgfx_konami68000(bb1, code, color, flipx, flipy, sx, sy, clip, shadow, 0);
+                common_drawgfx_konami(bb1, code, color, flipx, flipy, sx, sy, clip, shadow, 0);
                 return;
             }
             RECT myclip;
@@ -32,7 +32,7 @@ namespace mame
             if (myclip.max_y >= 0x100)
                 myclip.max_y = 0x100 - 1;
             int colorbase = 0x10 * (color % 0x80);
-            int source_baseoffset = (code % Konami68000.sprite_totel_element) * 0x100;
+            int source_baseoffset = (code % Konami.sprite_totel_element) * 0x100;
             int sprite_screen_height = (scaley * 0x10 + 0x8000) >> 16;
             int sprite_screen_width = (scalex * 0x10 + 0x8000) >> 16;
             int countx, county, i, j, srcoffset, dstoffset;
@@ -105,7 +105,7 @@ namespace mame
                 }
             }
         }
-        public static void common_drawgfxzoom_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, int transparent_color, int scalex, int scaley, uint pri_mask)
+        public static void common_drawgfxzoom_konami(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, int transparent_color, int scalex, int scaley, uint pri_mask)
         {
             if ((scalex == 0) || (scaley == 0))
             {
@@ -113,7 +113,7 @@ namespace mame
             }
             if (scalex == 0x10000 && scaley == 0x10000)
             {
-                common_drawgfx_konami68000(bb1, code, color, flipx, flipy, sx, sy, clip, shadow, pri_mask);
+                common_drawgfx_konami(bb1, code, color, flipx, flipy, sx, sy, clip, shadow, pri_mask);
                 return;
             }
             int transparency;
@@ -140,7 +140,7 @@ namespace mame
             if (myclip.max_y >= 0x100)
                 myclip.max_y = 0x100 - 1;
             int colorbase = 0x10 * (color % 0x80);
-            int source_baseoffset = (code % Konami68000.sprite_totel_element) * 0x100;
+            int source_baseoffset = (code % Konami.sprite_totel_element) * 0x100;
             int sprite_screen_height = (scaley * 0x10 + 0x8000) >> 16;
             int sprite_screen_width = (scalex * 0x10 + 0x8000) >> 16;
             int countx, county, i, j, srcoffset, dstoffset;
@@ -242,7 +242,7 @@ namespace mame
                 }
             }
         }
-        public static void common_drawgfx_konami68000(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, uint pri_mask)
+        public static void common_drawgfx_konami(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip, int shadow, uint pri_mask)
         {
             int ox;
             int oy;
@@ -305,14 +305,14 @@ namespace mame
             int colorbase = color * 0x10;
             if (shadow != 0)
             {
-                blockmove_8toN_pen_table_pri16_konami68000(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, pri_mask, 0, sx, sy);
+                blockmove_8toN_pen_table_pri16_konami(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, pri_mask, 0, sx, sy);
             }
             else
             {
-                blockmove_8toN_transpen_pri16_konami68000(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, pri_mask, 0, sx, sy);
+                blockmove_8toN_transpen_pri16_konami(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x200, colorbase, pri_mask, 0, sx, sy);
             }
         }
-        public static void blockmove_8toN_pen_table_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int transcolor, int sx, int sy)
+        public static void blockmove_8toN_pen_table_pri16_konami(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int transcolor, int sx, int sy)
         {
             int ydir, xdir, col, i, j, offsetx, offsety;
             int srcdata_offset = code * srcwidth * srcheight;
@@ -385,7 +385,7 @@ namespace mame
                 }
             }
         }
-        public static void blockmove_8toN_transpen_pri16_konami68000(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int transpen, int sx, int sy)
+        public static void blockmove_8toN_transpen_pri16_konami(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int transpen, int sx, int sy)
         {
             int ydir, xdir, col, i, j;
             int offsetx = sx, offsety = sy;

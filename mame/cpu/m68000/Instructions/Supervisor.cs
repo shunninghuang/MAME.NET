@@ -84,7 +84,9 @@ namespace cpu.m68000
         void ANDI_SR()
         {
             if (S == false)
+            {
                 throw new Exception("trap!");
+            }
             SR &= ReadOpWord(PC); PC += 2;
             pendingCycles -= 20;
         }
@@ -100,7 +102,9 @@ namespace cpu.m68000
         void EORI_SR()
         {
             if (S == false)
+            {
                 throw new Exception("trap!");
+            }
             SR ^= ReadOpWord(PC); PC += 2;
             pendingCycles -= 20;
         }
@@ -116,7 +120,9 @@ namespace cpu.m68000
         void ORI_SR()
         {
             if (S == false)
+            {
                 throw new Exception("trap!");
+            }
             SR |= ReadOpWord(PC); PC += 2;
             pendingCycles -= 20;
         }
@@ -132,8 +138,7 @@ namespace cpu.m68000
         void MOVECCR()
         {
             int mode = (op >> 3) & 7;
-            int reg = (op >> 0) & 7;
-                        
+            int reg = (op >> 0) & 7;                        
             /*ushort sr = (ushort)(SR & 0xFF00);
             sr |= (byte)ReadValueB(mode, reg);
             SR = (short)sr;*/

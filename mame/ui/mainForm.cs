@@ -32,6 +32,7 @@ namespace ui
         public tehkanForm tehkanform;
         public neogeoForm neogeoform;
         public technosForm technosform;
+        public seibuForm seibuform;
         public tadForm tadform;
         public megasys1Form megasys1form;
         public gaelcoForm gaelcoform;
@@ -43,7 +44,7 @@ namespace ui
         public m92Form m92form;
         public taitoForm taitoform;
         public taitobForm taitobform;
-        public konami68000Form konami68000form;
+        public konamiForm konamiform;
         public capcomForm capcomform;
         public string sSelect;
         private DSDevice dev;
@@ -91,6 +92,7 @@ namespace ui
             InitTehkanForm();
             InitNeogeoForm();
             InitTechnosForm();
+            InitSeibuForm();
             InitTadForm();
             InitMegasys1Form();
             InitGaelcoForm();
@@ -103,7 +105,7 @@ namespace ui
             InitM92Form();
             InitTaitoForm();
             InitTaitobForm();
-            InitKonami68000Form();
+            InitKonamiForm();
             InitCapcomForm();
             //load1();
         }
@@ -126,10 +128,11 @@ namespace ui
             tehkanToolStripMenuItem.Enabled = false;
             neogeoToolStripMenuItem.Enabled = false;
             technosToolStripMenuItem.Enabled = false;
+            seibuToolStripMenuItem.Enabled = false;
             tadToolStripMenuItem.Enabled = false;
             megasys1ToolStripMenuItem.Enabled = false;
             gaelcoToolStripMenuItem.Enabled = false;
-			kanekoToolStripMenuItem.Enabled = false;
+            kanekoToolStripMenuItem.Enabled = false;
             //suna8ToolStripMenuItem.Enabled = false;
             namcos1ToolStripMenuItem.Enabled = false;
             igs011ToolStripMenuItem.Enabled = false;
@@ -138,7 +141,7 @@ namespace ui
             m92ToolStripMenuItem.Enabled = false;
             taitoToolStripMenuItem.Enabled = false;
             taitobToolStripMenuItem.Enabled = false;
-            konami68000ToolStripMenuItem.Enabled = false;
+            konamiToolStripMenuItem.Enabled = false;
             capcomToolStripMenuItem.Enabled = false;
             switch (Machine.sBoard)
             {
@@ -273,6 +276,24 @@ namespace ui
                     technosToolStripMenuItem.Enabled = true;
                     Technos.DdragonInit();
                     Technos.GDIInit();
+                    break;
+                case "Seibu":
+                    Video.nMode = 1;
+                    itemSize = new ToolStripMenuItem[Video.nMode];
+                    for (i = 0; i < Video.nMode; i++)
+                    {
+                        itemSize[i] = new ToolStripMenuItem();
+                        itemSize[i].Size = new Size(152, 22);
+                        itemSize[i].Click += new EventHandler(itemsizeToolStripMenuItem_Click);
+                    }
+                    itemSize[0].Text = "240x256";
+                    resetToolStripMenuItem.DropDownItems.Clear();
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
+                    itemSelect();
+                    seibuToolStripMenuItem.Enabled = true;
+                    Seibu.SeibuInit();
+                    Seibu.GDIInit();
                     break;
                 case "Tad":
                     Video.nMode = 1;
@@ -557,7 +578,7 @@ namespace ui
                     Taitob.TaitobInit();
                     Taitob.GDIInit();
                     break;
-                case "Konami 68000":
+                case "Konami":
                     Video.nMode = 1;
                     itemSize = new ToolStripMenuItem[Video.nMode];
                     for (i = 0; i < Video.nMode; i++)
@@ -571,9 +592,9 @@ namespace ui
                     resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
                     Video.iMode = 0;
                     itemSelect();
-                    konami68000ToolStripMenuItem.Enabled = true;
-                    Konami68000.Konami68000Init();
-                    Konami68000.GDIInit();
+                    konamiToolStripMenuItem.Enabled = true;
+                    Konami.KonamiInit();
+                    Konami.GDIInit();
                     break;
                 case "Capcom":
                     Video.nMode = 1;
@@ -694,6 +715,10 @@ namespace ui
         {
             technosform = new technosForm(this);
         }
+        private void InitSeibuForm()
+        {
+            seibuform = new seibuForm(this);
+        }
         private void InitTadForm()
         {
             tadform = new tadForm(this);
@@ -742,9 +767,9 @@ namespace ui
         {
             taitobform = new taitobForm(this);
         }
-        private void InitKonami68000Form()
+        private void InitKonamiForm()
         {
-            konami68000form = new konami68000Form(this);
+            konamiform = new konamiForm(this);
         }
         private void InitCapcomForm()
         {
@@ -926,6 +951,10 @@ namespace ui
         {
             technosform.Show();
         }
+        private void seibuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            seibuform.Show();
+        }
         private void tadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tadform.Show();
@@ -974,9 +1003,9 @@ namespace ui
         {
             taitobform.Show();
         }
-        private void konami68000ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void konamiToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            konami68000form.Show();
+            konamiform.Show();
         }
         private void capcomToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1169,6 +1198,15 @@ namespace ui
                         Video.height = 240;
                     }
                     break;
+                case "Seibu":
+                    if (Video.iMode == 0)
+                    {
+                        Video.offsetx = 8;
+                        Video.offsety = 0;
+                        Video.width = 240;
+                        Video.height = 256;
+                    }
+                    break;
                 case "Tad":
                     if (Video.iMode == 0)
                     {
@@ -1347,19 +1385,36 @@ namespace ui
                         Video.height = 224;
                     }
                     break;
-                case "Konami 68000":
+                case "Konami":
                     if (Video.iMode == 0)
                     {
                         switch (Machine.sName)
                         {
+                            case "scontra":
+                            case "scontraa":
+                            case "scontraj":
+                            case "thunderx":
+                            case "thunderxa":
+                            case "thunderxb":
+                            case "thunderxj":
+                            case "gbusters":
+                            case "gbustersa":
+                            case "crazycop":
+                                Video.offsetx=112;
+                                Video.offsety = 16;
+                                Video.width = 288;
+                                Video.height = 224;
+                                break;
                             case "cuebrick":
                             case "mia":
                             case "mia2":
                             case "tmnt2":
                             case "tmnt2a":
+                            case "tmnt2o":
                             case "tmht22pe":
                             case "tmht24pe":
                             case "tmnt22pu":
+                            case "tmnt24pu":
                             case "qgakumon":
                                 Video.offsetx = 104;
                                 Video.offsety = 16;
@@ -1370,6 +1425,7 @@ namespace ui
                             case "tmntu":
                             case "tmntua":
                             case "tmntub":
+                            case "tmntuc":
                             case "tmht":
                             case "tmhta":
                             case "tmhtb":
@@ -1393,7 +1449,9 @@ namespace ui
                                 break;
                             case "punkshot":
                             case "punkshot2":
+                            case "punkshot2e":
                             case "punkshotj":
+                            case "punkshot2a":
                             case "glfgreat":
                             case "glfgreatj":
                             case "ssriders":

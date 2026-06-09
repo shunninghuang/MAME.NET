@@ -2,57 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Runtime.InteropServices;
 using mame;
 
 namespace cpu.i8039
 {
     public partial class I8039 : cpuexec_data
     {
-        [StructLayout(LayoutKind.Explicit)]
-        [Serializable()]
-        public struct RegisterPair
-        {
-            [FieldOffset(0)]
-            public ushort Word;
-            [FieldOffset(0)]
-            public byte Low;
-            [FieldOffset(1)]
-            public byte High;
-            public RegisterPair(ushort value)
-            {
-                Word = value;
-                Low = (byte)(Word);
-                High = (byte)(Word >> 8);
-            }
-            public static implicit operator ushort(RegisterPair rp)
-            {
-                return rp.Word;
-            }
-            public static implicit operator RegisterPair(ushort value)
-            {
-                return new RegisterPair(value);
-            }
-        }
-        public enum I8039_Registers
-        {
-            I8039_PC = 1,
-            I8039_SP,
-            I8039_PSW,
-            I8039_A,
-            I8039_TC,
-            I8039_P1,
-            I8039_P2,
-            I8039_R0,
-            I8039_R1,
-            I8039_R2,
-            I8039_R3,
-            I8039_R4,
-            I8039_R5,
-            I8039_R6,
-            I8039_R7,
-            I8039_EA
-        }
         public const int I8039_p0 = 0x100;
         public const int I8039_p1 = 0x101;
         public const int I8039_p2 = 0x102;
@@ -115,6 +70,10 @@ namespace cpu.i8039
             {
                 pendingCycles = value;
             }
+        }
+        public override void cpunum_set_input_line_and_vector(int cpunum, int line, LineState state, int vector)
+        {
+            Timer.timer_set_internal(Cpuint.cpunum_empty_event_queue, "cpunum_empty_event_queue");
         }
         public Func<ushort, byte> ReadMemory;
         public Action<ushort, byte> WriteMemory;
@@ -228,8 +187,8 @@ namespace cpu.i8039
         }
         private byte M_RDMEM_OPCODE()
         {
-            byte retval = M_RDOP_ARG(R.PC.Word);
-            R.PC.Word++;
+            byte retval = M_RDOP_ARG(R.PC.LowWord);
+            R.PC.LowWord++;
             return retval;
         }
         private void push(byte d)
@@ -298,10 +257,9 @@ namespace cpu.i8039
         }
         private void M_CALL(ushort addr)
         {
-            push((byte)R.PC); // 推入低字节
-            push((byte)(((R.PC >> 8) & 0x0f) | (R.PSW & 0xf0))); // 高4位 + PSW高4位
-            R.PC.Word = addr;
-            //ChangePC?.Invoke(addr);
+            push((byte)R.PC.LowByte); // 推入低字节
+            push((byte)((R.PC.HighByte & 0x0f) | (R.PSW & 0xf0))); // 高4位 + PSW高4位
+            R.PC.LowWord = addr;
         }
         private void M_XCHD(int addr)
         {
@@ -397,14 +355,14 @@ namespace cpu.i8039
         private void dec_r7() { R.RAM[R.regPtr + 7]--; }
         private void dis_i() { R.xirq_en = 0; }
         private void dis_tcnti() { R.tirq_en = 0; R.pending_irq &= unchecked((byte)~I8039_TIMCNT_INT); }
-        private void djnz_r0() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr]--; if (R0() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void djnz_r1() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 1]--; if (R1() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void djnz_r2() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 2]--; if (R2() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void djnz_r3() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 3]--; if (R3() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void djnz_r4() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 4]--; if (R4() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void djnz_r5() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 5]--; if (R5() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void djnz_r6() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 6]--; if (R6() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void djnz_r7() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 7]--; if (R7() != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
+        private void djnz_r0() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr]--; if (R0() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void djnz_r1() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 1]--; if (R1() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void djnz_r2() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 2]--; if (R2() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void djnz_r3() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 3]--; if (R3() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void djnz_r4() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 4]--; if (R4() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void djnz_r5() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 5]--; if (R5() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void djnz_r6() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 6]--; if (R6() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void djnz_r7() { byte i = M_RDMEM_OPCODE(); R.RAM[R.regPtr + 7]--; if (R7() != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
         private void en_i() { R.xirq_en = 1; if (R.irq_state == I8039_EXTERNAL_INT) { R.irq_extra_cycles += (byte)Ext_IRQ(); } }
         private void en_tcnti() { R.tirq_en = 1; }
         private void ento_clk() { M_UNDEFINED(); }
@@ -424,12 +382,12 @@ namespace cpu.i8039
         private void inc_xr1() { INTRAM_W(R1(), (byte)(INTRAM_R(R1()) + 1)); }
         private void jmp()
         {
-            byte i = M_RDOP(R.PC.Word);
+            byte i = M_RDOP(R.PC.LowWord);
             ushort oldpc, newpc;
             ushort a11 = (ushort)((R.irq_executing == I8039_NO_INT) ? R.A11 : 0);
-            oldpc = (ushort)(R.PC.Word - 1);
-            R.PC.Word = (ushort)(i | a11);
-            newpc = R.PC.Word;
+            oldpc = (ushort)(R.PC.LowWord - 1);
+            R.PC.LowWord = (ushort)(i | a11);
+            newpc = R.PC.LowWord;
             if (newpc == oldpc)
             {
                 if (pendingCycles > 0)
@@ -445,34 +403,34 @@ namespace cpu.i8039
                 }
             }
         }
-        private void jmp_1() { byte i = M_RDOP(R.PC.Word); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.Word = (ushort)(i | 0x100 | a11); }
-        private void jmp_2() { byte i = M_RDOP(R.PC.Word); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.Word = (ushort)(i | 0x200 | a11); }
-        private void jmp_3() { byte i = M_RDOP(R.PC.Word); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.Word = (ushort)(i | 0x300 | a11); }
-        private void jmp_4() { byte i = M_RDOP(R.PC.Word); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.Word = (ushort)(i | 0x400 | a11); }
-        private void jmp_5() { byte i = M_RDOP(R.PC.Word); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.Word = (ushort)(i | 0x500 | a11); }
-        private void jmp_6() { byte i = M_RDOP(R.PC.Word); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.Word = (ushort)(i | 0x600 | a11); }
-        private void jmp_7() { byte i = M_RDOP(R.PC.Word); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.Word = (ushort)(i | 0x700 | a11); }
-        private void jmpp_xa() { ushort addr = (ushort)((R.PC & 0xf00) | R.A); R.PC = (ushort)((R.PC & 0xf00) | ReadMemory(addr)); }
-        private void jb_0() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x01) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jb_1() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x02) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jb_2() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x04) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jb_3() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x08) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jb_4() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x10) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jb_5() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x20) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jb_6() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x40) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jb_7() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x80) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jf0() { byte i = M_RDMEM_OPCODE(); if (M_F0y) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jf1() { byte i = M_RDMEM_OPCODE(); if (R.f1 != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jnc() { byte i = M_RDMEM_OPCODE(); if (!M_Cy) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jc() { byte i = M_RDMEM_OPCODE(); if (M_Cy) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jni() { byte i = M_RDMEM_OPCODE(); if (R.irq_state == I8039_EXTERNAL_INT) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jnt_0() { byte i = M_RDMEM_OPCODE(); if (test_r(0) == 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jt_0() { byte i = M_RDMEM_OPCODE(); if (test_r(0) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jnt_1() { byte i = M_RDMEM_OPCODE(); if (test_r(1) == 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jt_1() { byte i = M_RDMEM_OPCODE(); if (test_r(1) != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jnz() { byte i = M_RDMEM_OPCODE(); if (R.A != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jz() { byte i = M_RDMEM_OPCODE(); if (R.A == 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
-        private void jtf() { byte i = M_RDMEM_OPCODE(); if (R.t_flag != 0) { R.PC = (ushort)(((R.PC - 1) & 0xf00) | i); } }
+        private void jmp_1() { byte i = M_RDOP(R.PC.LowWord); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.LowWord = (ushort)(i | 0x100 | a11); }
+        private void jmp_2() { byte i = M_RDOP(R.PC.LowWord); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.LowWord = (ushort)(i | 0x200 | a11); }
+        private void jmp_3() { byte i = M_RDOP(R.PC.LowWord); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.LowWord = (ushort)(i | 0x300 | a11); }
+        private void jmp_4() { byte i = M_RDOP(R.PC.LowWord); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.LowWord = (ushort)(i | 0x400 | a11); }
+        private void jmp_5() { byte i = M_RDOP(R.PC.LowWord); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.LowWord = (ushort)(i | 0x500 | a11); }
+        private void jmp_6() { byte i = M_RDOP(R.PC.LowWord); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.LowWord = (ushort)(i | 0x600 | a11); }
+        private void jmp_7() { byte i = M_RDOP(R.PC.LowWord); ushort a11 = (R.irq_executing == I8039_NO_INT) ? R.A11 : (ushort)0; R.PC.LowWord = (ushort)(i | 0x700 | a11); }
+        private void jmpp_xa() { ushort addr = (ushort)((R.PC.LowWord & 0xf00) | R.A); R.PC.LowWord = (ushort)((R.PC.LowWord & 0xf00) | ReadMemory(addr)); }
+        private void jb_0() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x01) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jb_1() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x02) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jb_2() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x04) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jb_3() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x08) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jb_4() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x10) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jb_5() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x20) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jb_6() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x40) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jb_7() { byte i = M_RDMEM_OPCODE(); if ((R.A & 0x80) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jf0() { byte i = M_RDMEM_OPCODE(); if (M_F0y) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jf1() { byte i = M_RDMEM_OPCODE(); if (R.f1 != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jnc() { byte i = M_RDMEM_OPCODE(); if (!M_Cy) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jc() { byte i = M_RDMEM_OPCODE(); if (M_Cy) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jni() { byte i = M_RDMEM_OPCODE(); if (R.irq_state == I8039_EXTERNAL_INT) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jnt_0() { byte i = M_RDMEM_OPCODE(); if (test_r(0) == 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jt_0() { byte i = M_RDMEM_OPCODE(); if (test_r(0) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jnt_1() { byte i = M_RDMEM_OPCODE(); if (test_r(1) == 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jt_1() { byte i = M_RDMEM_OPCODE(); if (test_r(1) != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jnz() { byte i = M_RDMEM_OPCODE(); if (R.A != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jz() { byte i = M_RDMEM_OPCODE(); if (R.A == 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
+        private void jtf() { byte i = M_RDMEM_OPCODE(); if (R.t_flag != 0) { R.PC.LowWord = (ushort)(((R.PC.LowWord - 1) & 0xf00) | i); } }
         private void mov_a_n() { R.A = M_RDMEM_OPCODE(); }
         private void mov_a_r0() { R.A = R0(); }
         private void mov_a_r1() { R.A = R1(); }
@@ -516,7 +474,7 @@ namespace cpu.i8039
         private void movd_p5_a() { port_w(5, (byte)(R.A & 0x0F)); }
         private void movd_p6_a() { port_w(6, (byte)(R.A & 0x0F)); }
         private void movd_p7_a() { port_w(7, (byte)(R.A & 0x0F)); }
-        private void movp_a_xa() { R.A = ReadMemory((ushort)((R.PC & 0x0f00) | R.A)); }
+        private void movp_a_xa() { R.A = ReadMemory((ushort)((R.PC.LowWord & 0x0f00) | R.A)); }
         private void movp3_a_xa() { R.A = ReadMemory((ushort)(0x300 | R.A)); }
         private void movx_a_xr0() { R.A = ReadIO(R0()); }
         private void movx_a_xr1() { R.A = ReadIO(R1()); }
@@ -552,11 +510,11 @@ namespace cpu.i8039
         private void outl_bus_a() { bus_w(R.A); }
         private void outl_p1_a() { port_w(1, R.A); R.P1 = R.A; }
         private void outl_p2_a() { port_w(2, R.A); R.P2 = R.A; }
-        private void ret() { R.PC.Word = (ushort)(((pull() & 0x0f) << 8) | pull()); }
+        private void ret() { R.PC.LowWord = (ushort)(((pull() & 0x0f) << 8) | pull()); }
         private void retr()
         {
             byte i = pull();
-            R.PC.Word = (ushort)(((i & 0x0f) << 8) | pull());
+            R.PC.LowWord = (ushort)(((i & 0x0f) << 8) | pull());
             R.PSW = (byte)((R.PSW & 0x0f) | (i & 0xf0));
             R.regPtr = (byte)((M_By) ? 24 : 0);
             R.irq_executing = I8039_NO_INT;
@@ -877,9 +835,9 @@ namespace cpu.i8039
             if (R.xirq_en != 0 && R.irq_executing == I8039_NO_INT)
             {
                 R.irq_executing = I8039_EXTERNAL_INT;
-                push((byte)R.PC.Low);
-                push((byte)(((R.PC.High >> 8) & 0x0f) | (R.PSW & 0xf0)));
-                R.PC.Word = 0x03;
+                push((byte)R.PC.LowByte);
+                push((byte)(((R.PC.HighByte >> 8) & 0x0f) | (R.PSW & 0xf0)));
+                R.PC.LowWord = 0x03;
                 extra_cycles = 2;
                 if (R.timerON != 0)
                 {
@@ -901,9 +859,9 @@ namespace cpu.i8039
                 {
                     R.irq_executing = I8039_TIMCNT_INT;
                     R.pending_irq &= unchecked((byte)~I8039_TIMCNT_INT);
-                    push((byte)R.PC.Low);
-                    push((byte)(((R.PC.High >> 8) & 0x0f) | (R.PSW & 0xf0)));
-                    R.PC = 0x07;
+                    push((byte)R.PC.LowByte);
+                    push((byte)(((R.PC.HighByte >> 8) & 0x0f) | (R.PSW & 0xf0)));
+                    R.PC.LowWord = 0x07;
                     extra_cycles = 2;
                     if (R.timerON != 0)
                     {
@@ -930,7 +888,7 @@ namespace cpu.i8039
         }
         public override void Reset()
         {
-            R.PC.Word = 0;
+            R.PC.LowWord = 0;
             R.SP = 0;
             R.A = 0;
             R.PSW = 0x08;
@@ -955,8 +913,8 @@ namespace cpu.i8039
             do
             {
                 R.PREVPC = R.PC;
-                opcode = M_RDOP(R.PC.Word);
-                R.PC.Word++;
+                opcode = M_RDOP(R.PC.LowWord);
+                R.PC.LowWord++;
                 R.inst_cycles = opcode_main[opcode].cycles;
                 opcode_main[opcode].function();
                 pendingCycles -= R.inst_cycles;

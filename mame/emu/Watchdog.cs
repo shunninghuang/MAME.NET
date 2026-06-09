@@ -27,7 +27,7 @@ namespace mame
                 case "M92":
                 case "Taito":
                 case "Taito B":
-                case "Konami 68000":
+                case "Konami":
                 case "Capcom":
                     watchdog_time = Attotime.ATTOTIME_ZERO;
                     break;

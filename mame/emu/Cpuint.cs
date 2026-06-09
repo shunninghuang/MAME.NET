@@ -6,35 +6,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 namespace mame
-{
-    [StructLayout(LayoutKind.Explicit)]
-    [Serializable()]
-    public struct Register
-    {
-        [FieldOffset(0)]
-        public uint d;
-        [FieldOffset(0)]
-        public int sd;
-
-        [FieldOffset(0)]
-        public ushort LowWord;
-        [FieldOffset(2)]
-        public ushort HighWord;
-
-        [FieldOffset(0)]
-        public byte LowByte;
-        [FieldOffset(1)]
-        public byte HighByte;
-        [FieldOffset(2)]
-        public byte HighByte2;
-        [FieldOffset(3)]
-        public byte HighByte3;
-
-        public override string ToString()
-        {
-            return String.Format("{0:X8}", d);
-        }
-    }
+{    
     public enum LineState
     {
         CLEAR_LINE = 0,

@@ -59,6 +59,8 @@
     <Compile Include="cpu\i8039\i8039.cs" />
     <Compile Include="cpu\i8x41\8x41dasm.cs" />
     <Compile Include="cpu\i8x41\i8x41.cs" />
+    <Compile Include="cpu\konami\konami.cs" />
+    <Compile Include="cpu\konami\konamops.cs" />
     <Compile Include="cpu\m6502\Ill02.cs" />
     <Compile Include="cpu\m6502\M6502.cs" />
     <Compile Include="cpu\m6502\M6502op.cs" />
@@ -130,16 +132,18 @@
     <Compile Include="mame\kaneko\Memory.cs" />
     <Compile Include="mame\kaneko\State.cs" />
     <Compile Include="mame\kaneko\Tilemap.cs" />
-    <Compile Include="mame\konami68000\Drawgfx.cs" />
-    <Compile Include="mame\konami68000\Gdi.cs" />
-    <Compile Include="mame\konami68000\Input.cs" />
-    <Compile Include="mame\konami68000\Konami68000.cs" />
-    <Compile Include="mame\konami68000\Konamiic.cs" />
-    <Compile Include="mame\konami68000\Memory.cs" />
-    <Compile Include="mame\konami68000\Memory2.cs" />
-    <Compile Include="mame\konami68000\State.cs" />
-    <Compile Include="mame\konami68000\Tilemap.cs" />
-    <Compile Include="mame\konami68000\Video.cs" />
+    <Compile Include="mame\konami\Drawgfx.cs" />
+    <Compile Include="mame\konami\Gdi.cs" />
+    <Compile Include="mame\konami\Input.cs" />
+    <Compile Include="mame\konami\Konami.cs" />
+    <Compile Include="mame\konami\Konamiic.cs" />
+    <Compile Include="mame\konami\Memory.cs" />
+    <Compile Include="mame\konami\Memory2.cs" />
+    <Compile Include="mame\konami\Memory3.cs" />
+    <Compile Include="mame\konami\State.cs" />
+    <Compile Include="mame\konami\thunderx.cs" />
+    <Compile Include="mame\konami\Tilemap.cs" />
+    <Compile Include="mame\konami\Video.cs" />
     <Compile Include="mame\m72\Audio.cs" />
     <Compile Include="mame\m72\Drawgfx.cs" />
     <Compile Include="mame\m72\Gdi.cs" />
@@ -195,6 +199,13 @@
     <Compile Include="mame\pgm\State.cs" />
     <Compile Include="mame\pgm\Tilemap.cs" />
     <Compile Include="mame\pgm\Video.cs" />
+    <Compile Include="mame\seibu\Drawgfx.cs" />
+    <Compile Include="mame\seibu\Gdi.cs" />
+    <Compile Include="mame\seibu\Input.cs" />
+    <Compile Include="mame\seibu\kncljoe.cs" />
+    <Compile Include="mame\seibu\Memory.cs" />
+    <Compile Include="mame\seibu\State.cs" />
+    <Compile Include="mame\seibu\Tilemap.cs" />
     <Compile Include="mame\suna8\Drawgfx.cs" />
     <Compile Include="mame\suna8\Gdi.cs" />
     <Compile Include="mame\suna8\Input.cs" />
@@ -266,6 +277,7 @@
     <Compile Include="sound\MSM5205.cs" />
     <Compile Include="sound\Namco.cs" />
     <Compile Include="sound\Sample.cs" />
+    <Compile Include="sound\SN76496.cs" />
     <Compile Include="sound\Taitosnd.cs" />
     <Compile Include="sound\Upd7759.cs" />
     <Compile Include="sound\YM2203.cs" />
@@ -332,6 +344,12 @@
     <Compile Include="ui\megasys1Form.Designer.cs">
       <DependentUpon>megasys1Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="ui\seibuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ui\seibuForm.Designer.cs">
+      <DependentUpon>seibuForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ui\tadForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -356,11 +374,11 @@
     <Compile Include="ui\igs011Form.Designer.cs">
       <DependentUpon>igs011Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="ui\konami68000Form.cs">
+    <Compile Include="ui\konamiForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ui\konami68000Form.Designer.cs">
-      <DependentUpon>konami68000Form.cs</DependentUpon>
+    <Compile Include="ui\konamiForm.Designer.cs">
+      <DependentUpon>konamiForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ui\m72Form.cs">
       <SubType>Form</SubType>
@@ -522,8 +540,8 @@
       <DependentUpon>kanekoForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ui\konami68000Form.resx">
-      <DependentUpon>konami68000Form.cs</DependentUpon>
+    <EmbeddedResource Include="ui\konamiForm.resx">
+      <DependentUpon>konamiForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\ListViewControl.resx">
@@ -568,6 +586,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ui\pgmForm.resx">
       <DependentUpon>pgmForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\seibuForm.resx">
+      <DependentUpon>seibuForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\tadForm.resx">

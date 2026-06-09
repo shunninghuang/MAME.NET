@@ -250,6 +250,26 @@ namespace mame
                     video_update_callback = Technos.video_update_ddragon;
                     video_eof_callback = Technos.video_eof_ddragon;
                     break;
+                case "Seibu":
+                    screenstate.width = 0x100;
+                    screenstate.height = 0x100;
+                    screenstate.visarea.min_x = 8;
+                    screenstate.visarea.max_x = 0xf7;
+                    screenstate.visarea.min_y = 0;
+                    screenstate.visarea.max_y = 0xff;
+                    fullwidth = 0x100;
+                    fullheight = 0x100;
+                    frame_update_time = new Atime(0, (long)(1e18 / 60));
+                    screenstate.vblank_period = (long)(1e12 * 1500);
+                    UI.ui_update_callback = UI.ui_update_konami;
+                    bitmapbase = new ushort[2][];
+                    bitmapbase[0] = new ushort[0x100 * 0x100];
+                    bitmapbase[1] = new ushort[0x100 * 0x100];
+                    bbmp = new Bitmap[1];
+                    bbmp[0] = new Bitmap(0x100, 0x100);
+                    video_update_callback = Seibu.video_update_kncljoe;
+                    video_eof_callback = Technos.video_eof_ddragon;
+                    break;
                 case "Tad":
                     screenstate.width = 0x100;
                     screenstate.height = 0x100;
@@ -646,28 +666,52 @@ namespace mame
                     video_update_callback = Taitob.video_update_taitob;
                     video_eof_callback = Taitob.video_eof_taitob;
                     break;
-                case "Konami 68000":
+                case "Konami":
                     screenstate.width = 0x200;
                     screenstate.height = 0x100;
                     fullwidth = 0x200;
                     fullheight = 0x100;
-                    frame_update_time = new Atime(0, (long)(1e18 / 60));
-                    screenstate.vblank_period = (long)(1e12 * 2500);
-                    UI.ui_update_callback = UI.ui_update_konami68000;
+                    frame_update_time = new Atime(0, (long)(1e18 / 60));                    
+                    UI.ui_update_callback = UI.ui_update_konami;
                     bitmapbase = new ushort[2][];
                     bitmapbase[0] = new ushort[0x200 * 0x100];
                     bitmapbase[1] = new ushort[0x200 * 0x100];
                     bbmp = new Bitmap[1];
                     bbmp[0] = new Bitmap(288, 224);
-                    video_eof_callback = Konami68000.video_eof;
+                    video_eof_callback = Konami.video_eof;
                     switch (Machine.sName)
                     {
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                            screenstate.visarea.min_x = 0x70;
+                            screenstate.visarea.max_x = 0x18f;
+                            screenstate.visarea.min_y = 0x10;
+                            screenstate.visarea.max_y = 0xef;
+                            screenstate.vblank_period = 0;
+                            video_update_callback = Konami.video_update_scontra;
+                            break;                        
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                            screenstate.visarea.min_x = 0x70;
+                            screenstate.visarea.max_x = 0x18f;
+                            screenstate.visarea.min_y = 0x10;
+                            screenstate.visarea.max_y = 0xef;
+                            screenstate.vblank_period = 0;
+                            video_update_callback = Konami.video_updata_gbusters;
+                            break;
                         case "cuebrick":
                             screenstate.visarea.min_x = 0x68;
                             screenstate.visarea.max_x = 0x197;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_mia;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_mia;
                             break;
                         case "mia":
                         case "mia2":
@@ -675,12 +719,14 @@ namespace mame
                             screenstate.visarea.max_x = 0x197;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_mia;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_mia;
                             break;
                         case "tmnt":
                         case "tmntu":
                         case "tmntua":
                         case "tmntub":
+                        case "tmntuc":
                         case "tmht":
                         case "tmhta":
                         case "tmhtb":
@@ -694,16 +740,20 @@ namespace mame
                             screenstate.visarea.max_x = 0x19f;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_mia;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_mia;
                             break;
                         case "punkshot":
                         case "punkshot2":
+                        case "punkshot2e":
                         case "punkshotj":
+                        case "punkshot2a":
                             screenstate.visarea.min_x = 0x70;
                             screenstate.visarea.max_x = 0x18f;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_punkshot;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_punkshot;
                             break;
                         case "lgtnfght":
                         case "lgtnfghta":
@@ -713,7 +763,8 @@ namespace mame
                             screenstate.visarea.max_x = 0x19f;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_lgtnfght;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_lgtnfght;
                             break;
                         case "blswhstl":
                         case "blswhstla":
@@ -722,8 +773,9 @@ namespace mame
                             screenstate.visarea.max_x = 0x19f;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_lgtnfght;
-                            video_eof_callback = Konami68000.video_eof_blswhstl;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_lgtnfght;
+                            video_eof_callback = Konami.video_eof_blswhstl;
                             break;
                         case "glfgreat":
                         case "glfgreatj":
@@ -733,19 +785,23 @@ namespace mame
                             screenstate.visarea.max_x = 0x18f;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_glfgreat;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_glfgreat;
                             break;
                         case "tmnt2":
                         case "tmnt2a":
+                        case "tmnt2o":
                         case "tmht22pe":
                         case "tmht24pe":
                         case "tmnt22pu":
+                        case "tmnt24pu":
                         case "qgakumon":
                             screenstate.visarea.min_x = 0x68;
                             screenstate.visarea.max_x = 0x197;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_tmnt2;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_tmnt2;
                             break;
                         case "ssriders":
                         case "ssriderseaa":
@@ -764,7 +820,8 @@ namespace mame
                             screenstate.visarea.max_x = 0x18f;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_tmnt2;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_tmnt2;
                             break;
                         case "thndrx2":
                         case "thndrx2a":
@@ -773,7 +830,8 @@ namespace mame
                             screenstate.visarea.max_x = 0x18f;
                             screenstate.visarea.min_y = 0x10;
                             screenstate.visarea.max_y = 0xef;
-                            video_update_callback = Konami68000.video_update_thndrx2;
+                            screenstate.vblank_period = (long)(1e12 * 2500);
+                            video_update_callback = Konami.video_update_thndrx2;
                             break;
                     }
                     break;

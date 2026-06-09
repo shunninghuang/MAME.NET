@@ -8,7 +8,7 @@ namespace mame
     public partial class Kaneko
     {
         public static byte dsw1, dsw2;
-        public static byte[] slaverom, devram, gfx1rom, gfx2rom, airbustr_bank1, airbustr_bank2, airbustr_bank3, sharedram, slaveram;
+        public static byte[] slaverom, devram, gfx1rom, gfx2rom, bank1, bank2, bank3, sharedram, slaveram;
         public static int basebankmaster, basebankslave, basebankaudio;
         public static int soundlatch_status, soundlatch2_status, master_addr, slave_addr;
         public static byte[] airbustr_videoram2, airbustr_colorram2;
@@ -23,9 +23,9 @@ namespace mame
                 case "airbustr":
                 case "airbustrj":
                 case "airbustrb":
-                    airbustr_bank1 = new byte[0x20000];
-                    airbustr_bank2 = new byte[0x20000];
-                    airbustr_bank3 = new byte[0x20000];
+                    bank1 = new byte[0x20000];
+                    bank2 = new byte[0x20000];
+                    bank3 = new byte[0x20000];
                     Memory.mainram = new byte[0x1000];
                     sharedram = new byte[0x1000];
                     devram = new byte[0x1000];
@@ -39,9 +39,9 @@ namespace mame
                     Memory.mainrom = Machine.GetRom("master.rom");
                     slaverom = Machine.GetRom("slave.rom");
                     Memory.audiorom = Machine.GetRom("audiocpu.rom");
-                    Array.Copy(Memory.mainrom, 0, airbustr_bank1, 0, 0x20000);
-                    Array.Copy(slaverom, 0, airbustr_bank2, 0, 0x20000);
-                    Array.Copy(Memory.audiorom, 0, airbustr_bank3, 0, 0x20000);
+                    Array.Copy(Memory.mainrom, 0, bank1, 0, 0x20000);
+                    Array.Copy(slaverom, 0, bank2, 0, 0x20000);
+                    Array.Copy(Memory.audiorom, 0, bank3, 0, 0x20000);
                     gfx1rom = Machine.GetRom("gfx1.rom");
                     gfx2rom = Machine.GetRom("gfx2.rom");
                     n = gfx2rom.Length;

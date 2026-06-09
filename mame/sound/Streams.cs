@@ -18,7 +18,7 @@ namespace mame
         public int outputs;
         public int output_sampindex;
         public int output_base_sampindex;
-        public int[][] streaminput,streamoutput;
+        public int[][] streaminput, streamoutput;
         private updatedelegate updatecallback;
         public delegate void updatedelegate(int offset, int length);
         public sound_stream(int _sample_rate, int _inputs, int _outputs, updatedelegate callback)
@@ -91,7 +91,7 @@ namespace mame
         }
         public void updatesamplerate()
         {
-            int i, old_rate;            
+            int i, old_rate;
             if (new_sample_rate != 0)
             {
                 old_rate = sample_rate;
@@ -124,9 +124,9 @@ namespace mame
         public static sound_stream ym2151stream, mixerstream;
         public static sound_stream qsoundstream;
         public static sound_stream ym2610stream;
-        public static sound_stream namcostream,dacstream;
+        public static sound_stream namcostream, dacstream;
         public static sound_stream ics2115stream;
-        public static sound_stream ym3812stream,ym3526stream,ym2413stream;
+        public static sound_stream ym3812stream, ym3526stream, ym2413stream;
         public static sound_stream iremga20stream;
         public static sound_stream k053260stream;
         public static sound_stream upd7759stream;
@@ -135,9 +135,9 @@ namespace mame
         public static sound_stream k054539stream;
         public static long update_attoseconds = Attotime.ATTOSECONDS_PER_SECOND / 50;
         private static void generate_resampled_data_ym2151(int gain)
-        {            
+        {
             int offset;
-            int sample0,sample1;
+            int sample0, sample1;
             long basetime;
             int basesample;
             uint basefrac;
@@ -215,7 +215,7 @@ namespace mame
         }
         private static void generate_resampled_data_qsound()
         {
-            int offset;            
+            int offset;
             long basetime;
             int basesample;
             uint basefrac;
@@ -342,7 +342,7 @@ namespace mame
                 }
             }
         }
-        private static void generate_resampled_data_ym2203(int c,int gain,int minput)
+        private static void generate_resampled_data_ym2203(int c, int gain, int minput)
         {
             int offset;
             long basetime;
@@ -727,7 +727,7 @@ namespace mame
                 }
             }
         }
-        public static void generate_resampled_data_k053260(int gain,int minput1,int minput2)
+        public static void generate_resampled_data_k053260(int gain, int minput1, int minput2)
         {
             int offset;
             int sample0, sample1;
@@ -986,9 +986,53 @@ namespace mame
                 }
             }
         }
+        public static void generate_resampled_data_sn76496(int chip, int gain, int minput)
+        {
+            int offset;
+            int sample;
+            long basetime;
+            int basesample;
+            uint basefrac;
+            uint step;
+            int sampindex;
+            basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample - mixerstream.attoseconds_per_sample;
+            if (basetime >= 0)
+                basesample = (int)(basetime / SN76496.ss1[chip].Channel.attoseconds_per_sample);
+            else
+                basesample = (int)(-(-basetime / SN76496.ss1[chip].Channel.attoseconds_per_sample) - 1);
+            offset = basesample - SN76496.ss1[chip].Channel.output_base_sampindex;
+            basefrac = (uint)((basetime - basesample * SN76496.ss1[chip].Channel.attoseconds_per_sample) / (Attotime.ATTOSECONDS_PER_SECOND >> 22));
+            step = (uint)(((ulong)SN76496.ss1[chip].Channel.sample_rate << 22) / 48000);
+            if (step > 0x400000)
+            {
+                int smallstep = (int)(step >> 14);
+                for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+                {
+                    int remainder = smallstep;
+                    int tpos = 0;
+                    int scale;
+                    scale = (int)((0x400000 - basefrac) >> 14);
+                    sample = SN76496.ss1[chip].Channel.streamoutput[0][offset + tpos] * scale;
+                    tpos++;
+                    remainder -= scale;
+                    while (remainder > 0x100)
+                    {
+                        sample += SN76496.ss1[chip].Channel.streamoutput[0][offset + tpos] * 0x100;
+                        tpos++;
+                        remainder -= 0x100;
+                    }
+                    sample += SN76496.ss1[chip].Channel.streamoutput[0][offset + tpos] * remainder;
+                    sample /= smallstep;
+                    mixerstream.streaminput[minput][sampindex] = (sample * gain) >> 8;
+                    basefrac += step;
+                    offset += (int)(basefrac >> 22);
+                    basefrac &= 0x3fffff;
+                }
+            }
+        }
         public static void streams_update_cps1()
         {
-            Atime curtime =Timer.global_basetime;
+            Atime curtime = Timer.global_basetime;
             bool second_tick = false;
             if (curtime.seconds != last_update_second)
             {
@@ -1083,6 +1127,21 @@ namespace mame
             ym2151stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
+        }
+        private static void streams_update_seibu_kncljoe()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            AY8910.AA8910[0].stream.adjuststream(second_tick);
+            SN76496.ss1[0].Channel.adjuststream(second_tick);
+            SN76496.ss1[1].Channel.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+            AY8910.AA8910[0].stream.updatesamplerate();
         }
         private static void streams_update_tad_tokib()
         {
@@ -1326,7 +1385,7 @@ namespace mame
             last_update_second = curtime.seconds;
             AY8910.AA8910[0].stream.updatesamplerate();
         }
-        private static void streams_update_konami68000_cuebrick()
+        private static void streams_update_konami_cuebrick()
         {
             Atime curtime = Timer.global_basetime;
             bool second_tick = false;
@@ -1338,7 +1397,7 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
-        private static void streams_update_konami68000_mia()
+        private static void streams_update_konami_mia()
         {
             Atime curtime = Timer.global_basetime;
             bool second_tick = false;
@@ -1351,7 +1410,7 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
-        private static void streams_update_konami68000_tmnt()
+        private static void streams_update_konami_tmnt()
         {
             Atime curtime = Timer.global_basetime;
             bool second_tick = false;
@@ -1366,7 +1425,7 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
-        private static void streams_update_konami68000_glfgreat()
+        private static void streams_update_konami_glfgreat()
         {
             Atime curtime = Timer.global_basetime;
             bool second_tick = false;
@@ -1377,8 +1436,8 @@ namespace mame
             k053260stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
-        } 
-        private static void streams_update_konami68000_ssriders()
+        }
+        private static void streams_update_konami_ssriders()
         {
             Atime curtime = Timer.global_basetime;
             bool second_tick = false;
@@ -1391,7 +1450,7 @@ namespace mame
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
-        private static void streams_update_konami68000_prmrsocr()
+        private static void streams_update_konami_prmrsocr()
         {
             Atime curtime = Timer.global_basetime;
             bool second_tick = false;
@@ -1413,7 +1472,7 @@ namespace mame
             }
             AY8910.AA8910[0].stream.adjuststream(second_tick);
             AY8910.AA8910[1].stream.adjuststream(second_tick);
-            YM2203.FF2203[0].stream.adjuststream(second_tick);            
+            YM2203.FF2203[0].stream.adjuststream(second_tick);
             YM2203.FF2203[1].stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;

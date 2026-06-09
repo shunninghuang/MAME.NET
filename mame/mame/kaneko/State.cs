@@ -27,9 +27,9 @@ namespace mame
             writer.Write(fg_scrollx);
             writer.Write(fg_scrolly);
             writer.Write(highbits);
-            writer.Write(airbustr_bank1, 0, 0x20000);
-            writer.Write(airbustr_bank2, 0, 0x20000);
-            writer.Write(airbustr_bank3, 0, 0x20000);
+            writer.Write(bank1, 0, 0x20000);
+            writer.Write(bank2, 0, 0x20000);
+            writer.Write(bank3, 0, 0x20000);
             writer.Write(sharedram, 0, 0x1000);
             writer.Write(devram, 0, 0x1000);
             writer.Write(slaveram, 0, 0x1a00);
@@ -96,9 +96,9 @@ namespace mame
             fg_scrollx = reader.ReadInt32();
             fg_scrolly = reader.ReadInt32();
             highbits = reader.ReadInt32();
-            airbustr_bank1 = reader.ReadBytes(0x20000);
-            airbustr_bank2 = reader.ReadBytes(0x20000);
-            airbustr_bank3 = reader.ReadBytes(0x20000);
+            bank1 = reader.ReadBytes(0x20000);
+            bank2 = reader.ReadBytes(0x20000);
+            bank3 = reader.ReadBytes(0x20000);
             sharedram = reader.ReadBytes(0x1000);
             devram = reader.ReadBytes(0x1000);
             slaveram = reader.ReadBytes(0x1a00);

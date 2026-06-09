@@ -162,7 +162,7 @@ namespace mame
                     address_bits = 6;
                     data_bits = 16;
                     break;
-                case "Konami 68000":                    
+                case "Konami":                    
                     cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
                     cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'1', (byte)'0', (byte)'0' };
                     cmd_erase = new byte[] { };

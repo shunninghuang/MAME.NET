@@ -57,7 +57,6 @@ namespace cpu.m68000
         {
             sbyte displacement8 = (sbyte)op;
             int cond = (op >> 8) & 0x0F;
-
             if (TestCondition(cond) == true)
             {
                 if (displacement8 != 0)
@@ -92,7 +91,6 @@ namespace cpu.m68000
             int pc = info.PC + 2;
             sbyte displacement8 = (sbyte)op;
             int cond = (op >> 8) & 0x0F;
-
             info.Mnemonic = "b" + DisassembleCondition(cond);
             if (displacement8 != 0)
             {
@@ -109,11 +107,14 @@ namespace cpu.m68000
         void BRA()
         {
             sbyte displacement8 = (sbyte)op;
-
             if (displacement8 != 0)
+            {
                 PC += displacement8;
+            }
             else
+            {
                 PC += ReadOpWord(PC);
+            }
             if (PPC == PC)
             {
                 pendingCycles = 0;
@@ -125,10 +126,11 @@ namespace cpu.m68000
         {
             int pc = info.PC + 2;
             info.Mnemonic = "bra";
-
             sbyte displacement8 = (sbyte)op;
             if (displacement8 != 0)
+            {
                 info.Args = String.Format("${0:X}", pc + displacement8);
+            }
             else
             {
                 info.Args = String.Format("${0:X}", pc + ReadOpWord(pc));
@@ -140,7 +142,6 @@ namespace cpu.m68000
         void BSR()
         {
             sbyte displacement8 = (sbyte)op;
-
             A[7].s32 -= 4;
             if (displacement8 != 0)
             {
@@ -161,10 +162,11 @@ namespace cpu.m68000
         {
             int pc = info.PC + 2;
             info.Mnemonic = "bsr";
-
             sbyte displacement8 = (sbyte)op;
             if (displacement8 != 0)
+            {
                 info.Args = String.Format("${0:X}", pc + displacement8);
+            }
             else
             {
                 info.Args = String.Format("${0:X}", pc + ReadOpWord(pc));
@@ -184,7 +186,6 @@ namespace cpu.m68000
             {
                 int reg = op & 7;
                 D[reg].u16--;
-
                 if (D[reg].u16 == 0xFFFF)
                 {
                     PC += 2; // counter underflowed, break out of loop
@@ -202,7 +203,6 @@ namespace cpu.m68000
         {
             int cond = (op >> 8) & 0x0F;
             info.Mnemonic = "db" + DisassembleCondition(cond);
-
             int pc = info.PC + 2;
             info.Args = String.Format("D{0}, ${1:X}", op & 7, pc + ReadWord(pc));
             info.Length = 4;
@@ -305,7 +305,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             int value;
             switch (size)
             {
@@ -324,7 +323,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: info.Mnemonic = "tst.b"; info.Args = DisassembleValue(mode, reg, 1, ref pc); break;
@@ -339,7 +337,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(PC); PC += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -362,7 +359,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(pc); pc += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "btst";
             info.Args = String.Format("${0:X}, {1}", bit, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -374,7 +370,6 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int reg = op & 7;
             int bit = D[dReg].s32;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -397,7 +392,6 @@ namespace cpu.m68000
             int dReg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "btst";
             info.Args = String.Format("D{0}, {1}", dReg, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -408,7 +402,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(PC); PC += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -435,7 +428,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(pc); pc += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "bchg";
             info.Args = String.Format("${0:X}, {1}", bit, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -447,7 +439,6 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int reg = op & 7;
             int bit = D[dReg].s32;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -474,7 +465,6 @@ namespace cpu.m68000
             int dReg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "bchg";
             info.Args = String.Format("D{0}, {1}", dReg, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -485,7 +475,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(PC); PC += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -512,7 +501,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(pc); pc += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "bclr";
             info.Args = String.Format("${0:X}, {1}", bit, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -524,7 +512,6 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int reg = op & 7;
             int bit = D[dReg].s32;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -551,7 +538,6 @@ namespace cpu.m68000
             int dReg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "bclr";
             info.Args = String.Format("D{0}, {1}", dReg, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -562,7 +548,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(PC); PC += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -589,7 +574,6 @@ namespace cpu.m68000
             int bit = ReadOpWord(pc); pc += 2;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "bset";
             info.Args = String.Format("${0:X}, {1}", bit, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -601,7 +585,6 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int reg = op & 7;
             int bit = D[dReg].s32;
-
             if (mode == 0)
             {
                 bit &= 31;
@@ -628,7 +611,6 @@ namespace cpu.m68000
             int dReg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = op & 7;
-
             info.Mnemonic = "bset";
             info.Args = String.Format("D{0}, {1}", dReg, DisassembleValue(mode, reg, 1, ref pc));
             info.Length = pc - info.PC;
@@ -675,11 +657,9 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
             int addr = ReadAddress(mode, reg);
-
             A[7].s32 -= 4;
             WriteLong(A[7].s32, PC);
             PC = addr;
-
             switch (mode)
             {
                 case 2: pendingCycles -= 16; break;
@@ -759,20 +739,29 @@ namespace cpu.m68000
             int cond = (op >> 8) & 0x0F;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             if (TestCondition(cond) == true)
             {
                 WriteValueB(mode, reg, -1);
-                if (mode == 0) pendingCycles -= 6;
-                else pendingCycles -= 8 + EACyclesBW[mode, reg];
+                if (mode == 0)
+                {
+                    pendingCycles -= 6;
+                }
+                else
+                {
+                    pendingCycles -= 8 + EACyclesBW[mode, reg];
+                }
             }
             else
             {
                 WriteValueB(mode, reg, 0);
                 if (mode == 0)
+                {
                     pendingCycles -= 4;
+                }
                 else
+                {
                     pendingCycles -= 8 + EACyclesBW[mode, reg];
+                }
             }
         }
 
@@ -782,7 +771,6 @@ namespace cpu.m68000
             int cond = (op >> 8) & 0x0F;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             info.Mnemonic = "s" + DisassembleCondition(cond);
             info.Args = DisassembleValue(mode, reg, 1, ref pc);
             info.Length = pc - info.PC;

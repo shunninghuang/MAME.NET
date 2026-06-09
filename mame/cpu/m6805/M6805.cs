@@ -11,7 +11,7 @@ namespace cpu.m6805
     public partial class M6805 : cpuexec_data
     {
         public static M6805 m1;
-        public Register ea,pc,s;
+        public RegisterPair ea,pc,s;
         public int subtype;
         public ushort sp_mask;
         public ushort sp_low;
@@ -138,7 +138,7 @@ namespace cpu.m6805
         {
             b = ReadOpArg(pc.LowWord++);
         }
-        private void IMMWORD(ref Register w)
+        private void IMMWORD(ref RegisterPair w)
         {            
             w.d = 0;
             w.HighByte = ReadOpArg(pc.LowWord);
@@ -149,7 +149,7 @@ namespace cpu.m6805
         {
             wr_s_handler_b(ref b);
         }
-        private void PUSHWORD(ref Register w)
+        private void PUSHWORD(ref RegisterPair w)
         {
             wr_s_handler_w(ref w);
         }
@@ -157,7 +157,7 @@ namespace cpu.m6805
         {
             rd_s_handler_b(ref b);
         }
-        private void PULLWORD(ref Register w)
+        private void PULLWORD(ref RegisterPair w)
         {
             rd_s_handler_w(ref w);
         }
@@ -337,7 +337,7 @@ namespace cpu.m6805
                 }
             }
         }
-        private void CLEAR_PAIR(ref Register p)
+        private void CLEAR_PAIR(ref RegisterPair p)
         {
             p.d = 0;
         }
@@ -346,7 +346,7 @@ namespace cpu.m6805
             SP_INC();
             b = ReadMemory(s.LowWord);
         }
-        private void rd_s_handler_w(ref Register p)
+        private void rd_s_handler_w(ref RegisterPair p)
         {
             CLEAR_PAIR(ref p);
             SP_INC();
@@ -359,14 +359,14 @@ namespace cpu.m6805
             WriteMemory(s.LowWord, b);
             SP_DEC();
         }
-        private void wr_s_handler_w(ref Register p)
+        private void wr_s_handler_w(ref RegisterPair p)
         {
             WriteMemory(s.LowWord, p.LowByte);
             SP_DEC();
             WriteMemory(s.LowWord, p.HighByte);
             SP_DEC();
         }
-        protected void RM16(uint Addr, ref Register p)
+        protected void RM16(uint Addr, ref RegisterPair p)
         {
             CLEAR_PAIR(ref p);
             p.HighByte = ReadMemory((ushort)Addr);

@@ -73,7 +73,7 @@ namespace ui
                     CheatReadByte = (int i1) => { return Memory.mainram[i1]; };
                     CheatWriteByte = (int i1, byte b1) => { Memory.mainram[i1] = b1; };
                     break;
-                case "Konami 68000":
+                case "Konami":
                     nRam = 0x4000;
                     tbRamRange.Text = "0000-4000";
                     CheatReadByte = (int i1) => { return Memory.mainram[i1]; };

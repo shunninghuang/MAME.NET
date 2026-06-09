@@ -19,7 +19,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = airbustr_bank1[basebankmaster + offset];
+                result = bank1[basebankmaster + offset];
             }
             return result;
         }
@@ -33,7 +33,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = airbustr_bank1[basebankmaster + offset];
+                result = bank1[basebankmaster + offset];
             }
             else if (address >= 0xc000 && address <= 0xcfff)
             {
@@ -67,7 +67,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = airbustr_bank1[basebankmaster + offset];
+                result = bank1[basebankmaster + offset];
             }
             else if (address >= 0xc000 && address <= 0xcfff)
             {
@@ -100,7 +100,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                airbustr_bank1[basebankmaster + offset] = value;
+                bank1[basebankmaster + offset] = value;
             }
             else if (address >= 0xc000 && address <= 0xcfff)
             {
@@ -153,7 +153,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = airbustr_bank2[basebankslave + offset];
+                result = bank2[basebankslave + offset];
             }
             return result;
         }
@@ -167,7 +167,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = airbustr_bank2[basebankslave + offset];
+                result = bank2[basebankslave + offset];
             }
             else if (address >= 0xc000 && address <= 0xc3ff)
             {
@@ -215,7 +215,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                airbustr_bank2[basebankslave + offset] = value;
+                bank2[basebankslave + offset] = value;
             }
             else if (address >= 0xc000 && address <= 0xc3ff)
             {
@@ -314,7 +314,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = airbustr_bank3[basebankaudio + offset];
+                result = bank3[basebankaudio + offset];
             }
             return result;
         }
@@ -328,7 +328,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                result = airbustr_bank3[basebankaudio + offset];
+                result = bank3[basebankaudio + offset];
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {
@@ -346,7 +346,7 @@ namespace mame
             else if (address >= 0x8000 && address <= 0xbfff)
             {
                 int offset = address - 0x8000;
-                airbustr_bank3[basebankaudio + offset] = value;
+                bank3[basebankaudio + offset] = value;
             }
             else if (address >= 0xc000 && address <= 0xdfff)
             {

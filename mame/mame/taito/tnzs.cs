@@ -10,7 +10,7 @@ namespace mame
 {
     public partial class Taito
     {
-        public static byte[] tnzs_bank1, tnzs_bank2, tnzs_bank3, tnzs_objram, tnzs_sharedram, tnzs_vdcram, tnzs_scrollram, tnzs_objctrl;
+        public static byte[] bank1, bank2, bank3, tnzs_objram, tnzs_sharedram, tnzs_vdcram, tnzs_scrollram, tnzs_objctrl;
         public static byte tnzs_bg_flag;
         public static int mcu_type, tnzs_input_select;
         public static int mcu_initializing, mcu_coinage_init, mcu_command, mcu_readcredits;
@@ -637,19 +637,19 @@ namespace mame
         }
         public static byte tnzs_bank1_r(int offset)
         {
-            return tnzs_bank1[basebankmain + offset];
+            return bank1[basebankmain + offset];
         }
         public static void tnzs_bank1_w(int offset, byte data)
         {
-            tnzs_bank1[basebankmain + offset] = data;
+            bank1[basebankmain + offset] = data;
         }
         public static byte tnzs_bank2_r(int offset)
         {
-            return tnzs_bank2[basebanksub + offset];
+            return bank2[basebanksub + offset];
         }
         public static void tnzs_bank2_w(int offset, byte data)
         {
-            tnzs_bank2[basebanksub + offset] = data;
+            bank2[basebanksub + offset] = data;
         }
         public static byte tnzs_sharedram_r(int offset)
         {

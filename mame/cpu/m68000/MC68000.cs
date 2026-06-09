@@ -264,7 +264,7 @@ namespace cpu.m68000
             if (Interrupt > 0 && (Interrupt > InterruptMaskLevel || Interrupt > 7))
             {
                 stopped = false;
-				int interrupt1 = Interrupt;
+                int interrupt1 = Interrupt;
                 irq_callback(Interrupt);
                 short sr = (short)SR;                  // capture current SR.
                 S = true;                               // switch to supervisor mode, if not already in it.
@@ -443,10 +443,5 @@ namespace cpu.m68000
         public byte u8;
         [FieldOffset(0)]
         public sbyte s8;
-
-        public override string ToString()
-        {
-            return String.Format("{0:X8}", u32);
-        }
     }
 }

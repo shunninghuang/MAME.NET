@@ -10,7 +10,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -68,7 +67,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -121,10 +119,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             string op1 = "D" + Dreg;
             string op2;
-
             switch (size)
             {
                 case 0: info.Mnemonic = "add.b"; op2 = DisassembleValue(mode, reg, 1, ref pc); break;
@@ -140,7 +136,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -154,8 +149,14 @@ namespace cpu.m68000
                         N = (result & 0x80) != 0;
                         Z = (result & 0xff) == 0;
                         WriteValueB(mode, reg, (sbyte)result);
-                        if (mode == 0) pendingCycles -= 8;
-                        else pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 8;
+                        }
+                        else
+                        {
+                            pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 1: // word
@@ -169,8 +170,14 @@ namespace cpu.m68000
                         N = (result & 0x8000) != 0;
                         Z = (result & 0xffff) == 0;
                         WriteValueW(mode, reg, (short)result);
-                        if (mode == 0) pendingCycles -= 8;
-                        else pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 8;
+                        }
+                        else
+                        {
+                            pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 2: // long
@@ -185,9 +192,13 @@ namespace cpu.m68000
                         Z = ((uint)result == 0);
                         WriteValueL(mode, reg, (int)result);
                         if (mode == 0)
+                        {
                             pendingCycles -= 16;
+                        }
                         else
+                        {
                             pendingCycles -= 20 + EACyclesL[mode, reg];
+                        }
                         return;
                     }
             }
@@ -199,7 +210,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0:
@@ -224,9 +234,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             data = data == 0 ? 8 : data; // range is 1-8; 0 represents 8
-
             switch (size)
             {
                 case 0: // byte
@@ -240,8 +248,14 @@ namespace cpu.m68000
                         V = result > sbyte.MaxValue || result < sbyte.MinValue;
                         C = X = (uresult & 0x100) != 0;
                         WriteValueB(mode, reg, (sbyte)result);
-                        if (mode == 0) pendingCycles -= 4;
-                        else pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 4;
+                        }
+                        else
+                        {
+                            pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 1: // word
@@ -263,9 +277,13 @@ namespace cpu.m68000
                             WriteValueW(mode, reg, (short)result);
                         }
                         if (mode <= 1)
+                        {
                             pendingCycles -= 4;
+                        }
                         else
+                        {
                             pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 default: // long
@@ -282,9 +300,13 @@ namespace cpu.m68000
                         }
                         WriteValueL(mode, reg, (int)result);
                         if (mode <= 1)
+                        {
                             pendingCycles -= 8;
+                        }
                         else
+                        {
                             pendingCycles -= 12 + EACyclesL[mode, reg];
+                        }
                         return;
                     }
             }
@@ -297,9 +319,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             data = data == 0 ? 8 : data; // range is 1-8; 0 represents 8
-
             switch (size)
             {
                 case 0: info.Mnemonic = "addq.b"; info.Args = data + ", " + DisassembleValue(mode, reg, 1, ref pc); break;
@@ -315,7 +335,6 @@ namespace cpu.m68000
             int size = (op >> 8) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             if (size == 0) // word
             {
                 int value = ReadValueW(mode, reg);
@@ -327,9 +346,13 @@ namespace cpu.m68000
                 int value = ReadValueL(mode, reg);
                 A[aReg].s32 += value;
                 if (mode == 0 || mode == 1 || (mode == 7 && reg == 4))
+                {
                     pendingCycles -= 8 + EACyclesL[mode, reg];
+                }
                 else
+                {
                     pendingCycles -= 6 + EACyclesL[mode, reg];
+                }
             }
         }
 
@@ -340,10 +363,8 @@ namespace cpu.m68000
             int size = (op >> 8) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             info.Mnemonic = (size == 0) ? "adda.w" : "adda.l";
             info.Args = DisassembleValue(mode, reg, (size == 0) ? 2 : 4, ref pc) + ", A" + aReg;
-
             info.Length = pc - info.PC;
         }
 
@@ -353,7 +374,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -411,7 +431,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -464,10 +483,8 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             string op1 = "D" + dReg;
             string op2;
-
             switch (size)
             {
                 case 0: info.Mnemonic = "sub.b"; op2 = DisassembleValue(mode, reg, 1, ref pc); break;
@@ -483,7 +500,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -496,8 +512,14 @@ namespace cpu.m68000
                         N = (result & 0x80) != 0;
                         Z = result == 0;
                         WriteValueB(mode, reg, (sbyte)result);
-                        if (mode == 0) pendingCycles -= 8;
-                        else pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 8;
+                        }
+                        else
+                        {
+                            pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 1: // word
@@ -510,8 +532,14 @@ namespace cpu.m68000
                         N = (result & 0x8000) != 0;
                         Z = result == 0;
                         WriteValueW(mode, reg, (short)result);
-                        if (mode == 0) pendingCycles -= 8;
-                        else pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 8;
+                        }
+                        else
+                        {
+                            pendingCycles -= 12 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 2: // long
@@ -525,9 +553,13 @@ namespace cpu.m68000
                         Z = ((uint)result == 0);
                         WriteValueL(mode, reg, (int)result);
                         if (mode == 0)
+                        {
                             pendingCycles -= 16;
+                        }
                         else
+                        {
                             pendingCycles -= 20 + EACyclesL[mode, reg];
+                        }
                         return;
                     }
             }
@@ -539,7 +571,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0:
@@ -564,9 +595,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             data = data == 0 ? 8 : data; // range is 1-8; 0 represents 8
-
             switch (size)
             {
                 case 0: // byte
@@ -579,8 +608,14 @@ namespace cpu.m68000
                         V = result > sbyte.MaxValue || result < sbyte.MinValue;
                         C = X = ((value < data) ^ ((value ^ data) >= 0) == false);
                         WriteValueB(mode, reg, (sbyte)result);
-                        if (mode == 0) pendingCycles -= 4;
-                        else pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 4;
+                        }
+                        else
+                        {
+                            pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 1: // word
@@ -601,11 +636,17 @@ namespace cpu.m68000
                             WriteValueW(mode, reg, (short)result);
                         }
                         if (mode == 0)
+                        {
                             pendingCycles -= 4;
+                        }
                         else if (mode == 1)
+                        {
                             pendingCycles -= 8;
+                        }
                         else
+                        {
                             pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 default: // long
@@ -620,8 +661,14 @@ namespace cpu.m68000
                             C = X = ((value < data) ^ ((value ^ data) >= 0) == false);
                         }
                         WriteValueL(mode, reg, (int)result);
-                        if (mode <= 1) pendingCycles -= 8;
-                        else pendingCycles -= 12 + EACyclesL[mode, reg];
+                        if (mode <= 1)
+                        {
+                            pendingCycles -= 8;
+                        }
+                        else
+                        {
+                            pendingCycles -= 12 + EACyclesL[mode, reg];
+                        }
                         return;
                     }
             }
@@ -634,9 +681,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             data = data == 0 ? 8 : data; // range is 1-8; 0 represents 8
-
             switch (size)
             {
                 case 0: info.Mnemonic = "subq.b"; info.Args = data + ", " + DisassembleValue(mode, reg, 1, ref pc); break;
@@ -652,7 +697,6 @@ namespace cpu.m68000
             int size = (op >> 8) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             if (size == 0) // word
             {
                 int value = ReadValueW(mode, reg);
@@ -664,9 +708,13 @@ namespace cpu.m68000
                 int value = ReadValueL(mode, reg);
                 A[aReg].s32 -= value;
                 if (mode == 0 || mode == 1 || (mode == 7 && reg == 4))
+                {
                     pendingCycles -= 8 + EACyclesL[mode, reg];
+                }
                 else
+                {
                     pendingCycles -= 6 + EACyclesL[mode, reg];
+                }
             }
         }
 
@@ -678,10 +726,8 @@ namespace cpu.m68000
             int size = (op >> 8) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             info.Mnemonic = (size == 0) ? "suba.w" : "suba.l";
             info.Args = DisassembleValue(mode, reg, (size == 0) ? 2 : 4, ref pc) + ", A" + aReg;
-
             info.Length = pc - info.PC;
         }
 
@@ -690,9 +736,10 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-
-            if (mode == 1) throw new Exception("NEG on address reg is invalid");
-
+            if (mode == 1)
+            {
+                throw new Exception("NEG on address reg is invalid");
+            }
             switch (size)
             {
                 case 0: // Byte
@@ -704,8 +751,14 @@ namespace cpu.m68000
                         V = result > sbyte.MaxValue || result < sbyte.MinValue;
                         C = X = ((0 < value) ^ ((0 ^ value) >= 0) == false);
                         WriteValueB(mode, reg, (sbyte)result);
-                        if (mode == 0) pendingCycles -= 4;
-                        else pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 4;
+                        }
+                        else
+                        {
+                            pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 1: // Word
@@ -717,8 +770,14 @@ namespace cpu.m68000
                         V = result > short.MaxValue || result < short.MinValue;
                         C = X = ((0 < value) ^ ((0 ^ value) >= 0) == false);
                         WriteValueW(mode, reg, (short)result);
-                        if (mode == 0) pendingCycles -= 4;
-                        else pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 4;
+                        }
+                        else
+                        {
+                            pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 2: // Long
@@ -731,9 +790,13 @@ namespace cpu.m68000
                         C = X = ((0 < value) ^ ((0 ^ value) >= 0) == false);
                         WriteValueL(mode, reg, (int)result);
                         if (mode == 0)
+                        {
                             pendingCycles -= 6;
+                        }
                         else
+                        {
                             pendingCycles -= 12 + EACyclesL[mode, reg];
+                        }
                         return;
                     }
             }
@@ -744,9 +807,7 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-
             int pc = info.PC + 2;
-
             switch (size)
             {
                 case 0: // Byte
@@ -762,7 +823,6 @@ namespace cpu.m68000
                     info.Args = DisassembleValue(mode, reg, 4, ref pc);
                     break;
             }
-
             info.Length = pc - info.PC;
         }
 
@@ -911,7 +971,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 0x03;
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-
             if (mode == 1)
             {
                 throw new Exception("NEG on address reg is invalid");
@@ -927,8 +986,14 @@ namespace cpu.m68000
                         V = result > sbyte.MaxValue || result < sbyte.MinValue;
                         C = X = ((0 < value) ^ ((0 ^ value) >= 0) == false);
                         WriteValueB(mode, reg, (sbyte)result);
-                        if (mode == 0) pendingCycles -= 4;
-                        else pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 4;
+                        }
+                        else
+                        {
+                            pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 1: // Word
@@ -940,8 +1005,14 @@ namespace cpu.m68000
                         V = result > short.MaxValue || result < short.MinValue;
                         C = X = ((0 < value) ^ ((0 ^ value) >= 0) == false);
                         WriteValueW(mode, reg, (short)result);
-                        if (mode == 0) pendingCycles -= 4;
-                        else pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 4;
+                        }
+                        else
+                        {
+                            pendingCycles -= 8 + EACyclesBW[mode, reg];
+                        }
                         return;
                     }
                 case 2: // Long
@@ -953,8 +1024,14 @@ namespace cpu.m68000
                         V = result > int.MaxValue || result < int.MinValue;
                         C = X = ((0 < value) ^ ((0 ^ value) >= 0) == false);
                         WriteValueL(mode, reg, (int)result);
-                        if (mode == 0) pendingCycles -= 6;
-                        else pendingCycles -= 12 + EACyclesL[mode, reg];
+                        if (mode == 0)
+                        {
+                            pendingCycles -= 6;
+                        }
+                        else
+                        {
+                            pendingCycles -= 12 + EACyclesL[mode, reg];
+                        }
                         return;
                     }
             }
@@ -1382,7 +1459,6 @@ namespace cpu.m68000
             int dstReg = (op >> 9) & 0x07;
             int size = (op >> 6) & 0x03;
             int srcReg = op & 0x07;
-
             switch (size)
             {
                 case 0:
@@ -1559,7 +1635,6 @@ namespace cpu.m68000
             int dstReg = (op >> 9) & 0x07;
             int size = (op >> 6) & 0x03;
             int srcReg = op & 0x07;
-
             switch (size)
             {
                 case 0:
@@ -1584,7 +1659,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -1629,12 +1703,10 @@ namespace cpu.m68000
         void CMP_Disasm(DisassemblyInfo info)
         {
             int pc = info.PC + 2;
-
             int dReg = (op >> 9) & 7;
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0:
@@ -1659,7 +1731,6 @@ namespace cpu.m68000
             int size = (op >> 8) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // word
@@ -1692,12 +1763,10 @@ namespace cpu.m68000
         void CMPA_Disasm(DisassemblyInfo info)
         {
             int pc = info.PC + 2;
-
             int aReg = (op >> 9) & 7;
             int size = (op >> 8) & 1;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0:
@@ -1717,7 +1786,6 @@ namespace cpu.m68000
             int axReg = (op >> 9) & 7;
             int size = (op >> 6) & 3;
             int ayReg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -1765,7 +1833,6 @@ namespace cpu.m68000
             int axReg = (op >> 9) & 7;
             int size = (op >> 6) & 3;
             int ayReg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: info.Mnemonic = "cmpm.b"; break;
@@ -1781,7 +1848,6 @@ namespace cpu.m68000
             int size = (op >> 6) & 3;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             switch (size)
             {
                 case 0: // byte
@@ -1833,7 +1899,6 @@ namespace cpu.m68000
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
             int immediate;
-
             switch (size)
             {
                 case 0:
@@ -1860,10 +1925,8 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             uint result = (uint)(D[dreg].u16 * (ushort)ReadValueW(mode, reg));
             D[dreg].u32 = result;
-
             V = false;
             C = false;
             N = (result & 0x80000000) != 0;
@@ -1877,7 +1940,6 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             int pc = info.PC + 2;
             info.Mnemonic = "mulu";
             info.Args = String.Format("{0}, D{1}", DisassembleValue(mode, reg, 2, ref pc), dreg);
@@ -1889,15 +1951,12 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             int result = D[dreg].s16 * ReadValueW(mode, reg);
             D[dreg].s32 = result;
-
             V = false;
             C = false;
             N = (result & 0x80000000) != 0;
             Z = result == 0;
-
             pendingCycles -= 54 + EACyclesBW[mode, reg];
         }
 
@@ -1906,7 +1965,6 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             int pc = info.PC + 2;
             info.Mnemonic = "muls";
             info.Args = String.Format("{0}, D{1}", DisassembleValue(mode, reg, 2, ref pc), dreg);
@@ -1918,10 +1976,8 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             uint source = (ushort)ReadValueW(mode, reg);
             uint dest = D[dreg].u32;
-
             if (source == 0)
             {                
                 TrapVector(5);
@@ -1951,7 +2007,6 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             int pc = info.PC + 2;
             info.Mnemonic = "divu";
             info.Args = String.Format("{0}, D{1}", DisassembleValue(mode, reg, 2, ref pc), dreg);
@@ -1963,10 +2018,8 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             int source = ReadValueW(mode, reg);
             int dest = D[dreg].s32;
-
             if (source == 0)
             {
                 TrapVector(5);
@@ -1996,7 +2049,6 @@ namespace cpu.m68000
             int dreg = (op >> 9) & 7;
             int mode = (op >> 3) & 7;
             int reg = (op >> 0) & 7;
-
             int pc = info.PC + 2;
             info.Mnemonic = "divs";
             info.Args = String.Format("{0}, D{1}", DisassembleValue(mode, reg, 2, ref pc), dreg);

@@ -7,10 +7,10 @@ using cpu.m68000;
 
 namespace mame
 {
-    public partial class Konami68000
+    public partial class Konami
     {
-        public static byte[] gfx1rom, gfx2rom, gfx12rom, gfx22rom,titlerom,user1rom,zoomrom;
-        public static byte dsw1, dsw2, dsw3, bytee;
+        public static byte[] gfx0rom, gfx1rom, gfx2rom, titlerom, zoomrom, zoomtmaprom;
+        public static byte dsw1, dsw2, dsw3, dsw3_old;
         public static byte[] mainram2;
         public static short[] sampledata;
         public static ushort[] cuebrick_nvram, tmnt2_1c0800;
@@ -18,9 +18,9 @@ namespace mame
         public static int toggle, sprite_totel_element;
         private static int tmnt_soundlatch, cuebrick_snd_irqlatch, cuebrick_nvram_bank;
         public static int basebanksnd;
-        public static void Konami68000Init()
+        public static void KonamiInit()
         {
-            int i, n1, n2;
+            int i,n;
             Generic.paletteram16 = new ushort[0x800];
             Generic.spriteram16 = new ushort[0x2000];
             init_eeprom_count = 10;
@@ -67,24 +67,46 @@ namespace mame
             Memory.mainrom = Machine.GetRom("maincpu.rom");
             Memory.audiorom = Machine.GetRom("audiocpu.rom");            
             gfx1rom = Machine.GetRom("gfx1.rom");
-            n1 = gfx1rom.Length;
-            gfx12rom = new byte[n1 * 2];
-            for (i = 0; i < n1; i++)
-            {
-                gfx12rom[i * 2] = (byte)(gfx1rom[i] >> 4);
-                gfx12rom[i * 2 + 1] = (byte)(gfx1rom[i] & 0x0f);
-            }
             gfx2rom = Machine.GetRom("gfx2.rom");
-            n2 = gfx2rom.Length;
-            gfx22rom = new byte[n2 * 2];
-            for (i = 0; i < n2; i++)
-            {
-                gfx22rom[i * 2] = (byte)(gfx2rom[i] >> 4);
-                gfx22rom[i * 2 + 1] = (byte)(gfx2rom[i] & 0x0f);
-            }
-            sprite_totel_element = gfx22rom.Length / 0x100;
+            sprite_totel_element = gfx2rom.Length / 0x100;
             switch (Machine.sName)
             {
+                case "scontra":
+                case "scontraa":
+                case "scontraj":
+                case "gbusters":
+                case "gbustersa":
+                case "crazycop":
+                    Generic.paletteram = new byte[0x800];
+                    ram = new byte[0x800];
+                    n = Memory.mainrom.Length;
+                    bank1 = new byte[n];
+                    Array.Copy(Memory.mainrom, 0, bank1, 0, n);
+                    K052109_memory_region = Machine.GetRom("k052109.rom");
+                    K051960_memory_region = Machine.GetRom("k051960.rom");
+                    K007232.k007232rom = Machine.GetRom("k007232.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K051960_memory_region == null || Memory.audiorom == null || K007232.k007232rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
+                case "thunderx":
+                case "thunderxa":
+                case "thunderxb":
+                case "thunderxj":
+                    Generic.paletteram = new byte[0x800];
+                    ram = new byte[0x800];
+                    pmcram = new byte[0x800];
+                    bank1 = new byte[0x18000];
+                    Array.Copy(Memory.mainrom, 0x10000, bank1, 0, 0x10000);
+                    Array.Copy(Memory.mainrom, 0, bank1, 0x10000, 0x8000);
+                    K052109_memory_region = Machine.GetRom("k052109.rom");
+                    K051960_memory_region = Machine.GetRom("k051960.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K051960_memory_region == null || Memory.audiorom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
                 case "cuebrick":
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K051960_memory_region = Machine.GetRom("k051960.rom");
@@ -107,6 +129,7 @@ namespace mame
                 case "tmntu":
                 case "tmntua":
                 case "tmntub":
+                case "tmntuc":
                 case "tmht":
                 case "tmhta":
                 case "tmhtb":
@@ -128,7 +151,9 @@ namespace mame
                     break;
                 case "punkshot":
                 case "punkshot2":
+                case "punkshot2e":
                 case "punkshotj":
+                case "punkshot2a":
                 case "thndrx2":
                 case "thndrx2a":
                 case "thndrx2j":
@@ -149,9 +174,11 @@ namespace mame
                 case "detatwin":
                 case "tmnt2":
                 case "tmnt2a":
+                case "tmnt2o":
                 case "tmht22pe":
                 case "tmht24pe":
                 case "tmnt22pu":
+                case "tmnt24pu":
                 case "qgakumon":
                 case "ssriders":
                 case "ssriderseaa":
@@ -179,9 +206,10 @@ namespace mame
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K053245_memory_region[0] = Machine.GetRom("k053245.rom");
                     zoomrom = Machine.GetRom("zoom.rom");
-                    user1rom = Machine.GetRom("user1.rom");
+                    gfx0rom = Machine.GetRom("gfx0.rom");
+                    zoomtmaprom = Machine.GetRom("zoomtmap.rom");
                     K053260.k053260rom = Machine.GetRom("k053260.rom");
-                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K053245_memory_region[0] == null || zoomrom == null || user1rom == null || Memory.audiorom == null || K053260.k053260rom == null)
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K053245_memory_region[0] == null || zoomrom == null || zoomtmaprom == null || Memory.audiorom == null || K053260.k053260rom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -191,9 +219,10 @@ namespace mame
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K053245_memory_region[0] = Machine.GetRom("k053245.rom");
                     zoomrom = Machine.GetRom("zoom.rom");
-                    user1rom = Machine.GetRom("user1.rom");
+                    gfx0rom = Machine.GetRom("gfx0.rom");
+                    zoomtmaprom = Machine.GetRom("zoomtmap.rom");
                     K054539.k054539rom = Machine.GetRom("k054539.rom");
-                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K053245_memory_region[0] == null || zoomrom == null || user1rom == null || Memory.audiorom == null || K054539.k054539rom == null)
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K053245_memory_region[0] == null || zoomrom == null || zoomtmaprom == null || Memory.audiorom == null || K054539.k054539rom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -203,25 +232,45 @@ namespace mame
             {
                 switch (Machine.sName)
                 {
+                    case "scontra":
+                    case "scontraa":
+                    case "scontraj":
+                        dsw1 = 0xff;
+                        dsw2 = 0x5a;
+                        dsw3 = 0xff;
+                        break;                    
+                    case "thunderx":
+                    case "thunderxa":
+                    case "thunderxb":
+                    case "thunderxj":
+                        dsw1 = 0xff;
+                        dsw2 = 0x7a;
+                        dsw3 = 0xff;
+                        break;
+                    case "gbusters":
+                    case "gbustersa":
+                    case "crazycop":
+                        dsw1 = 0xff;
+                        dsw2 = 0x56;
+                        dsw3 = 0xff;
+                        break;
                     case "cuebrick":
                         dsw1 = 0x56;
                         dsw2 = 0xff;
                         dsw3 = 0x0f;
-                        K052109_callback = cuebrick_tile_callback;
-                        K051960_callback = mia_sprite_callback;
                         break;
                     case "mia":
                     case "mia2":
                         dsw1 = 0xff;
                         dsw2 = 0x56;
                         dsw3 = 0x0f;
-                        K052109_callback = mia_tile_callback;
-                        K051960_callback = mia_sprite_callback;
                         break;                    
                     case "tmnt":
                     case "tmntu":
                     case "tmntua":
                     case "tmntub":
+                    case "tmntuc":
+                    case "tmntucbl":
                     case "tmht":
                     case "tmhta":
                     case "tmhtb":
@@ -230,8 +279,6 @@ namespace mame
                         dsw1 = 0x0f;
                         dsw2 = 0x5f;
                         dsw3 = 0xff;
-                        K052109_callback = tmnt_tile_callback;
-                        K051960_callback = tmnt_sprite_callback;
                         break;
                     case "tmht2p":
                     case "tmht2pa":
@@ -240,17 +287,15 @@ namespace mame
                         dsw1 = 0xff;
                         dsw2 = 0x5f;
                         dsw3 = 0xff;
-                        K052109_callback = tmnt_tile_callback;
-                        K051960_callback = tmnt_sprite_callback;
                         break;
                     case "punkshot":
                     case "punkshot2":
+                    case "punkshot2e":
                     case "punkshotj":
+                    case "punkshot2a":
                         dsw1 = 0xff;
                         dsw2 = 0x7f;
                         dsw3 = 0xff;
-                        K052109_callback = tmnt_tile_callback;
-                        K051960_callback = punkshot_sprite_callback;
                         break;
                     case "lgtnfght":
                     case "lgtnfghta":
@@ -259,57 +304,22 @@ namespace mame
                         dsw1 = 0x5e;
                         dsw2 = 0xff;
                         dsw3 = 0xfd;
-                        K052109_callback = tmnt_tile_callback;
-                        K053245_callback = lgtnfght_sprite_callback;
                         break;
                     case "blswhstl":
                     case "blswhstla":
                     case "detatwin":
                         bytee = 0xfe;
-                        K052109_callback = blswhstl_tile_callback;
-                        K053245_callback = blswhstl_sprite_callback;
                         break;
                     case "glfgreat":
                     case "glfgreatj":
                         dsw1 = 0xff;
                         dsw2 = 0x59;
                         dsw3 = 0xf7;
-                        K052109_callback = tmnt_tile_callback;
-                        K053245_callback = lgtnfght_sprite_callback;
-                        break;
-                    case "tmnt2":
-                    case "tmnt2a":
-                    case "tmht22pe":
-                    case "tmht24pe":
-                    case "tmnt22pu":
-                    case "qgakumon":
-                    case "ssriders":
-                    case "ssriderseaa":
-                    case "ssridersebd":
-                    case "ssridersebc":
-                    case "ssridersuda":
-                    case "ssridersuac":
-                    case "ssridersuab":
-                    case "ssridersubc":
-                    case "ssridersadd":
-                    case "ssridersabd":
-                    case "ssridersjad":
-                    case "ssridersjac":
-                    case "ssridersjbd":                        
-                        K052109_callback = tmnt_tile_callback;
-                        K053245_callback = lgtnfght_sprite_callback;
                         break;
                     case "thndrx2":
                     case "thndrx2a":
                     case "thndrx2j":
                         bytee = 0xfe;
-                        K052109_callback = tmnt_tile_callback;
-                        K051960_callback = thndrx2_sprite_callback;
-                        break;
-                    case "prmrsocr":
-                    case "prmrsocrj":                        
-                        K052109_callback = tmnt_tile_callback;
-                        K053245_callback = prmrsocr_sprite_callback;
                         break;
                 }
             }
@@ -318,7 +328,7 @@ namespace mame
         {
             cuebrick_snd_irqlatch = irq;
         }
-        public static void konami68000_ym2151_irq_handler(int irq)
+        public static void konami_ym2151_irq_handler(int irq)
         {
 
         }
@@ -558,7 +568,7 @@ namespace mame
         }
         public static void prmrsocr_audio_bankswitch_w(byte data)
         {
-            basebanksnd = 0x10000 + (data & 7) * 0x4000;
+            basebanksnd = (data & 7) * 0x4000;
         }
         public static ushort tmnt2_sound_r(int offset)
         {
@@ -1212,10 +1222,29 @@ namespace mame
         {
             Cpuint.cpunum_set_input_line(1, (int)LineState.INPUT_LINE_NMI, LineState.PULSE_LINE);
         }
-        public static void machine_reset_konami68000()
+        public static void machine_reset_konami()
         {
             switch (Machine.sName)
             {
+                case "scontra":
+                case "scontraa":
+                case "scontraj":
+                    Array.Clear(Generic.paletteram, 0, 0x800);
+                    break;
+                case "thunderx":
+                case "thunderxa":
+                case "thunderxb":
+                case "thunderxj":
+                    basebankmain = 0;
+                    Array.Clear(Generic.paletteram, 0, 0x800);
+                    Array.Clear(pmcram, 0, 0x800);
+                    break;
+                case "gbusters":
+                case "gbustersa":
+                case "crazycop":
+                    Array.Copy(Memory.mainrom, 0, bank1, 0x8000, 0x8000);
+                    Array.Clear(Generic.paletteram, 0, 0x800);
+                    break;
                 case "tmnt":
                 case "tmntu":
                 case "tmntua":
