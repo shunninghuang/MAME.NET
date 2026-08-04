@@ -10,6 +10,8 @@ E:\VS2008\mame_1\mame\obj\Debug\ui.dataeastForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.gaelcoForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.igs011Form.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.ipsForm.resources
+E:\VS2008\mame_1\mame\obj\Debug\ui.kanekoForm.resources
+E:\VS2008\mame_1\mame\obj\Debug\ui.konamiForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.ListViewControl.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.loadForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.m68000Form.resources
@@ -21,6 +23,7 @@ E:\VS2008\mame_1\mame\obj\Debug\ui.megasys1Form.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.namcos1Form.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.neogeoForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.pgmForm.resources
+E:\VS2008\mame_1\mame\obj\Debug\ui.seibuForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.tadForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.taitobForm.resources
 E:\VS2008\mame_1\mame\obj\Debug\ui.taitoForm.resources
@@ -30,6 +33,3 @@ E:\VS2008\mame_1\mame\obj\Debug\mame.Properties.Resources.resources
 E:\VS2008\mame_1\mame\obj\Debug\mame.csproj.GenerateResource.Cache
 E:\VS2008\mame_1\mame\obj\Debug\mame.exe
 E:\VS2008\mame_1\mame\obj\Debug\mame.pdb
-E:\VS2008\mame_1\mame\obj\Debug\ui.kanekoForm.resources
-E:\VS2008\mame_1\mame\obj\Debug\ui.konamiForm.resources
-E:\VS2008\mame_1\mame\obj\Debug\ui.seibuForm.resources

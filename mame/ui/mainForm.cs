@@ -1477,6 +1477,16 @@ namespace ui
                                 Video.width = 288;
                                 Video.height = 224;
                                 break;
+                            case "mystwarr":
+                            case "mystwarru":
+                            case "mystwarrj":
+                            case "mystwarra":
+                            case "mystwarraa":
+                                Video.offsetx = 24;
+                                Video.offsety = 16;
+                                Video.width = 288;
+                                Video.height = 224;
+                                break;
                         }
                     }
                     break;
