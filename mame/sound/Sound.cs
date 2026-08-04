@@ -789,10 +789,23 @@ namespace mame
                         case "prmrsocrj":
                             latched_value = new ushort[3];
                             utempdata = new ushort[3];
-                            K054539.k054539_start(48000);
-                            k054539stream = new sound_stream(48000, 0, 2, K054539.k054539_update);
+                            K054539.kk1[0].k054539_start(48000);
                             sound_update = sound_update_konami_prmrsocr;
                             mixerstream = new sound_stream(48000, 2, 0, null);
+                            break;
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                            latched_value = new ushort[3];
+                            utempdata = new ushort[3];
+                            K054539.kk1[0].k054539_start(48000);
+                            K054539.kk1[1].k054539_start(48000);
+                            K054539.kk1[0].info.stream = new sound_stream(48000, 0, 2, K054539.kk1[0].k054539_update);
+                            K054539.kk1[1].info.stream = new sound_stream(48000, 0, 2, K054539.kk1[1].k054539_update);
+                            sound_update = sound_update_konami_mystwarr;
+                            mixerstream = new sound_stream(48000, 4, 0, null);
                             break;
                     }
                     break;
@@ -1203,6 +1216,11 @@ namespace mame
                             break;
                         case "prmrsocr":
                         case "prmrsocrj":
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
                             break;
                     }
                     break;
@@ -2633,8 +2651,8 @@ namespace mame
         public static void sound_update_konami_prmrsocr()
         {
             int sampindex;
-            k054539stream.stream_update();
-            generate_resampled_data_k054539(0x100);
+            K054539.kk1[0].info.stream.stream_update();
+            generate_resampled_data_k054539(0, 0x100, 0);
             mixerstream.output_sampindex += 0x3c0;
             for (sampindex = 0; sampindex < 0x3c0; sampindex++)
             {
@@ -2664,6 +2682,43 @@ namespace mame
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_konami_prmrsocr();
+        }
+		public static void sound_update_konami_mystwarr()
+        {
+            int sampindex;
+            K054539.kk1[0].info.stream.stream_update();
+            K054539.kk1[1].info.stream.stream_update();
+            generate_resampled_data_k054539(0, 0x100, 0);
+            generate_resampled_data_k054539(1, 0x100, 2);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int sampL, sampR;
+                sampL = mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (sampL < -32768)
+                {
+                    sampL = -32768;
+                }
+                else if (sampL > 32767)
+                {
+                    sampL = 32767;
+                }
+                sampR = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[2][sampindex];
+                if (sampR < -32768)
+                {
+                    sampR = -32768;
+                }
+                else if (sampR > 32767)
+                {
+                    sampR = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)sampL;
+                finalmixb[sampindex * 4 + 1] = (byte)((sampL & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)sampR;
+                finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
+            }            
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_konami_mystwarr();
         }
         public static void sound_update_capcom_gng()
         {

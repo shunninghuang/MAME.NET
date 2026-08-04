@@ -16,10 +16,8 @@ namespace mame
         public static int[] pribase = new int[4] { 0x0180, 0x0080, 0x0100, 0x0000 };
         public static byte[] kncljoe_scrollregs, tilesrom, promsrom;
         public static byte[][] spritesrom;
-        public static bitmap_t bitmap;
         public static void SeibuInit()
         {
-            int i, n;
             Machine.bRom = true;
             switch (Machine.sName)
             {
@@ -155,10 +153,10 @@ namespace mame
         public static void video_start_kncljoe()
         {
             int j;
-            bitmap = new bitmap_t();
-            bitmap.rowpixels = 0x100;
-            bitmap.width = 0x100;
-            bitmap.height = 0x100;
+            Palette.bitmap = new bitmap_t();
+            Palette.bitmap.rowpixels = 0x100;
+            Palette.bitmap.width = 0x100;
+            Palette.bitmap.height = 0x100;
             bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
             bg_tilemap.tilemap_set_scroll_rows(4);
             bg_tilemap.pen_to_flags = new byte[1, 16];
@@ -256,7 +254,7 @@ namespace mame
                     {
                         sx -= 256;
                     }
-                    Drawgfx.common_drawgfx_kncljoe(bitmap, spritesrom[sprite_bank], code, color, flipx, flipy, sx, sy, clip);
+                    Drawgfx.common_drawgfx_kncljoe(Palette.bitmap, spritesrom[sprite_bank], code, color, flipx, flipy, sx, sy, clip);
                 }
             }
         }

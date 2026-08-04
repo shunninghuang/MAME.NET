@@ -134,6 +134,33 @@ namespace mame
                 }
             }
         }
+        public static void ui_update_konami_mystwarr()
+        {
+            int i;
+            int red, green, blue;
+            if (single_step || Mame.paused)
+            {
+                byte bright = 0xa7;
+                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
+                {
+                    red = (int)(((Palette.bbitmap[Video.curbitmap].ui1[i] & 0xff0000) >> 16) * bright / 0xff);
+                    green = (int)(((Palette.bbitmap[Video.curbitmap].ui1[i] & 0xff00) >> 8) * bright / 0xff);
+                    blue = (int)((Palette.bbitmap[Video.curbitmap].ui1[i] & 0xff) * bright / 0xff);
+                    Video.bitmapcolor[i] = (int)Palette.make_argb(0xff, red, green, blue);
+                }
+            }
+            else
+            {
+                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
+                {
+                    if ((Palette.bbitmap[Video.curbitmap].ui1[i] & 0xff000000) == 0)
+                    {
+                        int i1 = 1;
+                    }
+                    Video.bitmapcolor[i] = (int)Palette.bbitmap[Video.curbitmap].ui1[i];
+                }
+            }
+        }
         public static void handler_ingame()
         {
             Mame.handle2 = GetForegroundWindow();

@@ -702,15 +702,103 @@ namespace mame
                             break;
                     }
                     break;
-                case "Konami":
-                    Konami.K052109_tilemap[0].all_tiles_dirty = true;
-                    Konami.K052109_tilemap[1].all_tiles_dirty = true;
-                    Konami.K052109_tilemap[2].all_tiles_dirty = true;
-                    for (i = 0; i < 0x800; i++)
+                case "Konami":                    
+                    switch (Machine.sName)
                     {
-                        Palette.update_adjusted_color(0, i);
-                        Palette.update_adjusted_color(1, i);
-                        Palette.update_adjusted_color(2, i);
+                        case "scontra":
+                        case "scontraa":
+                        case "scontraj":
+                        case "gbusters":
+                        case "gbustersa":
+                        case "crazycop":
+                        case "thunderx":
+                        case "thunderxa":
+                        case "thunderxb":
+                        case "thunderxj":
+                        case "cuebrick":
+                        case "mia":
+                        case "mia2":
+                        case "tmnt":
+                        case "tmntu":
+                        case "tmntua":
+                        case "tmntub":
+                        case "tmntuc":
+                        case "tmht":
+                        case "tmhta":
+                        case "tmhtb":
+                        case "tmntj":
+                        case "tmnta":
+                        case "tmht2p":
+                        case "tmht2pa":
+                        case "tmnt2pj":
+                        case "tmnt2po":
+                        case "punkshot":
+                        case "punkshot2":
+                        case "punkshot2e":
+                        case "punkshotj":
+                        case "punkshot2a":
+                        case "thndrx2":
+                        case "thndrx2a":
+                        case "thndrx2j":
+                        case "lgtnfght":
+                        case "lgtnfghta":
+                        case "lgtnfghtu":
+                        case "trigon":
+                        case "blswhstl":
+                        case "blswhstla":
+                        case "detatwin":
+                        case "tmnt2":
+                        case "tmnt2a":
+                        case "tmnt2o":
+                        case "tmht22pe":
+                        case "tmht24pe":
+                        case "tmnt22pu":
+                        case "tmnt24pu":
+                        case "qgakumon":
+                        case "ssriders":
+                        case "ssriderseaa":
+                        case "ssridersebd":
+                        case "ssridersebc":
+                        case "ssridersuda":
+                        case "ssridersuac":
+                        case "ssridersuab":
+                        case "ssridersubc":
+                        case "ssridersadd":
+                        case "ssridersabd":
+                        case "ssridersjad":
+                        case "ssridersjac":
+                        case "ssridersjbd":
+                        case "glfgreat":
+                        case "glfgreatj":
+                        case "prmrsocr":
+                        case "prmrsocrj":
+                            Konami.K052109_tilemap[0].all_tiles_dirty = true;
+                            Konami.K052109_tilemap[1].all_tiles_dirty = true;
+                            Konami.K052109_tilemap[2].all_tiles_dirty = true;
+                            for (i = 0; i < 0x800; i++)
+                            {
+                                Palette.update_adjusted_color(0, i);
+                                Palette.update_adjusted_color(1, i);
+                                Palette.update_adjusted_color(2, i);
+                            }
+                            break;
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                            for (i = 0; i < 0x10; i++)
+                            {
+                                Konami.K056832_tilemap[i].all_tiles_dirty = true;
+                            }
+                            for (i = 0; i < 0x800; i++)
+                            {
+                                Palette.update_adjusted_color(0, i);
+                                Palette.update_adjusted_color(1, i);
+                                Palette.update_adjusted_color(2, i);
+                            }
+                            Konami.reset_sound_region();
+                            break;
                     }
                     break;
                 case "Capcom":

@@ -242,7 +242,16 @@ namespace mame
             pixmap_update(null);
             return pixmap;
         }
-
+        public unsafe byte[,] tilemap_get_flagsmap()
+        {
+            pixmap_update(null);
+            return flagsmap;
+        }
+        public unsafe byte[] tilemap_get_tile_flags()
+        {
+            pixmap_update(null);
+            return tileflags;
+        }
         public RECT sect_rect(RECT dst, RECT src)
         {
             RECT dst2 = dst;
@@ -400,7 +409,7 @@ namespace mame
             }
             tilemap_mark_all_tiles_dirty(this);
         }
-        public unsafe void pixmap_update(RECT *cliprect)
+        public unsafe void pixmap_update(RECT* cliprect)
         {
             int mincol, maxcol, minrow, maxrow;
             int row, col;
@@ -627,8 +636,9 @@ namespace mame
     {
         public static List<Tmap> lsTmap = new List<Tmap>();
         public static byte[,] priority_bitmap;
+        public static byte[] ppriority_bitmap;
         public static byte[,] bb00;
-        public static byte[] bb0F, bbFF;
+        public static byte[] bb0F, bbFF, bb10;
         public static int screen_width, screen_height;
         private static int INVALID_LOGICAL_INDEX = -1;
         public static byte TILEMAP_PIXEL_TRANSPARENT = 0x00;
@@ -708,6 +718,7 @@ namespace mame
                     priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "Taito":
+
                     screen_width = 0x140;
                     screen_height = 0x100;
                     priority_bitmap = new byte[0x100, 0x140];
@@ -729,6 +740,7 @@ namespace mame
                     priority_bitmap = new byte[0x100, 0x200];
                     break;
             }
+            ppriority_bitmap = new byte[screen_width * screen_height];
             switch (Machine.sBoard)
             {
                 case "CPS-1":
@@ -750,6 +762,7 @@ namespace mame
                 case "Konami":
                     bb0F = new byte[0x400];
                     bbFF = new byte[0x4000000];
+                    bb10 = new byte[0x800];
                     for (i = 0; i < 0x4000000; i++)
                     {
                         bbFF[i] = 0xff;
@@ -757,6 +770,10 @@ namespace mame
                     for (i = 0; i < 0x400; i++)
                     {
                         bb0F[i] = 0x0f;
+                    }
+                    for (i = 0; i < 0x800; i++)
+                    {
+                        bb10[i] = 0x10;
                     }
                     break;
                 case "Megasys1":

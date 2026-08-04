@@ -136,10 +136,12 @@
     <Compile Include="mame\konami\Gdi.cs" />
     <Compile Include="mame\konami\Input.cs" />
     <Compile Include="mame\konami\Konami.cs" />
+    <Compile Include="mame\konami\konamigx.cs" />
     <Compile Include="mame\konami\Konamiic.cs" />
     <Compile Include="mame\konami\Memory.cs" />
     <Compile Include="mame\konami\Memory2.cs" />
     <Compile Include="mame\konami\Memory3.cs" />
+    <Compile Include="mame\konami\mystwarr.cs" />
     <Compile Include="mame\konami\State.cs" />
     <Compile Include="mame\konami\thunderx.cs" />
     <Compile Include="mame\konami\Tilemap.cs" />

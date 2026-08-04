@@ -14,6 +14,7 @@ namespace mame
         public static mainForm FORM;
         public static RomInfo rom;
         public static bool bRom;
+        public static gfx_element[] gfx = new gfx_element[32];
         public delegate void machine_delegate();
         public static machine_delegate machine_reset_callback;
         public static void machine_start()
@@ -355,6 +356,15 @@ namespace mame
                         case "prmrsocr":
                         case "prmrsocrj":
                             Konami.video_start_prmrsocr();
+                            break;
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                            Konami.nvram_handler_load_mystwarr();
+                            Konami.machine_start_mystwarr();
+                            Konami.video_start_mystwarr();
                             break;
                     }
                     break;

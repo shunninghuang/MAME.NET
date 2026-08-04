@@ -9,7 +9,7 @@ namespace mame
 {
     public partial class Konami
     {
-        public static byte[] gfx0rom, gfx1rom, gfx2rom, titlerom, zoomrom, zoomtmaprom;
+        public static byte[] gfx0rom, gfx1rom, gfx2rom, gfx3rom, gfx4rom, titlerom, zoomrom, zoomtmaprom;
         public static byte dsw1, dsw2, dsw3, dsw3_old;
         public static byte[] mainram2;
         public static short[] sampledata;
@@ -20,15 +20,9 @@ namespace mame
         public static int basebanksnd;
         public static void KonamiInit()
         {
-            int i,n;
-            Generic.paletteram16 = new ushort[0x800];
-            Generic.spriteram16 = new ushort[0x2000];
-            init_eeprom_count = 10;
+            int i,n;            
             toggle = 0;
-            Memory.mainram = new byte[0x4000];
-            Memory.audioram = new byte[0x2000];//0x800 prmrsocr_0x2000
-            mainram2 = new byte[0x4000];//0x4000 tmnt2_ssriders_0x80
-            layer_colorbase = new int[3];
+            layer_colorbase = new int[6];//3 mystwarr 6
             cuebrick_nvram=new ushort[0x400*0x20];
             tmnt2_1c0800 = new ushort[0x10];
             K053245_memory_region = new byte[2][];
@@ -50,8 +44,7 @@ namespace mame
                 K053245_ram[i] = new byte[0];
                 K053245_buffer[i] = new ushort[0];
                 K053244_regs[i] = new byte[0x10];
-            }
-            K053251_tilemaps = new Tmap[5];
+            }            
             K053936_offset = new int[2][];
             for (i = 0; i < 2; i++)
             {
@@ -77,6 +70,9 @@ namespace mame
                 case "gbusters":
                 case "gbustersa":
                 case "crazycop":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x1800];
+                    Memory.audioram = new byte[0x800];
                     Generic.paletteram = new byte[0x800];
                     ram = new byte[0x800];
                     n = Memory.mainrom.Length;
@@ -94,6 +90,9 @@ namespace mame
                 case "thunderxa":
                 case "thunderxb":
                 case "thunderxj":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x1800];
+                    Memory.audioram = new byte[0x800];
                     Generic.paletteram = new byte[0x800];
                     ram = new byte[0x800];
                     pmcram = new byte[0x800];
@@ -108,6 +107,12 @@ namespace mame
                     }
                     break;
                 case "cuebrick":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    mainram2 = new byte[0x4000];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K051960_memory_region = Machine.GetRom("k051960.rom");
                     if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K051960_memory_region == null)
@@ -117,6 +122,12 @@ namespace mame
                     break;
                 case "mia":
                 case "mia2":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    mainram2 = new byte[0x4000];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K051960_memory_region = Machine.GetRom("k051960.rom");
                     K007232.k007232rom = Machine.GetRom("k007232.rom");
@@ -139,6 +150,11 @@ namespace mame
                 case "tmht2pa":
                 case "tmnt2pj":
                 case "tmnt2po":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K051960_memory_region = Machine.GetRom("k051960.rom");
                     K007232.k007232rom = Machine.GetRom("k007232.rom");
@@ -157,6 +173,11 @@ namespace mame
                 case "thndrx2":
                 case "thndrx2a":
                 case "thndrx2j":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K051960_memory_region = Machine.GetRom("k051960.rom");
                     K053260.k053260rom = Machine.GetRom("k053260.rom");
@@ -172,6 +193,19 @@ namespace mame
                 case "blswhstl":
                 case "blswhstla":
                 case "detatwin":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
+                    K052109_memory_region = Machine.GetRom("k052109.rom");
+                    K053245_memory_region[0] = Machine.GetRom("k053245.rom");
+                    K053260.k053260rom = Machine.GetRom("k053260.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K053245_memory_region[0] == null || Memory.audiorom == null || K053260.k053260rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
                 case "tmnt2":
                 case "tmnt2a":
                 case "tmnt2o":
@@ -193,6 +227,12 @@ namespace mame
                 case "ssridersjad":
                 case "ssridersjac":
                 case "ssridersjbd":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    mainram2 = new byte[0x80];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K053245_memory_region[0] = Machine.GetRom("k053245.rom");
                     K053260.k053260rom = Machine.GetRom("k053260.rom");
@@ -203,6 +243,11 @@ namespace mame
                     break;
                 case "glfgreat":
                 case "glfgreatj":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K053245_memory_region[0] = Machine.GetRom("k053245.rom");
                     zoomrom = Machine.GetRom("zoom.rom");
@@ -216,6 +261,11 @@ namespace mame
                     break;
                 case "prmrsocr":
                 case "prmrsocrj":
+                    init_eeprom_count = 10;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x2000];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
                     K052109_memory_region = Machine.GetRom("k052109.rom");
                     K053245_memory_region[0] = Machine.GetRom("k053245.rom");
                     zoomrom = Machine.GetRom("zoom.rom");
@@ -226,6 +276,35 @@ namespace mame
                     {
                         Machine.bRom = false;
                     }
+                    break;
+                case "mystwarr":
+                case "mystwarru":
+                case "mystwarrj":
+                case "mystwarra":
+                case "mystwarraa":
+                    init_eeprom_count = 0;
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x2000];
+                    mainram2 = new byte[0x20];
+                    audioram2 = new byte[0x1d0];
+                    audioram3 = new byte[0x1d0];
+                    Generic.paletteram16 = new ushort[0x1000];
+                    Generic.spriteram16 = new ushort[0x2000];                    
+                    gx_workram = new byte[0x10000];
+                    Generic.spriteram16 = new ushort[0x8000];
+                    K054539.k054539rom = Machine.GetRom("k054539.rom");
+                    eepromrom = Machine.GetRom("eeprom.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || Memory.audiorom == null || K054539.k054539rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
+                case "mmaulers":
+                case "mmaulersu":
+                case "dadandrn":
+                    init_eeprom_count = 0;
+
+
                     break;
             }
             if (Machine.bRom)
@@ -238,7 +317,7 @@ namespace mame
                         dsw1 = 0xff;
                         dsw2 = 0x5a;
                         dsw3 = 0xff;
-                        break;                    
+                        break;
                     case "thunderx":
                     case "thunderxa":
                     case "thunderxb":
@@ -264,7 +343,7 @@ namespace mame
                         dsw1 = 0xff;
                         dsw2 = 0x56;
                         dsw3 = 0x0f;
-                        break;                    
+                        break;
                     case "tmnt":
                     case "tmntu":
                     case "tmntua":
@@ -320,6 +399,13 @@ namespace mame
                     case "thndrx2a":
                     case "thndrx2j":
                         bytee = 0xfe;
+                        break;
+                    case "mystwarr":
+                    case "mystwarru":
+                    case "mystwarrj":
+                    case "mystwarra":
+                    case "mystwarraa":
+                        dsw1 = 0xe6;
                         break;
                 }
             }
@@ -388,6 +474,7 @@ namespace mame
         public static ushort K053245_scattered_word_r(int offset)
         {
             ushort result;
+            int offset1 = offset;
             if ((offset & 0x0031) != 0)
             {
                 result= Generic.spriteram16[offset];
@@ -397,6 +484,14 @@ namespace mame
                 offset = ((offset & 0x000e) >> 1) | ((offset & 0x1fc0) >> 3);
                 result= K053245_word_r(offset);
             }
+            /*if (offset1 == 0x1CB9 / 2)
+            {
+                result = (ushort)(0x00B4 | (result & 0xff00));
+            }
+            if (offset1 == 0x1CE0 / 2)
+            {
+                result = (ushort)(result & 0x00ff);
+            }*/
             return result;
         }
         public static void K053245_scattered_word_w(int offset, ushort data)
@@ -1207,11 +1302,11 @@ namespace mame
         }
         public static byte k054539_0_ctrl_r(int offset)
         {
-            return K054539.k054539_0_r(0x200 + offset);
+            return K054539.kk1[0].k054539_r(0x200 + offset);
         }
         public static void k054539_0_ctrl_w(int offset, byte data)
         {
-            K054539.k054539_0_w(0x200 + offset, data);
+            K054539.kk1[0].k054539_w(0x200 + offset, data);
         }
         public static  void volume_callback(int v)
         {
@@ -1264,6 +1359,18 @@ namespace mame
                 case "prmrsocr":
                 case "prmrsocrj":
                     basebanksnd = 0;
+                    break;
+                case "mystwarr":
+                case "mystwarru":
+                case "mystwarrj":
+                case "mystwarra":
+                case "mystwarraa":
+                    machine_reset_mystwarr();
+                    break;
+                case "mmaulers":
+                case "mmaulersu":
+                case "dadandrn":
+                    machine_reset_dadandrn();
                     break;
             }
         }

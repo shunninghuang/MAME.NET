@@ -7,19 +7,19 @@ namespace cpu.nec
 {
     partial class Nec
     {
-        ushort RegWord(int ModRM)
+        ushort RegWord(uint ModRM)
         {
             return (ushort)(I.regs.b[mod_RM.regw[ModRM] * 2] + I.regs.b[mod_RM.regw[ModRM] * 2 + 1] * 0x100);// I.regs.w[mod_RM.regw[ModRM]];
         }
-        byte RegByte(int ModRM)
+        byte RegByte(uint ModRM)
         {
             return I.regs.b[mod_RM.regb[ModRM]];
         }
-        ushort GetRMWord(int ModRM)
+        ushort GetRMWord(uint ModRM)
         {
             return (ushort)(ModRM >= 0xc0 ? I.regs.b[mod_RM.RMw[ModRM] * 2] + I.regs.b[mod_RM.RMw[ModRM] * 2 + 1] * 0x100 : ReadWord(GetEA[ModRM]()));
         }
-        void PutbackRMWord(int ModRM, ushort val)
+        void PutbackRMWord(uint ModRM, ushort val)
         {
             if (ModRM >= 0xc0)
             {
@@ -36,7 +36,7 @@ namespace cpu.nec
         {
             return ReadWord((EA & 0xf0000) | ((EA + 2) & 0xffff));
         }
-        void PutRMWord(int ModRM, ushort val)
+        void PutRMWord(uint ModRM, ushort val)
         {
             if (ModRM >= 0xc0)
             {
@@ -49,7 +49,7 @@ namespace cpu.nec
                 WriteWord(GetEA[ModRM](), val);
             }
         }
-        void PutImmRMWord(int ModRM)
+        void PutImmRMWord(uint ModRM)
         {
             ushort val;
             if (ModRM >= 0xc0)
@@ -66,11 +66,11 @@ namespace cpu.nec
                 WriteWord(EA, val);
             }
         }
-        byte GetRMByte(int ModRM)
+        byte GetRMByte(uint ModRM)
         {
             return ((ModRM) >= 0xc0 ? I.regs.b[mod_RM.RMb[ModRM]] : ReadByte(GetEA[ModRM]()));
         }
-        void PutRMByte(int ModRM, byte val)
+        void PutRMByte(uint ModRM, byte val)
         {
             if (ModRM >= 0xc0)
             {
@@ -81,7 +81,7 @@ namespace cpu.nec
                 WriteByte(GetEA[ModRM](), val);
             }
         }
-        void PutImmRMByte(int ModRM)
+        void PutImmRMByte(uint ModRM)
         {
             if (ModRM >= 0xc0)
             {
@@ -93,7 +93,7 @@ namespace cpu.nec
                 WriteByte(EA, FETCH());
             }
         }
-        void PutbackRMByte(int ModRM, byte val)
+        void PutbackRMByte(uint ModRM, byte val)
         {
             if (ModRM >= 0xc0)
             {
@@ -104,36 +104,36 @@ namespace cpu.nec
                 WriteByte(EA, val);
             }
         }
-        void DEF_br8(out int ModRM,out byte src, out byte dst)
+        void DEF_br8(out uint ModRM,out uint src, out uint dst)
         {
             ModRM = FETCH();
             src = RegByte(ModRM);
             dst = GetRMByte(ModRM);
         }
-        void DEF_wr16(out int ModRM,out ushort src, out ushort dst)
+        void DEF_wr16(out uint ModRM, out uint src, out uint dst)
         {
             ModRM = FETCH();
             src = RegWord(ModRM);
             dst = GetRMWord(ModRM);
         }
-        void DEF_r8b(out int ModRM,out byte src, out byte dst)
+        void DEF_r8b(out uint ModRM, out uint src, out uint dst)
         {
             ModRM = FETCH();
             dst = RegByte(ModRM);
             src = GetRMByte(ModRM);
         }
-        void DEF_r16w(out int ModRM,out ushort src,out ushort dst)
+        void DEF_r16w(out uint ModRM,out uint src,out uint dst)
         {
 	        ModRM = FETCH();
 	        dst = RegWord(ModRM);
             src = GetRMWord(ModRM);
         }
-        void DEF_ald8(out byte src, out byte dst)
+        void DEF_ald8(out uint src, out uint dst)
         {
 	         src = FETCH();
 	         dst = I.regs.b[0];
         }
-        void DEF_axd16(out ushort src, out ushort dst)
+        void DEF_axd16(out uint src, out uint dst)
         {
             src = FETCH();
             dst = (ushort)(I.regs.b[0] + I.regs.b[1] * 0x100);// I.regs.w[0];

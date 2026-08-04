@@ -471,6 +471,7 @@ namespace mame
                         case "tmht22pe":
                         case "tmht24pe":
                         case "tmnt22pu":
+                        case "tmnt24pu":
                         case "qgakumon"://ym k053260 K052109 K053245 eeprom tmnt2_1c0800
                             savestate_callback = Konami.SaveStateBinary_tmnt2;
                             loadstate_callback = Konami.LoadStateBinary_tmnt2;
@@ -501,6 +502,14 @@ namespace mame
                         case "prmrsocrj"://k054539 K052109 K053245 eeprom
                             savestate_callback = Konami.SaveStateBinary_prmrsocr;
                             loadstate_callback = Konami.LoadStateBinary_prmrsocr;
+                            break;
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                            savestate_callback = Konami.SaveStateBinary_mystwarr;
+                            loadstate_callback = Konami.LoadStateBinary_mystwarr;
                             break;
                     }
                     break;

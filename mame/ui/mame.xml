@@ -5460,6 +5460,223 @@
     <year>1993</year>
     <manufacturer>Konami</manufacturer>
   </game>
+  <game name="mystwarr" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Mystic Warriors (ver EAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mystwarru" board="Konami">
+    <parent>mystwarr</parent>
+    <direction></direction>
+    <description>Mystic Warriors (ver UAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mystwarrj" board="Konami">
+    <parent>mystwarr</parent>
+    <direction></direction>
+    <description>Mystic Warriors (ver JAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mystwarra" board="Konami">
+    <parent>mystwarr</parent>
+    <direction></direction>
+    <description>Mystic Warriors (ver AAB)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mystwarraa" board="Konami">
+    <parent>mystwarr</parent>
+    <direction></direction>
+    <description>Mystic Warriors (ver AAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <!--<game name="mmaulers" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Monster Maulers (ver EAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mmaulersu" board="Konami">
+    <parent>mmaulers</parent>
+    <direction></direction>
+    <description>Monster Maulers (ver UAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="dadandrn" board="Konami">
+    <parent>mmaulers</parent>
+    <direction></direction>
+    <description>Kyukyoku Sentai Dadandarn (ver JAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="viostorm" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Violent Storm (ver EAC)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="viostormeb" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver EAB)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="viostormu" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver UAC)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="viostormub" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver UAB)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="viostormubbl" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver UAB, bootleg)</description>
+    <year>1993</year>
+    <manufacturer>bootleg (Eye Pro)</manufacturer>
+  </game>
+  <game name="viostormj" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver JAC)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="viostorma" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver AAC)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="viostormab" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver AAB)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>-->
+  <!--<game name="viostormabbl" board="Konami">
+    <parent>viostorm</parent>
+    <direction></direction>
+    <description>Violent Storm (ver AAB, bootleg)</description>
+    <year>1993</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
+  <!--<game name="metamrph" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Metamorphic Force (ver EAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="metamrphe" board="Konami">
+    <parent>metamrph</parent>
+    <direction></direction>
+    <description>Metamorphic Force (ver EAA - alternate)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="metamrphu" board="Konami">
+    <parent>metamrph</parent>
+    <direction></direction>
+    <description>Metamorphic Force (ver UAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="metamrphj" board="Konami">
+    <parent>metamrph</parent>
+    <direction></direction>
+    <description>Metamorphic Force (ver JAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="metamrpha" board="Konami">
+    <parent>metamrph</parent>
+    <direction></direction>
+    <description>Metamorphic Force (ver AAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mtlchamp" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Martial Champion (ver EAB)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mtlchamp1" board="Konami">
+    <parent>mtlchamp</parent>
+    <direction></direction>
+    <description>Martial Champion (ver EAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mtlchampu" board="Konami">
+    <parent>mtlchamp</parent>
+    <direction></direction>
+    <description>Martial Champion (ver UAE)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mtlchampu1" board="Konami">
+    <parent>mtlchamp</parent>
+    <direction></direction>
+    <description>Martial Champion (ver UAD)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mtlchampj" board="Konami">
+    <parent>mtlchamp</parent>
+    <direction></direction>
+    <description>Martial Champion (ver JAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="mtlchampa" board="Konami">
+    <parent>mtlchamp</parent>
+    <direction></direction>
+    <description>Martial Champion (ver AAA)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="gaiapols" board="Konami">
+    <parent></parent>
+    <direction>90</direction>
+    <description>Gaiapolis (ver EAF)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="gaiapolsu" board="Konami">
+    <parent>gaiapols</parent>
+    <direction>90</direction>
+    <description>Gaiapolis (ver UAF)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="gaiapolsj" board="Konami">
+    <parent>gaiapols</parent>
+    <direction>90</direction>
+    <description>Gaiapolis (ver JAF)</description>
+    <year>1993</year>
+    <manufacturer>Konami</manufacturer>
+  </game>-->
   <game name="nam1975" board="Neo Geo">
     <parent></parent>
     <direction></direction>
@@ -7273,7 +7490,7 @@
     <year>2001</year>
     <manufacturer>Sun Amusement / BrezzaSoft</manufacturer>
   </game>
-  <!--  <game name="vliner" board="Neo Geo">
+  <!--<game name="vliner" board="Neo Geo">
     <parent></parent>
     <direction></direction>
     <description>V-Liner (set 1)</description>
@@ -7307,6 +7524,139 @@
     <description>Last Hope (bootleg AES to MVS conversion, no coin support)</description>
     <year>2005</year>
     <manufacturer>NG:DEV.TEAM</manufacturer>
+  </game>
+  <game name="bdudes" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Bad Dudes Vs Dragon Ninja - Burger Edition (Beta)</description>
+    <year>2025</year>
+    <manufacturer>Balek Corp</manufacturer>
+  </game>
+  <!--<game name="doubledragon" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Double Dragon One (Beta 3.2)</description>
+    <year>2025</year>
+    <manufacturer>OzzyOuzo</manufacturer>
+  </game>-->
+  <game name="inthehunt" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>In The Hunt (Demo)</description>
+    <year>2025</year>
+    <manufacturer>OzzyOuzo</manufacturer>
+  </game>
+  <game name="nblktiger" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Neo Black Tiger (Demo)</description>
+    <year>2020</year>
+    <manufacturer>OzzyOuzo</manufacturer>
+  </game>
+  <game name="nsmb" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>New Super Mario Bros (Demo)</description>
+    <year>2020</year>
+    <manufacturer>OzzyOuzo</manufacturer>
+  </game>
+  <game name="teot" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>The Eye Of Typhoon - Tsunami Edition</description>
+    <year>2020</year>
+    <manufacturer>OzzyOuzo</manufacturer>
+  </game>
+  <game name="violentv" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Violent Vengeance (Beta 3)</description>
+    <year>2025</year>
+    <manufacturer>Balek Corp</manufacturer>
+  </game>
+  <!--<game name="19yy" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>19YY</description>
+    <year>1996</year>
+    <manufacturer>ADK</manufacturer>
+  </game>-->
+  <game name="abyssali" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Abyssal Infants</description>
+    <year>2021</year>
+    <manufacturer>Kakoeimon</manufacturer>
+  </game>
+  <game name="captainb" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Captain Barrel</description>
+    <year>2024</year>
+    <manufacturer>OzzyOuzo</manufacturer>
+  </game>
+  <game name="cyborgforce" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Cyborg Force</description>
+    <year>2023</year>
+    <manufacturer>OzzyOuzo</manufacturer>
+  </game>
+  <game name="neogalaxian" board="Neo Geo">
+    <parent></parent>
+    <direction>270</direction>
+    <description>Galaxian (Beta 2) (Neo Geo unofficial port)</description>
+    <year>2023</year>
+    <manufacturer>TCDev</manufacturer>
+  </game>
+  <game name="gladmort" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Glad Mort</description>
+    <year>2025</year>
+    <manufacturer>Chipsonsteroids</manufacturer>
+  </game>
+  <game name="xenocrisis" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Xeno Crisis</description>
+    <year>2021</year>
+    <manufacturer>Bitmap Bureau</manufacturer>
+  </game>
+  <!--<game name="neokarnov" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Karnov (Neo Geo unofficial port)</description>
+    <year>2025</year>
+    <manufacturer>IQ_132</manufacturer>
+  </game>-->
+  <game name="looptrsp" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>LoopTris Plus (221224)</description>
+    <year>2022</year>
+    <manufacturer>Blastar</manufacturer>
+  </game>
+  <!--<game name="neopong" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Neo Pong (v1.1)</description>
+    <year>2002</year>
+    <manufacturer>NeoDev</manufacturer>
+  </game>-->
+  <game name="neotris" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Neotris (200x)</description>
+    <year>2016</year>
+    <manufacturer>Julien, Loic</manufacturer>
+  </game>
+  <game name="neoxevious" board="Neo Geo">
+    <parent></parent>
+    <direction>270</direction>
+    <description>Xevious (Beta 1) (Neo Geo unofficial port)</description>
+    <year>2023</year>
+    <manufacturer>TCDev</manufacturer>
   </game>
   <game name="ddragon" board="Technos">
     <parent></parent>

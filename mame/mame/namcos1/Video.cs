@@ -73,11 +73,11 @@ namespace mame
             }
             for (i = 0; i < 0x2000; i++)
             {
-                Drawgfx.shadow_table[0][i] = i;
+                Palette.shadow_table[0].data[i] = (uint)i;
             }
             for (i = 0x0800; i < 0x1000; i++)
             {
-                Drawgfx.shadow_table[0][i] = i + 0x0800;
+                Palette.shadow_table[0].data[i] = (uint)(i + 0x0800);
             }
             copy_sprites = 0;
         }

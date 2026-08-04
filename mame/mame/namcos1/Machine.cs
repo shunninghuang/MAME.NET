@@ -164,7 +164,7 @@ namespace mame
             }
             if (op == key_rng)
             {
-                return 0;// (byte)mame_rand(machine);
+                return (byte)Mame.mame_rand();
             }
             if (op == key_swap4)
             {

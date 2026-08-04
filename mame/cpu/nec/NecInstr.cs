@@ -9,35 +9,35 @@ namespace cpu.nec
     {
         void i_add_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             ADDB(ref src, ref dst);
-            PutbackRMByte(ModRM, dst);
+            PutbackRMByte(ModRM, (byte)dst);
             CLKM(ModRM, 2, 2, 2, 16, 16, 7);
         }
         void i_add_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             ADDW(ref src, ref dst);
-            PutbackRMWord(ModRM, dst);
+            PutbackRMWord(ModRM, (ushort)dst);
             CLKR(ModRM, 24, 24, 11, 24, 16, 7, 2, EA);
         }
         void i_add_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             ADDB(ref src, ref dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_add_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             ADDW(ref src, ref dst);
             //I.regs.w[mod_RM.regw[ModRM]] = dst;
@@ -47,15 +47,15 @@ namespace cpu.nec
         }
         void i_add_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             ADDB(ref src, ref dst);
-            I.regs.b[0] = dst;
+            I.regs.b[0] = (byte)dst;
             CLKS(4, 4, 2);
         }
         void i_add_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             ADDW(ref src, ref dst);
             //I.regs.w[0] = dst;
@@ -75,35 +75,35 @@ namespace cpu.nec
         }
         void i_or_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             ORB(ref src, ref dst);
-            PutbackRMByte(ModRM, dst);
+            PutbackRMByte(ModRM, (byte)dst);
             CLKM(ModRM, 2, 2, 2, 16, 16, 7);
         }
         void i_or_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             ORW(ref src, ref dst);
-            PutbackRMWord(ModRM, dst);
+            PutbackRMWord(ModRM, (ushort)dst);
             CLKR(ModRM, 24, 24, 11, 24, 16, 7, 2, EA);
         }
         void i_or_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             ORB(ref src, ref dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_or_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             ORW(ref src, ref dst);
             //I.regs.w[mod_RM.regw[ModRM]] = dst;
@@ -113,15 +113,15 @@ namespace cpu.nec
         }
         void i_or_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             ORB(ref src, ref dst);
-            I.regs.b[0] = dst;
+            I.regs.b[0] = (byte)dst;
             CLKS(4, 4, 2);
         }
         void i_or_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             ORW(ref src, ref dst);
             //I.regs.w[0] = dst;
@@ -136,32 +136,32 @@ namespace cpu.nec
         }
         void i_pre_nec()
         {
-            int ModRM = 0, tmp = 0, tmp2 = 0;
+            uint ModRM = 0, tmp = 0, tmp2 = 0;
             switch (FETCH())
             {
-                case 0x10: BITOP_BYTE(ref ModRM, ref tmp); CLKS(3, 3, 4); tmp2 = I.regs.b[2] & 0x7; I.ZeroVal = (uint)(((tmp & (1 << tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
-                case 0x11: BITOP_WORD(ref ModRM, ref tmp); CLKS(3, 3, 4); tmp2 = I.regs.b[2] & 0xf; I.ZeroVal = (uint)(((tmp & (1 << tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
-                case 0x12: BITOP_BYTE(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = I.regs.b[2] & 0x7; tmp &= ~(1 << tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Clr */
-                case 0x13: BITOP_WORD(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = I.regs.b[2] & 0xf; tmp &= ~(1 << tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Clr */
-                case 0x14: BITOP_BYTE(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = I.regs.b[2] & 0x7; tmp |= (1 << tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Set */
-                case 0x15: BITOP_WORD(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = I.regs.b[2] & 0xf; tmp |= (1 << tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Set */
-                case 0x16: BITOP_BYTE(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = I.regs.b[2] & 0x7; BIT_NOT(ref tmp, ref tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Not */
-                case 0x17: BITOP_WORD(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = I.regs.b[2] & 0xf; BIT_NOT(ref tmp, ref tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Not */
+                case 0x10: BITOP_BYTE(ref ModRM, ref tmp); CLKS(3, 3, 4); tmp2 = (uint)(I.regs.b[2] & 0x7); I.ZeroVal = (uint)(((tmp & (1 << (int)tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
+                case 0x11: BITOP_WORD(ref ModRM, ref tmp); CLKS(3, 3, 4); tmp2 = (uint)(I.regs.b[2] & 0xf); I.ZeroVal = (uint)(((tmp & (1 << (int)tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
+                case 0x12: BITOP_BYTE(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (uint)(I.regs.b[2] & 0x7); tmp &= (uint)~(1 << (int)tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Clr */
+                case 0x13: BITOP_WORD(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (uint)(I.regs.b[2] & 0xf); tmp &= (uint)~(1 << (int)tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Clr */
+                case 0x14: BITOP_BYTE(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (uint)(I.regs.b[2] & 0x7); tmp |= (uint)(1 << (int)tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Set */
+                case 0x15: BITOP_WORD(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (uint)(I.regs.b[2] & 0xf); tmp |= (uint)(1 << (int)tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Set */
+                case 0x16: BITOP_BYTE(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (uint)(I.regs.b[2] & 0x7); BIT_NOT(ref tmp, ref tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Not */
+                case 0x17: BITOP_WORD(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (uint)(I.regs.b[2] & 0xf); BIT_NOT(ref tmp, ref tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Not */
 
-                case 0x18: BITOP_BYTE(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (FETCH()) & 0x7; I.ZeroVal = (uint)(((tmp & (1 << tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
-                case 0x19: BITOP_WORD(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (FETCH()) & 0xf; I.ZeroVal = (uint)(((tmp & (1 << tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
-                case 0x1a: BITOP_BYTE(ref ModRM, ref tmp); CLKS(6, 6, 4); tmp2 = (FETCH()) & 0x7; tmp &= ~(1 << tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Clr */
-                case 0x1b: BITOP_WORD(ref ModRM, ref tmp); CLKS(6, 6, 4); tmp2 = (FETCH()) & 0xf; tmp &= ~(1 << tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Clr */
-                case 0x1c: BITOP_BYTE(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (FETCH()) & 0x7; tmp |= (1 << tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Set */
-                case 0x1d: BITOP_WORD(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (FETCH()) & 0xf; tmp |= (1 << tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Set */
-                case 0x1e: BITOP_BYTE(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (FETCH()) & 0x7; BIT_NOT(ref tmp, ref tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Not */
-                case 0x1f: BITOP_WORD(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (FETCH()) & 0xf; BIT_NOT(ref tmp, ref tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Not */
+                case 0x18: BITOP_BYTE(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (uint)(FETCH() & 0x7); I.ZeroVal = (uint)(((tmp & (1 << (int)tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
+                case 0x19: BITOP_WORD(ref ModRM, ref tmp); CLKS(4, 4, 4); tmp2 = (uint)(FETCH() & 0xf); I.ZeroVal = (uint)(((tmp & (1 << (int)tmp2)) != 0) ? 1 : 0); I.CarryVal = I.OverVal = 0; break; /* Test */
+                case 0x1a: BITOP_BYTE(ref ModRM, ref tmp); CLKS(6, 6, 4); tmp2 = (uint)(FETCH() & 0x7); tmp &= (uint)~(1 << (int)tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Clr */
+                case 0x1b: BITOP_WORD(ref ModRM, ref tmp); CLKS(6, 6, 4); tmp2 = (uint)(FETCH() & 0xf); tmp &= (uint)~(1 << (int)tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Clr */
+                case 0x1c: BITOP_BYTE(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (uint)(FETCH() & 0x7); tmp |= (uint)(1 << (int)tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Set */
+                case 0x1d: BITOP_WORD(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (uint)(FETCH() & 0xf); tmp |= (uint)(1 << (int)tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Set */
+                case 0x1e: BITOP_BYTE(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (uint)(FETCH() & 0x7); BIT_NOT(ref tmp, ref tmp2); PutbackRMByte(ModRM, (byte)tmp); break; /* Not */
+                case 0x1f: BITOP_WORD(ref ModRM, ref tmp); CLKS(5, 5, 4); tmp2 = (uint)(FETCH() & 0xf); BIT_NOT(ref tmp, ref tmp2); PutbackRMWord(ModRM, (ushort)tmp); break; /* Not */
 
                 case 0x20: ADD4S(ref tmp, ref tmp2); CLKS(7, 7, 2); break;
                 case 0x22: SUB4S(ref tmp, ref tmp2); CLKS(7, 7, 2); break;
                 case 0x26: CMP4S(ref tmp, ref tmp2); CLKS(7, 7, 2); break;
-                case 0x28: ModRM = FETCH(); tmp = GetRMByte(ModRM); tmp <<= 4; tmp |= I.regs.b[0] & 0xf; I.regs.b[0] = (byte)((I.regs.b[0] & 0xf0) | ((tmp >> 8) & 0xf)); tmp &= 0xff; PutbackRMByte(ModRM, (byte)tmp); CLKM(ModRM, 13, 13, 9, 28, 28, 15); break;
-                case 0x2a: ModRM = FETCH(); tmp = GetRMByte(ModRM); tmp2 = (I.regs.b[0] & 0xf) << 4; I.regs.b[0] = (byte)((I.regs.b[0] & 0xf0) | (tmp & 0xf)); tmp = tmp2 | (tmp >> 4); PutbackRMByte(ModRM, (byte)tmp); CLKM(ModRM, 17, 17, 13, 32, 32, 19); break;
+                case 0x28: ModRM = FETCH(); tmp = GetRMByte(ModRM); tmp <<= 4; tmp |= (uint)(I.regs.b[0] & 0xf); I.regs.b[0] = (byte)((I.regs.b[0] & 0xf0) | (byte)((tmp >> 8) & 0xf)); tmp &= 0xff; PutbackRMByte(ModRM, (byte)tmp); CLKM(ModRM, 13, 13, 9, 28, 28, 15); break;
+                case 0x2a: ModRM = FETCH(); tmp = GetRMByte(ModRM); tmp2 = (uint)((I.regs.b[0] & 0xf) << 4); I.regs.b[0] = (byte)((I.regs.b[0] & 0xf0) | (byte)(tmp & 0xf)); tmp = tmp2 | (tmp >> 4); PutbackRMByte(ModRM, (byte)tmp); CLKM(ModRM, 17, 17, 13, 32, 32, 19); break;
                 case 0x31: ModRM = FETCH(); ModRM = 0; break;
                 case 0x33: ModRM = FETCH(); ModRM = 0; break;
                 case 0x92: CLK(2); break; /* V25/35 FINT */
@@ -173,38 +173,38 @@ namespace cpu.nec
         }
         void i_adc_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             src += (byte)(CF() ? 1 : 0);
             ADDB(ref src, ref dst);
-            PutbackRMByte(ModRM, dst);
+            PutbackRMByte(ModRM, (byte)dst);
             CLKM(ModRM, 2, 2, 2, 16, 16, 7);
         }
         void i_adc_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             src += (ushort)(CF() ? 1 : 0);
             ADDW(ref src, ref dst);
-            PutbackRMWord(ModRM, dst);
+            PutbackRMWord(ModRM, (ushort)dst);
             CLKR(ModRM, 24, 24, 11, 24, 16, 7, 2, EA);
         }
         void i_adc_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             src += (byte)(CF() ? 1 : 0);
             ADDB(ref src, ref dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_adc_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             src += (ushort)(CF() ? 1 : 0);
             ADDW(ref src, ref dst);
@@ -215,16 +215,16 @@ namespace cpu.nec
         }
         void i_adc_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             src += (byte)(CF() ? 1 : 0);
             ADDB(ref src, ref dst);
-            I.regs.b[0] = dst;
+            I.regs.b[0] = (byte)dst;
             CLKS(4, 4, 2);
         }
         void i_adc_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             src += (ushort)(CF() ? 1 : 0);
             ADDW(ref src, ref dst);
@@ -246,38 +246,38 @@ namespace cpu.nec
         }
         void i_sbb_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             src += (byte)(CF() ? 1 : 0);
             SUBB(ref src, ref dst);
-            PutbackRMByte(ModRM, dst);
+            PutbackRMByte(ModRM, (byte)dst);
             CLKM(ModRM, 2, 2, 2, 16, 16, 7);
         }
         void i_sbb_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             src += (ushort)(CF() ? 1 : 0);
             SUBW(ref src, ref dst);
-            PutbackRMWord(ModRM, dst);
+            PutbackRMWord(ModRM, (ushort)dst);
             CLKR(ModRM, 24, 24, 11, 24, 16, 7, 2, EA);
         }
         void i_sbb_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             src += (byte)(CF() ? 1 : 0);
             SUBB(ref src, ref dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_sbb_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             src += (ushort)(CF() ? 1 : 0);
             SUBW(ref src, ref dst);
@@ -288,16 +288,16 @@ namespace cpu.nec
         }
         void i_sbb_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             src += (byte)(CF() ? 1 : 0);
             SUBB(ref src, ref dst);
-            I.regs.b[0] = dst;
+            I.regs.b[0] = (byte)dst;
             CLKS(4, 4, 2);
         }
         void i_sbb_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             src += (ushort)(CF() ? 1 : 0);
             SUBW(ref src, ref dst);
@@ -318,35 +318,35 @@ namespace cpu.nec
         }
         void i_and_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             ANDB(ref src, ref dst);
-            PutbackRMByte(ModRM, dst);
+            PutbackRMByte(ModRM, (byte)dst);
             CLKM(ModRM, 2, 2, 2, 16, 16, 7);
         }
         void i_and_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             ANDW(ref src, ref dst);
-            PutbackRMWord(ModRM, dst);
+            PutbackRMWord(ModRM, (ushort)dst);
             CLKR(ModRM, 24, 24, 11, 24, 16, 7, 2, EA);
         }
         void i_and_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             ANDB(ref src, ref dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_and_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             ANDW(ref src, ref dst);
             //I.regs.w[mod_RM.regw[ModRM]] = dst;
@@ -356,15 +356,15 @@ namespace cpu.nec
         }
         void i_and_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             ANDB(ref src, ref dst);
-            I.regs.b[0] = dst;
+            I.regs.b[0] = (byte)dst;
             CLKS(4, 4, 2);
         }
         void i_and_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             ANDW(ref src, ref dst);
             //I.regs.w[0] = dst;
@@ -387,35 +387,35 @@ namespace cpu.nec
         }
         void i_sub_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             SUBB(ref src, ref dst);
-            PutbackRMByte(ModRM, dst);
+            PutbackRMByte(ModRM, (byte)dst);
             CLKM(ModRM, 2, 2, 2, 16, 16, 7);
         }
         void i_sub_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             SUBW(ref src, ref dst);
-            PutbackRMWord(ModRM, dst);
+            PutbackRMWord(ModRM, (ushort)dst);
             CLKR(ModRM, 24, 24, 11, 24, 16, 7, 2, EA);
         }
         void i_sub_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             SUBB(ref src, ref dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_sub_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             SUBW(ref src, ref dst);
             //I.regs.w[mod_RM.regw[ModRM]] = dst;
@@ -425,15 +425,15 @@ namespace cpu.nec
         }
         void i_sub_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             SUBB(ref src, ref dst);
-            I.regs.b[0] = dst;
+            I.regs.b[0] = (byte)dst;
             CLKS(4, 4, 2);
         }
         void i_sub_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             SUBW(ref src, ref dst);
             //I.regs.w[0] = dst;
@@ -456,35 +456,35 @@ namespace cpu.nec
         }
         void i_xor_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             XORB(ref src, ref dst);
-            PutbackRMByte(ModRM, dst);
+            PutbackRMByte(ModRM, (byte)dst);
             CLKM(ModRM, 2, 2, 2, 16, 16, 7);
         }
         void i_xor_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             XORW(ref src, ref dst);
-            PutbackRMWord(ModRM, dst);
+            PutbackRMWord(ModRM, (ushort)dst);
             CLKR(ModRM, 24, 24, 11, 24, 16, 7, 2, EA);
         }
         void i_xor_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             XORB(ref src, ref dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_xor_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             XORW(ref src, ref dst);
             //I.regs.w[mod_RM.regw[ModRM]] = dst;
@@ -494,15 +494,15 @@ namespace cpu.nec
         }
         void i_xor_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             XORB(ref src, ref dst);
-            I.regs.b[0] = dst;
+            I.regs.b[0] = (byte)dst;
             CLKS(4, 4, 2);
         }
         void i_xor_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             XORW(ref src, ref dst);
             //I.regs.w[0] = dst;
@@ -525,46 +525,46 @@ namespace cpu.nec
         }
         void i_cmp_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             SUBB(ref src, ref dst);
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_cmp_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             SUBW(ref src, ref dst);
             CLKR(ModRM, 15, 15, 8, 15, 11, 6, 2, EA);
         }
         void i_cmp_r8b()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r8b(out ModRM, out src, out dst);
             SUBB(ref src, ref dst);
             CLKM(ModRM, 2, 2, 2, 11, 11, 6);
         }
         void i_cmp_r16w()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             SUBW(ref src, ref dst);
             CLKR(ModRM, 15, 15, 8, 15, 11, 6, 2, EA);
         }
         void i_cmp_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             SUBB(ref src, ref dst);
             CLKS(4, 4, 2);
         }
         void i_cmp_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             SUBW(ref src, ref dst);
             CLKS(4, 4, 2);
@@ -800,8 +800,8 @@ namespace cpu.nec
         }
         void i_chkind()
         {
-            int low, high, tmp;
-            int ModRM;
+            uint low, high, tmp;
+            uint ModRM;
             ModRM = GetModRM();
             low = GetRMWord(ModRM);
             high = GetnextRMWord();
@@ -881,7 +881,7 @@ namespace cpu.nec
         }
         void i_push_d16()
         {
-            int tmp;
+            uint tmp;
             tmp = FETCHWORD();
             PUSH((ushort)tmp);
             //CLKW(12, 12, 5, 12, 8, 5, I.regs.w[4]);
@@ -889,9 +889,9 @@ namespace cpu.nec
         }
         void i_imul_d16()
         {
-            int tmp;
-            int ModRM;
-            ushort src, dst;
+            uint tmp;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             tmp = FETCHWORD();
             dst = (ushort)((int)((short)src) * (int)((short)tmp));
@@ -903,16 +903,16 @@ namespace cpu.nec
         }
         void i_push_d8()
         {
-            int tmp = (ushort)((short)((sbyte)FETCH()));
+            uint tmp = (ushort)((short)((sbyte)FETCH()));
             PUSH((ushort)tmp);
             //CLKW(11, 11, 5, 11, 7, 3, I.regs.w[4]);
             CLKW(11, 11, 5, 11, 7, 3, I.regs.b[8]+I.regs.b[9]*0x100);
         }
         void i_imul_d8()
         {
-            int src2;
-            int ModRM;
-            ushort src, dst;
+            uint src2;
+            uint ModRM;
+            uint src, dst;
             DEF_r16w(out ModRM, out src, out dst);
             src2 = (ushort)((short)((sbyte)FETCH()));
             dst = (ushort)((int)((short)src) * (int)((short)src2));
@@ -1112,8 +1112,8 @@ namespace cpu.nec
         }
         void i_80pre()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             ModRM = GetModRM();
             dst = GetRMByte(ModRM);
             src = FETCH();
@@ -1131,20 +1131,20 @@ namespace cpu.nec
             }
             switch (ModRM & 0x38)
             {
-                case 0x00: ADDB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x08: ORB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x10: src += (byte)(CF() ? 1 : 0); ADDB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x18: src += (byte)(CF() ? 1 : 0); SUBB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x20: ANDB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x28: SUBB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x30: XORB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
+                case 0x00: ADDB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x08: ORB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x10: src += (byte)(CF() ? 1 : 0); ADDB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x18: src += (byte)(CF() ? 1 : 0); SUBB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x20: ANDB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x28: SUBB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x30: XORB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
                 case 0x38: SUBB(ref src, ref dst); break;
             }
         }
         void i_81pre()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             ModRM = GetModRM();
             dst = GetRMWord(ModRM);
             src = FETCH();
@@ -1163,20 +1163,20 @@ namespace cpu.nec
             }
             switch (ModRM & 0x38)
             {
-                case 0x00: ADDW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x08: ORW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x10: src += (ushort)(CF() ? 1 : 0); ADDW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x18: src += (ushort)(CF() ? 1 : 0); SUBW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x20: ANDW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x28: SUBW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x30: XORW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
+                case 0x00: ADDW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x08: ORW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x10: src += (ushort)(CF() ? 1 : 0); ADDW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x18: src += (ushort)(CF() ? 1 : 0); SUBW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x20: ANDW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x28: SUBW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x30: XORW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
                 case 0x38: SUBW(ref src, ref dst); break;
             }
         }
         void i_82pre()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             ModRM = GetModRM();
             dst = GetRMByte(ModRM);
             src = (byte)((sbyte)FETCH());
@@ -1194,20 +1194,20 @@ namespace cpu.nec
             }
             switch (ModRM & 0x38)
             {
-                case 0x00: ADDB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x08: ORB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x10: src += (byte)(CF() ? 1 : 0); ADDB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x18: src += (byte)(CF() ? 1 : 0); SUBB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x20: ANDB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x28: SUBB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
-                case 0x30: XORB(ref src, ref dst); PutbackRMByte(ModRM, dst); break;
+                case 0x00: ADDB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x08: ORB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x10: src += (byte)(CF() ? 1 : 0); ADDB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x18: src += (byte)(CF() ? 1 : 0); SUBB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x20: ANDB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x28: SUBB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
+                case 0x30: XORB(ref src, ref dst); PutbackRMByte(ModRM, (byte)dst); break;
                 case 0x38: SUBB(ref src, ref dst); break;
             }
         }
         void i_83pre()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             ModRM = GetModRM();
             dst = GetRMWord(ModRM);
             src = (ushort)((short)((sbyte)FETCH()));
@@ -1225,55 +1225,55 @@ namespace cpu.nec
             }
             switch (ModRM & 0x38)
             {
-                case 0x00: ADDW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x08: ORW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x10: src += (ushort)(CF() ? 1 : 0); ADDW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x18: src += (ushort)(CF() ? 1 : 0); SUBW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x20: ANDW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x28: SUBW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
-                case 0x30: XORW(ref src, ref dst); PutbackRMWord(ModRM, dst); break;
+                case 0x00: ADDW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x08: ORW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x10: src += (ushort)(CF() ? 1 : 0); ADDW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x18: src += (ushort)(CF() ? 1 : 0); SUBW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x20: ANDW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x28: SUBW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
+                case 0x30: XORW(ref src, ref dst); PutbackRMWord(ModRM, (ushort)dst); break;
                 case 0x38: SUBW(ref src, ref dst); break;
             }
         }
         void i_test_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
             ANDB(ref src, ref dst);
             CLKM(ModRM, 2, 2, 2, 10, 10, 6);
         }
         void i_test_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             ANDW(ref src, ref dst);
             CLKR(ModRM, 14, 14, 8, 14, 10, 6, 2, EA);
         }
         void i_xchg_br8()
         {
-            int ModRM;
-            byte src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_br8(out ModRM, out src, out dst);
-            I.regs.b[mod_RM.regb[ModRM]] = dst;
-            PutbackRMByte(ModRM, src);
+            I.regs.b[mod_RM.regb[ModRM]] = (byte)dst;
+            PutbackRMByte(ModRM, (byte)src);
             CLKM(ModRM, 3, 3, 3, 16, 18, 8);
         }
         void i_xchg_wr16()
         {
-            int ModRM;
-            ushort src, dst;
+            uint ModRM;
+            uint src, dst;
             DEF_wr16(out ModRM, out src, out dst);
             //I.regs.w[mod_RM.regw[ModRM]] = dst;
             I.regs.b[mod_RM.regw[ModRM] * 2] = (byte)(dst % 0x100);
             I.regs.b[mod_RM.regw[ModRM] * 2 + 1] = (byte)(dst / 0x100);
-            PutbackRMWord(ModRM, src);
+            PutbackRMWord(ModRM, (ushort)src);
             CLKR(ModRM, 24, 24, 12, 24, 16, 8, 3, EA);
         }
         void i_mov_br8()
         {
-            int ModRM;
+            uint ModRM;
             byte src;
             ModRM = GetModRM();
             src = I.regs.b[mod_RM.regb[ModRM]];
@@ -1282,7 +1282,7 @@ namespace cpu.nec
         }
         void i_mov_wr16()
         {
-            int ModRM;
+            uint ModRM;
             ushort src;
             ModRM = GetModRM();
             //src = I.regs.w[mod_RM.regw[ModRM]];
@@ -1292,7 +1292,7 @@ namespace cpu.nec
         }
         void i_mov_r8b()
         {
-            int ModRM;
+            uint ModRM;
             byte src;
             ModRM = GetModRM();
             src = GetRMByte(ModRM);
@@ -1301,7 +1301,7 @@ namespace cpu.nec
         }
         void i_mov_r16w()
         {
-            int ModRM;
+            uint ModRM;
             ushort src;
             ModRM = GetModRM();
             src = GetRMWord(ModRM);
@@ -1312,14 +1312,14 @@ namespace cpu.nec
         }
         void i_mov_wsreg()
         {
-            int ModRM;
+            uint ModRM;
             ModRM = GetModRM();
             PutRMWord(ModRM, I.sregs[(ModRM & 0x38) >> 3]);
             CLKR(ModRM, 14, 14, 5, 14, 10, 3, 2, EA);
         }
         void i_lea()
         {
-            int ModRM = FETCH();
+            ushort ModRM = FETCH();
             GetEA[ModRM]();
             //I.regs.w[mod_RM.regw[ModRM]] = EO;
             I.regs.b[mod_RM.regw[ModRM] * 2] = (byte)(EO % 0x100);
@@ -1328,7 +1328,7 @@ namespace cpu.nec
         }
         void i_mov_sregw()
         {
-            int ModRM;
+            uint ModRM;
             ushort src;
             ModRM = GetModRM();
             src = GetRMWord(ModRM);
@@ -1345,7 +1345,7 @@ namespace cpu.nec
         }
         void i_popw()
         {
-            int ModRM;
+            uint ModRM;
             ushort tmp = 0;
             ModRM = GetModRM();
             POP(ref tmp);
@@ -1456,39 +1456,39 @@ namespace cpu.nec
         }
         void i_mov_aldisp()
         {
-            ushort addr;
+            uint addr;
             addr = FETCHWORD();
-            I.regs.b[0] = GetMemB(3, addr);
+            I.regs.b[0] = GetMemB(3, (int)addr);
             CLKS(10, 10, 5);
         }
         void i_mov_axdisp()
         {
-            ushort addr;
+            uint addr;
             addr = FETCHWORD();
             //I.regs.w[0] = GetMemW(3, addr);
-            ushort w0 = GetMemW(3, addr);
+            ushort w0 = GetMemW(3, (int)addr);
             I.regs.b[0] = (byte)(w0 % 0x100);
             I.regs.b[1] = (byte)(w0 / 0x100);
-            CLKW(14, 14, 7, 14, 10, 5, addr);
+            CLKW(14, 14, 7, 14, 10, 5, (int)addr);
         }
         void i_mov_dispal()
         {
-            ushort addr;
+            uint addr;
             addr = FETCHWORD();
-            PutMemB(3, addr, I.regs.b[0]);
+            PutMemB(3, (int)addr, I.regs.b[0]);
             CLKS(9, 9, 3);
         }
         void i_mov_dispax()
         {
-            ushort addr;
+            uint addr;
             addr = FETCHWORD();
-            PutMemW(3, addr, (ushort)(I.regs.b[0] + I.regs.b[1] * 0x100));
-            CLKW(13, 13, 5, 13, 9, 3, addr);
+            PutMemW(3, (int)addr, (ushort)(I.regs.b[0] + I.regs.b[1] * 0x100));
+            CLKW(13, 13, 5, 13, 9, 3, (int)addr);
         }
         void i_movsb()
         {
-            byte tmp = GetMemB(3, I.regs.b[12] + I.regs.b[13] * 0x100);
-            PutMemB(0, I.regs.b[14] + I.regs.b[15] * 0x100, tmp);
+            uint tmp = GetMemB(3, I.regs.b[12] + I.regs.b[13] * 0x100);
+            PutMemB(0, I.regs.b[14] + I.regs.b[15] * 0x100, (byte)tmp);
             //I.regs.w[7] += (ushort)(-2 * (I.DF ? 1 : 0) + 1);
             //I.regs.w[6] += (ushort)(-2 * (I.DF ? 1 : 0) + 1);
             ushort w7 = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100 + (-2 * (I.DF ? 1 : 0) + 1));
@@ -1501,8 +1501,8 @@ namespace cpu.nec
         }
         void i_movsw()
         {
-            ushort tmp = GetMemW(3, I.regs.b[12] + I.regs.b[13] * 0x100);
-            PutMemW(0, I.regs.b[14] + I.regs.b[15] * 0x100, tmp);
+            uint tmp = GetMemW(3, I.regs.b[12] + I.regs.b[13] * 0x100);
+            PutMemW(0, I.regs.b[14] + I.regs.b[15] * 0x100, (ushort)tmp);
             //I.regs.w[7] += (ushort)(-4 * (I.DF ? 1 : 0) + 2);
             //I.regs.w[6] += (ushort)(-4 * (I.DF ? 1 : 0) + 2);
             ushort w7 = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100 + (-4 * (I.DF ? 1 : 0) + 2));
@@ -1515,8 +1515,8 @@ namespace cpu.nec
         }
         void i_cmpsb()
         {
-            byte src = GetMemB(0, I.regs.b[14] + I.regs.b[15] * 0x100);
-            byte dst = GetMemB(3, I.regs.b[12] + I.regs.b[13] * 0x100);
+            uint src = GetMemB(0, I.regs.b[14] + I.regs.b[15] * 0x100);
+            uint dst = GetMemB(3, I.regs.b[12] + I.regs.b[13] * 0x100);
             SUBB(ref src, ref dst);
             //I.regs.w[7] += (ushort)(-2 * (I.DF ? 1 : 0) + 1);
             //I.regs.w[6] += (ushort)(-2 * (I.DF ? 1 : 0) + 1);
@@ -1530,8 +1530,8 @@ namespace cpu.nec
         }
         void i_cmpsw()
         {
-            ushort src = GetMemW(0, I.regs.b[14] + I.regs.b[15] * 0x100);
-            ushort dst = GetMemW(3, I.regs.b[12] + I.regs.b[13] * 0x100);
+            uint src = GetMemW(0, I.regs.b[14] + I.regs.b[15] * 0x100);
+            uint dst = GetMemW(3, I.regs.b[12] + I.regs.b[13] * 0x100);
             SUBW(ref src, ref dst);
             //I.regs.w[7] += (ushort)(-4 * (I.DF ? 1 : 0) + 2);
             //I.regs.w[6] += (ushort)(-4 * (I.DF ? 1 : 0) + 2);
@@ -1545,14 +1545,14 @@ namespace cpu.nec
         }
         void i_test_ald8()
         {
-            byte src, dst;
+            uint src, dst;
             DEF_ald8(out src, out dst);
             ANDB(ref src, ref dst);
             CLKS(4, 4, 2);
         }
         void i_test_axd16()
         {
-            ushort src, dst;
+            uint src, dst;
             DEF_axd16(out src, out dst);
             ANDW(ref src, ref dst);
             CLKS(4, 4, 2);
@@ -1598,8 +1598,8 @@ namespace cpu.nec
         }
         void i_scasb()
         {
-            byte src = GetMemB(0, I.regs.b[14] + I.regs.b[15] * 0x100);
-            byte dst = I.regs.b[0];
+            uint src = GetMemB(0, I.regs.b[14] + I.regs.b[15] * 0x100);
+            uint dst = I.regs.b[0];
             SUBB(ref src, ref dst);
             //I.regs.w[7] += (ushort)(-2 * (I.DF ? 1 : 0) + 1);
             ushort w7 = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100 + (-2 * (I.DF ? 1 : 0) + 1));
@@ -1609,8 +1609,8 @@ namespace cpu.nec
         }
         void i_scasw()
         {
-            ushort src = GetMemW(0, I.regs.b[14]+I.regs.b[15]*0x100);
-            ushort dst = (ushort)(I.regs.b[0]+I.regs.b[1]*0x100);
+            uint src = GetMemW(0, I.regs.b[14] + I.regs.b[15] * 0x100);
+            uint dst = (ushort)(I.regs.b[0] + I.regs.b[1] * 0x100);
             SUBW(ref src, ref dst);
             //I.regs.w[7] += (ushort)(-4 * (I.DF ? 1 : 0) + 2);
             ushort w7 = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100 + (-4 * (I.DF ? 1 : 0) + 2));
@@ -1708,8 +1708,8 @@ namespace cpu.nec
         }
         void i_rotshft_bd8()
         {
-            int ModRM;
-            int src, dst;
+            uint ModRM;
+            uint src, dst;
             byte c;
             ModRM = GetModRM();
             src = GetRMByte(ModRM);
@@ -1733,8 +1733,8 @@ namespace cpu.nec
         }
         void i_rotshft_wd8()
         {
-            int ModRM;
-            int src, dst;
+            uint ModRM;
+            uint src, dst;
             byte c;
             ModRM = GetModRM();
             src = GetRMWord(ModRM);
@@ -1776,7 +1776,7 @@ namespace cpu.nec
         }
         void i_les_dw()
         {
-            int ModRM;
+            uint ModRM;
             ModRM = GetModRM();
             ushort tmp = GetRMWord(ModRM);
             //I.regs.w[mod_RM.regw[ModRM]] = tmp;
@@ -1787,7 +1787,7 @@ namespace cpu.nec
         }
         void i_lds_dw()
         {
-            int ModRM;
+            uint ModRM;
             ModRM = GetModRM();
             ushort tmp = GetRMWord(ModRM);
             //I.regs.w[mod_RM.regw[ModRM]] = tmp;
@@ -1798,14 +1798,14 @@ namespace cpu.nec
         }
         void i_mov_bd8()
         {
-            int ModRM;
+            uint ModRM;
             ModRM = GetModRM();
             PutImmRMByte(ModRM);
             pendingCycles -= (ModRM >= 0xc0) ? 4 : 11;
         }
         void i_mov_wd16()
         {
-            int ModRM;
+            uint ModRM;
             ModRM = GetModRM();
             PutImmRMWord(ModRM);
             pendingCycles -= (ModRM >= 0xc0) ? 4 : 15;
@@ -1897,8 +1897,8 @@ namespace cpu.nec
         }
         void i_rotshft_b()
         {
-            int ModRM;
-            int src, dst;
+            uint ModRM;
+            uint src, dst;
             ModRM = GetModRM();
             src = GetRMByte(ModRM);
             dst = src;
@@ -1917,8 +1917,8 @@ namespace cpu.nec
         }
         void i_rotshft_w()
         {
-            int ModRM;
-            int src, dst;
+            uint ModRM;
+            uint src, dst;
             ModRM = GetModRM();
             src = GetRMWord(ModRM);
             dst = src;
@@ -1937,8 +1937,8 @@ namespace cpu.nec
         }
         void i_rotshft_bcl()
         {
-            int ModRM;
-            int src, dst;
+            uint ModRM;
+            uint src, dst;
             byte c;
             ModRM = GetModRM();
             src = GetRMByte(ModRM);
@@ -1962,8 +1962,8 @@ namespace cpu.nec
         }
         void i_rotshft_wcl()
         {
-            int ModRM;
-            int src, dst;
+            uint ModRM;
+            uint src, dst;
             byte c;
             ModRM = GetModRM();
             src = GetRMWord(ModRM);
@@ -1991,7 +1991,7 @@ namespace cpu.nec
             mult = 0;
             I.regs.b[1] = (byte)(I.regs.b[0] / 10);
             I.regs.b[0] %= 10;
-            SetSZPF_Word(I.regs.b[0] + I.regs.b[1] * 0x100);
+            SetSZPF_Word((ushort)(I.regs.b[0] + I.regs.b[1] * 0x100));
             CLKS(15, 15, 12);
         }
         void i_aad()
@@ -2016,7 +2016,7 @@ namespace cpu.nec
         }
         void i_fpo()
         {
-            int ModRM;
+            uint ModRM;
             ModRM = GetModRM();
             pendingCycles -= 2;
         }
@@ -2254,7 +2254,7 @@ namespace cpu.nec
         }
         void i_f6pre()
         {
-            int ModRM;
+            uint ModRM;
             uint tmp;
             uint uresult, uresult2;
             int result, result2;
@@ -2262,10 +2262,10 @@ namespace cpu.nec
             tmp = GetRMByte(ModRM);
             switch (ModRM & 0x38)
             {
-                case 0x00: tmp &= FETCH(); I.CarryVal = I.OverVal = 0; SetSZPF_Byte((int)tmp); pendingCycles -= (ModRM >= 0xc0) ? 4 : 11; break;
+                case 0x00: tmp &= FETCH(); I.CarryVal = I.OverVal = 0; SetSZPF_Byte((byte)tmp); pendingCycles -= (ModRM >= 0xc0) ? 4 : 11; break;
                 case 0x08: break;
                 case 0x10: PutbackRMByte(ModRM, (byte)(~tmp)); pendingCycles -= (ModRM >= 0xc0) ? 2 : 16; break;
-                case 0x18: I.CarryVal = (uint)((tmp != 0) ? 1 : 0); tmp = (~tmp) + 1; SetSZPF_Byte((int)tmp); PutbackRMByte(ModRM, (byte)(tmp & 0xff)); pendingCycles -= (ModRM >= 0xc0) ? 2 : 16; break;
+                case 0x18: I.CarryVal = (uint)((tmp != 0) ? 1 : 0); tmp = (~tmp) + 1; SetSZPF_Byte((byte)tmp); PutbackRMByte(ModRM, (byte)(tmp & 0xff)); pendingCycles -= (ModRM >= 0xc0) ? 2 : 16; break;
                 case 0x20:
                     uresult = I.regs.b[0] * tmp;
                     //I.regs.w[0] = (ushort)uresult;
@@ -2318,7 +2318,7 @@ namespace cpu.nec
         }
         void i_f7pre()
         {
-            int ModRM;
+            uint ModRM;
             uint tmp, tmp2;
             uint uresult, uresult2;
             int result, result2;
@@ -2326,10 +2326,10 @@ namespace cpu.nec
             tmp = GetRMWord(ModRM);
             switch (ModRM & 0x38)
             {
-                case 0x00: tmp2 = FETCHWORD(); tmp &= tmp2; I.CarryVal = I.OverVal = 0; SetSZPF_Word((int)tmp); pendingCycles -= (ModRM >= 0xc0) ? 4 : 11; break;
+                case 0x00: tmp2 = FETCHWORD(); tmp &= tmp2; I.CarryVal = I.OverVal = 0; SetSZPF_Word((ushort)tmp); pendingCycles -= (ModRM >= 0xc0) ? 4 : 11; break;
                 case 0x08: break;
                 case 0x10: PutbackRMWord(ModRM, (ushort)(~tmp)); pendingCycles -= (ModRM >= 0xc0) ? 2 : 16; break;
-                case 0x18: I.CarryVal = (uint)((tmp != 0) ? 1 : 0); tmp = (~tmp) + 1; SetSZPF_Word((int)tmp); PutbackRMWord(ModRM, (ushort)(tmp & 0xffff)); pendingCycles -= (ModRM >= 0xc0) ? 2 : 16; break;
+                case 0x18: I.CarryVal = (uint)((tmp != 0) ? 1 : 0); tmp = (~tmp) + 1; SetSZPF_Word((ushort)tmp); PutbackRMWord(ModRM, (ushort)(tmp & 0xffff)); pendingCycles -= (ModRM >= 0xc0) ? 2 : 16; break;
                 case 0x20:
                     uresult = (uint)((I.regs.b[0]+I.regs.b[1]*0x100) * tmp);
                     //I.regs.w[0] = (ushort)(uresult & 0xffff);
@@ -2418,27 +2418,27 @@ namespace cpu.nec
         }
         void i_fepre()
         {
-            int ModRM;
-            byte tmp, tmp1;
+            uint ModRM;
+            uint tmp, tmp1;
             ModRM = GetModRM();
             tmp = GetRMByte(ModRM);
             switch (ModRM & 0x38)
             {
-                case 0x00: tmp1 = (byte)(tmp + 1); I.OverVal = (uint)((tmp == 0x7f) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Byte(tmp1); PutbackRMByte(ModRM, (byte)tmp1); CLKM(ModRM, 2, 2, 2, 16, 16, 7); break;
-                case 0x08: tmp1 = (byte)(tmp - 1); I.OverVal = (uint)((tmp == 0x80) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Byte(tmp1); PutbackRMByte(ModRM, (byte)tmp1); CLKM(ModRM, 2, 2, 2, 16, 16, 7); break;
+                case 0x00: tmp1 = (byte)(tmp + 1); I.OverVal = (uint)((tmp == 0x7f) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Byte((byte)tmp1); PutbackRMByte(ModRM, (byte)tmp1); CLKM(ModRM, 2, 2, 2, 16, 16, 7); break;
+                case 0x08: tmp1 = (byte)(tmp - 1); I.OverVal = (uint)((tmp == 0x80) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Byte((byte)tmp1); PutbackRMByte(ModRM, (byte)tmp1); CLKM(ModRM, 2, 2, 2, 16, 16, 7); break;
                 default: break;
             }
         }
         void i_ffpre()
         {
-            int ModRM;
-            ushort tmp, tmp1;
+            uint ModRM;
+            uint tmp, tmp1;
             ModRM = GetModRM();
             tmp = GetRMWord(ModRM);
             switch (ModRM & 0x38)
             {
-                case 0x00: tmp1 = (ushort)(tmp + 1); I.OverVal = (uint)((tmp == 0x7fff) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Word(tmp1); PutbackRMWord(ModRM, (ushort)tmp1); CLKM(ModRM, 2, 2, 2, 24, 16, 7); break;
-                case 0x08: tmp1 = (ushort)(tmp - 1); I.OverVal = (uint)((tmp == 0x8000) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Word(tmp1); PutbackRMWord(ModRM, (ushort)tmp1); CLKM(ModRM, 2, 2, 2, 24, 16, 7); break;
+                case 0x00: tmp1 = (ushort)(tmp + 1); I.OverVal = (uint)((tmp == 0x7fff) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Word((ushort)tmp1); PutbackRMWord(ModRM, (ushort)tmp1); CLKM(ModRM, 2, 2, 2, 24, 16, 7); break;
+                case 0x08: tmp1 = (ushort)(tmp - 1); I.OverVal = (uint)((tmp == 0x8000) ? 1 : 0); SetAF(tmp1, tmp, 1); SetSZPF_Word((ushort)tmp1); PutbackRMWord(ModRM, (ushort)tmp1); CLKM(ModRM, 2, 2, 2, 24, 16, 7); break;
                 case 0x10:
                     PUSH(I.ip);
                     I.ip = (ushort)tmp;
@@ -2448,24 +2448,24 @@ namespace cpu.nec
                 case 0x18:
                     tmp1 = I.sregs[1];
                     I.sregs[1] = GetnextRMWord();
-                    PUSH(tmp1);
+                    PUSH((ushort)tmp1);
                     PUSH(I.ip);
-                    I.ip = tmp;
+                    I.ip = (ushort)tmp;
                     //CHANGE_PC;
                     pendingCycles -= (ModRM >= 0xc0) ? 16 : 26;
                     break;
                 case 0x20:
-                    I.ip = tmp;
+                    I.ip = (ushort)tmp;
                     //CHANGE_PC;
                     pendingCycles -= 13;
                     break;
                 case 0x28:
-                    I.ip = tmp;
+                    I.ip = (ushort)tmp;
                     I.sregs[1] = GetnextRMWord();
                     //CHANGE_PC;
                     pendingCycles -= 15;
                     break;
-                case 0x30: PUSH(tmp); pendingCycles -= 4; break;
+                case 0x30: PUSH((ushort)tmp); pendingCycles -= 4; break;
                 default: break;
             }
         }

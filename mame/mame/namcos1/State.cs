@@ -14,6 +14,7 @@ namespace mame
         {
             int i, j;
             writer.Write(dipsw);
+            writer.Write(Mame.rand_seed);
             for (i = 0; i < 0x2000; i++)
             {
                 writer.Write(Palette.entry_color[i]);
@@ -84,6 +85,7 @@ namespace mame
         {
             int i,j;
             dipsw = reader.ReadByte();
+            Mame.rand_seed = reader.ReadUInt32();
             for (i = 0; i < 0x2000; i++)
             {
                 Palette.entry_color[i] = reader.ReadUInt32();

@@ -628,7 +628,7 @@ namespace mame
                                                     switch (Drawgfx.gfx_drawmode_table[col])
                                                     {
                                                         case 1:
-                                                            c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]);
+                                                            c1 = Color.FromArgb((int)Palette.entry_color2[Palette.shadow_table[Drawgfx.imode].data[color2 * 0x10 + col]]);
                                                             ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
                                                             *ptr2 = c1.B;
                                                             *(ptr2 + 1) = c1.G;
@@ -637,9 +637,9 @@ namespace mame
                                                             break;
                                                         case 4:
                                                             Drawgfx.afterdrawmask = eax;
-                                                            if ((Tilemap.priority_bitmap[sy + offy + y1 * ydir, sx + offx + x1 * xdir] & 0x80) != 0)
+                                                            if ((Tilemap.ppriority_bitmap[(sy + offy + y1 * ydir)*Tilemap.screen_width+ sx + offx + x1 * xdir] & 0x80) != 0)
                                                             {
-                                                                c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]]);
+                                                                c1 = Color.FromArgb((int)Palette.entry_color2[Palette.shadow_table[Drawgfx.imode].data[Palette.shadow_table[Drawgfx.imode].data[color2 * 0x10 + col]]]);
                                                                 ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
                                                                 *ptr2 = c1.B;
                                                                 *(ptr2 + 1) = c1.G;
@@ -648,7 +648,7 @@ namespace mame
                                                             }
                                                             else
                                                             {
-                                                                c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]);
+                                                                c1 = Color.FromArgb((int)Palette.entry_color2[Palette.shadow_table[Drawgfx.imode].data[color2 * 0x10 + col]]);
                                                                 ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;
                                                                 *ptr2 = c1.B;
                                                                 *(ptr2 + 1) = c1.G;
@@ -754,7 +754,7 @@ namespace mame
                                                 col = gfx2rom[source_baseoffset + srcoffset];
                                                 if (col != 0)
                                                 {
-                                                    c1 = Color.FromArgb((int)Palette.entry_color2[Drawgfx.shadow_table[Drawgfx.imode][color2 * 0x10 + col]]);
+                                                    c1 = Color.FromArgb((int)Palette.entry_color2[Palette.shadow_table[Drawgfx.imode].data[color2 * 0x10 + col]]);
                                                     if (sy + y2 >= 0 && sy + y2 < 0x100 && sx + x2 >= 0 && sx + x2 < 0x200)
                                                     {
                                                         ptr2 = ptr + ((sy + y2) * 0x200 + (sx + x2)) * 4;

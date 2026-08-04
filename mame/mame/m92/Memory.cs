@@ -41,11 +41,11 @@ namespace mame
                 int offset = (address - 0xd0000) / 2;
                 if (address % 2 == 0)
                 {
-                    result = (byte)(m92_vram_data[offset] >> 8);
+                    result = (byte)m92_vram_data[offset];
                 }
                 else if (address % 2 == 1)
                 {
-                    result = (byte)m92_vram_data[offset];
+                    result = (byte)(m92_vram_data[offset] >> 8);
                 }
             }
             else if (address >= 0xe0000 && address <= 0xeffff)
@@ -56,7 +56,14 @@ namespace mame
             else if (address >= 0xf8000 && address <= 0xf87ff)
             {
                 int offset = (address - 0xf8000) / 2;
-                result = (byte)Generic.spriteram16[offset];
+                if (address % 2 == 0)
+                {
+                    result = (byte)Generic.spriteram16[offset];
+                }
+                else if (address % 2 == 1)
+                {
+                    result = (byte)(Generic.spriteram16[offset] >> 8);
+                }
             }
             else if (address >= 0xf8800 && address <= 0xf8fff)
             {
@@ -120,11 +127,11 @@ namespace mame
                 int offset = (address - 0xd0000) / 2;
                 if (address % 2 == 0)
                 {
-                    m92_vram_data[offset] = (ushort)((value << 8) | (m92_vram_data[offset] & 0xff));
+                    m92_vram_data[offset] = (ushort)((m92_vram_data[offset] & 0xff00) | value);
                 }
                 else if (address % 2 == 1)
                 {
-                    m92_vram_data[offset] = (ushort)((m92_vram_data[offset] & 0xff00) | value);
+                    m92_vram_data[offset] = (ushort)((value << 8) | (m92_vram_data[offset] & 0xff));
                 }
                 m92_vram_w(offset);
             }
@@ -136,7 +143,14 @@ namespace mame
             else if (address >= 0xf8000 && address <= 0xf87ff)
             {
                 int offset = (address - 0xf8000) / 2;
-                Generic.spriteram16[offset] = value;
+                if (address % 2 == 0)
+                {
+                    Generic.spriteram16[offset] = (ushort)((Generic.spriteram16[offset] & 0xff00) | value);
+                }
+                else if (address % 2 == 1)
+                {
+                    Generic.spriteram16[offset] = (ushort)((value << 8) | (Generic.spriteram16[offset] & 0xff));
+                }
             }
             else if (address >= 0xf8800 && address <= 0xf8fff)
             {
@@ -148,16 +162,16 @@ namespace mame
                 int offset = (address - 0xf9000) / 2;
                 if (address % 2 == 0)
                 {
-                    m92_spritecontrol_w1(offset, value);
+                    m92_spritecontrol_w2(offset, value);
                 }
                 else if (address % 2 == 1)
                 {
-                    m92_spritecontrol_w2(offset, value);
+                    m92_spritecontrol_w1(offset, value);
                 }
             }
             else if (address >= 0xf9800 && address <= 0xf9801)
             {
-                if (address % 2 == 1)
+                if (address % 2 == 0)
                 {
                     m92_videocontrol_w(value);
                 }

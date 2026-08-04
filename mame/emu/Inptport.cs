@@ -968,6 +968,15 @@ namespace mame
                     record_port_callback = Konami.record_port_prmrsocr;
                     replay_port_callback = Konami.replay_port_prmrsocr;
                     break;
+                case "mystwarr":
+                case "mystwarru":
+                case "mystwarrj":
+                case "mystwarra":
+                case "mystwarraa":
+                    loop_inputports_callback = Konami.loop_inputports_konami_mystwarr;
+                    record_port_callback = Konami.record_port_cuebrick;
+                    replay_port_callback = Konami.replay_port_cuebrick;
+                    break;
                 case "gng":
                 case "gnga":
                 case "gngbl":

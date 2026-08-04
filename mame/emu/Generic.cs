@@ -21,6 +21,7 @@ namespace mame
         public static ushort[] spriteram16, spriteram16_2;
         public static byte[] paletteram, paletteram_2;
         public static ushort[] paletteram16, paletteram16_2;
+        public static uint[] paletteram32;
         public static int[] interrupt_enable;
         public static int objcpunum;
         public static int flip_screen_x, flip_screen_y;
@@ -189,6 +190,10 @@ namespace mame
         {
             nmi_line_pulse(0);
         }
+        public static void nmi_line_pulse1()
+        {
+            nmi_line_pulse(1);
+        }
         public static void nmi_line_pulse(int cpunum)
         {
             irqn_line_set(cpunum, (int)LineState.INPUT_LINE_NMI, (int)LineState.PULSE_LINE);
@@ -233,6 +238,10 @@ namespace mame
         {
             return (ushort)(paletteram[offset | 1] | (paletteram[offset & ~1] << 8));
         }
+        public static uint paletteram32_be(int offset)
+        {
+            return (uint)(paletteram16[offset | 1] | (paletteram16[offset & ~1] << 16));
+        }
         public static void set_color_444(int color, int rshift, int gshift, int bshift, ushort data)
         {
             Palette.palette_set_callback(color, Palette.make_rgb(Palette.pal4bit((byte)(data >> rshift)), Palette.pal4bit((byte)(data >> gshift)), Palette.pal4bit((byte)(data >> bshift))));
@@ -240,6 +249,10 @@ namespace mame
         public static void set_color_555(int color, int rshift, int gshift, int bshift, ushort data)
         {
             Palette.palette_set_callback(color, Palette.make_rgb(Palette.pal5bit((byte)(data >> rshift)), Palette.pal5bit((byte)(data >> gshift)), (int)Palette.pal5bit((byte)(data >> bshift))));
+        }
+        public static void set_color_888(int color, int rshift, int gshift, int bshift, uint data)
+        {
+            Palette.palette_entry_set_color4(color, Palette.make_rgb((int)((data >> rshift) & 0xff), (int)((data >> gshift) & 0xff), (int)((data >> bshift) & 0xff)));
         }
         public static void updateflip()
         {
@@ -438,6 +451,21 @@ namespace mame
             paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
             ushort data1 = paletteram16[offset];
             Palette.palette_set_callback(offset, (uint)((Palette.pal5bit((byte)(((data1 >> 11) & 0x1e) | ((data1 >> 3) & 0x01))) << 16) | (Palette.pal5bit((byte)(((data >> 7) & 0x1e) | ((data >> 2) & 0x01))) << 8) | Palette.pal5bit((byte)(((data >> 3) & 0x1e) | ((data >> 1) & 0x01)))));
+        }
+        public static void paletteram16_xrgb_word_be_w(int offset, ushort data)
+        {
+            paletteram16[offset] = data;
+            set_color_888(offset / 2, 16, 8, 0, paletteram32_be(offset));
+        }
+        public static void paletteram16_xrgb_word_be_w1(int offset, byte data)
+        {
+            paletteram16[offset] = (ushort)((data << 8) | (paletteram16[offset] & 0xff));
+            set_color_888(offset / 2, 16, 8, 0, paletteram32_be(offset));
+        }
+        public static void paletteram16_xrgb_word_be_w2(int offset, byte data)
+        {
+            paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
+            set_color_888(offset / 2, 16, 8, 0, paletteram32_be(offset));
         }
     }
 }

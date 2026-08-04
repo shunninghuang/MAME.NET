@@ -1590,6 +1590,153 @@ namespace mame
                 //sbyte0 |= 0x20;
             }
         }
+        public static void loop_inputports_konami_mystwarr()
+        {
+            if (Keyboard.IsPressed(Key.D5))
+            {
+                sbyte0 &= ~0x01;
+            }
+            else
+            {
+                sbyte0 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.D6))
+            {
+                sbyte0 &= ~0x02;
+            }
+            else
+            {
+                sbyte0 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.D1))
+            {
+                sbyte1 &= unchecked((sbyte)~0x80);
+            }
+            else
+            {
+                sbyte1 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.D2))
+            {
+                sbyte2 &= unchecked((sbyte)~0x80);
+            }
+            else
+            {
+                sbyte2 |= unchecked((sbyte)0x80);
+            }
+            if (Keyboard.IsPressed(Key.D))
+            {
+                sbyte1 &= ~0x02;
+            }
+            else
+            {
+                sbyte1 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.A))
+            {
+                sbyte1 &= ~0x01;
+            }
+            else
+            {
+                sbyte1 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.S))
+            {
+                sbyte1 &= ~0x08;
+            }
+            else
+            {
+                sbyte1 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.W))
+            {
+                sbyte1 &= ~0x04;
+            }
+            else
+            {
+                sbyte1 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.J))
+            {
+                sbyte1 &= ~0x10;
+            }
+            else
+            {
+                sbyte1 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.K))
+            {
+                sbyte1 &= ~0x20;
+            }
+            else
+            {
+                sbyte1 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.L))
+            {
+                sbyte1 &= ~0x40;
+            }
+            else
+            {
+                sbyte1 |= 0x40;
+            }
+            if (Keyboard.IsPressed(Key.Right))
+            {
+                sbyte2 &= ~0x02;
+            }
+            else
+            {
+                sbyte2 |= 0x02;
+            }
+            if (Keyboard.IsPressed(Key.Left))
+            {
+                sbyte2 &= ~0x01;
+            }
+            else
+            {
+                sbyte2 |= 0x01;
+            }
+            if (Keyboard.IsPressed(Key.Down))
+            {
+                sbyte2 &= ~0x08;
+            }
+            else
+            {
+                sbyte2 |= 0x08;
+            }
+            if (Keyboard.IsPressed(Key.Up))
+            {
+                sbyte2 &= ~0x04;
+            }
+            else
+            {
+                sbyte2 |= 0x04;
+            }
+            if (Keyboard.IsPressed(Key.NumPad1))
+            {
+                sbyte2 &= ~0x10;
+            }
+            else
+            {
+                sbyte2 |= 0x10;
+            }
+            if (Keyboard.IsPressed(Key.NumPad2))
+            {
+                sbyte2 &= ~0x20;
+            }
+            else
+            {
+                sbyte2 |= 0x20;
+            }
+            if (Keyboard.IsPressed(Key.NumPad3))
+            {
+                sbyte2 &= ~0x40;
+            }
+            else
+            {
+                sbyte2 |= 0x40;
+            }
+        }
         public static void record_port_scontra()
         {
             if (bytes != bytes_old || byte1 != byte1_old || byte2 != byte2_old)

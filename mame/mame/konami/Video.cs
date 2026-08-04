@@ -219,11 +219,11 @@ namespace mame
             {
                 if (i < 0x800)
                 {
-                    Drawgfx.shadow_table[0][i] = 0x800 + i;
+                    Palette.shadow_table[0].data[i] = (uint)(0x800 + i);
                 }
                 else
                 {
-                    Drawgfx.shadow_table[0][i] = i;
+                    Palette.shadow_table[0].data[i] = (uint)i;
                 }
             }
             K053251_vh_start();
@@ -600,7 +600,8 @@ namespace mame
             sorted_layer[2] = 2;
             layerpri[2] = K053251_get_priority(3);
             sortlayers(sorted_layer, layerpri);
-            Array.Clear(Tilemap.priority_bitmap, 0, 0x40000);
+            //Array.Clear(Tilemap.priority_bitmap, 0, Tilemap.priority_bitmap.Length);
+            Array.Clear(Tilemap.ppriority_bitmap, 0, Tilemap.ppriority_bitmap.Length);
             K052109_tilemap[sorted_layer[0]].tilemap_draw_primask(Video.screenstate.visarea, 0, 1);
             K052109_tilemap[sorted_layer[1]].tilemap_draw_primask(Video.screenstate.visarea, 0x10, 2);
             K052109_tilemap[sorted_layer[2]].tilemap_draw_primask(Video.screenstate.visarea, 0x10, 4);
@@ -622,7 +623,8 @@ namespace mame
             sorted_layer[2] = 2;
             layerpri[2] = K053251_get_priority(3);
             sortlayers(sorted_layer, layerpri);
-            Array.Clear(Tilemap.priority_bitmap, 0, 0x40000);
+            //Array.Clear(Tilemap.priority_bitmap, 0, Tilemap.priority_bitmap.Length);
+            Array.Clear(Tilemap.ppriority_bitmap, 0, Tilemap.ppriority_bitmap.Length);
             for (i = 0; i < 0x20000; i++)
             {
                 Video.bitmapbase[Video.curbitmap][i] = (ushort)(16 * bg_colorbase);
@@ -660,7 +662,8 @@ namespace mame
             sorted_layer[2] = 2;
             layerpri[2] = K053251_get_priority(4);
             sortlayers(sorted_layer, layerpri);
-            Array.Clear(Tilemap.priority_bitmap, 0, 0x20000);
+            //Array.Clear(Tilemap.priority_bitmap, 0, 0x20000);
+            Array.Clear(Tilemap.ppriority_bitmap, 0, Tilemap.ppriority_bitmap.Length);
             for (i = 0; i < 0x20000; i++)
             {
                 Video.bitmapbase[Video.curbitmap][i] = (ushort)(16 * bg_colorbase);
@@ -741,7 +744,8 @@ namespace mame
             sorted_layer[2] = 2;
             layerpri[2] = K053251_get_priority(3);
             sortlayers(sorted_layer, layerpri);
-            Array.Clear(Tilemap.priority_bitmap, 0, 0x40000);
+            //Array.Clear(Tilemap.priority_bitmap, 0, 0x40000);
+            Array.Clear(Tilemap.ppriority_bitmap, 0, Tilemap.ppriority_bitmap.Length);
             for (i = 0; i < 0x20000; i++)
             {
                 Video.bitmapbase[Video.curbitmap][i] = (ushort)(16 * bg_colorbase);

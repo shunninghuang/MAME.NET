@@ -181,9 +181,9 @@ namespace cpu.nec
             I.ip += 2;
             return var;
         }
-        public int GetModRM()
+        public uint GetModRM()
         {
-            int ModRM = ReadOpArg(((I.sregs[1] << 4) + I.ip++) ^ 0);
+            uint ModRM = ReadOpArg(((I.sregs[1] << 4) + I.ip++) ^ 0);
             return ModRM;
         }
         public void PUSH(ushort val)
@@ -227,107 +227,107 @@ namespace cpu.nec
         {
             I.CarryVal = x & 0x10000;
         }
-        public void SetAF(int x, int y, int z)
+        public void SetAF(uint x, uint y, uint z)
         {
             I.AuxVal = (uint)(((x) ^ ((y) ^ (z))) & 0x10);
         }
-        public void SetSZPF_Byte(int x)
+        public void SetSZPF_Byte(byte x)
         {
             I.ZeroVal = I.ParityVal = (uint)((sbyte)x);
             I.SignVal = (int)I.ZeroVal;
         }
-        public void SetSZPF_Word(int x)
+        public void SetSZPF_Word(ushort x)
         {
             I.ZeroVal = I.ParityVal = (uint)((short)x);
             I.SignVal = (int)I.ZeroVal;
         }
-        public void SetOFW_Add(int x, int y, int z)
+        public void SetOFW_Add(uint x, uint y, uint z)
         {
             I.OverVal = (uint)(((x) ^ (y)) & ((x) ^ (z)) & 0x8000);
         }
-        public void SetOFB_Add(int x, int y, int z)
+        public void SetOFB_Add(uint x, uint y, uint z)
         {
             I.OverVal = (uint)(((x) ^ (y)) & ((x) ^ (z)) & 0x80);
         }
-        public void SetOFW_Sub(int x, int y, int z)
+        public void SetOFW_Sub(uint x, uint y, uint z)
         {
             I.OverVal = (uint)(((z) ^ (y)) & ((z) ^ (x)) & 0x8000);
         }
-        public void SetOFB_Sub(int x, int y, int z)
+        public void SetOFB_Sub(uint x, uint y, uint z)
         {
             I.OverVal = (uint)(((z) ^ (y)) & ((z) ^ (x)) & 0x80);
         }
-        public void ADDB(ref byte src, ref byte dst)
+        public void ADDB(ref uint src, ref uint dst)
         {
             uint res = (uint)(dst + src);
             SetCFB((uint)res);
-            SetOFB_Add((int)res, src, dst);
-            SetAF((int)res, src, dst);
-            SetSZPF_Byte((int)res);
+            SetOFB_Add(res, src, dst);
+            SetAF(res, src, dst);
+            SetSZPF_Byte((byte)res);
             dst = (byte)res;
         }
-        public void ADDW(ref ushort src, ref ushort dst)
+        public void ADDW(ref uint src, ref uint dst)
         {
             uint res = (uint)(dst + src);
             SetCFW(res);
-            SetOFW_Add((int)res, src, dst);
-            SetAF((int)res, src, dst);
-            SetSZPF_Word((int)res);
+            SetOFW_Add(res, src, dst);
+            SetAF(res, src, dst);
+            SetSZPF_Word((ushort)res);
             dst = (ushort)res;
         }
-        public void SUBB(ref byte src, ref byte dst)
+        public void SUBB(ref uint src, ref uint dst)
         {
             uint res = (uint)(dst - src);
             SetCFB(res);
-            SetOFB_Sub((int)res, src, dst);
-            SetAF((int)res, src, dst);
-            SetSZPF_Byte((int)res);
+            SetOFB_Sub(res, src, dst);
+            SetAF(res, src, dst);
+            SetSZPF_Byte((byte)res);
             dst = (byte)res;
         }
-        public void SUBW(ref ushort src, ref ushort dst)
+        public void SUBW(ref uint src, ref uint dst)
         {
             uint res = (uint)(dst - src);
             SetCFW(res);
-            SetOFW_Sub((int)res, src, dst);
-            SetAF((int)res, src, dst);
-            SetSZPF_Word((int)res);
+            SetOFW_Sub(res, src, dst);
+            SetAF(res, src, dst);
+            SetSZPF_Word((ushort)res);
             dst = (ushort)res;
         }
-        public void ORB(ref byte src, ref byte dst)
+        public void ORB(ref uint src, ref uint dst)
         {
             dst |= src;
             I.CarryVal = I.OverVal = I.AuxVal = 0;
-            SetSZPF_Byte(dst);
+            SetSZPF_Byte((byte)dst);
         }
-        public void ORW(ref ushort src, ref ushort dst)
+        public void ORW(ref uint src, ref uint dst)
         {
             dst |= src;
             I.CarryVal = I.OverVal = I.AuxVal = 0;
-            SetSZPF_Word(dst);
+            SetSZPF_Word((ushort)dst);
         }
-        public void ANDB(ref byte src, ref byte dst)
+        public void ANDB(ref uint src, ref uint dst)
         {
             dst &= src;
             I.CarryVal = I.OverVal = I.AuxVal = 0;
-            SetSZPF_Byte(dst);
+            SetSZPF_Byte((byte)dst);
         }
-        public void ANDW(ref ushort src, ref ushort dst)
+        public void ANDW(ref uint src, ref uint dst)
         {
             dst &= src;
             I.CarryVal = I.OverVal = I.AuxVal = 0;
-            SetSZPF_Word(dst);
+            SetSZPF_Word((ushort)dst);
         }
-        public void XORB(ref byte src, ref byte dst)
+        public void XORB(ref uint src, ref uint dst)
         {
             dst ^= src;
             I.CarryVal = I.OverVal = I.AuxVal = 0;
-            SetSZPF_Byte(dst);
+            SetSZPF_Byte((byte)dst);
         }
-        public void XORW(ref ushort src, ref ushort dst)
+        public void XORW(ref uint src, ref uint dst)
         {
             dst ^= src;
             I.CarryVal = I.OverVal = I.AuxVal = 0;
-            SetSZPF_Word(dst);
+            SetSZPF_Word((ushort)dst);
         }
         public bool CF()
         {
@@ -371,12 +371,12 @@ namespace cpu.nec
             int ocount = (v20o << 16) | (v30o << 8) | v33o, ecount = (v20e << 16) | (v30e << 8) | v33e;
             pendingCycles -= ((addr & 1) != 0) ? ((ocount >> chip_type) & 0x7f) : ((ecount >> chip_type) & 0x7f);
         }
-        public void CLKM(int ModRM, int v20, int v30, int v33, int v20m, int v30m, int v33m)
+        public void CLKM(uint ModRM, int v20, int v30, int v33, int v20m, int v30m, int v33m)
         {
             int ccount = (v20 << 16) | (v30 << 8) | v33, mcount = (v20m << 16) | (v30m << 8) | v33m;
             pendingCycles -= (ModRM >= 0xc0) ? ((ccount >> chip_type) & 0x7f) : ((mcount >> chip_type) & 0x7f);
         }
-        public void CLKR(int ModRM, int v20o, int v30o, int v33o, int v20e, int v30e, int v33e, int vall, int addr)
+        public void CLKR(uint ModRM, int v20o, int v30o, int v33o, int v20e, int v30e, int v33e, int vall, int addr)
         {
             int ocount = (v20o << 16) | (v30o << 8) | v33o, ecount = (v20e << 16) | (v30e << 8) | v33e;
             if (ModRM >= 0xc0)
@@ -407,22 +407,22 @@ namespace cpu.nec
         }
         public void IncWordReg(int Reg)
         {
-            int tmp = (int)(I.regs.b[Reg * 2] + I.regs.b[Reg * 2 + 1] * 0x100);
-            int tmp1 = tmp + 1;
+            uint tmp = (uint)(I.regs.b[Reg * 2] + I.regs.b[Reg * 2 + 1] * 0x100);
+            uint tmp1 = tmp + 1;
             I.OverVal = (uint)((tmp == 0x7fff) ? 1 : 0);
             SetAF(tmp1, tmp, 1);
-            SetSZPF_Word(tmp1);
+            SetSZPF_Word((ushort)tmp1);
             //I.regs.w[Reg] = (ushort)tmp1;
             I.regs.b[Reg * 2] = (byte)((ushort)tmp1 % 0x100);
             I.regs.b[Reg * 2 + 1] = (byte)((ushort)tmp1 / 0x100);
         }
         public void DecWordReg(int Reg)
         {
-            int tmp = (int)(I.regs.b[Reg * 2] + I.regs.b[Reg * 2 + 1] * 0x100);
-            int tmp1 = tmp - 1;
+            uint tmp = (uint)(I.regs.b[Reg * 2] + I.regs.b[Reg * 2 + 1] * 0x100);
+            uint tmp1 = tmp - 1;
             I.OverVal = (uint)((tmp == 0x8000) ? 1 : 0);
             SetAF(tmp1, tmp, 1);
-            SetSZPF_Word(tmp1);
+            SetSZPF_Word((ushort)tmp1);
             //I.regs.w[Reg] = (ushort)tmp1;
             I.regs.b[Reg * 2] = (byte)((ushort)tmp1 % 0x100);
             I.regs.b[Reg * 2 + 1] = (byte)((ushort)tmp1 / 0x100);
@@ -472,7 +472,7 @@ namespace cpu.nec
             }
             I.regs.b[0] &= 0x0F;
         }
-        public void BITOP_BYTE(ref int ModRM, ref int tmp)
+        public void BITOP_BYTE(ref uint ModRM, ref uint tmp)
         {
             ModRM = FETCH();
             if (ModRM >= 0xc0)
@@ -485,12 +485,12 @@ namespace cpu.nec
                 tmp = ReadByte(EA);
             }
         }
-        public void BITOP_WORD(ref int ModRM, ref int tmp)
+        public void BITOP_WORD(ref uint ModRM, ref uint tmp)
         {
             ModRM = FETCH();
             if (ModRM >= 0xc0)
             {
-                tmp = I.regs.b[mod_RM.RMw[ModRM] * 2] + I.regs.b[mod_RM.RMw[ModRM] * 2 + 1] * 0x100;
+                tmp = (uint)(I.regs.b[mod_RM.RMw[ModRM] * 2] + I.regs.b[mod_RM.RMw[ModRM] * 2 + 1] * 0x100);
             }
             else
             {
@@ -498,15 +498,15 @@ namespace cpu.nec
                 tmp = ReadWord(EA);
             }
         }
-        public void BIT_NOT(ref int tmp, ref int tmp2)
+        public void BIT_NOT(ref uint tmp, ref uint tmp2)
         {
-            if ((tmp & (1 << tmp2)) != 0)
+            if ((tmp & (1 << (int)tmp2)) != 0)
             {
-                tmp &= (~(1 << tmp2));
+                tmp &= (uint)(~(1 << (int)tmp2));
             }
             else
             {
-                tmp |= (1 << tmp2);
+                tmp |= (uint)(1 << (int)tmp2);
             }
         }
         public void XchgAWReg(int Reg)
@@ -520,98 +520,98 @@ namespace cpu.nec
             I.regs.b[0] = (byte)(tmp % 0x100);
             I.regs.b[1] = (byte)(tmp / 0x100);
         }
-        public void ROL_BYTE(ref int dst)
+        public void ROL_BYTE(ref uint dst)
         {
             I.CarryVal = (uint)(dst & 0x80);
-            dst = (dst << 1) + (CF() ? 1 : 0);
+            dst = (uint)((dst << 1) + (CF() ? 1 : 0));
         }
-        public void ROL_WORD(ref int dst)
+        public void ROL_WORD(ref uint dst)
         {
             I.CarryVal = (uint)(dst & 0x8000);
-            dst = (dst << 1) + (CF() ? 1 : 0);
+            dst = (uint)((dst << 1) + (CF() ? 1 : 0));
         }
-        public void ROR_BYTE(ref int dst)
+        public void ROR_BYTE(ref uint dst)
         {
             I.CarryVal = (uint)(dst & 0x1);
-            dst = (dst >> 1) + ((CF() ? 1 : 0) << 7);
+            dst = (uint)((dst >> 1) + ((CF() ? 1 : 0) << 7));
         }
-        public void ROR_WORD(ref int dst)
+        public void ROR_WORD(ref uint dst)
         {
             I.CarryVal = (uint)(dst & 0x1);
-            dst = (dst >> 1) + ((CF() ? 1 : 0) << 15);
+            dst = (uint)((dst >> 1) + ((CF() ? 1 : 0) << 15));
         }
-        public void ROLC_BYTE(ref int dst)
+        public void ROLC_BYTE(ref uint dst)
         {
-            dst = (dst << 1) + (CF() ? 1 : 0);
+            dst = (uint)((dst << 1) + (CF() ? 1 : 0));
             SetCFB((uint)dst);
         }
-        public void ROLC_WORD(ref int dst)
+        public void ROLC_WORD(ref uint dst)
         {
-            dst = (dst << 1) + (CF() ? 1 : 0);
+            dst = (uint)((dst << 1) + (CF() ? 1 : 0));
             SetCFW((uint)dst);
         }
-        public void RORC_BYTE(ref int dst)
+        public void RORC_BYTE(ref uint dst)
         {
-            dst = ((CF() ? 1 : 0) << 8) + dst;
+            dst = (uint)(((CF() ? 1 : 0) << 8) + dst);
             I.CarryVal = (uint)(dst & 0x01);
             dst >>= 1;
         }
-        public void RORC_WORD(ref int dst)
+        public void RORC_WORD(ref uint dst)
         {
-            dst = ((CF() ? 1 : 0) << 16) + dst;
+            dst = (uint)(((CF() ? 1 : 0) << 16) + dst);
             I.CarryVal = (uint)(dst & 0x01);
             dst >>= 1;
         }
-        public void SHL_BYTE(int c, ref int dst, int ModRM)
+        public void SHL_BYTE(int c, ref uint dst, uint ModRM)
         {
             pendingCycles -= c;
             dst <<= c;
             SetCFB((uint)dst);
-            SetSZPF_Byte(dst);
+            SetSZPF_Byte((byte)dst);
             PutbackRMByte(ModRM, (byte)dst);
         }
-        public void SHL_WORD(int c, ref int dst, int ModRM)
+        public void SHL_WORD(int c, ref uint dst, uint ModRM)
         {
             pendingCycles -= c;
             dst <<= c;
-            SetCFW((uint)dst);
-            SetSZPF_Word(dst);
+            SetCFW(dst);
+            SetSZPF_Word((ushort)dst);
             PutbackRMWord(ModRM, (ushort)dst);
         }
-        public void SHR_BYTE(int c, ref int dst, int ModRM)
+        public void SHR_BYTE(int c, ref uint dst, uint ModRM)
         {
             pendingCycles -= c;
             dst >>= c - 1;
             I.CarryVal = (uint)(dst & 0x1);
             dst >>= 1;
-            SetSZPF_Byte(dst);
+            SetSZPF_Byte((byte)dst);
             PutbackRMByte(ModRM, (byte)dst);
         }
-        public void SHR_WORD(int c, ref int dst, int ModRM)
+        public void SHR_WORD(int c, ref uint dst, uint ModRM)
         {
             pendingCycles -= c;
             dst >>= c - 1;
             I.CarryVal = (uint)(dst & 0x1);
             dst >>= 1;
-            SetSZPF_Word(dst);
+            SetSZPF_Word((ushort)dst);
             PutbackRMWord(ModRM, (ushort)dst);
         }
-        public void SHRA_BYTE(int c, ref int dst, int ModRM)
+        public void SHRA_BYTE(int c, ref uint dst, uint ModRM)
         {
             pendingCycles -= c;
-            dst = ((sbyte)dst) >> (c - 1);
+            dst = (uint)(((sbyte)dst) >> (c - 1));
             I.CarryVal = (uint)(dst & 0x1);
-            dst = ((sbyte)((byte)dst)) >> 1;
-            SetSZPF_Byte(dst);
+            dst = (uint)(((sbyte)((byte)dst)) >> 1);
+            SetSZPF_Byte((byte)dst);
             PutbackRMByte(ModRM, (byte)dst);
         }
-        public void SHRA_WORD(int c, ref int dst, int ModRM)
+        public void SHRA_WORD(int c, ref uint dst, uint ModRM)
         {
             pendingCycles -= c;
-            dst = ((short)dst) >> (c - 1);
+            dst = (uint)(((short)dst) >> (c - 1));
             I.CarryVal = (uint)(dst & 0x1);
-            dst = ((short)((ushort)dst)) >> 1;
-            SetSZPF_Word(dst);
+            dst = (uint)(((short)((ushort)dst)) >> 1);
+            SetSZPF_Word((ushort)dst);
             PutbackRMWord(ModRM, (ushort)dst);
         }
         public void DIVUB(int tmp, out bool b1)
@@ -690,26 +690,26 @@ namespace cpu.nec
                 I.regs.b[5] = (byte)((ushort)result2 / 0x100);
             }
         }
-        public void ADD4S(ref int tmp, ref int tmp2)
+        public void ADD4S(ref uint tmp, ref uint tmp2)
         {
             int i, v1, v2, result;
             int count = (I.regs.b[2] + 1) / 2;
-            ushort di = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100);
-            ushort si = (ushort)(I.regs.b[12] + I.regs.b[13] * 0x100);
+            uint di = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100);
+            uint si = (ushort)(I.regs.b[12] + I.regs.b[13] * 0x100);
             byte[] table = new byte[] { 18, 19, 19 };
             I.ZeroVal = I.CarryVal = 0;
             for (i = 0; i < count; i++)
             {
                 pendingCycles -= table[chip_type / 8];
-                tmp = GetMemB(3, si);
-                tmp2 = GetMemB(0, di);
-                v1 = (tmp >> 4) * 10 + (tmp & 0xf);
-                v2 = (tmp2 >> 4) * 10 + (tmp2 & 0xf);
+                tmp = GetMemB(3, (int)si);
+                tmp2 = GetMemB(0, (int)di);
+                v1 = (int)((tmp >> 4) * 10 + (tmp & 0xf));
+                v2 = (int)((tmp2 >> 4) * 10 + (tmp2 & 0xf));
                 result = (int)(v1 + v2 + I.CarryVal);
                 I.CarryVal = (uint)(result > 99 ? 1 : 0);
                 result = result % 100;
                 v1 = ((result / 10) << 4) | (result % 10);
-                PutMemB(0, di, (byte)v1);
+                PutMemB(0, (int)di, (byte)v1);
                 if (v1 != 0)
                 {
                     I.ZeroVal = 1;
@@ -718,21 +718,21 @@ namespace cpu.nec
                 di++;
             }
         }
-        public void SUB4S(ref int tmp, ref int tmp2)
+        public void SUB4S(ref uint tmp, ref uint tmp2)
         {
             int count = (I.regs.b[2] + 1) / 2;
             int i, v1, v2, result;
-            ushort di = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100);
-            ushort si = (ushort)(I.regs.b[12] + I.regs.b[13] * 0x100);
+            uint di = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100);
+            uint si = (ushort)(I.regs.b[12] + I.regs.b[13] * 0x100);
             byte[] table = new byte[3] { 18, 19, 19 };
             I.ZeroVal = I.CarryVal = 0;
             for (i = 0; i < count; i++)
             {
                 pendingCycles -= table[chip_type / 8];
-                tmp = GetMemB(0, di);
-                tmp2 = GetMemB(3, si);
-                v1 = (tmp >> 4) * 10 + (tmp & 0xf);
-                v2 = (tmp2 >> 4) * 10 + (tmp2 & 0xf);
+                tmp = GetMemB(0, (int)di);
+                tmp2 = GetMemB(3, (int)si);
+                v1 = (int)((tmp >> 4) * 10 + (tmp & 0xf));
+                v2 = (int)((tmp2 >> 4) * 10 + (tmp2 & 0xf));
                 if (v1 < (v2 + I.CarryVal))
                 {
                     v1 += 100;
@@ -745,7 +745,7 @@ namespace cpu.nec
                     I.CarryVal = 0;
                 }
                 v1 = ((result / 10) << 4) | (result % 10);
-                PutMemB(0, di, (byte)v1);
+                PutMemB(0, (int)di, (byte)v1);
                 if (v1 != 0)
                 {
                     I.ZeroVal = 1;
@@ -754,21 +754,21 @@ namespace cpu.nec
                 di++;
             }
         }
-        private void CMP4S(ref int tmp, ref int tmp2)
+        private void CMP4S(ref uint tmp, ref uint tmp2)
         {
             int count = (I.regs.b[2] + 1) / 2;
             int i, v1, v2, result;
-            ushort di = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100);
-            ushort si = (ushort)(I.regs.b[12] + I.regs.b[13] * 0x100);
+            uint di = (ushort)(I.regs.b[14] + I.regs.b[15] * 0x100);
+            uint si = (ushort)(I.regs.b[12] + I.regs.b[13] * 0x100);
             byte[] table = new byte[3] { 14, 19, 19 };
             I.ZeroVal = I.CarryVal = 0;
             for (i = 0; i < count; i++)
             {
                 pendingCycles -= table[chip_type / 8];
-                tmp = GetMemB(0, di);
-                tmp2 = GetMemB(3, si);
-                v1 = (tmp >> 4) * 10 + (tmp & 0xf);
-                v2 = (tmp2 >> 4) * 10 + (tmp2 & 0xf);
+                tmp = GetMemB(0, (int)di);
+                tmp2 = GetMemB(3, (int)si);
+                v1 = (int)((tmp >> 4) * 10 + (tmp & 0xf));
+                v2 = (int)((tmp2 >> 4) * 10 + (tmp2 & 0xf));
                 if (v1 < (v2 + I.CarryVal))
                 {
                     v1 += 100;

@@ -158,7 +158,7 @@ namespace mame
             lt2.Add(new emu_timer2(51, YM2203.timer_callback_2203_1_1, "timer_callback_2203_1_1"));
             lt2.Add(new emu_timer2(52, YM3812.timer_callback_3526_0, "timer_callback_3526_0"));
             lt2.Add(new emu_timer2(53, YM3812.timer_callback_3526_1, "timer_callback_3526_1"));
-            lt2.Add(new emu_timer2(54, K054539.k054539_irq, "k054539_irq"));
+            lt2.Add(new emu_timer2(54, K054539.k054539_irq_0, "k054539_irq"));
             lt2.Add(new emu_timer2(55, Taito.cchip_timer, "cchip_timer"));
             lt2.Add(new emu_timer2(56, Technos.ddragon_scanline_callback, "ddragon_scanline_callback"));
             lt2.Add(new emu_timer2(57, Seibu.sound_nmi, "sound_nmi"));

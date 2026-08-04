@@ -163,11 +163,6 @@ namespace mame
                     data_bits = 16;
                     break;
                 case "Konami":                    
-                    cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
-                    cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'1', (byte)'0', (byte)'0' };
-                    cmd_erase = new byte[] { };
-                    cmd_lock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
-                    cmd_unlock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
                     for (int i = 0; i < 0x80; i++)
                     {
                         eeprom_data[i] = 0xff;
@@ -176,13 +171,38 @@ namespace mame
                     address_bits = 7;
                     data_bits = 8;
                     switch (Machine.sName)
-                    {
+                    {                        
                         case "thndrx2":
                         case "thndrx2a":
                         case "thndrx2j":
                         case "prmrsocr":
                         case "prmrsocrj":
+                            cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
                             cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'1', (byte)'0', (byte)'0' };
+                            cmd_erase = new byte[] { };
+                            cmd_lock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_unlock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            break;
+                        case "mystwarr":
+                            cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'1', (byte)'0', (byte)'0' };
+                            cmd_erase = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_lock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_unlock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            break;
+                        case "gaiapols":
+                            cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'1', (byte)'0', (byte)'0' };
+                            cmd_erase = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_lock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_unlock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            break;
+                        default:
+                            cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'1', (byte)'0', (byte)'0' };
+                            cmd_erase = new byte[] { };
+                            cmd_lock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
+                            cmd_unlock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
                             break;
                     }
                     break;

@@ -8,7 +8,9 @@ namespace mame
 {
     public partial class Palette
     {
+        public static uint[] pens;
         public static uint[] entry_color, entry_color2;
+        public static bitmap_format format;
         public static float[] group_bright, group_contrast, entry_contrast;
         private static uint trans_uint;
         private static int numcolors, numgroups;
@@ -19,7 +21,7 @@ namespace mame
         public static palette_delegate palette_set_callback;
         public static void palette_init()
         {
-            int i,index;
+            int index;
             numgroups = 1;
             group_bright = new float[3];
             group_contrast = new float[3];
@@ -30,6 +32,11 @@ namespace mame
             group_contrast[1] = (float)0.6;
             group_contrast[2] = (float)(1 / 0.6);
             Video.video_attributes = 0;
+            bbitmap = new bitmap_t[2];
+            bbitmap[0] = new bitmap_t();
+            bbitmap[1] = new bitmap_t();
+            bitmap = new bitmap_t();
+            format = bitmap_format.BITMAP_FORMAT_INDEXED16;
             switch (Machine.sBoard)
             {
                 case "CPS-1":
@@ -479,6 +486,10 @@ namespace mame
         public static byte RGB_BLUE(uint rgb)
         {
             return (byte)(rgb & 0xff);
+        }
+        public static ushort rgb_to_rgb15(uint rgb)
+        {
+            return (ushort)(((RGB_RED(rgb) >> 3) << 10) | ((RGB_GREEN(rgb) >> 3) << 5) | ((RGB_BLUE(rgb) >> 3) << 0));
         }
         public static byte rgb_clamp(int value)
         {

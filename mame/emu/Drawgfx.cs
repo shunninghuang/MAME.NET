@@ -10,20 +10,66 @@ namespace mame
     {
         //void *alloc;
         public ushort[] uu1;
+        public uint[] ui1;
         public int rowpixels;
         public int width;
         public int height;
-        //bitmap_format	format;
-        //int bpp;
+        //public bitmap_format format;
+        public int bpp;
         //palette_t *palette;
     }
+    public enum bitmap_format
+    {
+        BITMAP_FORMAT_INVALID = 0,
+        BITMAP_FORMAT_INDEXED8,
+        BITMAP_FORMAT_INDEXED16,
+        BITMAP_FORMAT_INDEXED32,
+        BITMAP_FORMAT_RGB15,
+        BITMAP_FORMAT_RGB32,
+        BITMAP_FORMAT_ARGB32,
+        BITMAP_FORMAT_YUY16,
+        BITMAP_FORMAT_LAST
+    }
+    public struct alpha_cache
+    {
+        public int alphas;
+        public int alphad;
+    }
+    public struct gfx_element
+    {
+        public ushort width;
+        public ushort height;
+        public byte flags;
+        public uint total_elements;
+        public uint color_base;
+        public ushort color_depth;
+        public ushort color_granularity;
+        public uint total_colors;
+        //UINT32 *		pen_usage;
+        public byte[] gfxdata;
+        public uint line_modulo;
+        public uint char_modulo;
+        //gfx_layout		layout;
+    }    
     public partial class Drawgfx
     {
+        public static alpha_cache drawgfx_alpha_cache;
+
         public static int[] gfx_drawmode_table = new int[256];
-        public static int afterdrawmask;
-        public static int[][] shadow_table = new int[4][];
+        public static int afterdrawmask;        
         public static int imode;
         public static int spritecount;
+        public static void alpha_set_level(int level)
+        {
+            drawgfx_alpha_cache.alphas = level;
+            drawgfx_alpha_cache.alphad = 256 - level;
+        }
+        public static uint alpha_blend32(uint d, uint s)
+        {
+            return (uint)(((((s & 0x0000ff) * drawgfx_alpha_cache.alphas + (d & 0x0000ff) * drawgfx_alpha_cache.alphad) >> 8)) |
+                   ((((s & 0x00ff00) * drawgfx_alpha_cache.alphas + (d & 0x00ff00) * drawgfx_alpha_cache.alphad) >> 8) & 0x00ff00) |
+                   ((((s & 0xff0000) * drawgfx_alpha_cache.alphas + (d & 0xff0000) * drawgfx_alpha_cache.alphad) >> 8) & 0xff0000));
+        }
         public static void copybitmap_core16(ushort[] uu1, bitmap_t dest, bitmap_t src, int flipx, int flipy, int sx, int sy, RECT clip, int transparency, int transparent_color)
         {
             int ox;
@@ -75,11 +121,9 @@ namespace mame
             {
                 return;
             }
-            //UINT16 *sd = (UINT16 *)src.base;
             int sw = ex - sx + 1;
             int sh = ey - sy + 1;
             int sm = src.rowpixels;
-            //UINT16 *dd1 = BITMAP_ADDR(dest, UINT16, 0, 0);
             int dm = dest.rowpixels;
             if (flipx!=0)
             {
@@ -106,7 +150,6 @@ namespace mame
                 case 0:
                     break;
                 case 1:
-                    //blockmove_NtoN_transpen_noremap16_1(sd, offsetx, offsety, xdir, ydir, sx, sy, sw, sh, sm, dd1, dm, transparent_color);
                     int i, j;
                     for (i = 0; i < sh; i++)
                     {

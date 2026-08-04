@@ -3052,7 +3052,7 @@ namespace mame
             else if (address>=0xe000&&address<=0xe0ff)
             {
                 int offset = address - 0xe000;
-                result = K054539.k054539_0_r(offset);
+                result = K054539.kk1[0].k054539_r(offset);
             }
             else if (address >= 0xe100 && address <= 0xe12f)
             {
@@ -3084,7 +3084,7 @@ namespace mame
             else if (address>=0xe000&&address<=0xe0ff)
             {
                 int offset = address - 0xe000;
-                K054539.k054539_0_w(offset, value);
+                K054539.kk1[0].k054539_w(offset, value);
             }
             else if (address >=0xe100&&address<=0xe12f)
             {

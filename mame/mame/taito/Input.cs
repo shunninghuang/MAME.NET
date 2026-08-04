@@ -8,10 +8,6 @@ namespace mame
 {
     public partial class Taito
     {
-        public static void loop_inputports_taito_common()
-        {
-
-        }
         public static void loop_inputports_taito_bublbobl()
         {
             if (Keyboard.IsPressed(Key.D5))

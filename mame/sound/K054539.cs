@@ -25,7 +25,8 @@ namespace mame
             public int k054539_flags;
 
             public byte[] regs;
-            public short[] ram;
+            public byte[] ram;
+            public short[] ram2;
             public int reverb_pos;
 
             public int cur_ptr;
@@ -34,35 +35,48 @@ namespace mame
             public byte[] rom;
             public int rom_size;
             public uint rom_mask;
+            public sound_stream stream;
 
             public k054539_channel[] channels;
         }
+        public static K054539[] kk1 = new K054539[2]{new K054539(),new K054539()};
         public static byte[] k054539rom;
-        public static k054539_info info;
-        public static int zoneflag, zonedata;
-        public static apanhandler apan;
-        public static irqhandler irq;
+        public k054539_info info;
+        public int zoneflag, zonedata;
+        public apanhandler apan;
+        public irqhandler irq;
         public delegate void apanhandler(double d1, double d2);
         public delegate void irqhandler();
-        public static bool k054539_regupdate()
+        public static void k054539_init_flags(int chip, int flags)
+        {
+            kk1[chip].info.k054539_flags = flags;
+        }
+        public static void k054539_set_gain(int chip, int channel, double gain)
+        {
+            if (gain >= 0)
+            {
+                kk1[chip].info.k054539_gain[channel] = gain;
+            }
+        }
+        public bool k054539_regupdate()
         {
             return (info.regs[0x22f] & 0x80) == 0;
         }
-        public static void k054539_keyon(int channel)
+        public void k054539_keyon(int channel)
         {
             if (k054539_regupdate())
             {
                 info.regs[0x22c] |= (byte)(1 << channel);
             }
         }
-        public static void k054539_keyoff(int channel)
+        public void k054539_keyoff(int channel)
         {
             if (k054539_regupdate())
             {
                 info.regs[0x22c] &= (byte)(~(1 << channel));
             }
         }
-        public static void k054539_update(int offset, int length)
+        public void k054539_update(int offset, int length)
         {
             short[] dpcm = new short[16] {
 		        0<<8, 1<<8, 4<<8, 9<<8, 16<<8, 25<<8, 36<<8, 49<<8,
@@ -73,7 +87,6 @@ namespace mame
             int rom_mask;
             int offset1;
             int base1_offset, base2_offset;
-            k054539_channel chan;
             int cur_pos, cur_pfrac, cur_val, cur_pval;
             int delta, rdelta, fdelta, pdelta;
             int vol, bval, pan, i;
@@ -83,10 +96,10 @@ namespace mame
             {
                 for (j = 0; j < length; j++)
                 {
-                    Sound.k054539stream.streamoutput[i][offset + j] = 0;
+                    info.stream.streamoutput[i][offset + j] = 0;
                 }
             }
-            samples = k054539rom;//info.rom;
+            samples = k054539rom;
             rom_mask = (int)info.rom_mask;
             if ((info.regs[0x22f] & 1) == 0)
             {
@@ -99,7 +112,6 @@ namespace mame
                 {
                     base1_offset = 0x20 * ch;
                     base2_offset = 0x200 + 0x2 * ch;
-                    chan = info.channels[ch];
                     delta = info.regs[base1_offset + 0x00] | (info.regs[base1_offset + 0x01] << 8) | (info.regs[base1_offset + 0x02] << 16);
                     vol = info.regs[base1_offset + 0x03];
                     bval = vol + info.regs[base1_offset + 0x04];
@@ -151,18 +163,22 @@ namespace mame
                         fdelta = -0x10000;
                         pdelta = +1;
                     }
-                    if (cur_pos != chan.pos)
+                    if (cur_pos != info.channels[ch].pos)
                     {
-                        chan.pos = cur_pos;
+                        info.channels[ch].pos = cur_pos;
                         cur_pfrac = 0;
                         cur_val = 0;
                         cur_pval = 0;
                     }
                     else
                     {
-                        cur_pfrac = chan.pfrac;
-                        cur_val = chan.val;
-                        cur_pval = chan.pval;
+                        cur_pfrac = info.channels[ch].pfrac;
+                        cur_val = info.channels[ch].val;
+                        cur_pval = info.channels[ch].pval;
+                    }
+                    if (ch == 5)
+                    {
+                        int i1 = 1;
                     }
                     switch (info.regs[base2_offset + 0] & 0xc)
                     {
@@ -192,10 +208,14 @@ namespace mame
                                             goto end_channel_0;
                                         }
                                     }
-                                    Sound.k054539stream.streamoutput[0][offset1] += (short)(cur_val * lvol);
-                                    Sound.k054539stream.streamoutput[1][offset1] += (short)(cur_val * rvol);
+                                    info.stream.streamoutput[0][offset1] += (short)(cur_val * lvol);
+                                    info.stream.streamoutput[1][offset1] += (short)(cur_val * rvol);
                                     offset1++;
-                                    info.ram[rdelta] += (short)(cur_val * rbvol);
+                                    if (cur_val * rbvol != 0)
+                                    {
+                                        int i1 = 1;
+                                    }
+                                    info.ram2[rdelta] += (short)(cur_val * rbvol);
                                     rdelta++;
                                     rdelta &= 0x3fff;
                                 }
@@ -205,7 +225,6 @@ namespace mame
                         case 0x4:
                             {
                                 pdelta <<= 1;
-
                                 for (i = 0; i < length; i++)
                                 {
                                     cur_pfrac += delta;
@@ -213,7 +232,6 @@ namespace mame
                                     {
                                         cur_pfrac += fdelta;
                                         cur_pos += pdelta;
-
                                         cur_pval = cur_val;
                                         cur_val = (short)(samples[cur_pos] | samples[cur_pos + 1] << 8);
                                         if (cur_val == unchecked((short)0x8000))
@@ -229,10 +247,14 @@ namespace mame
                                             goto end_channel_4;
                                         }
                                     }
-                                    Sound.k054539stream.streamoutput[0][offset1] += (short)(cur_val * lvol);
-                                    Sound.k054539stream.streamoutput[1][offset1] += (short)(cur_val * rvol);
+                                    info.stream.streamoutput[0][offset1] += (short)(cur_val * lvol);
+                                    info.stream.streamoutput[1][offset1] += (short)(cur_val * rvol);
                                     offset1++;
-                                    info.ram[rdelta] += (short)(cur_val * rbvol);
+                                    if (cur_val * rbvol != 0)
+                                    {
+                                        int i1 = 1;
+                                    }
+                                    info.ram2[rdelta] += (short)(cur_val * rbvol);
                                     rdelta++;
                                     rdelta &= 0x3fff;
                                 }
@@ -288,10 +310,14 @@ namespace mame
                                             cur_val = 32767;
                                         }
                                     }
-                                    Sound.k054539stream.streamoutput[0][offset1] += (short)(cur_val * lvol);
-                                    Sound.k054539stream.streamoutput[1][offset1] += (short)(cur_val * rvol);
+                                    info.stream.streamoutput[0][offset1] += (short)(cur_val * lvol);
+                                    info.stream.streamoutput[1][offset1] += (short)(cur_val * rvol);
                                     offset1++;
-                                    info.ram[rdelta] += (short)(cur_val * rbvol);
+                                    if (cur_val * rbvol != 0)
+                                    {
+                                        int i1 = 1;
+                                    }
+                                    info.ram2[rdelta] += (short)(cur_val * rbvol);
                                     rdelta++;
                                     rdelta &= 0x3fff;
                                 }
@@ -307,10 +333,10 @@ namespace mame
                         default:
                             break;
                     }
-                    chan.pos = cur_pos;
-                    chan.pfrac = cur_pfrac;
-                    chan.pval = cur_pval;
-                    chan.val = cur_val;
+                    info.channels[ch].pos = cur_pos;
+                    info.channels[ch].pfrac = cur_pfrac;
+                    info.channels[ch].pval = cur_pval;
+                    info.channels[ch].val = cur_val;
                     if (k054539_regupdate())
                     {
                         info.regs[base1_offset + 0x0c] = (byte)(cur_pos & 0xff);
@@ -323,43 +349,64 @@ namespace mame
             {
                 for (i = 0; i < length; i++)
                 {
-                    short val = info.ram[(i + reverb_pos) & 0x3fff];
-                    Sound.k054539stream.streamoutput[0][offset + i] += val;
-                    Sound.k054539stream.streamoutput[1][offset + i] += val;
+                    short val = info.ram2[(i + reverb_pos) & 0x3fff];
+                    if (val != 0)
+                    {
+                        int i1 = 1;
+                    }
+                    info.stream.streamoutput[0][offset + i] += val;
+                    info.stream.streamoutput[1][offset + i] += val;
                 }
+            }
+            if (reverb_pos % 2 == 1)
+            {
+                int i1 = 1;
             }
             if (reverb_pos + length > 0x4000)
             {
                 i = 0x4000 - reverb_pos;
                 for (j = 0; j < i; j++)
                 {
-                    info.ram[reverb_pos + j] = 0;
+                    info.ram2[reverb_pos + j] = 0;
                 }
                 for (j = 0; j < length - i; j++)
                 {
-                    info.ram[j] = 0;
+                    info.ram2[j] = 0;
                 }
             }
             else
             {
                 for (j = 0; j < length; j++)
                 {
-                    info.ram[reverb_pos + j] = 0;
+                    info.ram2[reverb_pos + j] = 0;
                 }
             }
         }
-        public static void k054539_irq()
+        public static void k054539_irq_0()
+        {
+            if ((kk1[0].info.regs[0x22f] & 0x20) != 0)
+            {
+                if (kk1[0].irq != null)
+                {
+                    kk1[0].irq();
+                }
+            }
+        }
+        public void k054539_irq()
         {
             if ((info.regs[0x22f] & 0x20) != 0)
             {
-                irq();
+                if (irq != null)
+                {
+                    irq();
+                }
             }
         }
-        public static void k054539_init_chip(int clock)
+        public void k054539_init_chip(int clock)
         {
             int i;
             info.k054539_flags |= 4;
-            info.ram = new short[0x4000 + clock / 50];
+            info.ram2 = new short[0x4000 + clock / 50];
             info.reverb_pos = 0;
             info.cur_ptr = 0;
             info.rom_size = k054539rom.Length;
@@ -376,8 +423,9 @@ namespace mame
             {
                 Timer.timer_pulse_internal(new Atime(0, (long)(1e18 / 480)), k054539_irq, "k054539_irq");
             }
+            info.stream = new sound_stream(48000, 0, 2, k054539_update);
         }
-        static void k054539_w(int chip, int offset, byte data)
+        public void k054539_w(int offset, byte data)
         {
             int latch, offs, ch, pan;
             int regptr_offset;
@@ -445,11 +493,11 @@ namespace mame
                             {
                                 if (info.cur_ptr % 2 == 0)
                                 {
-                                    info.ram[info.cur_ptr / 2] = (short)((data << 8) | (info.ram[info.cur_ptr / 2] & 0xff));
+                                    info.ram2[info.cur_ptr / 2] = (short)((info.ram2[info.cur_ptr / 2] & 0xff00) | data);
                                 }
                                 else if (info.cur_ptr % 2 == 1)
                                 {
-                                    info.ram[info.cur_ptr / 2] = (short)((info.ram[info.cur_ptr / 2] & 0xff00) | data);
+                                    info.ram2[info.cur_ptr / 2] =  (short)((data << 8) | (info.ram2[info.cur_ptr / 2] & 0xff));
                                 }
                             }
                             else if (zoneflag == 2)
@@ -482,7 +530,7 @@ namespace mame
             }
             info.regs[offset] = data;
         }
-        public static byte k054539_r(int chip, int offset)
+        public byte k054539_r(int offset)
         {
             switch (offset)
             {
@@ -494,11 +542,11 @@ namespace mame
                         {
                             if (info.cur_ptr % 2 == 0)
                             {
-                                res = (byte)(info.ram[info.cur_ptr / 2] >> 8);
+                                res = (byte)info.ram2[info.cur_ptr / 2];                                
                             }
                             else if (info.cur_ptr % 2 == 1)
                             {
-                                res = (byte)info.ram[info.cur_ptr / 2];
+                                res = (byte)(info.ram2[info.cur_ptr / 2] >> 8);
                             }
                         }
                         else if (zoneflag == 2)
@@ -523,7 +571,7 @@ namespace mame
             }
             return info.regs[offset];
         }
-        public static void k054539_start(int clock)
+        public void k054539_start(int clock)
         {
             int i;
             info = new k054539_info();
@@ -547,6 +595,7 @@ namespace mame
                     switch (Machine.sName)
                     {
                         case "prmrsocr":
+                        case "prmrsocrj":
                             irq = Konami.sound_nmi;
                             break;
                     }
@@ -562,15 +611,7 @@ namespace mame
             }
             k054539_init_chip(clock);
         }
-        public static void k054539_0_w(int offset, byte data)
-        {
-            k054539_w(0, offset, data);
-        }
-        public static byte k054539_0_r(int offset)
-        {
-            return k054539_r(0, offset);
-        }
-        public static void SaveStateBinary(BinaryWriter writer)
+        public void SaveStateBinary(BinaryWriter writer)
         {
             int i, j;
             for (i = 0; i < 8; i++)
@@ -582,9 +623,9 @@ namespace mame
             }
             writer.Write(info.k054539_flags);
             writer.Write(info.regs, 0, 0x230);
-            for (i = 0; i < info.ram.Length; i++)
+            for (i = 0; i < info.ram2.Length; i++)
             {
-                writer.Write(info.ram[i]);
+                writer.Write(info.ram2[i]);
             }
             writer.Write(info.reverb_pos);
             writer.Write(info.cur_ptr);
@@ -599,7 +640,7 @@ namespace mame
             writer.Write(zoneflag);
             writer.Write(zonedata);
         }
-        public static void LoadStateBinary(BinaryReader reader)
+        public void LoadStateBinary(BinaryReader reader)
         {
             int i, j;
             for (i = 0; i < 8; i++)
@@ -611,9 +652,9 @@ namespace mame
             }
             info.k054539_flags = reader.ReadInt32();
             info.regs = reader.ReadBytes(0x230);
-            for (i = 0; i < info.ram.Length; i++)
+            for (i = 0; i < info.ram2.Length; i++)
             {
-                info.ram[i] = reader.ReadInt16();
+                info.ram2[i] = reader.ReadInt16();
             }
             info.reverb_pos = reader.ReadInt32();
             info.cur_ptr = reader.ReadInt32();

@@ -1501,6 +1501,30 @@ namespace mame
                             vblank_interrupts_per_frame = 1;
                             vblank_interrupt = Konami.lgtnfght_interrupt;
                             break;
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 16000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 3;
+                            vblank_interrupt = Konami.mystwarr_interrupt;
+                            break;
                     }
                     break;
                 case "Capcom":
@@ -3714,6 +3738,27 @@ namespace mame
                             Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
                             Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_mystwarr;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_mystwarr;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_mystwarr;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_mystwarr;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_mystwarr;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_mystwarr;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_mystwarr;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_mystwarr;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_mystwarr;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mystwarr;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_mystwarr;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
                     }
                     break;
                 case "Capcom":
@@ -4249,7 +4294,6 @@ namespace mame
             {
                 case "CPS1":
                 case "Tad":
-                case "Namco System 1":
                     break;
                 case "CPS-1(QSound)":
                     timedint_period = new Atime(0, (long)(1e18 / 250));
@@ -4310,6 +4354,11 @@ namespace mame
                     Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
                     Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 4);
                     Cpuexec.cpu[1].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger2, "trigger2", false);
+                    break;
+                case "Namco System 1":
+                    timeslice_period = new Atime(0, Video.screenstate.frame_period / 640);
+                    timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                    Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                     break;
                 case "IGS011":
                     /*switch (Machine.sName)
@@ -4453,6 +4502,20 @@ namespace mame
                         case "cuebrick":
                             Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 10);
                             Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            break;
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                            timeslice_period = new Atime(0, Video.screenstate.frame_period / 32);
+                            timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                            Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 3);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            timedint_period = new Atime(0, (long)(1e18 / 480));
+                            timedint_timer = Timer.timer_alloc_common(Seibu.sound_nmi, "sound_nmi", false);
+                            Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
                             break;
                     }
                     break;
@@ -4704,7 +4767,7 @@ namespace mame
                 case "Namco System 1":
                     for (int cpunum = 0; cpunum < ncpu; cpunum++)
                     {
-                        //if (!cpunum_is_suspended(cpunum, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
+                        if (!cpunum_is_suspended(cpunum, (byte)(SUSPEND_REASON_HALT | SUSPEND_REASON_RESET | SUSPEND_REASON_DISABLE)))
                         {
                             Cpuint.cpunum_set_input_line(cpunum, 0, LineState.ASSERT_LINE);
                         }
@@ -4892,6 +4955,11 @@ namespace mame
                     switch (Machine.sName)
                     {
                         case "cuebrick":
+                        case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
                             Cpuexec.cpu[0].iloops = 0;
                             vblank_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);

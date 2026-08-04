@@ -873,7 +873,7 @@ namespace mame
                 }
             }
         }
-        public static void generate_resampled_data_k054539(int gain)
+        public static void generate_resampled_data_k054539(int chip, int gain, int minput)
         {
             int offset;
             long basetime;
@@ -883,18 +883,18 @@ namespace mame
             int sampindex;
             basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample;
             if (basetime >= 0)
-                basesample = (int)(basetime / k054539stream.attoseconds_per_sample);
+                basesample = (int)(basetime / K054539.kk1[chip].info.stream.attoseconds_per_sample);
             else
-                basesample = (int)(-(-basetime / k054539stream.attoseconds_per_sample) - 1);
-            offset = basesample - k054539stream.output_base_sampindex;
-            basefrac = (uint)((basetime - basesample * k054539stream.attoseconds_per_sample) / (Attotime.ATTOSECONDS_PER_SECOND >> 22));
-            step = (uint)(((ulong)k054539stream.sample_rate << 22) / 48000);
+                basesample = (int)(-(-basetime / K054539.kk1[chip].info.stream.attoseconds_per_sample) - 1);
+            offset = basesample - K054539.kk1[chip].info.stream.output_base_sampindex;
+            basefrac = (uint)((basetime - basesample * K054539.kk1[chip].info.stream.attoseconds_per_sample) / (Attotime.ATTOSECONDS_PER_SECOND >> 22));
+            step = (uint)(((ulong)K054539.kk1[chip].info.stream.sample_rate << 22) / 48000);
             if (step == 0x400000)
             {
                 for (sampindex = 0; sampindex < 0x3c0; sampindex++)
                 {
-                    mixerstream.streaminput[0][sampindex] = (k054539stream.streamoutput[0][offset + sampindex] * gain) >> 8;
-                    mixerstream.streaminput[1][sampindex] = (k054539stream.streamoutput[1][offset + sampindex] * gain) >> 8;
+                    mixerstream.streaminput[minput][sampindex] = (K054539.kk1[chip].info.stream.streamoutput[0][offset + sampindex] * gain) >> 8;
+                    mixerstream.streaminput[minput + 1][sampindex] = (K054539.kk1[chip].info.stream.streamoutput[1][offset + sampindex] * gain) >> 8;
                 }
             }
         }
@@ -1458,7 +1458,20 @@ namespace mame
             {
                 second_tick = true;
             }
-            k054539stream.adjuststream(second_tick);
+            K054539.kk1[0].info.stream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+        }
+        private static void streams_update_konami_mystwarr()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            K054539.kk1[0].info.stream.adjuststream(second_tick);
+            K054539.kk1[1].info.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }
