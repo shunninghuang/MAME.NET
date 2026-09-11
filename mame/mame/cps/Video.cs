@@ -374,7 +374,7 @@ namespace mame
             cps1_update_transmasks();
             for (i = 0; i < 0xc00; i++)
             {
-                Palette.palette_entry_set_color1(i, Palette.make_rgb(0, 0, 0));
+                Palette.palette_set_callback(i, Palette.make_rgb(0, 0, 0));
             }
             primasks = new uint[8];
             cps1_stars_enabled = new int[2];
@@ -469,7 +469,7 @@ namespace mame
                         r = ((palette >> 8) & 0x0f) * 0x11 * bright / 0x2d;
                         g = ((palette >> 4) & 0x0f) * 0x11 * bright / 0x2d;
                         b = ((palette >> 0) & 0x0f) * 0x11 * bright / 0x2d;
-                        Palette.palette_entry_set_color1(0x200 * page + offset, Palette.make_rgb(r, g, b));
+                        Palette.palette_set_callback(0x200 * page + offset, Palette.make_rgb(r, g, b));
                     }
                 }
                 else

@@ -54,11 +54,19 @@ namespace mame
     public partial class Drawgfx
     {
         public static alpha_cache drawgfx_alpha_cache;
-
         public static int[] gfx_drawmode_table = new int[256];
-        public static int afterdrawmask;        
+        public static int afterdrawmask;
         public static int imode;
         public static int spritecount;
+        public static uint SHADOW32(uint c)
+        {
+            return Palette.shadow_table[imode].data[((c >> 9) & 0x7c00) | ((c >> 6) & 0x03e0) | ((c >> 3) & 0x001f)];
+        }
+        public static void drawgfx_init()
+        {
+            afterdrawmask = 31;
+            alpha_set_level(255);
+        }
         public static void alpha_set_level(int level)
         {
             drawgfx_alpha_cache.alphas = level;

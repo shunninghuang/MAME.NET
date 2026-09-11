@@ -204,7 +204,7 @@ namespace mame
         }
         public static void changecolor(int color, int r, int g, int b)
         {
-            Palette.palette_entry_set_color1(color, Palette.make_rgb(Palette.pal5bit((byte)r), Palette.pal5bit((byte)g), Palette.pal5bit((byte)b)));
+            Palette.palette_set_callback(color, Palette.make_rgb(Palette.pal5bit((byte)r), Palette.pal5bit((byte)g), Palette.pal5bit((byte)b)));
         }
         public static void m72_palette1_w(int offset, ushort data)
         {

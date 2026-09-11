@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using cpu.m68000;
 
 namespace mame
 {
@@ -12,8 +13,6 @@ namespace mame
         public static RECT[] K053936_cliprect;
         public static int[] K053936_clip_enabled;
         public static int[] colormask = new int[8] { 1, 3, 7, 0xf, 0x1f, 0x3f, 0x7f, 0xff };
-
-
         public struct GX_OBJ
         {
             public int order, offs, code, color;
@@ -23,10 +22,8 @@ namespace mame
         public static int gx_objptr_offset;
         public static ushort[] gx_spriteram;
         public static int gx_objdma, gx_primode;
-
         public static byte konamigx_wrport1_0, konamigx_wrport1_1;
-        public static ushort konamigx_wrport2;
-        
+        public static ushort konamigx_wrport2;        
         public static int K053246_objset1;
         public static int[] K053247_vrcbk;
         public static int K053247_coreg, K053247_coregshift, K053247_opset;
@@ -34,10 +31,14 @@ namespace mame
         public static int[] vcblk;
         public static int ocblk;
         public static int vinmix, vmixon, osinmix, osmixon;
-
+        public static ushort[] prot_data=new ushort[0x20];
         public static void SaveStateBinary_konamigx(BinaryWriter writer)
         {
             int i;
+            for (i = 0; i < 2; i++)
+            {
+                writer.Write(K053936_clip_enabled[i]);
+            }
             writer.Write(konamigx_wrport1_0);
             writer.Write(konamigx_wrport1_1);
             writer.Write(konamigx_wrport2);
@@ -59,11 +60,14 @@ namespace mame
             writer.Write(vmixon);
             writer.Write(osinmix);
             writer.Write(osmixon);
-
         }
         public static void LoadStateBinary_konamigx(BinaryReader reader)
         {
             int i;
+            for (i = 0; i < 2; i++)
+            {
+                K053936_clip_enabled[i] = reader.ReadInt32();
+            }
             konamigx_wrport1_0=reader.ReadByte();
             konamigx_wrport1_1=reader.ReadByte();
             konamigx_wrport2 = reader.ReadUInt16();
@@ -102,147 +106,152 @@ namespace mame
             K053936_cliprect[chip].min_y = miny;
             K053936_cliprect[chip].max_y = maxy;
         }
-        public static unsafe void K053936GP_copyroz32clip(bitmap_t dst_bitmap,int src_bitmap_rowpixels, ushort[] src_bitmap_data,RECT *dst_cliprect,RECT *src_cliprect, uint _startx,uint _starty,int _incxx,int _incxy,int _incyx,int _incyy,int tilebpp, int blend, int clip)
+        public static unsafe void K053936GP_copyroz32clip(bitmap_t dst_bitmap, int src_bitmap_rowpixels, ushort[] src_bitmap_data, RECT* dst_cliprect, RECT* src_cliprect, uint _startx, uint _starty, int _incxx, int _incxy, int _incyx, int _incyy, int tilebpp, int blend, int clip)
         {
-	        int cy, cx;
-	        int ecx;
-	        int src_pitch, incxy, incxx;
-	        int src_minx, src_maxx, src_miny, src_maxy, cmask;
+            int cy, cx;
+            int ecx;
+            int src_pitch, incxy, incxx;
+            int src_minx, src_maxx, src_miny, src_maxy, cmask;
             int dst_base_offset;
-	        int tx, dst_pitch;
-	        int starty, incyy, startx, incyx, ty, sx, sy;
-	        incxy = _incxy; incxx = _incxx; incyy = _incyy; incyx = _incyx;
-	        starty = (int)_starty;
+            int tx, dst_pitch;
+            int starty, incyy, startx, incyx, ty, sx, sy;
+            incxy = _incxy;
+            incxx = _incxx;
+            incyy = _incyy;
+            incyx = _incyx;
+            starty = (int)_starty;
             startx = (int)_startx;
-	        if (src_cliprect!=null && clip!=0)
-	        {
-		        src_minx = src_cliprect->min_x;
-		        src_maxx = src_cliprect->max_x;
-		        src_miny = src_cliprect->min_y;
-		        src_maxy = src_cliprect->max_y;
-	        }
-	        else
+            if (src_cliprect != null && clip != 0)
+            {
+                src_minx = src_cliprect->min_x;
+                src_maxx = src_cliprect->max_x;
+                src_miny = src_cliprect->min_y;
+                src_maxy = src_cliprect->max_y;
+            }
+            else
             {
                 src_minx = src_miny = -0x10000;
                 src_maxx = src_maxy = 0x10000;
             }
-	        if (dst_cliprect!=null)
-	        {
-		        sx = dst_cliprect->min_x;
-		        tx = dst_cliprect->max_x - sx + 1;
-		        sy = dst_cliprect->min_y;
-		        ty = dst_cliprect->max_y - sy + 1;
-		        startx += sx * incxx + sy * incyx;
-		        starty += sx * incxy + sy * incyy;
-	        }
-	        else
+            if (dst_cliprect != null)
+            {
+                sx = dst_cliprect->min_x;
+                tx = dst_cliprect->max_x - sx + 1;
+                sy = dst_cliprect->min_y;
+                ty = dst_cliprect->max_y - sy + 1;
+                startx += sx * incxx + sy * incyx;
+                starty += sx * incxy + sy * incyy;
+            }
+            else
             {
                 sx = sy = 0;
                 tx = dst_bitmap.width;
                 ty = dst_bitmap.height;
             }
-	        dst_pitch = dst_bitmap.rowpixels;
+            dst_pitch = dst_bitmap.rowpixels;
             dst_base_offset = sy * dst_pitch + sx + tx;
-	        ecx = tx = -tx;
-	        tilebpp = (tilebpp-1) & 7;
-	        cmask = colormask[tilebpp];
-	        src_pitch = src_bitmap_rowpixels;
-	        cy = starty;
-	        cx = startx;
-	        if (blend > 0)
-	        {
+            ecx = tx = -tx;
+            tilebpp = (tilebpp - 1) & 7;
+            cmask = colormask[tilebpp];
+            src_pitch = src_bitmap_rowpixels;
+            cy = starty;
+            cx = startx;
+            if (blend > 0)
+            {
                 dst_base_offset += dst_pitch;
-		        starty += incyy;
-		        startx += incyx;
-		        do
+                starty += incyy;
+                startx += incyx;
+                do
                 {
-			        do
+                    do
                     {
-				        int srcx = (cx >> 16) & 0x1fff;
-				        int srcy = (cy >> 16) & 0x1fff;
-				        int pixel;
-				        cx += incxx;
-				        cy += incxy;
-				        if (srcx < src_minx || srcx > src_maxx || srcy < src_miny || srcy > src_maxy)
+                        int srcx = (cx >> 16) & 0x1fff;
+                        int srcy = (cy >> 16) & 0x1fff;
+                        int pixel;
+                        cx += incxx;
+                        cy += incxy;
+                        if (srcx < src_minx || srcx > src_maxx || srcy < src_miny || srcy > src_maxy)
                         {
-					        continue;
+                            continue;
                         }
                         pixel = src_bitmap_data[srcy * src_pitch + srcx];
-				        if ((pixel & cmask)==0)
+                        if ((pixel & cmask) == 0)
                         {
-					        continue;
+                            continue;
                         }
-                        dst_bitmap.uu1[dst_base_offset + ecx] = (ushort)Drawgfx.alpha_blend32(0, (uint)dst_bitmap.uu1[dst_base_offset + ecx]);
-			        }
-			        while (++ecx!=0);
-			        ecx = tx;
+                        dst_bitmap.ui1[dst_base_offset + ecx] = Drawgfx.alpha_blend32(Palette.entry_color2[pixel], dst_bitmap.ui1[dst_base_offset + ecx]);
+                    }
+                    while (++ecx != 0);
+                    ecx = tx;
                     dst_base_offset += dst_pitch;
-			        cy = starty;
+                    cy = starty;
                     starty += incyy;
-			        cx = startx;
+                    cx = startx;
                     startx += incyx;
-		        }
-                while (--ty!=0);
-	        }
-	        else
-	        {
-		        if (blend == 0)
-		        {
+                }
+                while (--ty != 0);
+            }
+            else
+            {
+                if (blend == 0)
+                {
                     dst_base_offset += dst_pitch;
-			        starty += incyy;
-			        startx += incyx;
-		        }
-		        else
-		        {
-			        if (((sy & 1) ^ (blend & 1))!=0)
-			        {
-				        if (ty <= 1)
+                    starty += incyy;
+                    startx += incyx;
+                }
+                else
+                {
+                    if (((sy & 1) ^ (blend & 1)) != 0)
+                    {
+                        if (ty <= 1)
                         {
                             return;
                         }
                         dst_base_offset += dst_pitch;
-				        cy += incyy;
-				        cx += incyx;
-			        }
-			        if (ty > 1)
-			        {
-				        ty >>= 1;
-				        dst_pitch <<= 1;
-				        incyy <<= 1;
-				        incyx <<= 1;
-                        dst_base_offset += dst_pitch;
-				        starty = cy + incyy;
-				        startx = cx + incyx;
-			        }
-		        }
-		        do
-                {
-			        do
+                        cy += incyy;
+                        cx += incyx;
+                    }
+                    if (ty > 1)
                     {
-				        int srcx = (cx >> 16) & 0x1fff;
-				        int srcy = (cy >> 16) & 0x1fff;
-				        int pixel;
-				        cx += incxx;
-				        cy += incxy;
-				        if (srcx < src_minx || srcx > src_maxx || srcy < src_miny || srcy > src_maxy)
+                        ty >>= 1;
+                        dst_pitch <<= 1;
+                        incyy <<= 1;
+                        incyx <<= 1;
+                        dst_base_offset += dst_pitch;
+                        starty = cy + incyy;
+                        startx = cx + incyx;
+                    }
+                }
+                do
+                {
+                    do
+                    {
+                        int srcx = (cx >> 16) & 0x1fff;
+                        int srcy = (cy >> 16) & 0x1fff;
+                        int pixel;
+                        cx += incxx;
+                        cy += incxy;
+                        if (srcx < src_minx || srcx > src_maxx || srcy < src_miny || srcy > src_maxy)
                         {
-					        continue;
+                            continue;
                         }
                         pixel = src_bitmap_data[srcy * src_pitch + srcx];
-				        if ((pixel & cmask)==0)
+                        if ((pixel & cmask) == 0)
                         {
-					        continue;
+                            continue;
                         }
-                        dst_bitmap.uu1[dst_base_offset + ecx] = 0;
-			        }
-			        while (++ecx!=0);
-			        ecx = tx;
+                        dst_bitmap.ui1[dst_base_offset + ecx] = Palette.entry_color2[pixel];
+                    }
+                    while (++ecx != 0);
+                    ecx = tx;
                     dst_base_offset += dst_pitch;
-			        cy = starty; starty += incyy;
-			        cx = startx; startx += incyx;
-		        }
-                while (--ty!=0);
-	        }
+                    cy = starty;
+                    starty += incyy;
+                    cx = startx;
+                    startx += incyx;
+                }
+                while (--ty != 0);
+            }
         }
         public static unsafe void K053936GP_zoom_draw(int chip, ushort[] ctrl, ushort[] linectrl, bitmap_t bitmap, RECT cliprect, Tmap tmap, int tilebpp, int blend)
         {
@@ -293,7 +302,6 @@ namespace mame
                 incyy = (short)(ctrl[0x03]);
                 incxx = (short)(ctrl[0x04]);
                 incxy = (short)(ctrl[0x05]);
-
                 if ((ctrl[0x06] & 0x4000) != 0)
                 {
                     incyx <<= 8;
@@ -339,6 +347,10 @@ namespace mame
             int dst_minx, dst_maxx, dst_miny, dst_maxy;
             int dst_skipx, dst_skipy, dst_x, dst_y, dst_lastx, dst_lasty;
             int src_pitch, dst_pitch;
+            if (Video.screenstate.frame_number == 0x5a0 && code == 0xd2cd)
+            {
+                int i1 = 1;
+            }
             if (scalex == 0 || scaley == 0)
             {
                 return;
@@ -557,8 +569,14 @@ namespace mame
                                         continue;
                                     }
                                     eax = (int)Palette.entry_color2[pal_base_offset + eax];
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset] = z8;
+                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = (uint)eax;
+                                    /*if (Video.screenstate.frame_number == 0x5a0 && code == 0xd2cd)
+                                    {
+                                        StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
+                                        sw2.WriteLine(code.ToString("x") + "\t" + color.ToString("x") + "\t" + flipx.ToString("x") + "\t" + flipy.ToString("x") + "\t" + sx.ToString("x") + "\t" + sy.ToString("x") + "\t" + scalex.ToString("x") + "\t" + scaley.ToString("x") + "\t" + alpha.ToString("x") + "\t" + drawmode.ToString("x") + "\t" + zcode.ToString("x") + "\t" + pri.ToString("x") + "\t" + ozbuf_ptr_offset.ToString("x") + "\t" + z8.ToString("x") + "\t" + dst_ptr_offset.ToString("x") + "\t" + ecx.ToString("x") + "\t" + eax.ToString("x"));
+                                        sw2.Close();
+                                    }*/
                                 }
                                 while (++ecx != 0);
                                 ecx = src_fby;
@@ -747,6 +765,10 @@ namespace mame
                     switch (drawmode)
                     {
                         case 0:
+                            if (Video.screenstate.frame_number == 0x88d)
+                            {
+                                int i1 = 1;
+                            }
                             do
                             {
                                 do
@@ -762,8 +784,14 @@ namespace mame
                                     if (eax != 0)
                                     {
                                         int i1 = 1;
-                                    }
+                                    }                                    
                                     bitmap.ui1[dst_ptr_offset + ecx] = (uint)eax;
+                                    /*if (Video.screenstate.frame_number == 0x88d)
+                                    {
+                                        StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
+                                        sw2.WriteLine(code.ToString("x") + "\t" + color.ToString("x") + "\t" + flipx.ToString("x") + "\t" + flipy.ToString("x") + "\t" + sx.ToString("x") + "\t" + sy.ToString("x") + "\t" + scalex.ToString("x") + "\t" + scaley.ToString("x") + "\t" + alpha.ToString("x") + "\t" + drawmode.ToString("x") + "\t" + zcode.ToString("x") + "\t" + pri.ToString("x") + "\t" + dst_ptr_offset.ToString("x") + "\t" + ecx.ToString("x") + "\t" + eax.ToString("x"));
+                                        sw2.Close();
+                                    }*/
                                 }
                                 while (++ecx != 0);
                                 src_ptr_offset += src_fdy;
@@ -992,7 +1020,7 @@ namespace mame
                 return;
             }
             cltc_shdpri &= 0x04;
-            if (Video.screenstate.frame_number == 0x3b2)
+            if (Video.screenstate.frame_number == 0x5a0)
             {
                 int i1 = 1;
             }
@@ -1384,7 +1412,7 @@ namespace mame
                                 }
                                 else
                                 {
-                                    //K053250_draw(machine, bitmap, cliprect, 0, vcblk[4] << l, 0, 0);
+                                    K053250_draw(bitmap, cliprect, 0, vcblk[4] << l, 0, 0);
                                 }
                             }
                             continue;
@@ -1420,7 +1448,7 @@ namespace mame
                                 }
                                 else
                                 {
-                                    //K053250_draw(machine, bitmap, cliprect, 1, vcblk[5] << l, 0, 0);
+                                    K053250_draw(bitmap, cliprect, 1, vcblk[5] << l, 0, 0);
                                 }
                             }
                             continue;
@@ -1548,8 +1576,14 @@ namespace mame
                 temp = wrapsize - 1;
                 ox = (ox - offx) & temp;
                 oy = (-oy - offy) & temp;
-                if (ox >= xwraplim) ox -= wrapsize;
-                if (oy >= ywraplim) oy -= wrapsize;
+                if (ox >= xwraplim)
+                {
+                    ox -= wrapsize;
+                }
+                if (oy >= ywraplim)
+                {
+                    oy -= wrapsize;
+                }
                 ox += K053247_dx;
                 oy += K053247_dy;
                 temp = temp4 >> 8 & 0x0f;
@@ -1625,6 +1659,15 @@ namespace mame
                             scalex = zw << 12;
                             scaley = zh << 12;
                         };
+                        /*if (Video.screenstate.frame_number == 0x5a0)
+                        {
+                            StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
+                            sw2.WriteLine(temp.ToString("x") + "\t" + color.ToString("x") + "\t" + temp1.ToString("x") + "\t" + temp2.ToString("x") + "\t" + temp3.ToString("x") + "\t" + temp4.ToString("x") + "\t" + scalex.ToString("x") + "\t" + scaley.ToString("x") + "\t" + alpha.ToString("x") + "\t" + drawmode.ToString("x") + "\t" + zcode.ToString("x") + "\t" + pri.ToString("x"));
+                            sw2.Close();
+                            BinaryWriter bw1 = new BinaryWriter(new FileStream(@"\VS2008\compare1\compare1\bin\Debug\2.dat", FileMode.Append));
+                            bw1.Write(Tilemap.ppriority_bitmap, 0, 0x20000);
+                            bw1.Close();
+                        }*/
                         zdrawgfxzoom32GP(Palette.bbitmap[Video.curbitmap], K053247_gfx, cliprect, (uint)temp, (uint)color, temp1, temp2, temp3, temp4, scalex, scaley, alpha, drawmode, zcode, pri);
                     }
                 }
@@ -1635,6 +1678,7 @@ namespace mame
             int[] xoffset = new int[8] { 0, 1, 4, 5, 16, 17, 20, 21 };
             int[] yoffset = new int[8] { 0, 2, 8, 10, 32, 34, 40, 42 };
             int parity = 0;
+            int i11 = (int)Video.screenstate.frame_number;
             int[] objbuf = new int[518];
             int[] shadowon = new int[3], shdpri = new int[3], layerid = new int[6], layerpri = new int[6];
             int wrapsize, xwraplim, ywraplim, cltc_shdpri, prflp, disp;
@@ -2034,8 +2078,14 @@ namespace mame
                                 if (temp1 != 0xff && temp2 != 0)
                                 {
                                     temp4 = K054338_set_alpha_level(temp2);
-                                    if (temp4 <= 0) continue;
-                                    if (temp4 < 255) k = (j == 2) ? ~parity : 1;
+                                    if (temp4 <= 0)
+                                    {
+                                        continue;
+                                    }
+                                    if (temp4 < 255)
+                                    {
+                                        k = (j == 2) ? ~parity : 1;
+                                    }
                                 }
                                 l = sub1flags & 0xf;
                                 if (offs == -2)
@@ -2044,7 +2094,7 @@ namespace mame
                                 }
                                 else
                                 {
-                                    //K053250_draw(machine, bitmap, cliprect, 0, vcblk[4] << l, 0, 0);
+                                    K053250_draw(bitmap, cliprect, 0, vcblk[4] << l, 0, 0);
                                 }
                             }
                             continue;
@@ -2080,7 +2130,7 @@ namespace mame
                                 }
                                 else
                                 {
-                                    //K053250_draw(machine, bitmap, cliprect, 1, vcblk[5] << l, 0, 0);
+                                    K053250_draw(bitmap, cliprect, 1, vcblk[5] << l, 0, 0);
                                 }
                             }
                             continue;
@@ -2285,10 +2335,473 @@ namespace mame
                             scalex = zw << 12;
                             scaley = zh << 12;
                         };
+                        /*if (Video.screenstate.frame_number == 0x88d)
+                        {
+                            StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
+                            sw2.WriteLine(temp.ToString("x") + "\t" + color.ToString("x") + "\t" + temp1.ToString("x") + "\t" + temp2.ToString("x") + "\t" + temp3.ToString("x") + "\t" + temp4.ToString("x") + "\t" + scalex.ToString("x") + "\t" + scaley.ToString("x") + "\t" + alpha.ToString("x") + "\t" + drawmode.ToString("x") + "\t" + zcode.ToString("x") + "\t" + pri.ToString("x"));
+                            sw2.Close();
+                        }*/
                         zdrawgfxzoom32GP(Palette.bbitmap[Video.curbitmap], K053247_gfx, cliprect, (uint)temp, (uint)color, temp1, temp2, temp3, temp4, scalex, scaley, alpha, drawmode, zcode, pri);
                     }
                 }
             }
+        }
+        public static ushort K055550_word_r(int offset)
+        {
+            return (prot_data[offset]);
+        }
+        public static void K055550_word_w(int offset, ushort data)
+        {
+            uint adr, bsize, count, i, lim;
+            int src, tgt, srcend, tgtend, skip, cx1, sx1, wx1, cy1, sy1, wy1, cz1, sz1, wz1, c2, s2, w2;
+            int dx, dy, angle;
+            prot_data[offset] = data;
+            if (offset == 0)
+            {
+                data >>= 8;
+                switch (data)
+                {
+                    case 0x97:
+                    case 0x9f:
+                        adr = (uint)((prot_data[7] << 16) | prot_data[8]);
+                        bsize = (uint)((prot_data[10] << 16) | prot_data[11]);
+                        count = (uint)((prot_data[0] & 0xff) + 1);
+                        lim = adr + bsize * count;
+                        for (i = adr; i < lim; i += 2)
+                        {
+                            MC68000.mm1[0].WriteWord((int)i, (short)prot_data[0x1a / 2]);
+                        }
+                        break;
+                    case 0x87:
+                        count = (uint)((prot_data[0] & 0xff) + 1);
+                        i = prot_data[1];
+                        adr = (uint)(prot_data[7] << 16 | prot_data[8]);
+                        lim = prot_data[9];
+                        src = prot_data[10] << 16 | prot_data[11];
+                        tgt = prot_data[12] << 16 | prot_data[13];
+                        break;
+                    case 0xa0:
+                        count = (uint)(prot_data[0] & 0xff);
+                        skip = prot_data[1] >> (8 - 1);
+                        adr = (uint)(prot_data[2] << 16 | prot_data[3]);
+                        bsize = (uint)(prot_data[5] << 16 | prot_data[6]);
+                        srcend = (int)(adr + bsize * count);
+                        tgtend = (int)(srcend + bsize);
+                        for (src = (int)adr; src < srcend; src += (int)bsize)
+                        {
+                            cx1 = (short)MC68000.mm1[0].ReadWord(src);
+                            sx1 = (short)MC68000.mm1[0].ReadWord(src + 2);
+                            wx1 = (short)MC68000.mm1[0].ReadWord(src + 4);
+                            cy1 = (short)MC68000.mm1[0].ReadWord(src + 6);
+                            sy1 = (short)MC68000.mm1[0].ReadWord(src + 8);
+                            wy1 = (short)MC68000.mm1[0].ReadWord(src + 10);
+                            cz1 = (short)MC68000.mm1[0].ReadWord(src + 12);
+                            sz1 = (short)MC68000.mm1[0].ReadWord(src + 14);
+                            wz1 = (short)MC68000.mm1[0].ReadWord(src + 16);
+                            count = i = (uint)(src + skip);
+                            tgt = (int)(src + bsize);
+                            for (; count < tgt; count++)
+                            {
+                                MC68000.mm1[0].WriteWord((int)count, 0);
+                            }
+                            for (; tgt < tgtend; i++, tgt += (int)bsize)
+                            {
+                                c2 = (short)MC68000.mm1[0].ReadWord(tgt);
+                                s2 = (short)MC68000.mm1[0].ReadWord(tgt + 2);
+                                w2 = (short)MC68000.mm1[0].ReadWord(tgt + 4);
+                                if (Math.Abs((cx1 + sx1) - (c2 + s2)) >= wx1 + w2)
+                                {
+                                    continue;
+                                }
+                                c2 = (short)MC68000.mm1[0].ReadWord(tgt + 6);
+                                s2 = (short)MC68000.mm1[0].ReadWord(tgt + 8);
+                                w2 = (short)MC68000.mm1[0].ReadWord(tgt + 10);
+                                if (Math.Abs((cy1 + sy1) - (c2 + s2)) >= wy1 + w2)
+                                {
+                                    continue;
+                                }
+                                c2 = (short)MC68000.mm1[0].ReadWord(tgt + 12);
+                                s2 = (short)MC68000.mm1[0].ReadWord(tgt + 14);
+                                w2 = (short)MC68000.mm1[0].ReadWord(tgt + 16);
+                                if (Math.Abs((cz1 + sz1) - (c2 + s2)) >= wz1 + w2)
+                                {
+                                    continue;
+                                }
+                                MC68000.mm1[0].WriteWord((int)i, 0x80);
+                            }
+                        }
+                        break;
+
+                    case 0xc0:
+                        dx = (short)prot_data[0xc];
+                        dy = (short)prot_data[0xd];
+                        if (dx!=0)
+                        {
+                            if (dy!=0)
+                            {
+                                angle = (int)((Math.Atan((double)dy / dx) * 128.0) / Math.PI);
+                                if (dx < 0)
+                                {
+                                    angle += 128;
+                                }
+                                i = (uint)((angle - 0x40) & 0xff);
+                            }
+                            else
+                            {
+                                i = (uint)((dx > 0) ? 0xc0 : 0x40);
+                            }
+                        }
+                        else if (dy > 0)
+                        {
+                            i = 0;
+                        }
+                        else if (dy < 0)
+                        {
+                            i = 0x80;
+                        }
+                        else
+                        {
+                            i = Mame.mame_rand() & 0xff;
+                        }
+                        prot_data[0x10] = (ushort)i;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public static void K055550_word_w1(int offset, byte data)
+        {
+            uint adr, bsize, count, i, lim;
+            int src, tgt, srcend, tgtend, skip, cx1, sx1, wx1, cy1, sy1, wy1, cz1, sz1, wz1, c2, s2, w2;
+            int dx, dy, angle;
+            prot_data[offset] = (ushort)((data << 8) | (prot_data[offset] & 0xff));
+            if (offset == 0)
+            {
+                switch (data)
+                {
+                    case 0x97:
+                    case 0x9f:
+                        adr = (uint)((prot_data[7] << 16) | prot_data[8]);
+                        bsize = (uint)((prot_data[10] << 16) | prot_data[11]);
+                        count = (uint)((prot_data[0] & 0xff) + 1);
+                        lim = adr + bsize * count;
+                        for (i = adr; i < lim; i += 2)
+                        {
+                            MC68000.mm1[0].WriteWord((int)i, (short)prot_data[0x1a / 2]);
+                        }
+                        break;
+                    case 0x87:
+                        count = (uint)((prot_data[0] & 0xff) + 1);
+                        i = prot_data[1];
+                        adr = (uint)(prot_data[7] << 16 | prot_data[8]);
+                        lim = prot_data[9];
+                        src = prot_data[10] << 16 | prot_data[11];
+                        tgt = prot_data[12] << 16 | prot_data[13];
+                        break;
+                    case 0xa0:
+                        count = (uint)(prot_data[0] & 0xff);
+                        skip = prot_data[1] >> (8 - 1);
+                        adr = (uint)(prot_data[2] << 16 | prot_data[3]);
+                        bsize = (uint)(prot_data[5] << 16 | prot_data[6]);
+                        srcend = (int)(adr + bsize * count);
+                        tgtend = (int)(srcend + bsize);
+                        for (src = (int)adr; src < srcend; src += (int)bsize)
+                        {
+                            cx1 = (short)MC68000.mm1[0].ReadWord(src);
+                            sx1 = (short)MC68000.mm1[0].ReadWord(src + 2);
+                            wx1 = (short)MC68000.mm1[0].ReadWord(src + 4);
+                            cy1 = (short)MC68000.mm1[0].ReadWord(src + 6);
+                            sy1 = (short)MC68000.mm1[0].ReadWord(src + 8);
+                            wy1 = (short)MC68000.mm1[0].ReadWord(src + 10);
+                            cz1 = (short)MC68000.mm1[0].ReadWord(src + 12);
+                            sz1 = (short)MC68000.mm1[0].ReadWord(src + 14);
+                            wz1 = (short)MC68000.mm1[0].ReadWord(src + 16);
+                            count = i = (uint)(src + skip);
+                            tgt = (int)(src + bsize);
+                            for (; count < tgt; count++)
+                            {
+                                MC68000.mm1[0].WriteWord((int)count, 0);
+                            }
+                            for (; tgt < tgtend; i++, tgt += (int)bsize)
+                            {
+                                c2 = (short)MC68000.mm1[0].ReadWord(tgt);
+                                s2 = (short)MC68000.mm1[0].ReadWord(tgt + 2);
+                                w2 = (short)MC68000.mm1[0].ReadWord(tgt + 4);
+                                if (Math.Abs((cx1 + sx1) - (c2 + s2)) >= wx1 + w2)
+                                {
+                                    continue;
+                                }
+                                c2 = (short)MC68000.mm1[0].ReadWord(tgt + 6);
+                                s2 = (short)MC68000.mm1[0].ReadWord(tgt + 8);
+                                w2 = (short)MC68000.mm1[0].ReadWord(tgt + 10);
+                                if (Math.Abs((cy1 + sy1) - (c2 + s2)) >= wy1 + w2)
+                                {
+                                    continue;
+                                }
+                                c2 = (short)MC68000.mm1[0].ReadWord(tgt + 12);
+                                s2 = (short)MC68000.mm1[0].ReadWord(tgt + 14);
+                                w2 = (short)MC68000.mm1[0].ReadWord(tgt + 16);
+                                if (Math.Abs((cz1 + sz1) - (c2 + s2)) >= wz1 + w2)
+                                {
+                                    continue;
+                                }
+                                MC68000.mm1[0].WriteWord((int)i, 0x80);
+                            }
+                        }
+                        break;
+
+                    case 0xc0:
+                        dx = (short)prot_data[0xc];
+                        dy = (short)prot_data[0xd];
+                        if (dx != 0)
+                        {
+                            if (dy != 0)
+                            {
+                                angle = (int)((Math.Atan((double)dy / dx) * 128.0) / Math.PI);
+                                if (dx < 0)
+                                {
+                                    angle += 128;
+                                }
+                                i = (uint)((angle - 0x40) & 0xff);
+                            }
+                            else
+                            {
+                                i = (uint)((dx > 0) ? 0xc0 : 0x40);
+                            }
+                        }
+                        else if (dy > 0)
+                        {
+                            i = 0;
+                        }
+                        else if (dy < 0)
+                        {
+                            i = 0x80;
+                        }
+                        else
+                        {
+                            i = Mame.mame_rand() & 0xff;
+                        }
+                        prot_data[0x10] = (ushort)i;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public static void K055550_word_w2(int offset, byte data)
+        {
+            prot_data[offset] = (ushort)((prot_data[offset] & 0xff00) | data);
+        }
+        public static void K053990_martchmp_word_w(int offset, ushort data)
+        {
+            int src_addr, src_count, src_skip;
+            int dst_addr, dst_count, dst_skip;
+            int mod_addr, mod_count, mod_skip, mod_offs;
+            int mode, i, element_size = 1;
+            ushort mod_val, mod_data;
+            prot_data[offset] = data;
+            if (offset == 0x0c)
+            {
+                mode = (prot_data[0x0d] << 8 & 0xff00) | (prot_data[0x0f] & 0xff);
+                switch (mode)
+                {
+                    case 0xffff:
+                        element_size = 2;
+                        src_addr = prot_data[0x0];
+                        src_addr |= prot_data[0x1] << 16 & 0xff0000;
+                        dst_addr = prot_data[0x2];
+                        dst_addr |= prot_data[0x3] << 16 & 0xff0000;
+                        src_count = prot_data[0x8] >> 8;
+                        dst_count = prot_data[0x9] >> 8;
+                        src_skip = prot_data[0xa] & 0xff;
+                        dst_skip = prot_data[0xb] & 0xff;
+                        if ((prot_data[0x8] & 0xff) == 2)
+                        {
+                            src_count <<= 1;
+                        }
+                        src_skip += element_size;
+                        dst_skip += element_size;
+                        if (element_size == 1)
+                            for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteByte(dst_addr, MC68000.mm1[0].ReadByte(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        else for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteWord(dst_addr, MC68000.mm1[0].ReadWord(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        break;
+                    case 0xff00:
+                        src_addr = prot_data[0x0];
+                        src_addr |= prot_data[0x1] << 16 & 0xff0000;
+                        dst_addr = prot_data[0x2];
+                        dst_addr |= prot_data[0x3] << 16 & 0xff0000;
+                        src_count = prot_data[0x8] >> 8;
+                        dst_count = prot_data[0x9] >> 8;
+                        src_skip = prot_data[0xa] & 0xff;
+                        dst_skip = prot_data[0xb] & 0xff;
+                        if ((prot_data[0x8] & 0xff) == 2)
+                        {
+                            src_count <<= 1;
+                        }
+                        src_skip += element_size;
+                        dst_skip += element_size;
+                        if (element_size == 1)
+                            for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteByte(dst_addr, MC68000.mm1[0].ReadByte(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        else for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteWord(dst_addr, MC68000.mm1[0].ReadWord(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        break;
+                    case 0x00ff:
+                        src_addr = prot_data[0x0];
+                        src_addr |= prot_data[0x1] << 16 & 0xff0000;
+                        src_skip = prot_data[0x1] >> 8;
+                        dst_addr = prot_data[0x2];
+                        dst_addr |= prot_data[0x3] << 16 & 0xff0000;
+                        dst_skip = prot_data[0x3] >> 8;
+                        mod_addr = prot_data[0x4];
+                        mod_addr |= prot_data[0x5] << 16 & 0xff0000;
+                        mod_skip = prot_data[0x5] >> 8;
+                        mod_offs = prot_data[0x8] & 0xff;
+                        mod_offs <<= 1;
+                        mod_count = 0x100;
+                        src_addr += mod_offs;
+                        dst_addr += mod_offs;
+                        for (i = mod_count; i != 0; i--)
+                        {
+                            mod_val = (ushort)MC68000.mm1[0].ReadWord(mod_addr);
+                            mod_addr += mod_skip;
+                            mod_data = (ushort)MC68000.mm1[0].ReadWord(src_addr);
+                            src_addr += src_skip;
+                            mod_data += mod_val;
+                            MC68000.mm1[0].WriteWord(dst_addr, (short)mod_data);
+                            dst_addr += dst_skip;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public static void K053990_martchmp_word_w1(int offset, byte data)
+        {
+            int src_addr, src_count, src_skip;
+            int dst_addr, dst_count, dst_skip;
+            int mod_addr, mod_count, mod_skip, mod_offs;
+            int mode, i, element_size = 1;
+            ushort mod_val, mod_data;
+            prot_data[offset] = (ushort)((data<<8)|(prot_data[offset]&0xff));
+            if (offset == 0x0c)
+            {
+                mode = (prot_data[0x0d] << 8 & 0xff00) | (prot_data[0x0f] & 0xff);
+                switch (mode)
+                {
+                    case 0xffff:
+                        element_size = 2;
+                        src_addr = prot_data[0x0];
+                        src_addr |= prot_data[0x1] << 16 & 0xff0000;
+                        dst_addr = prot_data[0x2];
+                        dst_addr |= prot_data[0x3] << 16 & 0xff0000;
+                        src_count = prot_data[0x8] >> 8;
+                        dst_count = prot_data[0x9] >> 8;
+                        src_skip = prot_data[0xa] & 0xff;
+                        dst_skip = prot_data[0xb] & 0xff;
+                        if ((prot_data[0x8] & 0xff) == 2)
+                        {
+                            src_count <<= 1;
+                        }
+                        src_skip += element_size;
+                        dst_skip += element_size;
+                        if (element_size == 1)
+                            for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteByte(dst_addr, MC68000.mm1[0].ReadByte(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        else for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteWord(dst_addr, MC68000.mm1[0].ReadWord(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        break;
+                    case 0xff00:
+                        src_addr = prot_data[0x0];
+                        src_addr |= prot_data[0x1] << 16 & 0xff0000;
+                        dst_addr = prot_data[0x2];
+                        dst_addr |= prot_data[0x3] << 16 & 0xff0000;
+                        src_count = prot_data[0x8] >> 8;
+                        dst_count = prot_data[0x9] >> 8;
+                        src_skip = prot_data[0xa] & 0xff;
+                        dst_skip = prot_data[0xb] & 0xff;
+                        if ((prot_data[0x8] & 0xff) == 2)
+                        {
+                            src_count <<= 1;
+                        }
+                        src_skip += element_size;
+                        dst_skip += element_size;
+                        if (element_size == 1)
+                            for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteByte(dst_addr, MC68000.mm1[0].ReadByte(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        else for (i = src_count; i != 0; i--)
+                            {
+                                MC68000.mm1[0].WriteWord(dst_addr, MC68000.mm1[0].ReadWord(src_addr));
+                                src_addr += src_skip;
+                                dst_addr += dst_skip;
+                            }
+                        break;
+                    case 0x00ff:
+                        src_addr = prot_data[0x0];
+                        src_addr |= prot_data[0x1] << 16 & 0xff0000;
+                        src_skip = prot_data[0x1] >> 8;
+                        dst_addr = prot_data[0x2];
+                        dst_addr |= prot_data[0x3] << 16 & 0xff0000;
+                        dst_skip = prot_data[0x3] >> 8;
+                        mod_addr = prot_data[0x4];
+                        mod_addr |= prot_data[0x5] << 16 & 0xff0000;
+                        mod_skip = prot_data[0x5] >> 8;
+                        mod_offs = prot_data[0x8] & 0xff;
+                        mod_offs <<= 1;
+                        mod_count = 0x100;
+                        src_addr += mod_offs;
+                        dst_addr += mod_offs;
+                        for (i = mod_count; i != 0; i--)
+                        {
+                            mod_val = (ushort)MC68000.mm1[0].ReadWord(mod_addr);
+                            mod_addr += mod_skip;
+                            mod_data = (ushort)MC68000.mm1[0].ReadWord(src_addr);
+                            src_addr += src_skip;
+                            mod_data += mod_val;
+                            MC68000.mm1[0].WriteWord(dst_addr, (short)mod_data);
+                            dst_addr += dst_skip;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public static void K053990_martchmp_word_w2(int offset, byte data)
+        {
+            prot_data[offset] = (ushort)((prot_data[offset] & 0xff00) | data);
         }
     }
 }

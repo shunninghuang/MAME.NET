@@ -391,11 +391,7 @@ namespace mame
             else if (address >= 0x500000 && address <= 0x50003f)
             {
                 int offset = (address - 0x500000) / 2;
-                if (address % 2 == 0)
-                {
-
-                }
-                else if (address % 2 == 1)
+                if (address % 2 == 1)
                 {
                     K054000_lsb_w2(offset, (byte)value);
                 }

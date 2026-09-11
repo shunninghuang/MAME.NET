@@ -1245,7 +1245,7 @@ namespace cpu.m68000
             WriteValueW(mode, reg, (short)res);
             N = ((res & 0x8000) != 0);
             Z = (res == 0);
-            C = ((res & 0x8000) != 0);
+            C = ((src & 0x8000) != 0);
             V = false;
             pendingCycles -= 8 + EACyclesBW[mode, reg];
         }
@@ -1357,7 +1357,7 @@ namespace cpu.m68000
             WriteValueW(mode, reg, (short)res);
             N = ((res & 0x8000) != 0);
             Z = (res == 0);
-            C = ((res & 0x01) != 0);
+            C = ((src & 0x01) != 0);
             V = false;
             pendingCycles -= 8 + EACyclesBW[mode, reg];
         }

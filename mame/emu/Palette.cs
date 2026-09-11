@@ -8,12 +8,11 @@ namespace mame
 {
     public partial class Palette
     {
-        public static uint[] pens;
         public static uint[] entry_color, entry_color2;
         public static bitmap_format format;
         public static float[] group_bright, group_contrast, entry_contrast;
         private static uint trans_uint;
-        private static int numcolors, numgroups;
+        public static int numcolors, numgroups;
         public static int[] dirty;
         public static int mindirty, maxdirty;
         public static Color trans_color;
@@ -106,13 +105,13 @@ namespace mame
                     trans_color = Color.Black;
                     trans_uint = (uint)trans_color.ToArgb();
                     numcolors = 0x2001;
-                    palette_set_callback = palette_entry_set_color1;
+                    palette_set_callback = palette_entry_set_color2;
                     break;
                 case "IGS011":
                     trans_color = Color.Black;
                     trans_uint = (uint)trans_color.ToArgb();
                     numcolors = 0x800;
-                    palette_set_callback = palette_entry_set_color1;
+                    palette_set_callback = palette_entry_set_color2;
                     break;
                 case "PGM":
                     trans_color = Color.Magenta;
@@ -124,7 +123,7 @@ namespace mame
                     trans_color = Color.Black;
                     trans_uint = (uint)trans_color.ToArgb();
                     numcolors = 0x201;
-                    palette_set_callback = palette_entry_set_color1;
+                    palette_set_callback = palette_entry_set_color2;
                     break;
                 case "M92":
                     trans_color = Color.Black;
@@ -256,7 +255,21 @@ namespace mame
                         case "thndrx2":
                         case "thndrx2a":
                         case "thndrx2j":
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
                             Video.video_attributes = 0x30;
+                            break;
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            numcolors = 0x1000;
                             break;
                     }
                     palette_set_callback = palette_entry_set_color4;
@@ -498,7 +511,7 @@ namespace mame
             {
                 value2 = 0;
             }
-            if (value > 255)
+            else if (value > 255)
             {
                 value2 = 255;
             }

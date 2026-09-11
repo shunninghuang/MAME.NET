@@ -69,7 +69,7 @@ namespace mame
             Drawgfx.gfx_drawmode_table[15] = 0;
             for (i = 0; i < 0x2000; i++)
             {
-                Palette.palette_entry_set_color1(i, Palette.make_rgb(0, 0, 0));
+                Palette.palette_set_callback(i, Palette.make_rgb(0, 0, 0));
             }
             for (i = 0; i < 0x2000; i++)
             {
@@ -117,7 +117,7 @@ namespace mame
                 r = namcos1_paletteram[offset];
                 g = namcos1_paletteram[offset + 0x0800];
                 b = namcos1_paletteram[offset + 0x1000];
-                Palette.palette_entry_set_color1(color, Palette.make_rgb(r, g, b));
+                Palette.palette_set_callback(color, Palette.make_rgb(r, g, b));
             }
             else
             {

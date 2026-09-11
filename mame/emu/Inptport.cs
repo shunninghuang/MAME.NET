@@ -968,11 +968,48 @@ namespace mame
                     record_port_callback = Konami.record_port_prmrsocr;
                     replay_port_callback = Konami.replay_port_prmrsocr;
                     break;
+                case "moomesa":
+                case "moomesauac":
+                case "moomesauab":
+                case "moomesaaab":
+                case "moomesabl":
+                case "bucky":
+                case "buckyea":
+                case "buckyjaa":
+                case "buckyuab":
+                case "buckyaab":
+                case "buckyaa":
                 case "mystwarr":
                 case "mystwarru":
                 case "mystwarrj":
                 case "mystwarra":
                 case "mystwarraa":
+                case "mmaulers":
+                case "mmaulersu":
+                case "dadandrn":
+                case "viostorm":
+                case "viostormeb":
+                case "viostormu":
+                case "viostormub":
+                case "viostormubbl":
+                case "viostormj":
+                case "viostorma":
+                case "viostormab":
+                //case "viostormabbl":
+                case "metamrph":
+                case "metamrphe":
+                case "metamrphu":
+                case "metamrphj":
+                case "metamrpha":
+                case "mtlchamp":
+                case "mtlchamp1":
+                case "mtlchampu":
+                case "mtlchampu1":
+                case "mtlchampj":
+                case "mtlchampa":
+                case "gaiapols":
+                case "gaiapolsu":
+                case "gaiapolsj":
                     loop_inputports_callback = Konami.loop_inputports_konami_mystwarr;
                     record_port_callback = Konami.record_port_cuebrick;
                     replay_port_callback = Konami.replay_port_cuebrick;

@@ -357,6 +357,20 @@ namespace mame
                         case "prmrsocrj":
                             Konami.video_start_prmrsocr();
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                            Konami.video_start_moo();
+                            break;
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            Konami.video_start_bucky();
+                            break;
                         case "mystwarr":
                         case "mystwarru":
                         case "mystwarrj":
@@ -365,6 +379,52 @@ namespace mame
                             Konami.nvram_handler_load_mystwarr();
                             Konami.machine_start_mystwarr();
                             Konami.video_start_mystwarr();
+                            break;
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                            Konami.nvram_handler_load_mystwarr();
+                            Konami.machine_start_mystwarr();
+                            Konami.video_start_dadandrn();
+                            break;
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                            Konami.nvram_handler_load_mystwarr();
+                            Konami.machine_start_mystwarr();
+                            Konami.video_start_viostorm();
+                            break;
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                            Konami.nvram_handler_load_mystwarr();
+                            Konami.machine_start_mystwarr();
+                            Konami.video_start_metamrph();
+                            break;
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                            Konami.nvram_handler_load_mystwarr();
+                            Konami.machine_start_mystwarr();
+                            Konami.video_start_martchmp();
+                            break;
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
+                            Konami.nvram_handler_load_mystwarr();
+                            Konami.machine_start_mystwarr();
+                            Konami.video_start_gaiapols();
                             break;
                     }
                     break;

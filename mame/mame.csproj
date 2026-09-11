@@ -141,6 +141,7 @@
     <Compile Include="mame\konami\Memory.cs" />
     <Compile Include="mame\konami\Memory2.cs" />
     <Compile Include="mame\konami\Memory3.cs" />
+    <Compile Include="mame\konami\moo.cs" />
     <Compile Include="mame\konami\mystwarr.cs" />
     <Compile Include="mame\konami\State.cs" />
     <Compile Include="mame\konami\thunderx.cs" />

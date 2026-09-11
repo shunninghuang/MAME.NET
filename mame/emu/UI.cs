@@ -153,11 +153,7 @@ namespace mame
             {
                 for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
                 {
-                    if ((Palette.bbitmap[Video.curbitmap].ui1[i] & 0xff000000) == 0)
-                    {
-                        int i1 = 1;
-                    }
-                    Video.bitmapcolor[i] = (int)Palette.bbitmap[Video.curbitmap].ui1[i];
+                    Video.bitmapcolor[i] = (int)(0xff000000 | Palette.bbitmap[Video.curbitmap].ui1[i]);
                 }
             }
         }

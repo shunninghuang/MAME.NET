@@ -9,9 +9,9 @@ namespace mame
 {
     public partial class Konami
     {
-        public static byte[] gfx0rom, gfx1rom, gfx2rom, gfx3rom, gfx4rom, titlerom, zoomrom, zoomtmaprom;
+        public static byte[] gfx0rom, gfx1rom, gfx2rom, gfx3rom, gfx4rom, k053250rom, titlerom, zoomrom, zoomtmaprom;
         public static byte dsw1, dsw2, dsw3, dsw3_old;
-        public static byte[] mainram2;
+        public static byte[] mainram2, mainram3, mainram4, mainram5, mainram6;
         public static short[] sampledata;
         public static ushort[] cuebrick_nvram, tmnt2_1c0800;
         private static int init_eeprom_count;
@@ -50,6 +50,15 @@ namespace mame
             {
                 K053936_offset[i] = new int[2];
             }
+            K053936_cliprect = new RECT[2];
+            for (i = 0; i < 2; i++)
+            {
+                K053936_cliprect[i].min_x = 0;
+                K053936_cliprect[i].max_x = 0;
+                K053936_cliprect[i].min_y = 0;
+                K053936_cliprect[i].max_y = 0;
+            }
+            K053936_clip_enabled = new int[2];
             K053936_wraparound = new int[2];
             K053936_0_ctrl = new ushort[0x10];
             K053936_0_linectrl = new ushort[0x800];
@@ -277,24 +286,72 @@ namespace mame
                         Machine.bRom = false;
                     }
                     break;
+                case "moomesa":
+                case "moomesauac":
+                case "moomesauab":
+                case "moomesaaab":                
+                    init_eeprom_count = 10;
+                    protram = new ushort[0x10];
+                    Memory.mainram = new byte[0x10000];
+                    Memory.audioram = new byte[0x2000];
+                    mainram2 = new byte[0x20];
+                    mainram3 = new byte[0x20];
+                    Generic.paletteram16 = new ushort[0x1000];
+                    Generic.spriteram16 = new ushort[0x8000];
+                    K054539.k054539rom = Machine.GetRom("k054539.rom");
+                    eepromrom = Machine.GetRom("eeprom.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || Memory.audiorom == null || K054539.k054539rom == null || eepromrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
+                case "moomesabl":
+                    break;
+                case "bucky":
+                case "buckyea":
+                case "buckyjaa":
+                case "buckyuab":
+                case "buckyaab":
+                case "buckyaa":
+                    init_eeprom_count = 10;
+                    protram = new ushort[0x10];
+                    Memory.mainram = new byte[0x10000];
+                    Memory.audioram = new byte[0x2000];
+                    mainram2 = new byte[0x10000];
+                    mainram3 = new byte[0x20];
+                    mainram4 = new byte[0x20];
+                    mainram5 = new byte[0x4000];
+                    Generic.paletteram16 = new ushort[0x2000];
+                    Generic.spriteram16 = new ushort[0x8000];
+                    K054539.k054539rom = Machine.GetRom("k054539.rom");
+                    eepromrom = Machine.GetRom("eeprom.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || Memory.audiorom == null || K054539.k054539rom == null || eepromrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
                 case "mystwarr":
                 case "mystwarru":
                 case "mystwarrj":
                 case "mystwarra":
                 case "mystwarraa":
+                case "mtlchamp":
+                case "mtlchamp1":
+                case "mtlchampu":
+                case "mtlchampu1":
+                case "mtlchampj":
+                case "mtlchampa":
                     init_eeprom_count = 0;
-                    Memory.mainram = new byte[0x4000];
+                    Memory.mainram = new byte[0x10000];
                     Memory.audioram = new byte[0x2000];
                     mainram2 = new byte[0x20];
                     audioram2 = new byte[0x1d0];
                     audioram3 = new byte[0x1d0];
                     Generic.paletteram16 = new ushort[0x1000];
-                    Generic.spriteram16 = new ushort[0x2000];                    
-                    gx_workram = new byte[0x10000];
                     Generic.spriteram16 = new ushort[0x8000];
                     K054539.k054539rom = Machine.GetRom("k054539.rom");
                     eepromrom = Machine.GetRom("eeprom.rom");
-                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || Memory.audiorom == null || K054539.k054539rom == null)
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || Memory.audiorom == null || K054539.k054539rom == null || eepromrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -302,9 +359,76 @@ namespace mame
                 case "mmaulers":
                 case "mmaulersu":
                 case "dadandrn":
+                case "gaiapols":
+                case "gaiapolsu":
+                case "gaiapolsj":
                     init_eeprom_count = 0;
-
-
+                    Memory.mainram = new byte[0x10000];
+                    Memory.audioram = new byte[0x2000];
+                    mainram2 = new byte[0x20];
+                    audioram2 = new byte[0x1d0];
+                    audioram3 = new byte[0x1d0];
+                    Generic.paletteram16 = new ushort[0x1000];
+                    Generic.spriteram16 = new ushort[0x8000];
+                    gfx0rom = Machine.GetRom("gfx0.rom");
+                    gfx3rom = Machine.GetRom("gfx3.rom");
+                    gfx4rom = Machine.GetRom("gfx4.rom");
+                    K054539.k054539rom = Machine.GetRom("k054539.rom");
+                    eepromrom = Machine.GetRom("eeprom.rom");
+                    if (Memory.mainrom == null || gfx0rom == null || gfx1rom == null || gfx2rom == null || gfx3rom == null || gfx4rom == null || Memory.audiorom == null || K054539.k054539rom == null || eepromrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
+                case "viostorm":
+                case "viostormeb":
+                case "viostormu":
+                case "viostormub":
+                case "viostormubbl":
+                case "viostormj":
+                case "viostorma":
+                case "viostormab":
+                //case "viostormabbl":
+                    init_eeprom_count = 0;
+                    Memory.mainram = new byte[0x10000];
+                    Memory.audioram = new byte[0x2000];
+                    mainram2 = new byte[0xf000];
+                    mainram3 = new byte[0x4000];
+                    mainram4 = new byte[0x10];
+                    mainram5 = new byte[0x20];
+                    mainram6 = new byte[0x200];
+                    audioram2 = new byte[0x1d0];
+                    audioram3 = new byte[0x1d0];
+                    Generic.paletteram16 = new ushort[0x1000];
+                    Generic.spriteram16 = new ushort[0x8000];
+                    K054539.k054539rom = Machine.GetRom("k054539.rom");
+                    eepromrom = Machine.GetRom("eeprom.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || Memory.audiorom == null || K054539.k054539rom == null || eepromrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
+                case "metamrph":
+                case "metamrphe":
+                case "metamrphu":
+                case "metamrphj":
+                case "metamrpha":
+                    init_eeprom_count = 0;
+                    Memory.mainram = new byte[0x10000];
+                    Memory.audioram = new byte[0x2000];
+                    mainram2 = new byte[0xf000];
+                    mainram3 = new byte[0x20];
+                    audioram2 = new byte[0x1d0];
+                    audioram3 = new byte[0x1d0];
+                    Generic.paletteram16 = new ushort[0x1000];
+                    Generic.spriteram16 = new ushort[0x8000];
+                    k053250rom = Machine.GetRom("k053250_1.rom");
+                    K054539.k054539rom = Machine.GetRom("k054539.rom");
+                    eepromrom = Machine.GetRom("eeprom.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || Memory.audiorom == null || k053250rom == null || K054539.k054539rom == null || eepromrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
                     break;
             }
             if (Machine.bRom)
@@ -400,12 +524,53 @@ namespace mame
                     case "thndrx2j":
                         bytee = 0xfe;
                         break;
+                    case "moomesa":
+                    case "moomesauac":
+                    case "moomesauab":
+                    case "moomesaaab":
+                    case "moomesabl":
+                    case "bucky":
+                    case "buckyea":
+                    case "buckyjaa":
+                    case "buckyuab":
+                    case "buckyaab":
+                    case "buckyaa":
+                        dsw1 = 0xaa;
+                        break;
                     case "mystwarr":
                     case "mystwarru":
                     case "mystwarrj":
                     case "mystwarra":
                     case "mystwarraa":
+                    case "mtlchamp":
+                    case "mtlchamp1":
+                    case "mtlchampu":
+                    case "mtlchampu1":
+                    case "mtlchampj":
+                    case "mtlchampa":
                         dsw1 = 0xe6;
+                        break;
+                    case "mmaulers":
+                    case "mmaulersu":
+                    case "dadandrn":
+                    case "viostorm":
+                    case "viostormeb":
+                    case "viostormu":
+                    case "viostormub":
+                    case "viostormubbl":
+                    case "viostormj":
+                    case "viostorma":
+                    case "viostormab":
+                    //case "viostormabbl":
+                    case "metamrph":
+                    case "metamrphe":
+                    case "metamrphu":
+                    case "metamrphj":
+                    case "metamrpha":
+                    case "gaiapols":
+                    case "gaiapolsu":
+                    case "gaiapolsj":
+                        dsw1 = 0xea;
                         break;
                 }
             }
@@ -1360,6 +1525,12 @@ namespace mame
                 case "prmrsocrj":
                     basebanksnd = 0;
                     break;
+                case "moomesa":
+                case "moomesauac":
+                case "moomesauab":
+                case "moomesaaab":
+                    machine_reset_moo();
+                    break;
                 case "mystwarr":
                 case "mystwarru":
                 case "mystwarrj":
@@ -1371,6 +1542,37 @@ namespace mame
                 case "mmaulersu":
                 case "dadandrn":
                     machine_reset_dadandrn();
+                    break;
+                case "viostorm":
+                case "viostormeb":
+                case "viostormu":
+                case "viostormub":
+                case "viostormubbl":
+                case "viostormj":
+                case "viostorma":
+                case "viostormab":
+                //case "viostormabbl":
+                    machine_reset_viostorm();
+                    break;
+                case "metamrph":
+                case "metamrphe":
+                case "metamrphu":
+                case "metamrphj":
+                case "metamrpha":
+                    machine_reset_metamrph();
+                    break;
+                case "mtlchamp":
+                case "mtlchamp1":
+                case "mtlchampu":
+                case "mtlchampu1":
+                case "mtlchampj":
+                case "mtlchampa":
+                    machine_reset_martchmp();
+                    break;
+                case "gaiapols":
+                case "gaiapolsu":
+                case "gaiapolsj":
+                    machine_reset_gaiapols();
                     break;
             }
         }

@@ -66,6 +66,7 @@ namespace mame
         private static int NEOGEO_VBLANK_RELOAD_HPOS = 0x11f;//287
         public static void video_init()
         {
+            int i;
             Wintime.wintime_init();
             global_throttle = true;
             UI.ui_handler_callback = UI.handler_ingame;
@@ -899,6 +900,50 @@ namespace mame
                             screenstate.vblank_period = (long)(1e12 * 2500);
                             video_update_callback = Konami.video_update_thndrx2;
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                        case "moomesabl":
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            screenstate.width = 0x200;
+                            screenstate.height = 0x100;
+                            fullwidth = 0x200;
+                            fullheight = 0x100;
+                            Palette.format = bitmap_format.BITMAP_FORMAT_RGB32;
+                            for (i = 0; i < 2; i++)
+                            {
+                                Palette.bbitmap[i].rowpixels = 0x200;
+                                Palette.bbitmap[i].width = 0x200;
+                                Palette.bbitmap[i].height = 0x100;
+                                Palette.bbitmap[i].bpp = 32;
+                                Palette.bbitmap[i].ui1 = new uint[0x20000];
+                            }
+                            Machine.gfx[1].width = 0x10;
+                            Machine.gfx[1].height = 0x10;
+                            Machine.gfx[1].total_elements = (uint)(Konami.gfx2rom.Length / 0x100);
+                            Machine.gfx[1].char_modulo = 0x100;
+                            Machine.gfx[1].line_modulo = 0x10;
+                            Machine.gfx[1].flags = 0;
+                            Machine.gfx[1].total_colors = 0x80;
+                            Machine.gfx[1].color_base = 0;
+                            Machine.gfx[1].color_depth = 0x10;
+                            Machine.gfx[1].color_granularity = 0x10;
+                            Machine.gfx[1].gfxdata = Konami.gfx2rom;
+                            frame_update_time = new Atime(0, (long)(1e18 / 60));
+                            UI.ui_update_callback = UI.ui_update_konami_mystwarr;
+                            screenstate.visarea.min_x = 0x28;
+                            screenstate.visarea.max_x = 0x1a7;
+                            screenstate.visarea.min_y = 0x10;
+                            screenstate.visarea.max_y = 0xef;
+                            screenstate.vblank_period = (long)(1e12 * 1200);
+                            video_update_callback = Konami.video_update_moo;
+                            break;
                         case "mystwarr":
                         case "mystwarru":
                         case "mystwarrj":
@@ -909,14 +954,13 @@ namespace mame
                             fullwidth = 0x200;
                             fullheight = 0x100;
                             Palette.format = bitmap_format.BITMAP_FORMAT_RGB32;
-                            Palette.bbitmap[0].rowpixels = 0x200;
-                            Palette.bbitmap[0].width = 0x200;
-                            Palette.bbitmap[0].height = 0x100;
-                            Palette.bbitmap[0].ui1 = new uint[0x20000];
-                            Palette.bbitmap[1].rowpixels = 0x200;
-                            Palette.bbitmap[1].width = 0x200;
-                            Palette.bbitmap[1].height = 0x100;
-                            Palette.bbitmap[1].ui1 = new uint[0x20000];                            
+                            for (i = 0; i < 2; i++)
+                            {
+                                Palette.bbitmap[i].rowpixels = 0x200;
+                                Palette.bbitmap[i].width = 0x200;
+                                Palette.bbitmap[i].height = 0x100;
+                                Palette.bbitmap[i].ui1 = new uint[0x20000];
+                            }
                             Machine.gfx[1].width = 0x10;
                             Machine.gfx[1].height = 0x10;
                             Machine.gfx[1].total_elements = (uint)(Konami.gfx2rom.Length / 0x100);
@@ -936,6 +980,192 @@ namespace mame
                             screenstate.visarea.max_y = 0xef;
                             screenstate.vblank_period = (long)(1e12 * 600); //0x000221b262dd8000
                             video_update_callback = Konami.video_update_mystwarr;
+                            break;
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                            screenstate.width = 0x200;
+                            screenstate.height = 0x100;
+                            fullwidth = 0x200;
+                            fullheight = 0x100;
+                            Palette.format = bitmap_format.BITMAP_FORMAT_RGB32;
+                            for (i = 0; i < 2; i++)
+                            {
+                                Palette.bbitmap[i].rowpixels = 0x200;
+                                Palette.bbitmap[i].width = 0x200;
+                                Palette.bbitmap[i].height = 0x100;
+                                Palette.bbitmap[i].ui1 = new uint[0x20000];
+                            }
+                            Machine.gfx[1].width = 0x10;
+                            Machine.gfx[1].height = 0x10;
+                            Machine.gfx[1].total_elements = (uint)(Konami.gfx2rom.Length / 0x100);
+                            Machine.gfx[1].char_modulo = 0x100;
+                            Machine.gfx[1].line_modulo = 0x10;
+                            Machine.gfx[1].flags = 0;
+                            Machine.gfx[1].total_colors = 0x80;
+                            Machine.gfx[1].color_base = 0;
+                            Machine.gfx[1].color_depth = 0x20;
+                            Machine.gfx[1].color_granularity = 0x20;
+                            Machine.gfx[1].gfxdata = Konami.gfx2rom;
+                            frame_update_time = new Atime(0, (long)(1e18 / 6000000) * 0x180 * 0x108);
+                            UI.ui_update_callback = UI.ui_update_konami_mystwarr;
+                            screenstate.visarea.min_x = 0x18;
+                            screenstate.visarea.max_x = 0x137;
+                            screenstate.visarea.min_y = 0x11;
+                            screenstate.visarea.max_y = 0xf0;
+                            screenstate.vblank_period = (long)(1e12 * 600);
+                            video_update_callback = Konami.video_update_dadandrn;
+                            break;
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                            screenstate.width = 0x200;
+                            screenstate.height = 0x100;
+                            fullwidth = 0x200;
+                            fullheight = 0x100;
+                            Palette.format = bitmap_format.BITMAP_FORMAT_RGB32;
+                            for (i = 0; i < 2; i++)
+                            {
+                                Palette.bbitmap[i].rowpixels = 0x200;
+                                Palette.bbitmap[i].width = 0x200;
+                                Palette.bbitmap[i].height = 0x100;
+                                Palette.bbitmap[i].ui1 = new uint[0x20000];
+                            }
+                            Machine.gfx[1].width = 0x10;
+                            Machine.gfx[1].height = 0x10;
+                            Machine.gfx[1].total_elements = (uint)(Konami.gfx2rom.Length / 0x100);
+                            Machine.gfx[1].char_modulo = 0x100;
+                            Machine.gfx[1].line_modulo = 0x10;
+                            Machine.gfx[1].flags = 0;
+                            Machine.gfx[1].total_colors = 0x80;
+                            Machine.gfx[1].color_base = 0;
+                            Machine.gfx[1].color_depth = 0x10;
+                            Machine.gfx[1].color_granularity = 0x10;
+                            Machine.gfx[1].gfxdata = Konami.gfx2rom;
+                            frame_update_time = new Atime(0, (long)(1e18 / 6000000) * 0x180 * 0x108);
+                            UI.ui_update_callback = UI.ui_update_konami_mystwarr;
+                            screenstate.visarea.min_x = 0x28;
+                            screenstate.visarea.max_x = 0x1a7;
+                            screenstate.visarea.min_y = 0x10;
+                            screenstate.visarea.max_y = 0xef;
+                            screenstate.vblank_period = (long)(1e12 * 900);
+                            video_update_callback = Konami.video_update_metamrph;
+                            break;
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                            screenstate.width = 0x200;
+                            screenstate.height = 0x100;
+                            fullwidth = 0x200;
+                            fullheight = 0x100;
+                            Palette.format = bitmap_format.BITMAP_FORMAT_RGB32;
+                            for (i = 0; i < 2; i++)
+                            {
+                                Palette.bbitmap[i].rowpixels = 0x200;
+                                Palette.bbitmap[i].width = 0x200;
+                                Palette.bbitmap[i].height = 0x100;
+                                Palette.bbitmap[i].ui1 = new uint[0x20000];
+                            }
+                            Machine.gfx[1].width = 0x10;
+                            Machine.gfx[1].height = 0x10;
+                            Machine.gfx[1].total_elements = (uint)(Konami.gfx2rom.Length / 0x100);
+                            Machine.gfx[1].char_modulo = 0x100;
+                            Machine.gfx[1].line_modulo = 0x10;
+                            Machine.gfx[1].flags = 0;
+                            Machine.gfx[1].total_colors = 0x80;
+                            Machine.gfx[1].color_base = 0;
+                            Machine.gfx[1].color_depth = 0x10;
+                            Machine.gfx[1].color_granularity = 0x10;
+                            Machine.gfx[1].gfxdata = Konami.gfx2rom;
+                            frame_update_time = new Atime(0, (long)(1e18 / 6000000) * 0x180 * 0x108);
+                            UI.ui_update_callback = UI.ui_update_konami_mystwarr;
+                            screenstate.visarea.min_x = 0x18;
+                            screenstate.visarea.max_x = 0x137;
+                            screenstate.visarea.min_y = 0x11;
+                            screenstate.visarea.max_y = 0xf0;
+                            screenstate.vblank_period = (long)(1e12 * 900);
+                            video_update_callback = Konami.video_update_metamrph;
+                            break;
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                            screenstate.width = 0x200;
+                            screenstate.height = 0x100;
+                            fullwidth = 0x200;
+                            fullheight = 0x100;
+                            Palette.format = bitmap_format.BITMAP_FORMAT_RGB32;
+                            for (i = 0; i < 2; i++)
+                            {
+                                Palette.bbitmap[i].rowpixels = 0x200;
+                                Palette.bbitmap[i].width = 0x200;
+                                Palette.bbitmap[i].height = 0x100;
+                                Palette.bbitmap[i].ui1 = new uint[0x20000];
+                            }
+                            Machine.gfx[1].width = 0x10;
+                            Machine.gfx[1].height = 0x10;
+                            Machine.gfx[1].total_elements = (uint)(Konami.gfx2rom.Length / 0x100);
+                            Machine.gfx[1].char_modulo = 0x100;
+                            Machine.gfx[1].line_modulo = 0x10;
+                            Machine.gfx[1].flags = 0;
+                            Machine.gfx[1].total_colors = 0x80;
+                            Machine.gfx[1].color_base = 0;
+                            Machine.gfx[1].color_depth = 0x20;
+                            Machine.gfx[1].color_granularity = 0x20;
+                            Machine.gfx[1].gfxdata = Konami.gfx2rom;
+                            frame_update_time = new Atime(0, (long)(1e18 / 6000000) * 0x180 * 0x108);
+                            UI.ui_update_callback = UI.ui_update_konami_mystwarr;
+                            screenstate.visarea.min_x = 0x20;
+                            screenstate.visarea.max_x = 0x19f;
+                            screenstate.visarea.min_y = 0x10;
+                            screenstate.visarea.max_y = 0xef;
+                            screenstate.vblank_period = 0;
+                            video_update_callback = Konami.video_update_martchmp;
+                            break;
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
+                            screenstate.width = 0x200;
+                            screenstate.height = 0x100;
+                            fullwidth = 0x200;
+                            fullheight = 0x100;
+                            Palette.format = bitmap_format.BITMAP_FORMAT_RGB32;
+                            for (i = 0; i < 2; i++)
+                            {
+                                Palette.bbitmap[i].rowpixels = 0x200;
+                                Palette.bbitmap[i].width = 0x200;
+                                Palette.bbitmap[i].height = 0x100;
+                                Palette.bbitmap[i].ui1 = new uint[0x20000];
+                            }
+                            Machine.gfx[1].width = 0x10;
+                            Machine.gfx[1].height = 0x10;
+                            Machine.gfx[1].total_elements = (uint)(Konami.gfx2rom.Length / 0x100);
+                            Machine.gfx[1].char_modulo = 0x100;
+                            Machine.gfx[1].line_modulo = 0x10;
+                            Machine.gfx[1].flags = 0;
+                            Machine.gfx[1].total_colors = 0x80;
+                            Machine.gfx[1].color_base = 0;
+                            Machine.gfx[1].color_depth = 0x10;
+                            Machine.gfx[1].color_granularity = 0x10;
+                            Machine.gfx[1].gfxdata = Konami.gfx2rom;
+                            frame_update_time = new Atime(0, (long)(1e18 / 8000000) * 0x200 * 0x108);
+                            UI.ui_update_callback = UI.ui_update_konami_mystwarr;
+                            screenstate.visarea.min_x = 0x28;
+                            screenstate.visarea.max_x = 0x19f;
+                            screenstate.visarea.min_y = 0x10;
+                            screenstate.visarea.max_y = 0xef;
+                            screenstate.vblank_period = (long)(1e12 * 600);
+                            video_update_callback = Konami.video_update_dadandrn;
                             break;
                     }
                     break;

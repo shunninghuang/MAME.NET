@@ -14,6 +14,7 @@ using cpu.m6800;
 using cpu.m6805;
 using cpu.m6809;
 using cpu.nec;
+using cpu.i8039;
 using cpu.i8x41;
 using ui;
 
@@ -1501,6 +1502,48 @@ namespace mame
                             vblank_interrupts_per_frame = 1;
                             vblank_interrupt = Konami.lgtnfght_interrupt;
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 16000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.moo_interrupt;
+                            break;
+                        case "moomesabl":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            ncpu = 1;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[0].cycles_per_second = 16100000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.moobl_interrupt;
+                            break;
                         case "mystwarr":
                         case "mystwarru":
                         case "mystwarrj":
@@ -1524,6 +1567,127 @@ namespace mame
                             cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
                             vblank_interrupts_per_frame = 3;
                             vblank_interrupt = Konami.mystwarr_interrupt;
+                            break;
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 16000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.ddd_interrupt;
+                            break;
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 16000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 40;
+                            vblank_interrupt = Konami.metamrph_interrupt;
+                            break;
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 16000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 40;
+                            vblank_interrupt = Konami.metamrph_interrupt;
+                            break;
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 16000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 2;
+                            vblank_interrupt = Konami.mchamp_interrupt;
+                            break;
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 16000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Konami.ddd_interrupt;
                             break;
                     }
                     break;
@@ -3738,6 +3902,59 @@ namespace mame
                             Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
                             Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_moo;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_moo;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_moo;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_moo;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_moo;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_moo;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_moo;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_moo;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_moo;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_moo;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_moo;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_moo;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_moo;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
+                        case "moomesabl":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_moobl;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_moobl;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_moobl;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_moobl;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_moobl;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_moobl;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_moobl;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_moobl;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_moobl;
+                            break;
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_bucky;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_bucky;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_bucky;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_bucky;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_bucky;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_bucky;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_bucky;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_bucky;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_bucky;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_moo;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_moo;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_moo;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_moo;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
                         case "mystwarr":
                         case "mystwarru":
                         case "mystwarrj":
@@ -3752,6 +3969,112 @@ namespace mame
                             MC68000.mm1[0].WriteByte = Konami.MWriteByte_mystwarr;
                             MC68000.mm1[0].WriteWord = Konami.MWriteWord_mystwarr;
                             MC68000.mm1[0].WriteLong = Konami.MWriteLong_mystwarr;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mystwarr;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_mystwarr;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_dadandrn;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_dadandrn;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_dadandrn;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_dadandrn;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_dadandrn;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_dadandrn;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_dadandrn;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_dadandrn;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_dadandrn;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mystwarr;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_mystwarr;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_viostorm;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_viostorm;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_viostorm;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_viostorm;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_viostorm;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_viostorm;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_viostorm;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_viostorm;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_viostorm;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mystwarr;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_mystwarr;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_metamrph;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_metamrph;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_metamrph;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_metamrph;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_metamrph;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_metamrph;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_metamrph;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_metamrph;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_metamrph;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mystwarr;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_mystwarr;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_martchmp;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_martchmp;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_martchmp;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_martchmp;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_martchmp;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_martchmp;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_martchmp;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_martchmp;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_martchmp;
+                            Z80A.zz1[0].ReadOp = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mystwarr;
+                            Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mystwarr;
+                            Z80A.zz1[0].WriteMemory = Konami.ZWriteMemory_mystwarr;
+                            Z80A.zz1[0].ReadHardware = Konami.ZReadHardware;
+                            Z80A.zz1[0].WriteHardware = Konami.ZWriteHardware;
+                            break;
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
+                            MC68000.mm1[0].ReadOpByte = Konami.MReadOpByte_gaiapols;
+                            MC68000.mm1[0].ReadByte = Konami.MReadByte_gaiapols;
+                            MC68000.mm1[0].ReadOpWord = Konami.MReadOpWord_gaiapols;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = Konami.MReadWord_gaiapols;
+                            MC68000.mm1[0].ReadOpLong = Konami.MReadOpLong_gaiapols;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = Konami.MReadLong_gaiapols;
+                            MC68000.mm1[0].WriteByte = Konami.MWriteByte_gaiapols;
+                            MC68000.mm1[0].WriteWord = Konami.MWriteWord_gaiapols;
+                            MC68000.mm1[0].WriteLong = Konami.MWriteLong_gaiapols;
                             Z80A.zz1[0].ReadOp = Konami.ZReadOp_mystwarr;
                             Z80A.zz1[0].ReadOpArg = Konami.ZReadOp_mystwarr;
                             Z80A.zz1[0].ReadMemory = Konami.ZReadMemory_mystwarr;
@@ -4196,6 +4519,7 @@ namespace mame
                             Z80A.zz1[0].debugger_stop_cpu_hook_callback = Machine.FORM.z80form.z80_stop_debug;
                             break;
                         case "cuebrick":
+                        case "moomesabl":
                             m68000Form.m68000State = m68000Form.M68000State.M68000_RUN;
                             MC68000.mm1[0].debugger_start_cpu_hook_callback = Machine.FORM.m68000form.m68000_start_debug;
                             MC68000.mm1[0].debugger_stop_cpu_hook_callback = Machine.FORM.m68000form.m68000_stop_debug;
@@ -4512,6 +4836,57 @@ namespace mame
                             timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
                             Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
                             Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 3);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            timedint_period = new Atime(0, (long)(1e18 / 480));
+                            timedint_timer = Timer.timer_alloc_common(Seibu.sound_nmi, "sound_nmi", false);
+                            Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
+                            break;
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
+                            timeslice_period = new Atime(0, Video.screenstate.frame_period / 32);
+                            timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                            Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                            timedint_period = new Atime(0, (long)(1e18 / 480));
+                            timedint_timer = Timer.timer_alloc_common(Seibu.sound_nmi, "sound_nmi", false);
+                            Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
+                            break;
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                            timeslice_period = new Atime(0, Video.screenstate.frame_period / 32);
+                            timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                            Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 40);
+                            Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                            timedint_period = new Atime(0, (long)(1e18 / 480));
+                            timedint_timer = Timer.timer_alloc_common(Seibu.sound_nmi, "sound_nmi", false);
+                            Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
+                            break;
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                            timeslice_period = new Atime(0, Video.screenstate.frame_period / 32);
+                            timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                            Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                            Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
                             Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
                             timedint_period = new Atime(0, (long)(1e18 / 480));
                             timedint_timer = Timer.timer_alloc_common(Seibu.sound_nmi, "sound_nmi", false);
@@ -4960,6 +5335,26 @@ namespace mame
                         case "mystwarrj":
                         case "mystwarra":
                         case "mystwarraa":
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
                             Cpuexec.cpu[0].iloops = 0;
                             vblank_interrupt();
                             Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);

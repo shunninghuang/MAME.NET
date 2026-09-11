@@ -5460,6 +5460,83 @@
     <year>1993</year>
     <manufacturer>Konami</manufacturer>
   </game>
+  <game name="moomesa" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Wild West C.O.W.-Boys of Moo Mesa (ver EAB)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="moomesauac" board="Konami">
+    <parent>moomesa</parent>
+    <direction></direction>
+    <description>Wild West C.O.W.-Boys of Moo Mesa (ver UAC)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="moomesauab" board="Konami">
+    <parent>moomesa</parent>
+    <direction></direction>
+    <description>Wild West C.O.W.-Boys of Moo Mesa (ver UAB)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="moomesaaab" board="Konami">
+    <parent>moomesa</parent>
+    <direction></direction>
+    <description>Wild West C.O.W.-Boys of Moo Mesa (ver AAB)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <!--<game name="moomesabl" board="Konami">
+    <parent>moomesa</parent>
+    <direction></direction>
+    <description>Wild West C.O.W.-Boys of Moo Mesa (bootleg)</description>
+    <year>1992</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
+  <game name="bucky" board="Konami">
+    <parent></parent>
+    <direction></direction>
+    <description>Bucky O'Hare (ver EAB)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="buckyea" board="Konami">
+    <parent>bucky</parent>
+    <direction></direction>
+    <description>Bucky O'Hare (ver EA)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="buckyjaa" board="Konami">
+    <parent>bucky</parent>
+    <direction></direction>
+    <description>Bucky O'Hare (ver JAA)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="buckyuab" board="Konami">
+    <parent>bucky</parent>
+    <direction></direction>
+    <description>Bucky O'Hare (ver UAB)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="buckyaab" board="Konami">
+    <parent>bucky</parent>
+    <direction></direction>
+    <description>Bucky O'Hare (ver AAB)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
+  <game name="buckyaa" board="Konami">
+    <parent>bucky</parent>
+    <direction></direction>
+    <description>Bucky O'Hare (ver AA)</description>
+    <year>1992</year>
+    <manufacturer>Konami</manufacturer>
+  </game>
   <game name="mystwarr" board="Konami">
     <parent></parent>
     <direction></direction>
@@ -5495,7 +5572,7 @@
     <year>1993</year>
     <manufacturer>Konami</manufacturer>
   </game>
-  <!--<game name="mmaulers" board="Konami">
+  <game name="mmaulers" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Monster Maulers (ver EAA)</description>
@@ -5571,7 +5648,7 @@
     <description>Violent Storm (ver AAB)</description>
     <year>1993</year>
     <manufacturer>Konami</manufacturer>
-  </game>-->
+  </game>
   <!--<game name="viostormabbl" board="Konami">
     <parent>viostorm</parent>
     <direction></direction>
@@ -5579,7 +5656,7 @@
     <year>1993</year>
     <manufacturer>bootleg</manufacturer>
   </game>-->
-  <!--<game name="metamrph" board="Konami">
+  <game name="metamrph" board="Konami">
     <parent></parent>
     <direction></direction>
     <description>Metamorphic Force (ver EAA)</description>
@@ -5676,7 +5753,7 @@
     <description>Gaiapolis (ver JAF)</description>
     <year>1993</year>
     <manufacturer>Konami</manufacturer>
-  </game>-->
+  </game>
   <game name="nam1975" board="Neo Geo">
     <parent></parent>
     <direction></direction>

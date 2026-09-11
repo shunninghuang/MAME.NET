@@ -1477,15 +1477,72 @@ namespace ui
                                 Video.width = 288;
                                 Video.height = 224;
                                 break;
+                            case "moomesa":
+                            case "moomesauac":
+                            case "moomesauab":
+                            case "moomesaaab":
+                            case "moomesabl":
+                            case "bucky":
+                            case "buckyea":
+                            case "buckyjaa":
+                            case "buckyuab":
+                            case "buckyaab":
+                            case "buckyaa":
+                            case "viostorm":
+                            case "viostormeb":
+                            case "viostormu":
+                            case "viostormub":
+                            case "viostormubbl":
+                            case "viostormj":
+                            case "viostorma":
+                            case "viostormab":
+                                //case "viostormabbl":
+                                Video.offsetx = 0x28;
+                                Video.offsety = 0x10;
+                                Video.width = 0x180;
+                                Video.height = 0xe0;
+                                break;
                             case "mystwarr":
                             case "mystwarru":
                             case "mystwarrj":
                             case "mystwarra":
                             case "mystwarraa":
-                                Video.offsetx = 24;
-                                Video.offsety = 16;
-                                Video.width = 288;
-                                Video.height = 224;
+                                Video.offsetx = 0x18;
+                                Video.offsety = 0x10;
+                                Video.width = 0x120;
+                                Video.height = 0xe0;
+                                break;
+                            case "mmaulers":
+                            case "mmaulersu":
+                            case "dadandrn":
+                            case "metamrph":
+                            case "metamrphe":
+                            case "metamrphu":
+                            case "metamrphj":
+                            case "metamrpha":
+                                Video.offsetx = 0x18;
+                                Video.offsety = 0x11;
+                                Video.width = 0x120;
+                                Video.height = 0xe0;
+                                break;                            
+                            case "mtlchamp":
+                            case "mtlchamp1":
+                            case "mtlchampu":
+                            case "mtlchampu1":
+                            case "mtlchampj":
+                            case "mtlchampa":
+                                Video.offsetx = 0x20;
+                                Video.offsety = 0x10;
+                                Video.width = 0x180;
+                                Video.height = 0xe0;
+                                break;
+                            case "gaiapols":
+                            case "gaiapolsu":
+                            case "gaiapolsj":
+                                Video.offsetx = 0x28;
+                                Video.offsety = 0x10;
+                                Video.width = 0x178;
+                                Video.height = 0xe0;
                                 break;
                         }
                     }

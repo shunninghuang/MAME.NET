@@ -793,11 +793,58 @@ namespace mame
                             sound_update = sound_update_konami_prmrsocr;
                             mixerstream = new sound_stream(48000, 2, 0, null);
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            latched_value = new ushort[3];
+                            utempdata = new ushort[3];
+                            YM2151.ym2151_init(4000000);
+                            K054539.kk1[0].k054539_start(48000);
+                            ym2151stream = new sound_stream(0xf424, 0, 2, YM2151.ym2151_update_one);
+                            K054539.kk1[0].info.stream = new sound_stream(48000, 0, 2, K054539.kk1[0].k054539_update);
+                            sound_update = sound_update_konami_moo;
+                            mixerstream = new sound_stream(48000, 4, 0, null);
+                            break;
+                        case "moomesabl":
+                            break;
                         case "mystwarr":
                         case "mystwarru":
                         case "mystwarrj":
                         case "mystwarra":
                         case "mystwarraa":
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
                             latched_value = new ushort[3];
                             utempdata = new ushort[3];
                             K054539.kk1[0].k054539_start(48000);
@@ -1214,13 +1261,17 @@ namespace mame
                         case "glfgreatj":
                             K053260.k053260_reset();
                             break;
-                        case "prmrsocr":
-                        case "prmrsocrj":
-                        case "mystwarr":
-                        case "mystwarru":
-                        case "mystwarrj":
-                        case "mystwarra":
-                        case "mystwarraa":
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            YM2151.ym2151_reset_chip();
                             break;
                     }
                     break;
@@ -2683,7 +2734,44 @@ namespace mame
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_konami_prmrsocr();
         }
-		public static void sound_update_konami_mystwarr()
+        public static void sound_update_konami_moo()
+        {
+            int sampindex;
+            ym2151stream.stream_update();
+            K054539.kk1[0].info.stream.stream_update();
+            generate_resampled_data_ym2151(0x80);
+            generate_resampled_data_k054539(0, 0xc0, 2);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int sampL, sampR;
+                sampL = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[2][sampindex];
+                if (sampL < -32768)
+                {
+                    sampL = -32768;
+                }
+                else if (sampL > 32767)
+                {
+                    sampL = 32767;
+                }
+                sampR = mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[3][sampindex];
+                if (sampR < -32768)
+                {
+                    sampR = -32768;
+                }
+                else if (sampR > 32767)
+                {
+                    sampR = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)sampL;
+                finalmixb[sampindex * 4 + 1] = (byte)((sampL & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)sampR;
+                finalmixb[sampindex * 4 + 3] = (byte)((sampR & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_konami_moo();
+        }
+        public static void sound_update_konami_mystwarr()
         {
             int sampindex;
             K054539.kk1[0].info.stream.stream_update();

@@ -1399,10 +1399,279 @@ namespace mame
             Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
             Eeprom.LoadStateBinary(reader);
         }
+        public static void SaveStateBinary_moo(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dsw1);
+            writer.Write(basebanksnd);
+            writer.Write(init_eeprom_count);
+            writer.Write(init_nosound_count);
+            writer.Write(cur_control2);
+            writer.Write(alpha_enabled);
+            writer.Write(zmask);
+            for (i = 0; i < 0x10; i++)
+            {
+                writer.Write(protram[i]);
+            }
+            writer.Write(sprite_colorbase);
+            for (i = 0; i < 4; i++)
+            {
+                writer.Write(layer_colorbase[i]);
+            }
+            SaveStateBinary_K053251(writer);
+            SaveStateBinary_K054338(writer);
+            SaveStateBinary_K056832(writer);
+            SaveStateBinary_K053247(writer);
+            for (i = 0; i < 0x1000; i++)
+            {
+                writer.Write(Generic.paletteram16[i]);
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                writer.Write(Generic.spriteram16[i]);
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            writer.Write(Memory.mainram, 0, 0x10000);
+            writer.Write(mainram2, 0, 0x20);
+            writer.Write(mainram3, 0, 0x20);
+            writer.Write(Memory.audioram, 0, 0x2000);
+            MC68000.mm1[0].SaveStateBinary(writer);
+            Z80A.zz1[0].SaveStateBinary(writer);
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            Video.SaveStateBinary(writer);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            YM2151.SaveStateBinary(writer);
+            K054539.kk1[0].SaveStateBinary(writer);
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.latched_value[i]);
+            }
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.utempdata[i]);
+            }
+            writer.Write(Sound.ym2151stream.output_sampindex);
+            writer.Write(Sound.ym2151stream.output_base_sampindex);
+            writer.Write(K054539.kk1[0].info.stream.output_sampindex);
+            writer.Write(K054539.kk1[0].info.stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+            Eeprom.SaveStateBinary(writer);
+        }
+        public static void LoadStateBinary_moo(BinaryReader reader)
+        {
+            int i;
+            dsw1 = reader.ReadByte();
+            basebanksnd = reader.ReadInt32();
+            init_eeprom_count = reader.ReadInt32();
+            init_nosound_count = reader.ReadInt32();
+            cur_control2 = reader.ReadUInt16();
+            alpha_enabled = reader.ReadInt32();
+            zmask = reader.ReadInt32();
+            for (i = 0; i < 0x10; i++)
+            {
+                protram[i] = reader.ReadUInt16();
+            }
+            sprite_colorbase = reader.ReadInt32();
+            for (i = 0; i < 4; i++)
+            {
+                layer_colorbase[i] = reader.ReadInt32();
+            }
+            LoadStateBinary_K053251(reader);
+            LoadStateBinary_K054338(reader);
+            LoadStateBinary_K056832(reader);
+            LoadStateBinary_K053247(reader);
+            for (i = 0; i < 0x1000; i++)
+            {
+                Generic.paletteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                Generic.spriteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            Memory.mainram = reader.ReadBytes(0x10000);
+            mainram2 = reader.ReadBytes(0x20);
+            mainram3 = reader.ReadBytes(0x20);
+            Memory.audioram = reader.ReadBytes(0x2000);
+            MC68000.mm1[0].LoadStateBinary(reader);
+            Z80A.zz1[0].LoadStateBinary(reader);
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.LoadStateBinary(reader);
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            YM2151.LoadStateBinary(reader);
+            K054539.kk1[0].LoadStateBinary(reader);
+            for (i = 0; i < 3; i++)
+            {
+                Sound.latched_value[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Sound.utempdata[i] = reader.ReadUInt16();
+            }
+            Sound.ym2151stream.output_sampindex = reader.ReadInt32();
+            Sound.ym2151stream.output_base_sampindex = reader.ReadInt32();
+            K054539.kk1[0].info.stream.output_sampindex = reader.ReadInt32();
+            K054539.kk1[0].info.stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+            Eeprom.LoadStateBinary(reader);
+        }
+        public static void SaveStateBinary_bucky(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dsw1);
+            writer.Write(basebanksnd);
+            writer.Write(init_eeprom_count);
+            writer.Write(init_nosound_count);
+            writer.Write(cur_control2);
+            writer.Write(alpha_enabled);
+            writer.Write(zmask);
+            for (i = 0; i < 0x10; i++)
+            {
+                writer.Write(protram[i]);
+            }
+            writer.Write(sprite_colorbase);
+            for (i = 0; i < 4; i++)
+            {
+                writer.Write(layer_colorbase[i]);
+            }
+            SaveStateBinary_K053251(writer);
+            SaveStateBinary_K054338(writer);
+            SaveStateBinary_K056832(writer);
+            SaveStateBinary_K053247(writer);
+            for (i = 0; i < 0x2000; i++)
+            {
+                writer.Write(Generic.paletteram16[i]);
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                writer.Write(Generic.spriteram16[i]);
+            }
+            for (i = 0; i < 0x1000; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            writer.Write(Memory.mainram, 0, 0x10000);
+            writer.Write(mainram2, 0, 0x10000);
+            writer.Write(mainram3, 0, 0x20);
+            writer.Write(mainram4, 0, 0x20);
+            writer.Write(mainram5, 0, 0x4000);
+            writer.Write(Memory.audioram, 0, 0x2000);
+            MC68000.mm1[0].SaveStateBinary(writer);
+            Z80A.zz1[0].SaveStateBinary(writer);
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            Video.SaveStateBinary(writer);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            YM2151.SaveStateBinary(writer);
+            K054539.kk1[0].SaveStateBinary(writer);
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.latched_value[i]);
+            }
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.utempdata[i]);
+            }
+            writer.Write(Sound.ym2151stream.output_sampindex);
+            writer.Write(Sound.ym2151stream.output_base_sampindex);
+            writer.Write(K054539.kk1[0].info.stream.output_sampindex);
+            writer.Write(K054539.kk1[0].info.stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+            Eeprom.SaveStateBinary(writer);
+        }
+        public static void LoadStateBinary_bucky(BinaryReader reader)
+        {
+            int i;
+            dsw1 = reader.ReadByte();
+            basebanksnd = reader.ReadInt32();
+            init_eeprom_count = reader.ReadInt32();
+            init_nosound_count = reader.ReadInt32();
+            cur_control2 = reader.ReadUInt16();
+            alpha_enabled = reader.ReadInt32();
+            zmask = reader.ReadInt32();
+            for (i = 0; i < 0x10; i++)
+            {
+                protram[i] = reader.ReadUInt16();
+            }
+            sprite_colorbase = reader.ReadInt32();
+            for (i = 0; i < 4; i++)
+            {
+                layer_colorbase[i] = reader.ReadInt32();
+            }
+            LoadStateBinary_K053251(reader);
+            LoadStateBinary_K054338(reader);
+            LoadStateBinary_K056832(reader);
+            LoadStateBinary_K053247(reader);
+            for (i = 0; i < 0x2000; i++)
+            {
+                Generic.paletteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                Generic.spriteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x1000; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            Memory.mainram = reader.ReadBytes(0x10000);
+            mainram2 = reader.ReadBytes(0x10000);
+            mainram3 = reader.ReadBytes(0x20);
+            mainram4 = reader.ReadBytes(0x20);
+            mainram5 = reader.ReadBytes(0x4000);
+            Memory.audioram = reader.ReadBytes(0x2000);
+            MC68000.mm1[0].LoadStateBinary(reader);
+            Z80A.zz1[0].LoadStateBinary(reader);
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.LoadStateBinary(reader);
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            YM2151.LoadStateBinary(reader);
+            K054539.kk1[0].LoadStateBinary(reader);
+            for (i = 0; i < 3; i++)
+            {
+                Sound.latched_value[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Sound.utempdata[i] = reader.ReadUInt16();
+            }
+            Sound.ym2151stream.output_sampindex = reader.ReadInt32();
+            Sound.ym2151stream.output_base_sampindex = reader.ReadInt32();
+            K054539.kk1[0].info.stream.output_sampindex = reader.ReadInt32();
+            K054539.kk1[0].info.stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+            Eeprom.LoadStateBinary(reader);
+        }
         public static void SaveStateBinary_mystwarr(BinaryWriter writer)
         {
             int i;
             writer.Write(dsw1);
+            writer.Write(init_eeprom_count);
             writer.Write(mw_irq_control);
             writer.Write(oinprion);
             writer.Write(cbparam);
@@ -1426,11 +1695,7 @@ namespace mame
             {
                 writer.Write(Palette.entry_color[i]);
             }
-            for (i = 0; i < 0x1800; i++)
-            {
-                writer.Write(Palette.entry_color2[i]);
-            }
-            writer.Write(gx_workram, 0, 0x10000);
+            writer.Write(Memory.mainram, 0, 0x10000);
             writer.Write(mainram2, 0, 0x20);
             writer.Write(Memory.audioram, 0, 0x2000);
             writer.Write(audioram2, 0, 0x1d0);
@@ -1466,6 +1731,7 @@ namespace mame
         {
             int i;
             dsw1 = reader.ReadByte();
+            init_eeprom_count = reader.ReadInt32();
             mw_irq_control = reader.ReadByte();
             oinprion = reader.ReadInt32();
             cbparam = reader.ReadInt32();
@@ -1489,11 +1755,7 @@ namespace mame
             {
                 Palette.entry_color[i] = reader.ReadUInt32();
             }
-            for (i = 0; i < 0x1800; i++)
-            {
-                Palette.entry_color2[i] = reader.ReadUInt32();
-            }
-            gx_workram = reader.ReadBytes(0x10000);
+            Memory.mainram = reader.ReadBytes(0x10000);
             mainram2 = reader.ReadBytes(0x20);
             Memory.audioram = reader.ReadBytes(0x2000);
             audioram2 = reader.ReadBytes(0x1d0);
@@ -1522,6 +1784,260 @@ namespace mame
             K054539.kk1[1].info.stream.output_sampindex= reader.ReadInt32();
             K054539.kk1[1].info.stream.output_base_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_sampindex= reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+            Eeprom.LoadStateBinary(reader);
+        }
+        public static void SaveStateBinary_viostorm(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dsw1);
+            writer.Write(init_eeprom_count);
+            writer.Write(mw_irq_control);
+            writer.Write(oinprion);
+            writer.Write(cbparam);
+            writer.Write(cur_sound_region);
+            writer.Write(sub1_colorbase);
+            writer.Write(last_psac_colorbase);
+            writer.Write(gametype);
+            writer.Write(roz_enable);
+            writer.Write(roz_rombank);
+            writer.Write(clip);
+            SaveStateBinary_K055555(writer);
+            SaveStateBinary_K054338(writer);
+            SaveStateBinary_K056832(writer);
+            SaveStateBinary_K055673(writer);
+            SaveStateBinary_K053936(writer);
+            SaveStateBinary_konamigx(writer);
+            for (i = 0; i < 0x1000; i++)
+            {
+                writer.Write(Generic.paletteram16[i]);
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            writer.Write(Memory.mainram, 0, 0x10000);
+            writer.Write(mainram2, 0, 0xf000);
+            writer.Write(mainram3, 0, 0x4000);
+            writer.Write(mainram4, 0, 0x10);
+            writer.Write(mainram5, 0, 0x20);
+            writer.Write(mainram6, 0, 0x200);
+            writer.Write(Memory.audioram, 0, 0x2000);
+            writer.Write(audioram2, 0, 0x1d0);
+            writer.Write(audioram3, 0, 0x1d0);
+            MC68000.mm1[0].SaveStateBinary(writer);
+            Z80A.zz1[0].SaveStateBinary(writer);
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            Video.SaveStateBinary(writer);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            K054539.kk1[0].SaveStateBinary(writer);
+            K054539.kk1[1].SaveStateBinary(writer);
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.latched_value[i]);
+            }
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.utempdata[i]);
+            }
+            writer.Write(K054539.kk1[0].info.stream.output_sampindex);
+            writer.Write(K054539.kk1[0].info.stream.output_base_sampindex);
+            writer.Write(K054539.kk1[1].info.stream.output_sampindex);
+            writer.Write(K054539.kk1[1].info.stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+            Eeprom.SaveStateBinary(writer);
+        }
+        public static void LoadStateBinary_viostorm(BinaryReader reader)
+        {
+            int i;
+            dsw1 = reader.ReadByte();
+            init_eeprom_count = reader.ReadInt32();
+            mw_irq_control = reader.ReadByte();
+            oinprion = reader.ReadInt32();
+            cbparam = reader.ReadInt32();
+            cur_sound_region = reader.ReadInt32();
+            sub1_colorbase = reader.ReadInt32();
+            last_psac_colorbase = reader.ReadInt32();
+            gametype = reader.ReadInt32();
+            roz_enable = reader.ReadInt32();
+            roz_rombank = reader.ReadInt32();
+            clip = reader.ReadUInt16();
+            LoadStateBinary_K055555(reader);
+            LoadStateBinary_K054338(reader);
+            LoadStateBinary_K056832(reader);
+            LoadStateBinary_K055673(reader);
+            LoadStateBinary_K053936(reader);
+            LoadStateBinary_konamigx(reader);
+            for (i = 0; i < 0x1000; i++)
+            {
+                Generic.paletteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            Memory.mainram = reader.ReadBytes(0x10000);
+            mainram2 = reader.ReadBytes(0xf000);
+            mainram3 = reader.ReadBytes(0x4000);
+            mainram4 = reader.ReadBytes(0x10);
+            mainram5 = reader.ReadBytes(0x20);
+            mainram6 = reader.ReadBytes(0x200);
+            Memory.audioram = reader.ReadBytes(0x2000);
+            audioram2 = reader.ReadBytes(0x1d0);
+            audioram3 = reader.ReadBytes(0x1d0);
+            MC68000.mm1[0].LoadStateBinary(reader);
+            Z80A.zz1[0].LoadStateBinary(reader);
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.LoadStateBinary(reader);
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            K054539.kk1[0].LoadStateBinary(reader);
+            K054539.kk1[1].LoadStateBinary(reader);
+            for (i = 0; i < 3; i++)
+            {
+                Sound.latched_value[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Sound.utempdata[i] = reader.ReadUInt16();
+            }
+            K054539.kk1[0].info.stream.output_sampindex = reader.ReadInt32();
+            K054539.kk1[0].info.stream.output_base_sampindex = reader.ReadInt32();
+            K054539.kk1[1].info.stream.output_sampindex = reader.ReadInt32();
+            K054539.kk1[1].info.stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
+            Eeprom.LoadStateBinary(reader);
+        }
+        public static void SaveStateBinary_metamrph(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(dsw1);
+            writer.Write(init_eeprom_count);
+            writer.Write(mw_irq_control);
+            writer.Write(oinprion);
+            writer.Write(cbparam);
+            writer.Write(cur_sound_region);
+            writer.Write(sub1_colorbase);
+            writer.Write(last_psac_colorbase);
+            writer.Write(gametype);
+            writer.Write(roz_enable);
+            writer.Write(roz_rombank);
+            writer.Write(clip);
+            SaveStateBinary_K055555(writer);
+            SaveStateBinary_K054338(writer);
+            SaveStateBinary_K056832(writer);
+            SaveStateBinary_K055673(writer);
+            SaveStateBinary_K053936(writer);
+            SaveStateBinary_konamigx(writer);
+            for (i = 0; i < 0x1000; i++)
+            {
+                writer.Write(Generic.paletteram16[i]);
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                writer.Write(Palette.entry_color[i]);
+            }
+            writer.Write(Memory.mainram, 0, 0x10000);
+            writer.Write(mainram2, 0, 0xf000);
+            writer.Write(mainram3, 0, 0x20);
+            writer.Write(Memory.audioram, 0, 0x2000);
+            writer.Write(audioram2, 0, 0x1d0);
+            writer.Write(audioram3, 0, 0x1d0);
+            MC68000.mm1[0].SaveStateBinary(writer);
+            Z80A.zz1[0].SaveStateBinary(writer);
+            Cpuint.SaveStateBinary(writer);
+            writer.Write(Timer.global_basetime.seconds);
+            writer.Write(Timer.global_basetime.attoseconds);
+            Video.SaveStateBinary(writer);
+            writer.Write(Sound.last_update_second);
+            Cpuexec.SaveStateBinary(writer);
+            Timer.SaveStateBinary(writer);
+            K054539.kk1[0].SaveStateBinary(writer);
+            K054539.kk1[1].SaveStateBinary(writer);
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.latched_value[i]);
+            }
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(Sound.utempdata[i]);
+            }
+            writer.Write(K054539.kk1[0].info.stream.output_sampindex);
+            writer.Write(K054539.kk1[0].info.stream.output_base_sampindex);
+            writer.Write(K054539.kk1[1].info.stream.output_sampindex);
+            writer.Write(K054539.kk1[1].info.stream.output_base_sampindex);
+            writer.Write(Sound.mixerstream.output_sampindex);
+            writer.Write(Sound.mixerstream.output_base_sampindex);
+            Eeprom.SaveStateBinary(writer);
+        }
+        public static void LoadStateBinary_metamrph(BinaryReader reader)
+        {
+            int i;
+            dsw1 = reader.ReadByte();
+            init_eeprom_count = reader.ReadInt32();
+            mw_irq_control = reader.ReadByte();
+            oinprion = reader.ReadInt32();
+            cbparam = reader.ReadInt32();
+            cur_sound_region = reader.ReadInt32();
+            sub1_colorbase = reader.ReadInt32();
+            last_psac_colorbase = reader.ReadInt32();
+            gametype = reader.ReadInt32();
+            roz_enable = reader.ReadInt32();
+            roz_rombank = reader.ReadInt32();
+            clip = reader.ReadUInt16();
+            LoadStateBinary_K055555(reader);
+            LoadStateBinary_K054338(reader);
+            LoadStateBinary_K056832(reader);
+            LoadStateBinary_K055673(reader);
+            LoadStateBinary_K053936(reader);
+            LoadStateBinary_konamigx(reader);
+            for (i = 0; i < 0x1000; i++)
+            {
+                Generic.paletteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                Palette.entry_color[i] = reader.ReadUInt32();
+            }
+            Memory.mainram = reader.ReadBytes(0x10000);
+            mainram2 = reader.ReadBytes(0xf000);
+            mainram3 = reader.ReadBytes(0x20);
+            Memory.audioram = reader.ReadBytes(0x2000);
+            audioram2 = reader.ReadBytes(0x1d0);
+            audioram3 = reader.ReadBytes(0x1d0);
+            MC68000.mm1[0].LoadStateBinary(reader);
+            Z80A.zz1[0].LoadStateBinary(reader);
+            Cpuint.LoadStateBinary(reader);
+            Timer.global_basetime.seconds = reader.ReadInt32();
+            Timer.global_basetime.attoseconds = reader.ReadInt64();
+            Video.LoadStateBinary(reader);
+            Sound.last_update_second = reader.ReadInt32();
+            Cpuexec.LoadStateBinary(reader);
+            Timer.LoadStateBinary(reader);
+            K054539.kk1[0].LoadStateBinary(reader);
+            K054539.kk1[1].LoadStateBinary(reader);
+            for (i = 0; i < 3; i++)
+            {
+                Sound.latched_value[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 3; i++)
+            {
+                Sound.utempdata[i] = reader.ReadUInt16();
+            }
+            K054539.kk1[0].info.stream.output_sampindex = reader.ReadInt32();
+            K054539.kk1[0].info.stream.output_base_sampindex = reader.ReadInt32();
+            K054539.kk1[1].info.stream.output_sampindex = reader.ReadInt32();
+            K054539.kk1[1].info.stream.output_base_sampindex = reader.ReadInt32();
+            Sound.mixerstream.output_sampindex = reader.ReadInt32();
             Sound.mixerstream.output_base_sampindex = reader.ReadInt32();
             Eeprom.LoadStateBinary(reader);
         }

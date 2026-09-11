@@ -8,6 +8,65 @@ namespace mame
 {
     public partial class Tmap
     {
+        public delegate void draw_opaque_delegate(uint[] ui1, int ypos, int offsety2, int xpos, int x_start, int x_end, byte[] bb1, byte priority);
+        public draw_opaque_delegate draw_opaque;
+        public delegate void draw_masked_delegate(uint[] ui1, int ypos, int offsety2, int xpos, int x_start, int x_end, byte[] bb1, byte priority);
+        public draw_masked_delegate draw_masked;
+        public void scanline_draw_opaque_rgb32(uint[] ui1, int ypos, int offsety2, int xpos, int x_start, int x_end, byte[] bb1, byte priority)//, const UINT16 *source, int count, UINT8 *pri, UINT32 pcode)
+        {
+            int i;
+            for (i = xpos + x_start; i < xpos + x_end; i++)
+            {
+                ui1[(offsety2 + ypos) * Video.fullwidth + i] = Palette.entry_color2[pixmap[offsety2 * width + i - xpos]];
+            }
+            if (priority != 0)
+            {
+                for (i = xpos + x_start; i < xpos + x_end; i++)
+                {
+                    bb1[(offsety2 + ypos) * 0x200 + i] = (byte)(bb1[(offsety2 + ypos) * 0x200 + i] | priority);
+                }
+            }
+        }
+        public void scanline_draw_masked_rgb32(uint[] ui1, int ypos, int offsety2, int xpos, int x_start, int x_end, byte[] bb1, byte priority)
+        {
+            int i;
+            for (i = xpos + x_start; i < xpos + x_end; i++)
+            {
+                if ((flagsmap[offsety2, i - xpos] & mask) == value)
+                {
+                    ui1[(offsety2 + ypos) * Video.fullwidth + i] = Palette.entry_color2[pixmap[offsety2 * width + i - xpos]];
+                    bb1[(offsety2 + ypos) * 0x200 + i] = (byte)(bb1[(offsety2 + ypos) * 0x200 + i] | priority);
+                }
+            }
+        }
+        public void scanline_draw_opaque_rgb32_alpha(uint[] ui1, int ypos, int offsety2, int xpos, int x_start, int x_end, byte[] bb1, byte priority)
+        {
+            int i;
+            for (i = xpos + x_start; i < xpos + x_end; i++)
+            {
+                ui1[(offsety2 + ypos) * Video.fullwidth + i] = Drawgfx.alpha_blend32(ui1[(offsety2 + ypos) * Video.fullwidth + i], Palette.entry_color2[pixmap[offsety2 * width + i - xpos]]);
+
+            }
+            if (priority != 0)
+            {
+                for (i = xpos + x_start; i < xpos + x_end; i++)
+                {
+                    bb1[(offsety2 + ypos) * 0x200 + i] = (byte)(bb1[(offsety2 + ypos) * 0x200 + i] | priority);
+                }
+            }
+        }
+        public void scanline_draw_masked_rgb32_alpha(uint[] ui1, int ypos, int offsety2, int xpos, int x_start, int x_end, byte[] bb1, byte priority)
+        {
+            int i;
+            for (i = xpos + x_start; i < xpos + x_end; i++)
+            {
+                if ((flagsmap[offsety2, i - xpos] & mask) == value)
+                {
+                    ui1[(offsety2 + ypos) * Video.fullwidth + i] = Drawgfx.alpha_blend32(ui1[(offsety2 + ypos) * Video.fullwidth + i], Palette.entry_color2[pixmap[offsety2 * width + i - xpos]]);
+                    bb1[(offsety2 + ypos) * 0x200 + i] = (byte)(bb1[(offsety2 + ypos) * 0x200 + i] | priority);
+                }
+            }
+        }
         public void tile_update_konami_k052109_0(int logindex, int col, int row)
         {
             int x0 = tilewidth * col;
@@ -31,7 +90,7 @@ namespace mame
             flipy = color & 0x02;
             int code2, color2;
             int flags2;
-            Konami.K052109_callback(0, bank, code, color, flags, priority, out code2, out color2,out flags2);
+            Konami.K052109_callback(0, bank, code, color, flags, priority, out code2, out color2, out flags2);
             code = code2;
             color = color2;
             flags = (byte)flags2;
@@ -70,8 +129,8 @@ namespace mame
             color = (color & 0xf3) | ((bank & 0x03) << 2);
             bank >>= 2;
             flipy = color & 0x02;
-            int code2, color2,flags2;
-            Konami.K052109_callback(1, bank, code, color, flags, priority, out code2, out color2,out flags2);
+            int code2, color2, flags2;
+            Konami.K052109_callback(1, bank, code, color, flags, priority, out code2, out color2, out flags2);
             code = code2;
             color = color2;
             flags = (byte)flags2;
@@ -110,8 +169,8 @@ namespace mame
             color = (color & 0xf3) | ((bank & 0x03) << 2);
             bank >>= 2;
             flipy = color & 0x02;
-            int code2,color2,flags2;
-            Konami.K052109_callback(2, bank, code, color, flags, priority, out code2, out color2,out flags2);
+            int code2, color2, flags2;
+            Konami.K052109_callback(2, bank, code, color, flags, priority, out code2, out color2, out flags2);
             code = code2;
             color = color2;
             flags = (byte)flags2;
@@ -266,7 +325,45 @@ namespace mame
         }
         public void tile_update_konami_gai_936(int logindex, int col, int row)
         {
-
+            int x0 = tilewidth * col;
+            int y0 = tileheight * row;
+            int memindex;
+            int pen_data_offset, palette_base;
+            int code, color;
+            memindex = logical_to_memory[logindex];
+            code = Konami.gfx4rom[0x60000 + memindex] | ((Konami.gfx4rom[0x20000 + memindex] & 0x3f) << 8);
+            if ((memindex & 1) != 0)
+            {
+                color = Konami.gfx4rom[memindex >> 1] & 0xf;
+            }
+            else
+            {
+                color = (Konami.gfx4rom[memindex >> 1] >> 4) & 0xf;
+            }
+            if ((Konami.gfx4rom[0x20000 + memindex] & 0x80) != 0)
+            {
+                color |= 0x10;
+            }
+            color |= Konami.sub1_colorbase << 4;
+            pen_data_offset = code * 0x100;
+            palette_base = 0x10 * color;
+            tileflags[logindex] = tile_draw(Konami.gfx0rom, pen_data_offset, x0, y0, palette_base, 0, 0, 0);
+        }
+        public void tile_update_konami_ult_936(int logindex, int col, int row)
+        {
+            int x0 = tilewidth * col;
+            int y0 = tileheight * row;
+            int memindex;
+            int pen_data_offset, palette_base;
+            int code, color;
+            byte flags;
+            memindex = logical_to_memory[logindex];
+            code = Konami.gfx4rom[0x40000 + memindex] | ((Konami.gfx4rom[memindex] & 0x1f) << 8);
+            color = Konami.sub1_colorbase;
+            pen_data_offset = code * 0x100;
+            palette_base = 0x100 * color;
+            flags = (byte)((Konami.gfx4rom[memindex] & 0x40) != 0 ? Tilemap.TILEMAP_FLIPX : 0);
+            tileflags[logindex] = tile_draw(Konami.gfx0rom, pen_data_offset, x0, y0, palette_base, 0, 0, flags);
         }
         public void tilemap_draw_instance_konami_mystwarr(RECT cliprect, int xpos, int ypos)
         {
@@ -274,7 +371,6 @@ namespace mame
             int x1, y1, x2, y2;
             int y, nexty;
             int offsety1, offsety2;
-            int i,j;
             x1 = Math.Max(xpos, cliprect.min_x);
             x2 = Math.Min(xpos + width, cliprect.max_x + 1);
             y1 = Math.Max(ypos, cliprect.min_y);
@@ -293,10 +389,6 @@ namespace mame
             y = y1;
             nexty = tileheight * (y1 / tileheight) + tileheight;
             nexty = Math.Min(nexty, y2);
-            if (Video.screenstate.frame_number == 0x3b2 && Konami.counta == 0x19)
-            {
-                int i1 = 1;
-            }
             for (; ; )
             {
                 int row = y / tileheight;
@@ -316,10 +408,6 @@ namespace mame
                         logindex = row * cols + column;
                         if (tileflags[logindex] == Tilemap.TILE_FLAG_DIRTY)
                         {
-                            if (Video.screenstate.frame_number == 0x3b2 && Konami.counta == 0x19)
-                            {
-                                int i1 = 1;
-                            }
                             tile_update3(logindex, column, row);
                         }
                         if ((tileflags[logindex] & mask) != 0)
@@ -346,24 +434,7 @@ namespace mame
                         {
                             for (cury = y; cury < nexty; cury++)
                             {
-                                for (i = xpos + x_start; i < xpos + x_end; i++)
-                                {
-                                    Palette.bbitmap[Video.curbitmap].ui1[(offsety2 + ypos) * Video.fullwidth + i] = Palette.entry_color2[pixmap[offsety2 * width + i - xpos]];
-                                    if (Video.screenstate.frame_number == 0x3b1 && Konami.counta == 0x19)
-                                    {
-                                        /*StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
-                                        sw2.WriteLine(i.ToString("x") + "\t" + (offsety2 + ypos).ToString("x") + "\t" + (offsety2 * width + i - xpos).ToString("x") + "\t" + Palette.entry_color2[pixmap[offsety2 * width + i - xpos]].ToString("x"));
-                                        sw2.Close();*/
-
-                                    }
-                                }
-                                if (priority != 0)
-                                {
-                                    for (i = xpos + x_start; i < xpos + x_end; i++)
-                                    {
-                                        Tilemap.ppriority_bitmap[(offsety2 + ypos) * 0x200 + i] = (byte)(Tilemap.ppriority_bitmap[(offsety2 + ypos) * 0x200 + i] | priority);
-                                    }
-                                }
+                                draw_opaque(Palette.bbitmap[Video.curbitmap].ui1, ypos, offsety2, xpos, x_start, x_end, Tilemap.ppriority_bitmap, priority);
                                 offsety2++;
                             }
                         }
@@ -371,14 +442,7 @@ namespace mame
                         {
                             for (cury = y; cury < nexty; cury++)
                             {
-                                for (i = xpos + x_start; i < xpos + x_end; i++)
-                                {
-                                    if ((flagsmap[offsety2, i - xpos] & mask) == value)
-                                    {
-                                        Palette.bbitmap[Video.curbitmap].ui1[(offsety2 + ypos) * Video.fullwidth + i] = Palette.entry_color2[pixmap[offsety2 * width + i - xpos]];
-                                        Tilemap.ppriority_bitmap[(offsety2 + ypos) * 0x200 + i] = (byte)(Tilemap.ppriority_bitmap[(offsety2 + ypos) * 0x200 + i] | priority);
-                                    }
-                                }
+                                draw_masked(Palette.bbitmap[Video.curbitmap].ui1, ypos, offsety2, xpos, x_start, x_end, Tilemap.ppriority_bitmap, priority);
                                 offsety2++;
                             }
                         }

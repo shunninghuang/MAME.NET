@@ -192,17 +192,17 @@ namespace mame
         }
         public static void tilemap_mark_all_tiles_dirty(Tmap tmap)
         {
-            if (tmap == null)
+            tmap.all_tiles_dirty = true;
+            tmap.all_tiles_clean = false;
+        }
+        public static void tilemap_mark_all_tiles_dirty_alltilemap()
+        {
+            foreach (Tmap t1 in Tilemap.lsTmap)
             {
-                foreach (Tmap t1 in Tilemap.lsTmap)
+                if (t1 != null)
                 {
                     tilemap_mark_all_tiles_dirty(t1);
                 }
-            }
-            else
-            {
-                tmap.all_tiles_dirty = true;
-                tmap.all_tiles_clean = false;
             }
         }
         public void tilemap_set_scroll_rows(int scroll_rows)
@@ -718,7 +718,6 @@ namespace mame
                     priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "Taito":
-
                     screen_width = 0x140;
                     screen_height = 0x100;
                     priority_bitmap = new byte[0x100, 0x140];

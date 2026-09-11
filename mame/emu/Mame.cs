@@ -148,6 +148,7 @@ namespace mame
             Inptport.input_init();
             //output_init();
 
+            Drawgfx.drawgfx_init();
             Palette.palette_init();
             //render_init();
             //ui_init();
@@ -782,11 +783,47 @@ namespace mame
                                 Palette.update_adjusted_color(2, i);
                             }
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                        case "moomesabl":
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
                         case "mystwarr":
                         case "mystwarru":
                         case "mystwarrj":
                         case "mystwarra":
                         case "mystwarraa":
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
                             for (i = 0; i < 0x10; i++)
                             {
                                 Konami.K056832_tilemap[i].all_tiles_dirty = true;

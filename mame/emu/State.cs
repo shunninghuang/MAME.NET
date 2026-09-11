@@ -503,13 +503,62 @@ namespace mame
                             savestate_callback = Konami.SaveStateBinary_prmrsocr;
                             loadstate_callback = Konami.LoadStateBinary_prmrsocr;
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":                        
+                            savestate_callback = Konami.SaveStateBinary_moo;
+                            loadstate_callback = Konami.LoadStateBinary_moo;
+                            break;
+                        case "moomesabl":
+                            break;
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
+                            savestate_callback = Konami.SaveStateBinary_bucky;
+                            loadstate_callback = Konami.LoadStateBinary_bucky;
+                            break;
                         case "mystwarr":
                         case "mystwarru":
                         case "mystwarrj":
                         case "mystwarra":
                         case "mystwarraa":
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":                        
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
+                        case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
                             savestate_callback = Konami.SaveStateBinary_mystwarr;
                             loadstate_callback = Konami.LoadStateBinary_mystwarr;
+                            break;
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                            savestate_callback = Konami.SaveStateBinary_viostorm;
+                            loadstate_callback = Konami.LoadStateBinary_viostorm;
+                            break;
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                            savestate_callback = Konami.SaveStateBinary_metamrph;
+                            loadstate_callback = Konami.LoadStateBinary_metamrph;
                             break;
                     }
                     break;

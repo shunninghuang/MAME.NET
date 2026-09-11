@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace mame
 {
@@ -10,14 +11,12 @@ namespace mame
         public static byte[] audioram2, audioram3;
         public static byte[] eepromrom;
         public static byte mw_irq_control;
-        public static byte[] gx_workram;
         public static int oinprion, cbparam;
         public static int cur_sound_region;
         public static int sub1_colorbase, last_psac_colorbase, gametype;
         public static int roz_enable, roz_rombank;
         public static Tmap ult_936_tilemap;
         public static ushort clip;
-
         public static void nvram_handler_load_mystwarr()
         {
             Array.Copy(eepromrom, Eeprom.eeprom_data, 0x80);
@@ -166,6 +165,10 @@ namespace mame
         {
             Sound.soundlatch_w((ushort)(data >> 8));
         }
+        public static void sound_cmd1_msb_w1(byte data)
+        {
+            Sound.soundlatch_w((ushort)data);
+        }
         public static void sound_cmd2_w(ushort data)
         {
             Sound.soundlatch2_w((ushort)(data & 0xff));
@@ -173,6 +176,10 @@ namespace mame
         public static void sound_cmd2_msb_w(ushort data)
         {
             Sound.soundlatch2_w((ushort)(data >> 8));
+        }
+        public static void sound_cmd2_msb_w1(byte data)
+        {
+            Sound.soundlatch2_w((ushort)data);
         }
         public static void sound_irq_w()
         {
@@ -264,7 +271,7 @@ namespace mame
         {
             if ((offset & 0x0078) != 0)
             {
-                Generic.spriteram16[offset] = (ushort)((data<<8)|(Generic.spriteram16[offset]&0xff));
+                Generic.spriteram16[offset] = (ushort)((data << 8) | (Generic.spriteram16[offset] & 0xff));
             }
             else
             {
@@ -348,7 +355,7 @@ namespace mame
         }
         public static void reset_sound_region()
         {
-            basebanksnd = 0x20000 + cur_sound_region * 0x4000;
+            basebanksnd = cur_sound_region * 0x4000;
         }
         public static void sound_ctrl_w(byte data)
         {
@@ -490,7 +497,7 @@ namespace mame
             {
                 color2 = sprite_colorbase | (c & 0x1f);
             }
-            if ((oinprion & 0xf0)!=0)
+            if ((oinprion & 0xf0) != 0)
             {
                 priority2 = cbparam;
             }
@@ -517,6 +524,8 @@ namespace mame
             ult_936_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 16, 16, 512, 512);
             ult_936_tilemap.pen_to_flags = new byte[1, 16];
             ult_936_tilemap.pen_to_flags[0, 0] = 0;
+            ult_936_tilemap.tilemap_draw_instance3 = null;
+            ult_936_tilemap.tile_update3 = ult_936_tilemap.tile_update_konami_gai_936;
             for (i = 1; i < 16; i++)
             {
                 ult_936_tilemap.pen_to_flags[0, i] = 0x10;
@@ -539,15 +548,17 @@ namespace mame
             K053936_wraparound_enable(0, 1);
             K053936GP_set_offset(0, -8, 0);
             ult_936_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 16, 16, 512, 512);
-            ult_936_tilemap.pen_to_flags = new byte[1, 16];
+            ult_936_tilemap.pen_to_flags = new byte[1, 0x100];
             ult_936_tilemap.pen_to_flags[0, 0] = 0;
-            for (i = 1; i < 16; i++)
+            ult_936_tilemap.tilemap_draw_instance3 = null;
+            ult_936_tilemap.tile_update3 = ult_936_tilemap.tile_update_konami_ult_936;
+            for (i = 1; i < 0x100; i++)
             {
                 ult_936_tilemap.pen_to_flags[0, i] = 0x10;
             }
         }
         public static void video_start_mystwarr()
-        {            
+        {
             K055555_vh_start();
             K054338_vh_start();
             gametype = 0;
@@ -565,7 +576,7 @@ namespace mame
             gametype = 0;
             K055555_vh_start();
             K054338_vh_start();
-            K053250_vh_start(1, gfx3rom);
+            K053250_vh_start(1, k053250rom);
             K056832_vh_start(game4bpp_tile_callback, 0);
             K055673_vh_start(1, -51, -22, metamrph_sprite_callback);
             konamigx_mixer_init(0);
@@ -655,21 +666,18 @@ namespace mame
             sprite_colorbase = K055555_get_palette_index(4) << 5;
             cbparam = K055555_read_register(15);
             oinprion = K055555_read_register(19);
-            blendmode = (oinprion == 0xef && K054338_read_register(13)!=0) ? ((1 << 16 | 3) << 2) : 0;
+            blendmode = (oinprion == 0xef && K054338_read_register(13) != 0) ? ((1 << 16 | 3) << 2) : 0;
             konamigx_mixer(Palette.bbitmap[Video.curbitmap], Video.new_clip, 0, 0, blendmode);
         }
         public static void ddd_053936_enable_w(ushort data)
         {
-            //if (ACCESSING_BITS_8_15)
-            {
-                roz_enable = data & 0x0100;
-                roz_rombank = (data & 0xc000) >> 14;
-            }
+            roz_enable = data & 0x0100;
+            roz_rombank = (data & 0xc000) >> 14;
         }
         public static void ddd_053936_enable_w1(byte data)
         {
-            roz_enable = (data<<8) & 0x0100;
-            roz_rombank = ((data<<8) & 0xc000) >> 14;
+            roz_enable = (data << 8) & 0x0100;
+            roz_rombank = ((data << 8) & 0xc000) >> 14;
         }
         public static void ddd_053936_clip_w(int offset, ushort data)
         {
@@ -677,15 +685,11 @@ namespace mame
             int minx, maxx, miny, maxy;
             if (offset == 1)
             {
-                //if (ACCESSING_BITS_8_15)
-                {
-                    K053936GP_clip_enable(0, data & 0x0100);
-                }
+                K053936GP_clip_enable(0, data & 0x0100);
             }
             else
             {
                 old = clip;
-                //COMBINE_DATA(&clip);
                 clip = data;
                 if (clip != old)
                 {
@@ -719,13 +723,12 @@ namespace mame
             int minx, maxx, miny, maxy;
             if (offset == 1)
             {
-                K053936GP_clip_enable(0, (data<<8) & 0x0100);
+                K053936GP_clip_enable(0, (data << 8) & 0x0100);
             }
             else
             {
                 old = clip;
-                //COMBINE_DATA(&clip);
-                clip = (ushort)((data<<8)|(clip&0xff));
+                clip = (ushort)((data << 8) | (clip & 0xff));
                 if (clip != old)
                 {
                     clip_x = (clip & 0x003f) >> 0;
@@ -763,7 +766,6 @@ namespace mame
             else
             {
                 old = clip;
-                //COMBINE_DATA(&clip);
                 clip = (ushort)((clip & 0xff00) | data);
                 if (clip != old)
                 {
@@ -826,8 +828,7 @@ namespace mame
                 sprite_colorbase = (K055555_get_palette_index(4) << 3) & 0x7f;
                 rozmode = 0x08;
             }
-
-            if (K056832_get_LayerAssociation()!=0)
+            if (K056832_get_LayerAssociation() != 0)
             {
                 for (i = 0; i < 4; i++)
                 {

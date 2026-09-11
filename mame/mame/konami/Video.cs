@@ -623,7 +623,6 @@ namespace mame
             sorted_layer[2] = 2;
             layerpri[2] = K053251_get_priority(3);
             sortlayers(sorted_layer, layerpri);
-            //Array.Clear(Tilemap.priority_bitmap, 0, Tilemap.priority_bitmap.Length);
             Array.Clear(Tilemap.ppriority_bitmap, 0, Tilemap.ppriority_bitmap.Length);
             for (i = 0; i < 0x20000; i++)
             {

@@ -132,7 +132,6 @@ namespace mame
         public static sound_stream upd7759stream;
         public static sound_stream k007232stream;
         public static sound_stream samplestream;
-        public static sound_stream k054539stream;
         public static long update_attoseconds = Attotime.ATTOSECONDS_PER_SECOND / 50;
         private static void generate_resampled_data_ym2151(int gain)
         {
@@ -1458,6 +1457,19 @@ namespace mame
             {
                 second_tick = true;
             }
+            K054539.kk1[0].info.stream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+        }
+        private static void streams_update_konami_moo()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            ym2151stream.adjuststream(second_tick);
             K054539.kk1[0].info.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;

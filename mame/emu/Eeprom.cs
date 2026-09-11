@@ -183,7 +183,45 @@ namespace mame
                             cmd_lock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
                             cmd_unlock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
                             break;
+                        case "moomesa":
+                        case "moomesauac":
+                        case "moomesauab":
+                        case "moomesaaab":
+                        case "moomesabl":
+                        case "bucky":
+                        case "buckyea":
+                        case "buckyjaa":
+                        case "buckyuab":
+                        case "buckyaab":
+                        case "buckyaa":
                         case "mystwarr":
+                        case "mystwarru":
+                        case "mystwarrj":
+                        case "mystwarra":
+                        case "mystwarraa":
+                        case "mmaulers":
+                        case "mmaulersu":
+                        case "dadandrn":
+                        case "viostorm":
+                        case "viostormeb":
+                        case "viostormu":
+                        case "viostormub":
+                        case "viostormubbl":
+                        case "viostormj":
+                        case "viostorma":
+                        case "viostormab":
+                        //case "viostormabbl":
+                        case "metamrph":
+                        case "metamrphe":
+                        case "metamrphu":
+                        case "metamrphj":
+                        case "metamrpha":
+                        case "mtlchamp":
+                        case "mtlchamp1":
+                        case "mtlchampu":
+                        case "mtlchampu1":
+                        case "mtlchampj":
+                        case "mtlchampa":
                             cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
                             cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'1', (byte)'0', (byte)'0' };
                             cmd_erase = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
@@ -191,6 +229,8 @@ namespace mame
                             cmd_unlock = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
                             break;
                         case "gaiapols":
+                        case "gaiapolsu":
+                        case "gaiapolsj":
                             cmd_read = new byte[] { (byte)'0', (byte)'1', (byte)'1', (byte)'0', (byte)'0', (byte)'0' };
                             cmd_write = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'1', (byte)'0', (byte)'0' };
                             cmd_erase = new byte[] { (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'1', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
