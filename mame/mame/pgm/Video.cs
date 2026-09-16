@@ -47,7 +47,7 @@ namespace mame
         {
             if ((xdrawpos >= 0) && (xdrawpos < 448))
             {
-                if ((Tilemap.priority_bitmap[ydrawpos, xdrawpos] & 1) == 0)
+                if ((Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] & 1) == 0)
                 {
                     if (pri == 0)
                     {
@@ -55,38 +55,38 @@ namespace mame
                     }
                     else
                     {
-                        if ((Tilemap.priority_bitmap[ydrawpos, xdrawpos] & 2) == 0)
+                        if ((Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] & 2) == 0)
                         {
                             Video.bitmapbase[Video.curbitmap][ydrawpos * 0x200 + xdrawpos] = srcdat;
                         }
                     }
                 }
-                Tilemap.priority_bitmap[ydrawpos,xdrawpos] |= 1;
+                Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] |= 1;
             }
         }
         private static void pgm_draw_pix_nopri(int xdrawpos, int ydrawpos, ushort srcdat)
         {
             if ((xdrawpos >= 0) && (xdrawpos < 448))
             {
-                if ((Tilemap.priority_bitmap[ydrawpos, xdrawpos] & 1) == 0)
+                if ((Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] & 1) == 0)
                 {
                     Video.bitmapbase[Video.curbitmap][ydrawpos * 0x200 + xdrawpos] = srcdat;
                 }
-                Tilemap.priority_bitmap[ydrawpos, xdrawpos] |= 1;
+                Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] |= 1;
             }
         }
         private static void pgm_draw_pix_pri(int xdrawpos, int ydrawpos, ushort srcdat)
         {
             if ((xdrawpos >= 0) && (xdrawpos < 448))
             {
-                if ((Tilemap.priority_bitmap[ydrawpos, xdrawpos] & 1) == 0)
+                if ((Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] & 1) == 0)
                 {
-                    if ((Tilemap.priority_bitmap[ydrawpos, xdrawpos] & 2) == 0)
+                    if ((Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] & 2) == 0)
                     {
                         Video.bitmapbase[Video.curbitmap][ydrawpos * 0x200 + xdrawpos] = srcdat;
                     }
                 }
-                Tilemap.priority_bitmap[ydrawpos, xdrawpos] |= 1;
+                Tilemap.priority_bitmap[ydrawpos * Tilemap.screen_width + xdrawpos] |= 1;
             }
         }
         private static void draw_sprite_line(int wide, int ydrawpos, int xzoom, int xgrow, int yoffset, int flip, int xpos)
@@ -99,47 +99,59 @@ namespace mame
             xcnt = 0;
             xcntdraw = 0;
             while (xcnt < wide * 16)
-            {                
-                if ((flip & 0x01)==0)
+            {
+                if ((flip & 0x01) == 0)
+                {
                     xoffset = xcnt;
+                }
                 else
+                {
                     xoffset = (wide * 16) - xcnt - 1;
+                }
                 srcdat = sprite_temp_render[yoffset + xoffset];
                 xzoombit = (xzoom >> (xcnt & 0x1f)) & 1;
                 if (xzoombit == 1 && xgrow == 1)
                 {
                     xdrawpos = xpos + xcntdraw;
-                    if ((srcdat & 0x8000)==0)
+                    if ((srcdat & 0x8000) == 0)
                     {
                         if ((xdrawpos >= 0) && (xdrawpos < 448))
+                        {
                             Video.bitmapbase[Video.curbitmap][ydrawpos * 0x200 + xdrawpos] = srcdat;
+                        }
                     }
                     xcntdraw++;
                     xdrawpos = xpos + xcntdraw;
-                    if ((srcdat & 0x8000)==0)
+                    if ((srcdat & 0x8000) == 0)
                     {
                         if ((xdrawpos >= 0) && (xdrawpos < 448))
+                        {
                             Video.bitmapbase[Video.curbitmap][ydrawpos * 0x200 + xdrawpos] = srcdat;
+                        }
                     }
                     xcntdraw++;
                 }
                 else if (xzoombit == 1 && xgrow == 0)
                 {
-                    
+
                 }
                 else
                 {
                     xdrawpos = xpos + xcntdraw;
-                    if ((srcdat & 0x8000)==0)
+                    if ((srcdat & 0x8000) == 0)
                     {
                         if ((xdrawpos >= 0) && (xdrawpos < 448))
+                        {
                             Video.bitmapbase[Video.curbitmap][ydrawpos * 0x200 + xdrawpos] = srcdat;
+                        }
                     }
                     xcntdraw++;
                 }
                 xcnt++;
                 if (xdrawpos == 448)
+                {
                     xcnt = wide * 16;
+                }
             }
         }
         private static void draw_sprite_new_zoomed(int wide, int high, int xpos, int ypos, int palt, int boffset, int flip, int xzoom, int xgrow, int yzoom, int ygrow)
@@ -159,9 +171,13 @@ namespace mame
                 {
                     ydrawpos = ypos + ycntdraw;
                     if ((flip & 0x02) == 0)
+                    {
                         yoffset = (ycnt * (wide * 16));
+                    }
                     else
+                    {
                         yoffset = ((high - ycnt - 1) * (wide * 16));
+                    }
                     if ((ydrawpos >= 0) && (ydrawpos < 224))
                     {
                         draw_sprite_line(wide, ydrawpos, xzoom, xgrow, yoffset, flip, xpos);
@@ -169,16 +185,22 @@ namespace mame
                     ycntdraw++;
                     ydrawpos = ypos + ycntdraw;
                     if ((flip & 0x02) == 0)
+                    {
                         yoffset = (ycnt * (wide * 16));
+                    }
                     else
+                    {
                         yoffset = ((high - ycnt - 1) * (wide * 16));
+                    }
                     if ((ydrawpos >= 0) && (ydrawpos < 224))
                     {
                         draw_sprite_line(wide, ydrawpos, xzoom, xgrow, yoffset, flip, xpos);
                     }
                     ycntdraw++;
                     if (ydrawpos == 224)
+                    {
                         ycnt = high;
+                    }
                 }
                 else if (yzoombit == 1 && ygrow == 0)
                 {
@@ -188,16 +210,22 @@ namespace mame
                 {
                     ydrawpos = ypos + ycntdraw;
                     if ((flip & 0x02) == 0)
+                    {
                         yoffset = (ycnt * (wide * 16));
+                    }
                     else
+                    {
                         yoffset = ((high - ycnt - 1) * (wide * 16));
+                    }
                     if ((ydrawpos >= 0) && (ydrawpos < 224))
                     {
                         draw_sprite_line(wide, ydrawpos, xzoom, xgrow, yoffset, flip, xpos);
                     }
                     ycntdraw++;
                     if (ydrawpos == 224)
+                    {
                         ycnt = high;
+                    }
                 }
                 ycnt++;
             }
@@ -232,13 +260,21 @@ namespace mame
                 yzoom = ((pgm_videoregs[pgm_sprite_zoomtable_offset + yzom * 4] * 0x100 + pgm_videoregs[pgm_sprite_zoomtable_offset + yzom * 4 + 1]) << 16) | (pgm_videoregs[pgm_sprite_zoomtable_offset + yzom * 4 + 2] * 0x100 + pgm_videoregs[pgm_sprite_zoomtable_offset + yzom * 4 + 3]);
                 boff *= 2;
                 if (xpos > 0x3ff)
+                {
                     xpos -= 0x800;
+                }
                 if (ypos > 0x1ff)
+                {
                     ypos -= 0x400;
+                }
                 if (high == 0)
+                {
                     break;
+                }
                 if ((priority == 1) && (pri == 0))
+                {
                     break;
+                }
                 draw_sprite_new_zoomed(wide, high, xpos, ypos, palt, boff, flip, xzoom, xgrow, yzoom, ygrow);
                 pgm_sprite_source_offset += 5;
             }
@@ -281,7 +317,6 @@ namespace mame
             pgm_tx_tilemap.total_elements = 0x800000 / 0x20;
             pgm_tx_tilemap.tile_update3 = pgm_tx_tilemap.tile_update_pgm_tx;
             pgm_tx_tilemap.tilemap_draw_instance3 = pgm_tx_tilemap.tilemap_draw_instance_cps;
-
             pgm_bg_tilemap = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 32, 32, 64, 64);
             pgm_bg_tilemap.total_elements = 0x3333;
             pgm_bg_tilemap.pen_to_flags = new byte[1, 32];
@@ -295,7 +330,6 @@ namespace mame
             pgm_bg_tilemap.rowscroll = new int[pgm_bg_tilemap.scrollrows];
             pgm_bg_tilemap.tile_update3 = pgm_bg_tilemap.tile_update_pgm_bg;
             pgm_bg_tilemap.tilemap_draw_instance3 = pgm_bg_tilemap.tilemap_draw_instance_cps;
-
             uu900 = new ushort[0x200 * 0x200];
             for (i = 0; i < 0x40000; i++)
             {
@@ -322,7 +356,6 @@ namespace mame
             }
             pgm_bg_tilemap.tilemap_draw_primask(new_clip, 0x10, 0);
             draw_sprites(0);
-            //draw_sprites();
             pgm_tx_tilemap.tilemap_set_scrolly(0, pgm_videoregs[0x5000] * 0x100 + pgm_videoregs[0x5000 + 1]);
             pgm_tx_tilemap.tilemap_set_scrollx(0, pgm_videoregs[0x6000] * 0x100 + pgm_videoregs[0x6000 + 1]);
             pgm_tx_tilemap.tilemap_draw_primask(new_clip, 0x10, 0);

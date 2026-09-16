@@ -279,7 +279,7 @@ namespace mame
         public static void video_update_scontra()
         {
             K052109_tilemap_update();
-            Array.Clear(Tilemap.ppriority_bitmap, 0, Tilemap.ppriority_bitmap.Length);
+            Array.Clear(Tilemap.priority_bitmap, 0, Tilemap.priority_bitmap.Length);
             if (m_priority!=0)
             {
                 K052109_tilemap[2].tilemap_draw_primask(Video.screenstate.visarea, 0, 1);

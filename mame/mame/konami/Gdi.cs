@@ -637,7 +637,7 @@ namespace mame
                                                             break;
                                                         case 4:
                                                             Drawgfx.afterdrawmask = eax;
-                                                            if ((Tilemap.ppriority_bitmap[(sy + offy + y1 * ydir)*Tilemap.screen_width+ sx + offx + x1 * xdir] & 0x80) != 0)
+                                                            if ((Tilemap.priority_bitmap[(sy + offy + y1 * ydir)*Tilemap.screen_width+ sx + offx + x1 * xdir] & 0x80) != 0)
                                                             {
                                                                 c1 = Color.FromArgb((int)Palette.entry_color2[Palette.shadow_table[Drawgfx.imode].data[Palette.shadow_table[Drawgfx.imode].data[color2 * 0x10 + col]]]);
                                                                 ptr2 = ptr + ((sy + offy + y1 * ydir) * 0x200 + (sx + offx + x1 * xdir)) * 4;

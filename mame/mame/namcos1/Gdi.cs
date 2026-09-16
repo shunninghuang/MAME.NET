@@ -81,39 +81,39 @@ namespace mame
             {
                 for (j = 0; j < 0x200; j++)
                 {
-                    if (Tilemap.priority_bitmap[i, j] == 0)
+                    if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0)
                     {
                         c1 = Color.Black;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x01)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x01)
                     {
                         c1 = Color.Red;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x03)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x03)
                     {
                         c1 = Color.Blue;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x04)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x04)
                     {
                         c1 = Color.Yellow;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x07)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x07)
                     {
                         c1 = Color.Magenta;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x08)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x08)
                     {
                         c1 = Color.AliceBlue;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x1f)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x1f)
                     {
                         c1 = Color.Orange;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x80)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x80)
                     {
                         c1 = Color.LimeGreen;
                     }
-                    else if (Tilemap.priority_bitmap[i, j] == 0x9f)
+                    else if (Tilemap.priority_bitmap[i * Tilemap.screen_width + j] == 0x9f)
                     {
                         c1 = Color.Green;
                     }

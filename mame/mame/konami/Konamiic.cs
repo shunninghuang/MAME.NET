@@ -2785,7 +2785,7 @@ namespace mame
             }
             return 0;
         }
-        public static void K056832_tilemap_draw(/*running_machine *machine, bitmap_t *bitmap,*/ RECT cliprect, int layer, int flags, uint priority)
+        public static void K056832_tilemap_draw(RECT cliprect, int layer, int flags, uint priority)
         {
             int[] last_colorbase = new int[16];
             uint last_dx, last_visible, new_colorbase, last_active;
@@ -2796,13 +2796,10 @@ namespace mame
             int pageIndex, flipx, flipy, corr, r, c;
             int cminy, cmaxy, cminx, cmaxx;
             int dminy, dmaxy, dminx, dmaxx;
+            int flags2;
             RECT drawrect = new RECT();
             //tilemap *tmap;
             //UINT16 *pScrollData;
-            if (flags == 0x10)
-            {
-                int i1 = 1;
-            }
             int ScrollData;
             int pScrollData_offset;
             ushort[] ram16 = new ushort[2];
@@ -3021,19 +3018,21 @@ namespace mame
                     last_visible = 0;
                     if (flags == 0)
                     {
-                        flags = 0x10;
+                        flags2 = 0x10;
                         K056832_tilemap[pageIndex].draw_opaque = K056832_tilemap[pageIndex].scanline_draw_opaque_rgb32;
                         K056832_tilemap[pageIndex].draw_masked = K056832_tilemap[pageIndex].scanline_draw_masked_rgb32;
                     }
                     else if (flags == 0x100)
                     {
-                        flags = 0x10;
+                        flags2 = 0x10;
                         K056832_tilemap[pageIndex].draw_opaque = K056832_tilemap[pageIndex].scanline_draw_opaque_rgb32_alpha;
                         K056832_tilemap[pageIndex].draw_masked = K056832_tilemap[pageIndex].scanline_draw_masked_rgb32_alpha;
                     }
                     else
                     {
-                        int i1 = 1;
+                        flags2 = flags;
+                        K056832_tilemap[pageIndex].draw_opaque = K056832_tilemap[pageIndex].scanline_draw_opaque_rgb32;
+                        K056832_tilemap[pageIndex].draw_masked = K056832_tilemap[pageIndex].scanline_draw_masked_rgb32;
                     }
                     for (sdat_walk = sdat_start, line_y = line_starty; line_y < line_endy; sdat_walk += sdat_adv, line_y += line_height)
                     {
@@ -3127,7 +3126,7 @@ namespace mame
                         drawrect.max_x = (dmaxx > cmaxx) ? cmaxx : dmaxx;
                         K056832_tilemap[pageIndex].tilemap_set_scrollx(0, dx);
                     LINE_SHORTCIRCUIT:
-                        K056832_tilemap[pageIndex].tilemap_draw_primask(drawrect, flags, (byte)priority);
+                        K056832_tilemap[pageIndex].tilemap_draw_primask(drawrect, flags2, (byte)priority);
                     }
                 }
             }
@@ -3736,7 +3735,7 @@ namespace mame
                         //pix_data = pal_base[pix_data];
                         pix_data = (int)Palette.entry_color2[pal_base_offset + pix_data];
                         //pri_base[dst_offset] = pri;
-                        Tilemap.ppriority_bitmap[pri_base_offset + dst_offset] = pri;
+                        Tilemap.priority_bitmap[pri_base_offset + dst_offset] = pri;
                         //dst_base[dst_offset] = pix_data;
                         bitmap.ui1[dst_base_offset + dst_offset] = (uint)pix_data;
                     }

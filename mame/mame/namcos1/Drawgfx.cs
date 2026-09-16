@@ -109,9 +109,9 @@ namespace mame
                     col = Namcos1.gfx3rom[srcdata_offset + i * 0x20 + j];
                     if (col != 0x0f)
                     {
-                        if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
+                        if (((1 << (Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] & 0x1f)) & pmask) == 0)
                         {
-                            if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
+                            if ((Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] & 0x80) != 0)
                             {
                                 Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)Palette.shadow_table[0].data[colorbase + col];
                             }
@@ -120,7 +120,7 @@ namespace mame
                                 Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)(colorbase + col);
                             }
                         }
-                        Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | 0x1f);
+                        Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] & 0x7f) | 0x1f);
                     }
                 }
             }
@@ -166,9 +166,9 @@ namespace mame
                         {
                             case 2:
                                 afterdrawmask = eax;
-                                if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
+                                if (((1 << (Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] & 0x1f)) & pmask) == 0)
                                 {
-                                    if ((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x80) != 0)
+                                    if ((Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] & 0x80) != 0)
                                     {
                                         Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)Palette.shadow_table[0].data[Palette.shadow_table[0].data[Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j]]];
                                     }
@@ -177,7 +177,7 @@ namespace mame
                                         Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j] = (ushort)Palette.shadow_table[0].data[Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * 0x200 + offsetx + xdir * j]];
                                     }
                                 }
-                                Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | afterdrawmask);
+                                Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] & 0x7f) | afterdrawmask);
                                 afterdrawmask = 31;
                                 break;
                         }

@@ -434,7 +434,7 @@ namespace mame
                         {
                             for (cury = y; cury < nexty; cury++)
                             {
-                                draw_opaque(Palette.bbitmap[Video.curbitmap].ui1, ypos, offsety2, xpos, x_start, x_end, Tilemap.ppriority_bitmap, priority);
+                                draw_opaque(Palette.bbitmap[Video.curbitmap].ui1, ypos, offsety2, xpos, x_start, x_end, Tilemap.priority_bitmap, priority);
                                 offsety2++;
                             }
                         }
@@ -442,7 +442,7 @@ namespace mame
                         {
                             for (cury = y; cury < nexty; cury++)
                             {
-                                draw_masked(Palette.bbitmap[Video.curbitmap].ui1, ypos, offsety2, xpos, x_start, x_end, Tilemap.ppriority_bitmap, priority);
+                                draw_masked(Palette.bbitmap[Video.curbitmap].ui1, ypos, offsety2, xpos, x_start, x_end, Tilemap.priority_bitmap, priority);
                                 offsety2++;
                             }
                         }

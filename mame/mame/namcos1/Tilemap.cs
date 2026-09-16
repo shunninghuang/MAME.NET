@@ -96,7 +96,7 @@ namespace mame
                                 for (i = xpos + x_start; i < xpos + x_end; i++)
                                 {
                                     Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * Video.fullwidth + i] = (ushort)(pixmap[offsety2 * width + i - xpos] + palette_offset);
-                                    Tilemap.priority_bitmap[offsety2 + ypos, i] = (byte)((Tilemap.priority_bitmap[offsety2 + ypos, i] & (palette_offset >> 8)) | priority);
+                                    Tilemap.priority_bitmap[(offsety2 + ypos) * Tilemap.screen_width + i] = (byte)((Tilemap.priority_bitmap[(offsety2 + ypos) * Tilemap.screen_width + i] & (palette_offset >> 8)) | priority);
                                 }
                                 offsety2++;
                             }
@@ -110,7 +110,7 @@ namespace mame
                                     if ((flagsmap[offsety2, i - xpos] & mask) == value)
                                     {
                                         Video.bitmapbase[Video.curbitmap][(offsety2 + ypos) * Video.fullwidth + i] = (ushort)(pixmap[offsety2 * width + i - xpos] + palette_offset);
-                                        Tilemap.priority_bitmap[offsety2 + ypos, i] = (byte)((Tilemap.priority_bitmap[offsety2 + ypos, i] & (palette_offset >> 8)) | priority);
+                                        Tilemap.priority_bitmap[(offsety2 + ypos) * Tilemap.screen_width + i] = (byte)((Tilemap.priority_bitmap[(offsety2 + ypos) * Tilemap.screen_width + i] & (palette_offset >> 8)) | priority);
                                     }
                                 }
                                 offsety2++;

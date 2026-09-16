@@ -564,12 +564,12 @@ namespace mame
                                     src_x = src_fx;
                                     src_fx += src_fdx;
                                     src_x >>= 19;
-                                    if (eax == 0 || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
                                     eax = (int)Palette.entry_color2[pal_base_offset + eax];
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = (uint)eax;
                                     /*if (Video.screenstate.frame_number == 0x5a0 && code == 0xd2cd)
                                     {
@@ -604,12 +604,12 @@ namespace mame
                                     src_x = src_fx;
                                     src_fx += src_fdx;
                                     src_x >>= 19;
-                                    if (eax == 0 || eax >= shdpen || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || eax >= shdpen || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
                                     eax = (int)Palette.entry_color2[pal_base_offset + eax];
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = (uint)eax;
                                 }
                                 while (++ecx != 0);
@@ -638,11 +638,11 @@ namespace mame
                                     src_x = src_fx;
                                     src_fx += src_fdx;
                                     src_x >>= 19;
-                                    if (eax == 0 || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = Drawgfx.alpha_blend32(Palette.entry_color2[pal_base_offset + eax], bitmap.ui1[dst_ptr_offset + ecx]);
                                 }
                                 while (++ecx != 0);
@@ -671,11 +671,11 @@ namespace mame
                                     src_x = src_fx;
                                     src_fx += src_fdx;
                                     src_x >>= 19;
-                                    if (eax == 0 || eax >= shdpen || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || eax >= shdpen || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = Drawgfx.alpha_blend32(Palette.entry_color2[pal_base_offset + eax], bitmap.ui1[dst_ptr_offset + ecx]);
                                 }
                                 while (++ecx != 0);
@@ -775,12 +775,12 @@ namespace mame
                                 {
                                     eax = gfx.gfxdata[src_ptr_offset];
                                     src_ptr_offset += src_fdx;
-                                    if (eax == 0 || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
                                     eax = (int)Palette.entry_color2[pal_base_offset + eax];
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     if (eax != 0)
                                     {
                                         int i1 = 1;
@@ -808,12 +808,12 @@ namespace mame
                                 {
                                     eax = gfx.gfxdata[src_ptr_offset];
                                     src_ptr_offset += src_fdx;
-                                    if (eax == 0 || eax >= shdpen || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || eax >= shdpen || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
                                     eax = (int)Palette.entry_color2[pal_base_offset + eax];
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = (uint)eax;
                                 }
                                 while (++ecx != 0);
@@ -831,11 +831,11 @@ namespace mame
                                 {
                                     eax = gfx.gfxdata[src_ptr_offset];
                                     src_ptr_offset += src_fdx;
-                                    if (eax == 0 || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = Drawgfx.alpha_blend32(Palette.entry_color2[pal_base_offset + eax], bitmap.ui1[dst_ptr_offset + ecx]);
                                 }
                                 while (++ecx != 0);
@@ -853,11 +853,11 @@ namespace mame
                                 {
                                     eax = gfx.gfxdata[src_ptr_offset];
                                     src_ptr_offset += src_fdx;
-                                    if (eax == 0 || eax >= shdpen || Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] < z8)
+                                    if (eax == 0 || eax >= shdpen || Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] < z8)
                                     {
                                         continue;
                                     }
-                                    Tilemap.ppriority_bitmap[ozbuf_ptr_offset + ecx] = z8;
+                                    Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = Drawgfx.alpha_blend32(Palette.entry_color2[pal_base_offset + eax], bitmap.ui1[dst_ptr_offset + ecx]);
                                 }
                                 while (++ecx != 0);
@@ -946,7 +946,7 @@ namespace mame
             {
                 for (i = 0; i < w; i++)
                 {
-                    Tilemap.ppriority_bitmap[offset + i] = 0xff;
+                    Tilemap.priority_bitmap[offset + i] = 0xff;
                 }
                 offset += 384;
             }

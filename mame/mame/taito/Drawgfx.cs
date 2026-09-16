@@ -125,7 +125,7 @@ namespace mame
             int dw = ex - sx + 1;
             int dh = ey - sy + 1;
             int colorbase = color * 0x10;
-            blockmove_8toN_transpen_pri16_opwolf(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x140, colorbase, pri_mask, 0, sx, sy);
+            blockmove_8toN_transpen_pri16(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x140, colorbase, pri_mask, 0, sx, sy);
         }
         public static void common_drawgfx_tnzs(byte[] bb1, int code, int color, int flipx, int flipy, int sx, int sy, RECT clip)
         {
@@ -186,50 +186,6 @@ namespace mame
             int dh = ey - sy + 1;
             int colorbase = 0x10 * color;
             blockmove_8toN_transpen16_m72(bb1, code, sw, sh, 0x10, ls, ts, flipx, flipy, dw, dh, 0x100, colorbase, 0, sx, sy);
-        }
-        public static void blockmove_8toN_transpen_pri16_opwolf(byte[] bb1, int code, int srcwidth, int srcheight, int srcmodulo, int leftskip, int topskip, int flipx, int flipy, int dstwidth, int dstheight, int dstmodulo, int colorbase, uint pmask, int transpen, int sx, int sy)
-        {
-            int ydir, xdir, col, i, j, offsetx, offsety;
-            int srcdata_offset = code * srcwidth * srcheight;
-            offsetx = sx;
-            offsety = sy;
-            if (flipy != 0)
-            {
-                offsety += (dstheight - 1);
-                srcdata_offset += (srcheight - dstheight - topskip) * srcmodulo;
-                ydir = -1;
-            }
-            else
-            {
-                srcdata_offset += topskip * srcmodulo;
-                ydir = 1;
-            }
-            if (flipx != 0)
-            {
-                offsetx += (dstwidth - 1);
-                srcdata_offset += (srcwidth - dstwidth - leftskip);
-                xdir = -1;
-            }
-            else
-            {
-                srcdata_offset += leftskip;
-                xdir = 1;
-            }
-            for (i = 0; i < dstheight; i++)
-            {
-                for (j = 0; j < dstwidth; j++)
-                {
-                    col = bb1[srcdata_offset + srcmodulo * i + j];
-                    if (col != transpen)
-                    {
-                        if (((1 << (Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x1f)) & pmask) == 0)
-                        {
-                            Video.bitmapbase[Video.curbitmap][(offsety + ydir * i) * dstmodulo + offsetx + xdir * j] = (ushort)(colorbase + col);
-                        }
-                        Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] = (byte)((Tilemap.priority_bitmap[offsety + ydir * i, offsetx + xdir * j] & 0x7f) | 0x1f);
-                    }
-                }
-            }
         }
     }
 }

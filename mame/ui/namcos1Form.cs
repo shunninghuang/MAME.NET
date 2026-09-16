@@ -83,7 +83,7 @@ namespace ui
             locationY = e.Location.Y;
             if (locationX >= 0 && locationX <= 0x1ff && locationY >= 0 && locationY <= 0x1ff)
             {
-                tsslLocation.Text = locationX + "," + locationY + "," + Tilemap.priority_bitmap[locationX, 0x1ff - locationY].ToString();
+                tsslLocation.Text = locationX + "," + locationY + "," + Tilemap.priority_bitmap[(0x1ff - locationY) * Tilemap.screen_width + locationX].ToString();
             }
             Application.DoEvents();
         }

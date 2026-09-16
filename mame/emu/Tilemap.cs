@@ -571,7 +571,7 @@ namespace mame
                             if ((flagsmap[cy, cx >> 16] & mask) == value)
                             {
                                 Video.bitmapbase[Video.curbitmap][sy * Video.fullwidth + x] = pixmap[cy * width + (cx >> 16)];
-                                Tilemap.priority_bitmap[sy, x] = (byte)(Tilemap.priority_bitmap[sy, x] | priority);
+                                Tilemap.priority_bitmap[sy * Tilemap.screen_width + x] = (byte)(Tilemap.priority_bitmap[sy * Tilemap.screen_width + x] | priority);
                             }
                             cx += (uint)incxx;
                             x++;
@@ -593,7 +593,7 @@ namespace mame
                         if ((flagsmap[(cy >> 16) & ymask, (cx >> 16) & xmask] & mask) == value)
                         {
                             Video.bitmapbase[Video.curbitmap][sy * Video.fullwidth + x] = pixmap[((cy >> 16) & ymask) * width + ((cx >> 16) & xmask)];
-                            Tilemap.priority_bitmap[sy, x] = (byte)(Tilemap.priority_bitmap[sy, x] | priority);
+                            Tilemap.priority_bitmap[sy * Tilemap.screen_width + x] = (byte)(Tilemap.priority_bitmap[sy * Tilemap.screen_width + x] | priority);
                         }
                         cx += (uint)incxx;
                         cy += (uint)incxy;
@@ -618,7 +618,7 @@ namespace mame
                             if ((flagsmap[cy >> 16, cx >> 16] & mask) == value)
                             {
                                 Video.bitmapbase[Video.curbitmap][sy * Video.fullwidth + x] = pixmap[(cy >> 16) * width + (cx >> 16)];
-                                Tilemap.priority_bitmap[sy, x] = (byte)(Tilemap.priority_bitmap[sy, x] | priority);
+                                Tilemap.priority_bitmap[sy * Tilemap.screen_width + x] = (byte)(Tilemap.priority_bitmap[sy * Tilemap.screen_width + x] | priority);
                             }
                         }
                         cx += (uint)incxx;
@@ -635,8 +635,7 @@ namespace mame
     public class Tilemap
     {
         public static List<Tmap> lsTmap = new List<Tmap>();
-        public static byte[,] priority_bitmap;
-        public static byte[] ppriority_bitmap;
+        public static byte[] priority_bitmap;
         public static byte[,] bb00;
         public static byte[] bb0F, bbFF, bb10;
         public static int screen_width, screen_height;
@@ -661,7 +660,6 @@ namespace mame
                 case "CPS2turbo":
                     screen_width = 0x200;
                     screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "Data East":
                     screen_width = 0x100;
@@ -686,12 +684,10 @@ namespace mame
                 case "Megasys1":
                     screen_width = 0x196;
                     screen_height = 0x107;
-                    priority_bitmap = new byte[0x107, 0x196];
                     break;
                 case "Gaelco":
                     screen_width = 0x200;
                     screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "Kaneko":
                     screen_width = 0x100;
@@ -700,46 +696,38 @@ namespace mame
                 case "Namco System 1":
                     screen_width = 0x200;
                     screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "PGM":
                     screen_width = 0x200;
                     screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "M72":
                     screen_width = 0x200;
                     screen_height = 0x200;
-                    priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "M92":
                     screen_width = 0x200;
                     screen_height = 0x100;
-                    priority_bitmap = new byte[0x200, 0x200];
                     break;
                 case "Taito":
                     screen_width = 0x140;
                     screen_height = 0x100;
-                    priority_bitmap = new byte[0x100, 0x140];
                     Taito.tilemap_init();
                     break;
                 case "Taito B":
                     screen_width = 0x200;
                     screen_height = 0x100;
-                    priority_bitmap = new byte[0x100, 0x200];
                     break;
                 case "Konami":
                     screen_width = 0x200;
                     screen_height = 0x100;
-                    priority_bitmap = new byte[0x100, 0x200];
                     break;
                 case "Capcom":
                     screen_width = 0x200;
                     screen_height = 0x100;
-                    priority_bitmap = new byte[0x100, 0x200];
                     break;
             }
-            ppriority_bitmap = new byte[screen_width * screen_height];
+            priority_bitmap = new byte[screen_width * screen_height];
             switch (Machine.sBoard)
             {
                 case "CPS-1":

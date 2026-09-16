@@ -58,7 +58,7 @@ namespace mame
                 sy = -bublbobl_objectram[offs + 0];
                 for (yc = 0; yc < 32; yc++)
                 {
-                    if ((promsrom[prom_line_offset+ yc / 2] & 0x08) != 0)
+                    if ((promsrom[prom_line_offset + yc / 2] & 0x08) != 0)
                     {
                         continue;
                     }

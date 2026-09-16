@@ -324,7 +324,7 @@ namespace mame
             {
                 for (i = Video.new_clip.min_x; i <= Video.new_clip.max_x; i++)
                 {
-                    Tilemap.ppriority_bitmap[j * 0x200 + i] = 0;
+                    Tilemap.priority_bitmap[j * 0x200 + i] = 0;
                 }
             }
             if (layerpri[0] < K053251_get_priority(1))
