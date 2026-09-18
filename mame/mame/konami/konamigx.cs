@@ -2402,7 +2402,7 @@ namespace mame
                             tgt = (int)(src + bsize);
                             for (; count < tgt; count++)
                             {
-                                MC68000.mm1[0].WriteWord((int)count, 0);
+                                MC68000.mm1[0].WriteByte((int)count, 0);
                             }
                             for (; tgt < tgtend; i++, tgt += (int)bsize)
                             {
@@ -2427,7 +2427,7 @@ namespace mame
                                 {
                                     continue;
                                 }
-                                MC68000.mm1[0].WriteWord((int)i, 0x80);
+                                MC68000.mm1[0].WriteByte((int)i, unchecked((sbyte)0x80));
                             }
                         }
                         break;
@@ -2521,7 +2521,7 @@ namespace mame
                             tgt = (int)(src + bsize);
                             for (; count < tgt; count++)
                             {
-                                MC68000.mm1[0].WriteWord((int)count, 0);
+                                MC68000.mm1[0].WriteByte((int)count, 0);
                             }
                             for (; tgt < tgtend; i++, tgt += (int)bsize)
                             {
@@ -2546,7 +2546,7 @@ namespace mame
                                 {
                                     continue;
                                 }
-                                MC68000.mm1[0].WriteWord((int)i, 0x80);
+                                MC68000.mm1[0].WriteByte((int)i, unchecked((sbyte)0x80));
                             }
                         }
                         break;

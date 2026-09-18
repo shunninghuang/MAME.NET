@@ -218,17 +218,17 @@ namespace mame
             if (scroll1 != cps1_base(CPS1_SCROLL1_BASE, 0x4000))
             {
                 scroll1 = cps1_base(CPS1_SCROLL1_BASE, 0x4000);
-                Tmap.tilemap_mark_all_tiles_dirty(ttmap[0]);
+                ttmap[0].tilemap_mark_all_tiles_dirty();
             }
             if (scroll2 != cps1_base(CPS1_SCROLL2_BASE, 0x4000))
             {
                 scroll2 = cps1_base(CPS1_SCROLL2_BASE, 0x4000);
-                Tmap.tilemap_mark_all_tiles_dirty(ttmap[1]);
+                ttmap[1].tilemap_mark_all_tiles_dirty();
             }
             if (scroll3 != cps1_base(CPS1_SCROLL3_BASE, 0x4000))
             {
                 scroll3 = cps1_base(CPS1_SCROLL3_BASE, 0x4000);
-                Tmap.tilemap_mark_all_tiles_dirty(ttmap[2]);
+                ttmap[2].tilemap_mark_all_tiles_dirty();
             }
             if (bootleg_kludge == 1)
             {

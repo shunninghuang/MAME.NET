@@ -119,7 +119,7 @@ namespace mame
                     {
                         iOffset3 = i4 * cols + i3;
                         iTile = iOffset3;
-                        iCode = K052109_ram[K052109_videoram_F_offset + iTile] + 256 * K052109_ram[K052109_videoram2_F_offset + iTile]; ;
+                        iCode = K052109_ram[K052109_videoram_F_offset + iTile] + 256 * K052109_ram[K052109_videoram2_F_offset + iTile];
                         iColor = K052109_ram[K052109_colorram_F_offset + iTile];
                         bank = K052109_charrombank[(iColor & 0x0c) >> 2];
                         priority = 0;                        
@@ -221,7 +221,7 @@ namespace mame
                     {
                         iOffset3 = i4 * cols + i3;
                         iTile = iOffset3;
-                        iCode = K052109_ram[K052109_videoram_A_offset + iTile] + 256 * K052109_ram[K052109_videoram2_A_offset + iTile]; ;
+                        iCode = K052109_ram[K052109_videoram_A_offset + iTile] + 256 * K052109_ram[K052109_videoram2_A_offset + iTile];
                         iColor = K052109_ram[K052109_colorram_A_offset + iTile];
                         bank = K052109_charrombank[(iColor & 0x0c) >> 2];
                         priority = 0;
@@ -323,7 +323,7 @@ namespace mame
                     {
                         iOffset3 = i4 * cols + i3;
                         iTile = iOffset3;
-                        iCode = K052109_ram[K052109_videoram_B_offset + iTile] + 256 * K052109_ram[K052109_videoram2_B_offset + iTile]; ;
+                        iCode = K052109_ram[K052109_videoram_B_offset + iTile] + 256 * K052109_ram[K052109_videoram2_B_offset + iTile];
                         iColor = K052109_ram[K052109_colorram_B_offset + iTile];
                         bank = K052109_charrombank[(iColor & 0x0c) >> 2];
                         priority = 0;

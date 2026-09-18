@@ -17,7 +17,7 @@ namespace mame
         public static int roz_enable, roz_rombank;
         public static Tmap ult_936_tilemap;
         public static ushort clip;
-        public static void nvram_handler_load_mystwarr()
+        public static void nvram_handler_load()
         {
             Array.Copy(eepromrom, Eeprom.eeprom_data, 0x80);
         }

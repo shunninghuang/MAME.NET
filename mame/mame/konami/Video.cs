@@ -399,7 +399,7 @@ namespace mame
                 if (blswhstl_rombank != ((data & 0x80) >> 7))
                 {
                     blswhstl_rombank = (data & 0x80) >> 7;
-                    //tilemap_mark_all_tiles_dirty(ALL_TILEMAPS);
+                    Tmap.tilemap_mark_all_tiles_dirty_alltilemap();
                 }
             }
         }
@@ -411,7 +411,7 @@ namespace mame
             if (blswhstl_rombank != ((data & 0x80) >> 7))
             {
                 blswhstl_rombank = (data & 0x80) >> 7;
-                //tilemap_mark_all_tiles_dirty(ALL_TILEMAPS);
+                Tmap.tilemap_mark_all_tiles_dirty_alltilemap();
             }
         }
         public static ushort glfgreat_rom_r(int offset)
@@ -600,7 +600,6 @@ namespace mame
             sorted_layer[2] = 2;
             layerpri[2] = K053251_get_priority(3);
             sortlayers(sorted_layer, layerpri);
-            //Array.Clear(Tilemap.priority_bitmap, 0, Tilemap.priority_bitmap.Length);
             Array.Clear(Tilemap.priority_bitmap, 0, Tilemap.priority_bitmap.Length);
             K052109_tilemap[sorted_layer[0]].tilemap_draw_primask(Video.screenstate.visarea, 0, 1);
             K052109_tilemap[sorted_layer[1]].tilemap_draw_primask(Video.screenstate.visarea, 0x10, 2);

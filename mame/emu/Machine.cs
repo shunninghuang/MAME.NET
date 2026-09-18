@@ -342,6 +342,7 @@ namespace mame
                         case "blswhstl":
                         case "blswhstla":
                         case "detatwin":
+                            Konami.nvram_handler_load();
                             Konami.video_start_blswhstl();
                             break;
                         case "glfgreat":
@@ -376,14 +377,14 @@ namespace mame
                         case "mystwarrj":
                         case "mystwarra":
                         case "mystwarraa":
-                            Konami.nvram_handler_load_mystwarr();
+                            Konami.nvram_handler_load();
                             Konami.machine_start_mystwarr();
                             Konami.video_start_mystwarr();
                             break;
                         case "mmaulers":
                         case "mmaulersu":
                         case "dadandrn":
-                            Konami.nvram_handler_load_mystwarr();
+                            Konami.nvram_handler_load();
                             Konami.machine_start_mystwarr();
                             Konami.video_start_dadandrn();
                             break;
@@ -396,7 +397,7 @@ namespace mame
                         case "viostorma":
                         case "viostormab":
                         //case "viostormabbl":
-                            Konami.nvram_handler_load_mystwarr();
+                            Konami.nvram_handler_load();
                             Konami.machine_start_mystwarr();
                             Konami.video_start_viostorm();
                             break;
@@ -405,7 +406,7 @@ namespace mame
                         case "metamrphu":
                         case "metamrphj":
                         case "metamrpha":
-                            Konami.nvram_handler_load_mystwarr();
+                            Konami.nvram_handler_load();
                             Konami.machine_start_mystwarr();
                             Konami.video_start_metamrph();
                             break;
@@ -415,14 +416,14 @@ namespace mame
                         case "mtlchampu1":
                         case "mtlchampj":
                         case "mtlchampa":
-                            Konami.nvram_handler_load_mystwarr();
+                            Konami.nvram_handler_load();
                             Konami.machine_start_mystwarr();
                             Konami.video_start_martchmp();
                             break;
                         case "gaiapols":
                         case "gaiapolsu":
                         case "gaiapolsj":
-                            Konami.nvram_handler_load_mystwarr();
+                            Konami.nvram_handler_load();
                             Konami.machine_start_mystwarr();
                             Konami.video_start_gaiapols();
                             break;

@@ -190,10 +190,10 @@ namespace mame
                 }
             }
         }
-        public static void tilemap_mark_all_tiles_dirty(Tmap tmap)
+        public void tilemap_mark_all_tiles_dirty()
         {
-            tmap.all_tiles_dirty = true;
-            tmap.all_tiles_clean = false;
+            all_tiles_dirty = true;
+            all_tiles_clean = false;
         }
         public static void tilemap_mark_all_tiles_dirty_alltilemap()
         {
@@ -201,7 +201,7 @@ namespace mame
             {
                 if (t1 != null)
                 {
-                    tilemap_mark_all_tiles_dirty(t1);
+                    t1.tilemap_mark_all_tiles_dirty();
                 }
             }
         }
@@ -407,7 +407,7 @@ namespace mame
                 memory_to_logical[memindex] = flipped_logindex;
                 logical_to_memory[flipped_logindex] = memindex;
             }
-            tilemap_mark_all_tiles_dirty(this);
+            tilemap_mark_all_tiles_dirty();
         }
         public unsafe void pixmap_update(RECT* cliprect)
         {
@@ -636,8 +636,7 @@ namespace mame
     {
         public static List<Tmap> lsTmap = new List<Tmap>();
         public static byte[] priority_bitmap;
-        public static byte[,] bb00;
-        public static byte[] bb0F, bbFF, bb10;
+        public static byte[] bb00, bb0F, bbFF, bb10;
         public static int screen_width, screen_height;
         private static int INVALID_LOGICAL_INDEX = -1;
         public static byte TILEMAP_PIXEL_TRANSPARENT = 0x00;
@@ -776,13 +775,10 @@ namespace mame
                     {
                         bbFF[i] = 0xff;
                     }
-                    bb00 = new byte[0x200, 0x200];
-                    for (i = 0; i < 0x200; i++)
+                    bb00 = new byte[0x20000];
+                    for (i = 0; i < 0x20000; i++)
                     {
-                        for (j = 0; j < 0x200; j++)
-                        {
-                            bb00[i, j] = 0;
-                        }
+                        bb00[i] = 0;
                     }
                     break;
                 case "Capcom":

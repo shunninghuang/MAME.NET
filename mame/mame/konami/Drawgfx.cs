@@ -389,10 +389,6 @@ namespace mame
             ox = sx;
             oy = sy;
             ex = sx + 0x10 - 1;
-            if (code > 0x4000 || color > 0x80)
-            {
-                int i1 = 1;
-            }
             if (sx < 0)
             {
                 sx = 0;

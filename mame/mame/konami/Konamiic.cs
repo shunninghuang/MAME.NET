@@ -126,9 +126,6 @@ namespace mame
             K052109_videoram2_F_offset = 0x4000;
             K052109_videoram2_A_offset = 0x4800;
             K052109_videoram2_B_offset = 0x5000;
-            //tilemap_set_transparent_pen(K052109_tilemap[0],0);
-            //tilemap_set_transparent_pen(K052109_tilemap[1],0);
-            //tilemap_set_transparent_pen(K052109_tilemap[2],0);
             K052109_tilemap[0].scrollrows = 1;
             K052109_tilemap[0].scrollcols = 1;
             K052109_tilemap[1].scrollrows = 256;
@@ -140,59 +137,6 @@ namespace mame
                 K052109_tilemap[i].rowscroll = new int[K052109_tilemap[i].scrollrows];
                 K052109_tilemap[i].colscroll = new int[K052109_tilemap[1].scrollcols];
                 K052109_tilemap[i].tilemap_draw_instance3 = K052109_tilemap[i].tilemap_draw_instance_cps;
-                K052109_tilemap[i].pen_to_flags = new byte[1, 16];
-                K052109_tilemap[i].pen_to_flags[0, 0] = 0;
-                for (j = 1; j < 16; j++)
-                {
-                    K052109_tilemap[i].pen_to_flags[0, j] = 0x10;
-                }
-                K052109_tilemap[i].total_elements = gfx1rom.Length / 0x40;
-            }
-            K052109_tilemap[0].tile_update3 = K052109_tilemap[0].tile_update_konami_k052109_0;
-            K052109_tilemap[1].tile_update3 = K052109_tilemap[1].tile_update_konami_k052109_1;
-            K052109_tilemap[2].tile_update3 = K052109_tilemap[2].tile_update_konami_k052109_2;
-            for (i = 0; i < 3; i++)
-            {
-                K052109_dx[i] = K052109_dy[i] = 0;
-            }
-        }
-        public static void K052109_vh_start2(K052109_delegate _K052109_callback)
-        {
-            int i, j;
-            K052109_callback = _K052109_callback;
-            K052109_RMRD_line = LineState.CLEAR_LINE;
-            K052109_irq_enabled = 0;
-            has_extra_video_ram = 0;
-            K052109_tilemap = new Tmap[3];
-            for (i = 0; i < 3; i++)
-            {
-                K052109_tilemap[i] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-                Tilemap.lsTmap.Add(K052109_tilemap[i]);
-            }
-            K052109_ram = new byte[0x6000];
-            K052109_colorram_F_offset = 0x0000;
-            K052109_colorram_A_offset = 0x0800;
-            K052109_colorram_B_offset = 0x1000;
-            K052109_videoram_F_offset = 0x2000;
-            K052109_videoram_A_offset = 0x2800;
-            K052109_videoram_B_offset = 0x3000;
-            K052109_videoram2_F_offset = 0x4000;
-            K052109_videoram2_A_offset = 0x4800;
-            K052109_videoram2_B_offset = 0x5000;
-            //tilemap_set_transparent_pen(K052109_tilemap[0],0);
-            //tilemap_set_transparent_pen(K052109_tilemap[1],0);
-            //tilemap_set_transparent_pen(K052109_tilemap[2],0);
-            K052109_tilemap[0].scrollrows = 1;
-            K052109_tilemap[0].scrollcols = 1;
-            K052109_tilemap[1].scrollrows = 256;
-            K052109_tilemap[2].scrollrows = 256;
-            K052109_tilemap[1].scrollcols = 512;
-            K052109_tilemap[2].scrollcols = 512;
-            for (i = 0; i < 3; i++)
-            {
-                K052109_tilemap[i].rowscroll = new int[K052109_tilemap[i].scrollrows];
-                K052109_tilemap[i].colscroll = new int[K052109_tilemap[1].scrollcols];
-                K052109_tilemap[i].tilemap_draw_instance3 = K052109_tilemap[i].tilemap_draw_instance_konami_mystwarr;
                 K052109_tilemap[i].pen_to_flags = new byte[1, 16];
                 K052109_tilemap[i].pen_to_flags[0, 0] = 0;
                 for (j = 1; j < 16; j++)
@@ -242,14 +186,6 @@ namespace mame
         }
         public static void K052109_w(int offset, byte data)
         {
-            if (offset == 0x90d)
-            {
-                int i1 = 1;
-            }
-            if (offset == 0x290d)
-            {
-                int i1 = 1;
-            }
             if ((offset & 0x1fff) < 0x1800)
             {
                 if (offset >= 0x4000)
@@ -307,15 +243,15 @@ namespace mame
                 }
                 else if (offset == 0x1e80)
                 {
-                    //tilemap_set_flip(K052109_tilemap[0], (data & 1) ? (TILEMAP_FLIPY | TILEMAP_FLIPX) : 0);
-                    //tilemap_set_flip(K052109_tilemap[1], (data & 1) ? (TILEMAP_FLIPY | TILEMAP_FLIPX) : 0);
-                    //tilemap_set_flip(K052109_tilemap[2], (data & 1) ? (TILEMAP_FLIPY | TILEMAP_FLIPX) : 0);
+                    Tmap.tilemap_set_flip(K052109_tilemap[0], (byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
+                    Tmap.tilemap_set_flip(K052109_tilemap[1], (byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
+                    Tmap.tilemap_set_flip(K052109_tilemap[2], (byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
                     if (K052109_tileflip_enable != ((data & 0x06) >> 1))
                     {
                         K052109_tileflip_enable = ((data & 0x06) >> 1);
-                        K052109_tilemap[0].all_tiles_dirty = true;
-                        K052109_tilemap[1].all_tiles_dirty = true;
-                        K052109_tilemap[2].all_tiles_dirty = true;
+                        K052109_tilemap[0].tilemap_mark_all_tiles_dirty();
+                        K052109_tilemap[1].tilemap_mark_all_tiles_dirty();
+                        K052109_tilemap[2].tilemap_mark_all_tiles_dirty();
                     }
                 }
                 else if (offset == 0x1f00)
@@ -2746,8 +2682,6 @@ namespace mame
         {
             K056832_regsb[offset] = (ushort)((K056832_regsb[offset] & 0xff00) | data);
         }
-
-
         public static int K056832_update_linemap(/*running_machine *machine, bitmap_t *bitmap,*/ int page, int flags)
         {
             if (K056832_PageTileMode[page] != 0)

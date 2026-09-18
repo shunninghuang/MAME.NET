@@ -20,10 +20,10 @@ namespace mame
         public static int basebanksnd;
         public static void KonamiInit()
         {
-            int i,n;            
+            int i, n;
             toggle = 0;
             layer_colorbase = new int[6];//3 mystwarr 6
-            cuebrick_nvram=new ushort[0x400*0x20];
+            cuebrick_nvram = new ushort[0x400 * 0x20];
             tmnt2_1c0800 = new ushort[0x10];
             K053245_memory_region = new byte[2][];
             K053244_rombank = new int[2];
@@ -44,7 +44,7 @@ namespace mame
                 K053245_ram[i] = new byte[0];
                 K053245_buffer[i] = new ushort[0];
                 K053244_regs[i] = new byte[0x10];
-            }            
+            }
             K053936_offset = new int[2][];
             for (i = 0; i < 2; i++)
             {
@@ -66,8 +66,7 @@ namespace mame
             layerpri = new int[3];
             sorted_layer = new int[3];
             Machine.bRom = true;
-            Memory.mainrom = Machine.GetRom("maincpu.rom");
-            Memory.audiorom = Machine.GetRom("audiocpu.rom");            
+            Memory.mainrom = Machine.GetRom("maincpu.rom");            
             gfx1rom = Machine.GetRom("gfx1.rom");
             gfx2rom = Machine.GetRom("gfx2.rom");
             sprite_totel_element = gfx2rom.Length / 0x100;
@@ -80,6 +79,7 @@ namespace mame
                 case "gbustersa":
                 case "crazycop":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x1800];
                     Memory.audioram = new byte[0x800];
                     Generic.paletteram = new byte[0x800];
@@ -100,6 +100,7 @@ namespace mame
                 case "thunderxb":
                 case "thunderxj":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x1800];
                     Memory.audioram = new byte[0x800];
                     Generic.paletteram = new byte[0x800];
@@ -132,6 +133,7 @@ namespace mame
                 case "mia":
                 case "mia2":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x4000];
                     Memory.audioram = new byte[0x800];
                     mainram2 = new byte[0x4000];
@@ -160,6 +162,7 @@ namespace mame
                 case "tmnt2pj":
                 case "tmnt2po":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x4000];
                     Memory.audioram = new byte[0x800];
                     Generic.paletteram16 = new ushort[0x800];
@@ -183,6 +186,7 @@ namespace mame
                 case "thndrx2a":
                 case "thndrx2j":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x4000];
                     Memory.audioram = new byte[0x800];
                     Generic.paletteram16 = new ushort[0x800];
@@ -199,10 +203,8 @@ namespace mame
                 case "lgtnfghta":
                 case "lgtnfghtu":
                 case "trigon":
-                case "blswhstl":
-                case "blswhstla":
-                case "detatwin":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x4000];
                     Memory.audioram = new byte[0x800];
                     Generic.paletteram16 = new ushort[0x800];
@@ -211,6 +213,24 @@ namespace mame
                     K053245_memory_region[0] = Machine.GetRom("k053245.rom");
                     K053260.k053260rom = Machine.GetRom("k053260.rom");
                     if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K053245_memory_region[0] == null || Memory.audiorom == null || K053260.k053260rom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
+                case "blswhstl":
+                case "blswhstla":
+                case "detatwin":
+                    init_eeprom_count = 0;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
+                    Memory.mainram = new byte[0x4000];
+                    Memory.audioram = new byte[0x800];
+                    Generic.paletteram16 = new ushort[0x800];
+                    Generic.spriteram16 = new ushort[0x2000];
+                    K052109_memory_region = Machine.GetRom("k052109.rom");
+                    K053245_memory_region[0] = Machine.GetRom("k053245.rom");
+                    K053260.k053260rom = Machine.GetRom("k053260.rom");
+                    eepromrom = Machine.GetRom("eeprom.rom");
+                    if (Memory.mainrom == null || gfx1rom == null || gfx2rom == null || K052109_memory_region == null || K053245_memory_region[0] == null || Memory.audiorom == null || K053260.k053260rom == null || eepromrom == null)
                     {
                         Machine.bRom = false;
                     }
@@ -237,6 +257,7 @@ namespace mame
                 case "ssridersjac":
                 case "ssridersjbd":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x4000];
                     Memory.audioram = new byte[0x800];
                     mainram2 = new byte[0x80];
@@ -253,6 +274,7 @@ namespace mame
                 case "glfgreat":
                 case "glfgreatj":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x4000];
                     Memory.audioram = new byte[0x800];
                     Generic.paletteram16 = new ushort[0x800];
@@ -271,6 +293,7 @@ namespace mame
                 case "prmrsocr":
                 case "prmrsocrj":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x4000];
                     Memory.audioram = new byte[0x2000];
                     Generic.paletteram16 = new ushort[0x800];
@@ -289,8 +312,9 @@ namespace mame
                 case "moomesa":
                 case "moomesauac":
                 case "moomesauab":
-                case "moomesaaab":                
+                case "moomesaaab":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     protram = new ushort[0x10];
                     Memory.mainram = new byte[0x10000];
                     Memory.audioram = new byte[0x2000];
@@ -314,6 +338,7 @@ namespace mame
                 case "buckyaab":
                 case "buckyaa":
                     init_eeprom_count = 10;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     protram = new ushort[0x10];
                     Memory.mainram = new byte[0x10000];
                     Memory.audioram = new byte[0x2000];
@@ -342,6 +367,7 @@ namespace mame
                 case "mtlchampj":
                 case "mtlchampa":
                     init_eeprom_count = 0;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x10000];
                     Memory.audioram = new byte[0x2000];
                     mainram2 = new byte[0x20];
@@ -363,6 +389,7 @@ namespace mame
                 case "gaiapolsu":
                 case "gaiapolsj":
                     init_eeprom_count = 0;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x10000];
                     Memory.audioram = new byte[0x2000];
                     mainram2 = new byte[0x20];
@@ -388,8 +415,9 @@ namespace mame
                 case "viostormj":
                 case "viostorma":
                 case "viostormab":
-                //case "viostormabbl":
+                    //case "viostormabbl":
                     init_eeprom_count = 0;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x10000];
                     Memory.audioram = new byte[0x2000];
                     mainram2 = new byte[0xf000];
@@ -414,6 +442,7 @@ namespace mame
                 case "metamrphj":
                 case "metamrpha":
                     init_eeprom_count = 0;
+                    Memory.audiorom = Machine.GetRom("audiocpu.rom");
                     Memory.mainram = new byte[0x10000];
                     Memory.audioram = new byte[0x2000];
                     mainram2 = new byte[0xf000];
@@ -588,17 +617,17 @@ namespace mame
             int offset1 = ((offset & 0x3000) >> 1) | (offset & 0x07ff);
             return K052109_word_r(offset1);
         }
-        public static void K052109_word_noA12_w(int offset,ushort data)
+        public static void K052109_word_noA12_w(int offset, ushort data)
         {
             int offset1;
-	        offset1 = ((offset & 0x3000) >> 1) | (offset & 0x07ff);
-	        K052109_word_w(offset1,data);
+            offset1 = ((offset & 0x3000) >> 1) | (offset & 0x07ff);
+            K052109_word_w(offset1, data);
         }
         public static void K052109_word_noA12_w1(int offset, byte data)
         {
             int offset1;
             offset1 = ((offset & 0x3000) >> 1) | (offset & 0x07ff);
-            K052109_w(offset1, data);            
+            K052109_w(offset1, data);
         }
         public static void K052109_word_noA12_w2(int offset, byte data)
         {
@@ -642,12 +671,12 @@ namespace mame
             int offset1 = offset;
             if ((offset & 0x0031) != 0)
             {
-                result= Generic.spriteram16[offset];
+                result = Generic.spriteram16[offset];
             }
             else
             {
                 offset = ((offset & 0x000e) >> 1) | ((offset & 0x1fc0) >> 3);
-                result= K053245_word_r(offset);
+                result = K053245_word_r(offset);
             }
             /*if (offset1 == 0x1CB9 / 2)
             {
@@ -694,13 +723,13 @@ namespace mame
             offset &= ~1;
             return (ushort)(K053244_r(offset + 1) | (K053244_r(offset) << 8));
         }
-        public static void K053244_word_noA1_w(int offset,ushort data)
+        public static void K053244_word_noA1_w(int offset, ushort data)
         {
             offset &= ~1;
             //if (ACCESSING_BITS_8_15)
-                K053244_w(offset, (byte)((data >> 8) & 0xff));
+            K053244_w(offset, (byte)((data >> 8) & 0xff));
             //if (ACCESSING_BITS_0_7)
-                K053244_w(offset + 1, (byte)(data & 0xff));
+            K053244_w(offset + 1, (byte)(data & 0xff));
         }
         public static void K053244_word_noA1_w1(int offset, byte data)
         {
@@ -729,7 +758,7 @@ namespace mame
         }
         public static void punkshot_interrupt()
         {
-            if (K052109_is_IRQ_enabled()!=0)
+            if (K052109_is_IRQ_enabled() != 0)
             {
                 Generic.irq4_line_hold(0);
             }
@@ -1008,7 +1037,7 @@ namespace mame
             //if (ACCESSING_BITS_0_7)
             {
                 Eeprom.eeprom_write_bit(data & 0x01);
-                Eeprom.eeprom_set_cs_line((data & 0x02)!=0 ?LineState.CLEAR_LINE :LineState.ASSERT_LINE);
+                Eeprom.eeprom_set_cs_line((data & 0x02) != 0 ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
                 Eeprom.eeprom_set_clock_line((data & 0x04) != 0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
                 dim_c = data & 0x18;
                 K053244_bankselect(0, ((data & 0x20) >> 5) << 2);
@@ -1038,7 +1067,7 @@ namespace mame
         }
         public static ushort thndrx2_eeprom_r()
         {
-            int res;            
+            int res;
             res = (Eeprom.eeprom_read_bit() << 8) | (ushort)((bytee << 8) | (byte)sbyte2);
             toggle ^= 0x0800;
             return (ushort)(res ^ toggle);
@@ -1048,15 +1077,15 @@ namespace mame
             //if (ACCESSING_BITS_0_7)
             {
                 Eeprom.eeprom_write_bit(data & 0x01);
-                Eeprom.eeprom_set_cs_line((data & 0x02)!=0 ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
-                Eeprom.eeprom_set_clock_line((data & 0x04)!=0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
+                Eeprom.eeprom_set_cs_line((data & 0x02) != 0 ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
+                Eeprom.eeprom_set_clock_line((data & 0x04) != 0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
                 if (last == 0 && (data & 0x20) != 0)
                 {
                     Cpuint.cpunum_set_input_line(1, 0, LineState.HOLD_LINE);
                     //cpunum_set_input_line_and_vector(machine, 1, 0, LineState.HOLD_LINE, 0xff);
                 }
                 last = data & 0x20;
-                K052109_set_RMRD_line((data & 0x40)!=0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
+                K052109_set_RMRD_line((data & 0x40) != 0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
             }
         }
         public static void thndrx2_eeprom_w2(byte data)
@@ -1074,7 +1103,7 @@ namespace mame
         public static ushort prmrsocr_IN0_r()
         {
             ushort res;
-            res = (ushort)((sbyte0 << 8)|(byte)sbyte1);
+            res = (ushort)((sbyte0 << 8) | (byte)sbyte1);
             if (init_eeprom_count != 0)
             {
                 init_eeprom_count--;
@@ -1187,14 +1216,13 @@ namespace mame
         {
             cuebrick_nvram_bank = 0;
         }
-
         public static void ssriders_soundkludge_w()
         {
             Cpuint.cpunum_set_input_line(1, 0, LineState.HOLD_LINE);
         }
         public static byte tmnt2_get_byte(int addr)
         {
-            byte result=0;
+            byte result = 0;
             if (addr <= 0x07ffff)
             {
                 result = Memory.mainrom[addr];
@@ -1473,7 +1501,7 @@ namespace mame
         {
             K054539.kk1[0].k054539_w(0x200 + offset, data);
         }
-        public static  void volume_callback(int v)
+        public static void volume_callback(int v)
         {
             K007232.k007232_set_volume(0, 0, (v >> 4) * 0x11, 0);
             K007232.k007232_set_volume(0, 1, 0, (v & 0x0f) * 0x11);

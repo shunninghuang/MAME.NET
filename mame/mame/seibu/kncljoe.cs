@@ -186,7 +186,7 @@ namespace mame
             if (tile_bank != i)
             {
                 tile_bank = i;
-                Tmap.tilemap_mark_all_tiles_dirty(bg_tilemap);
+                bg_tilemap.tilemap_mark_all_tiles_dirty();
             }
             i = (data & 0x04) >> 2;
             if (sprite_bank != i)
