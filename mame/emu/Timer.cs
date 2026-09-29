@@ -746,6 +746,12 @@ namespace mame
                     lt.Remove(lt[i]);
                     lt.Add(Technos.scanline_timer);
                 }
+                else if (lt[i].func == "sound_nmi")
+                {
+                    Cpuexec.timedint_timer = lt[i];
+                    lt.Remove(lt[i]);
+                    lt.Add(Cpuexec.timedint_timer);
+                }
             }
             for (i = n; i < 32; i++)
             {

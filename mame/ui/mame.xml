@@ -7735,6 +7735,13 @@
     <year>2023</year>
     <manufacturer>TCDev</manufacturer>
   </game>
+  <game name="vaporous" board="Neo Geo">
+    <parent></parent>
+    <direction></direction>
+    <description>Vaporous (Demo)</description>
+    <year>2025</year>
+    <manufacturer>TTE</manufacturer>
+  </game>
   <game name="ddragon" board="Technos">
     <parent></parent>
     <direction></direction>
@@ -8375,14 +8382,14 @@
   <game name="youkaidk2" board="Namco System 1">
     <parent>shadowld</parent>
     <direction>180</direction>
-    <description>Yokai Douchuuki (Japan, new version (YD2, Rev B))</description>
+    <description>Youkai Douchuuki (Japan, new version (YD2, Rev B))</description>
     <year>1987</year>
     <manufacturer>Namco</manufacturer>
   </game>
   <game name="youkaidk1" board="Namco System 1">
     <parent>shadowld</parent>
     <direction>180</direction>
-    <description>Yokai Douchuuki (Japan, old version (YD1))</description>
+    <description>Youkai Douchuuki (Japan, old version (YD1))</description>
     <year>1987</year>
     <manufacturer>Namco</manufacturer>
   </game>
@@ -8473,31 +8480,38 @@
   <game name="ws" board="Namco System 1">
     <parent></parent>
     <direction>180</direction>
-    <description>World Stadium (Japan)</description>
+    <description>Pro Yakyuu World Stadium (Japan)</description>
     <year>1988</year>
     <manufacturer>Namco</manufacturer>
   </game>
   <game name="berabohm" board="Namco System 1">
     <parent></parent>
     <direction>180</direction>
-    <description>Beraboh Man (Japan, Rev C)</description>
+    <description>Chou Zetsurinjin Berabowman (Japan, Rev C)</description>
     <year>1988</year>
     <manufacturer>Namco</manufacturer>
   </game>
   <game name="berabohmb" board="Namco System 1">
     <parent>berabohm</parent>
     <direction>180</direction>
-    <description>Beraboh Man (Japan, Rev B)</description>
+    <description>Chou Zetsurinjin Berabowman (Japan, Rev B)</description>
     <year>1988</year>
     <manufacturer>Namco</manufacturer>
   </game>
-  <!--  <game name="mmaze" board="Namco System 1">
+  <game name="mmaze" board="Namco System 1">
     <parent></parent>
     <direction>180</direction>
     <description>Marchen Maze (Japan)</description>
     <year>1988</year>
     <manufacturer>Namco</manufacturer>
-  </game>-->
+  </game>
+  <game name="mmaze2" board="Namco System 1">
+    <parent>mmaze</parent>
+    <direction>180</direction>
+    <description>Marchen Maze (Japan, hack?)</description>
+    <year>1988</year>
+    <manufacturer>Namco</manufacturer>
+  </game>
   <game name="bakutotu" board="Namco System 1">
     <parent></parent>
     <direction>180</direction>
@@ -8508,7 +8522,7 @@
   <game name="wldcourt" board="Namco System 1">
     <parent></parent>
     <direction>180</direction>
-    <description>World Court (Japan)</description>
+    <description>Pro Tennis World Court (Japan)</description>
     <year>1988</year>
     <manufacturer>Namco</manufacturer>
   </game>
@@ -8564,7 +8578,7 @@
   <game name="ws89" board="Namco System 1">
     <parent>ws</parent>
     <direction>180</direction>
-    <description>World Stadium '89 (Japan)</description>
+    <description>Pro Yakyuu World Stadium '89 (Japan)</description>
     <year>1989</year>
     <manufacturer>Namco</manufacturer>
   </game>
@@ -8578,7 +8592,7 @@
   <game name="ws90" board="Namco System 1">
     <parent>ws</parent>
     <direction>180</direction>
-    <description>World Stadium '90 (Japan)</description>
+    <description>Pro Yakyuu World Stadium '90 (Japan)</description>
     <year>1990</year>
     <manufacturer>Namco</manufacturer>
   </game>
@@ -8591,6 +8605,13 @@
   </game>
   <game name="boxyboy" board="Namco System 1">
     <parent></parent>
+    <direction></direction>
+    <description>Boxy Boy (World, SB2)</description>
+    <year>1990</year>
+    <manufacturer>Namco</manufacturer>
+  </game>
+  <game name="boxyboya" board="Namco System 1">
+    <parent>boxyboy</parent>
     <direction></direction>
     <description>Boxy Boy (SB?)</description>
     <year>1990</year>
@@ -8613,14 +8634,14 @@
   <game name="tankfrce" board="Namco System 1">
     <parent></parent>
     <direction></direction>
-    <description>Tank Force (US, 2 Player)</description>
+    <description>Tank Force (US, 2 Players)</description>
     <year>1991</year>
     <manufacturer>Namco</manufacturer>
   </game>
   <game name="tankfrce4" board="Namco System 1">
     <parent>tankfrce</parent>
     <direction></direction>
-    <description>Tank Force (US, 4 Player)</description>
+    <description>Tank Force (US, 4 Players)</description>
     <year>1991</year>
     <manufacturer>Namco</manufacturer>
   </game>

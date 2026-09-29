@@ -9,7 +9,6 @@ namespace mame
 {
     public partial class Konami
     {
-        public static int counta;
         public static RECT[] K053936_cliprect;
         public static int[] K053936_clip_enabled;
         public static int[] colormask = new int[8] { 1, 3, 7, 0xf, 0x1f, 0x3f, 0x7f, 0xff };
@@ -23,7 +22,7 @@ namespace mame
         public static ushort[] gx_spriteram;
         public static int gx_objdma, gx_primode;
         public static byte konamigx_wrport1_0, konamigx_wrport1_1;
-        public static ushort konamigx_wrport2;        
+        public static ushort konamigx_wrport2;
         public static int K053246_objset1;
         public static int[] K053247_vrcbk;
         public static int K053247_coreg, K053247_coregshift, K053247_opset;
@@ -31,10 +30,15 @@ namespace mame
         public static int[] vcblk;
         public static int ocblk;
         public static int vinmix, vmixon, osinmix, osmixon;
-        public static ushort[] prot_data=new ushort[0x20];
+        public static ushort[] prot_data = new ushort[0x20];
         public static void SaveStateBinary_konamigx(BinaryWriter writer)
         {
             int i;
+            writer.Write(gx_shdzbuf, 0, 0x2a0000);
+            for (i = 0; i < 0x800; i++)
+            {
+                writer.Write(gx_spriteram[i]);
+            }
             for (i = 0; i < 2; i++)
             {
                 writer.Write(K053936_clip_enabled[i]);
@@ -60,16 +64,25 @@ namespace mame
             writer.Write(vmixon);
             writer.Write(osinmix);
             writer.Write(osmixon);
+            for (i = 0; i < 0x20; i++)
+            {
+                writer.Write(prot_data[i]);
+            }
         }
         public static void LoadStateBinary_konamigx(BinaryReader reader)
         {
             int i;
+            gx_shdzbuf = reader.ReadBytes(0x2a0000);
+            for (i = 0; i < 0x800; i++)
+            {
+                gx_spriteram[i] = reader.ReadUInt16();
+            }
             for (i = 0; i < 2; i++)
             {
                 K053936_clip_enabled[i] = reader.ReadInt32();
             }
-            konamigx_wrport1_0=reader.ReadByte();
-            konamigx_wrport1_1=reader.ReadByte();
+            konamigx_wrport1_0 = reader.ReadByte();
+            konamigx_wrport1_1 = reader.ReadByte();
             konamigx_wrport2 = reader.ReadUInt16();
             K053246_objset1 = reader.ReadInt32();
             for (i = 0; i < 4; i++)
@@ -89,6 +102,10 @@ namespace mame
             vmixon = reader.ReadInt32();
             osinmix = reader.ReadInt32();
             osmixon = reader.ReadInt32();
+            for (i = 0; i < 0x20; i++)
+            {
+                prot_data[i] = reader.ReadUInt16();
+            }
         }
         public static void K053936GP_set_offset(int chip, int xoffs, int yoffs)
         {
@@ -347,10 +364,6 @@ namespace mame
             int dst_minx, dst_maxx, dst_miny, dst_maxy;
             int dst_skipx, dst_skipy, dst_x, dst_y, dst_lastx, dst_lasty;
             int src_pitch, dst_pitch;
-            if (Video.screenstate.frame_number == 0x5a0 && code == 0xd2cd)
-            {
-                int i1 = 1;
-            }
             if (scalex == 0 || scaley == 0)
             {
                 return;
@@ -571,12 +584,6 @@ namespace mame
                                     eax = (int)Palette.entry_color2[pal_base_offset + eax];
                                     Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
                                     bitmap.ui1[dst_ptr_offset + ecx] = (uint)eax;
-                                    /*if (Video.screenstate.frame_number == 0x5a0 && code == 0xd2cd)
-                                    {
-                                        StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
-                                        sw2.WriteLine(code.ToString("x") + "\t" + color.ToString("x") + "\t" + flipx.ToString("x") + "\t" + flipy.ToString("x") + "\t" + sx.ToString("x") + "\t" + sy.ToString("x") + "\t" + scalex.ToString("x") + "\t" + scaley.ToString("x") + "\t" + alpha.ToString("x") + "\t" + drawmode.ToString("x") + "\t" + zcode.ToString("x") + "\t" + pri.ToString("x") + "\t" + ozbuf_ptr_offset.ToString("x") + "\t" + z8.ToString("x") + "\t" + dst_ptr_offset.ToString("x") + "\t" + ecx.ToString("x") + "\t" + eax.ToString("x"));
-                                        sw2.Close();
-                                    }*/
                                 }
                                 while (++ecx != 0);
                                 ecx = src_fby;
@@ -712,7 +719,7 @@ namespace mame
                                     gx_shdzbuf[szbuf_ptr_offset + ecx * 2] = z8;
                                     gx_shdzbuf[szbuf_ptr_offset + ecx * 2 + 1] = p8;
                                     eax = (eax >> 9 & 0x7c00) | (eax >> 6 & 0x03e0) | (eax >> 3 & 0x001f);
-                                    bitmap.ui1[dst_ptr_offset + ecx] = Palette.shadow_table[0].data[eax];
+                                    bitmap.ui1[dst_ptr_offset + ecx] = Palette.shadow_table[Drawgfx.imode].data[eax];
                                 }
                                 while (++ecx != 0);
                                 ecx = src_fby;
@@ -781,17 +788,7 @@ namespace mame
                                     }
                                     eax = (int)Palette.entry_color2[pal_base_offset + eax];
                                     Tilemap.priority_bitmap[ozbuf_ptr_offset + ecx] = z8;
-                                    if (eax != 0)
-                                    {
-                                        int i1 = 1;
-                                    }                                    
                                     bitmap.ui1[dst_ptr_offset + ecx] = (uint)eax;
-                                    /*if (Video.screenstate.frame_number == 0x88d)
-                                    {
-                                        StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
-                                        sw2.WriteLine(code.ToString("x") + "\t" + color.ToString("x") + "\t" + flipx.ToString("x") + "\t" + flipy.ToString("x") + "\t" + sx.ToString("x") + "\t" + sy.ToString("x") + "\t" + scalex.ToString("x") + "\t" + scaley.ToString("x") + "\t" + alpha.ToString("x") + "\t" + drawmode.ToString("x") + "\t" + zcode.ToString("x") + "\t" + pri.ToString("x") + "\t" + dst_ptr_offset.ToString("x") + "\t" + ecx.ToString("x") + "\t" + eax.ToString("x"));
-                                        sw2.Close();
-                                    }*/
                                 }
                                 while (++ecx != 0);
                                 src_ptr_offset += src_fdy;
@@ -883,7 +880,7 @@ namespace mame
                                     gx_shdzbuf[szbuf_ptr_offset + ecx * 2] = z8;
                                     gx_shdzbuf[szbuf_ptr_offset + ecx * 2 + 1] = p8;
                                     eax = (eax >> 9 & 0x7c00) | (eax >> 6 & 0x03e0) | (eax >> 3 & 0x001f);
-                                    bitmap.ui1[dst_ptr_offset + ecx] = Palette.shadow_table[0].data[eax];
+                                    bitmap.ui1[dst_ptr_offset + ecx] = Palette.shadow_table[Drawgfx.imode].data[eax];
                                 }
                                 while (++ecx != 0);
                                 src_ptr_offset += src_fdy;
@@ -936,7 +933,7 @@ namespace mame
         {
             int w = Video.screenstate.visarea.max_x - Video.screenstate.visarea.min_x + 1;
             int h = Video.screenstate.visarea.max_y - Video.screenstate.visarea.min_y + 1;
-            int offsetx,offsety,offset;
+            int offsetx, offsety, offset;
             offsetx = Video.screenstate.visarea.min_x;
             offsety = Video.screenstate.visarea.min_y;
             offset = 0;
@@ -950,7 +947,7 @@ namespace mame
                 }
                 offset += 384;
             }
-            while (--ecx!=0);
+            while (--ecx != 0);
             if (noshadow == 0)
             {
                 offset = 0;
@@ -1370,11 +1367,6 @@ namespace mame
                                 {
                                     k |= unchecked((int)0x80000000);
                                 }
-                                if (Video.screenstate.frame_number==0x3b2&& count == 0x19)
-                                {
-                                    int i1 = 1;
-                                }
-                                counta = count;
                                 K056832_tilemap_draw(cliprect, code, k, 0);
                             }
                             continue;
@@ -1659,15 +1651,6 @@ namespace mame
                             scalex = zw << 12;
                             scaley = zh << 12;
                         };
-                        /*if (Video.screenstate.frame_number == 0x5a0)
-                        {
-                            StreamWriter sw2 = new StreamWriter(@"\VS2008\compare1\compare1\bin\Debug\2.txt", true);
-                            sw2.WriteLine(temp.ToString("x") + "\t" + color.ToString("x") + "\t" + temp1.ToString("x") + "\t" + temp2.ToString("x") + "\t" + temp3.ToString("x") + "\t" + temp4.ToString("x") + "\t" + scalex.ToString("x") + "\t" + scaley.ToString("x") + "\t" + alpha.ToString("x") + "\t" + drawmode.ToString("x") + "\t" + zcode.ToString("x") + "\t" + pri.ToString("x"));
-                            sw2.Close();
-                            BinaryWriter bw1 = new BinaryWriter(new FileStream(@"\VS2008\compare1\compare1\bin\Debug\2.dat", FileMode.Append));
-                            bw1.Write(Tilemap.ppriority_bitmap, 0, 0x20000);
-                            bw1.Close();
-                        }*/
                         zdrawgfxzoom32GP(Palette.bbitmap[Video.curbitmap], K053247_gfx, cliprect, (uint)temp, (uint)color, temp1, temp2, temp3, temp4, scalex, scaley, alpha, drawmode, zcode, pri);
                     }
                 }
@@ -2050,7 +2033,6 @@ namespace mame
                                 {
                                     k |= unchecked((int)0x80000000);
                                 }
-                                counta = count;
                                 K056832_tilemap_draw(cliprect, code, k, 0);
                             }
                             continue;
@@ -2435,9 +2417,9 @@ namespace mame
                     case 0xc0:
                         dx = (short)prot_data[0xc];
                         dy = (short)prot_data[0xd];
-                        if (dx!=0)
+                        if (dx != 0)
                         {
-                            if (dy!=0)
+                            if (dy != 0)
                             {
                                 angle = (int)((Math.Atan((double)dy / dx) * 128.0) / Math.PI);
                                 if (dx < 0)
@@ -2703,7 +2685,7 @@ namespace mame
             int mod_addr, mod_count, mod_skip, mod_offs;
             int mode, i, element_size = 1;
             ushort mod_val, mod_data;
-            prot_data[offset] = (ushort)((data<<8)|(prot_data[offset]&0xff));
+            prot_data[offset] = (ushort)((data << 8) | (prot_data[offset] & 0xff));
             if (offset == 0x0c)
             {
                 mode = (prot_data[0x0d] << 8 & 0xff00) | (prot_data[0x0f] & 0xff);

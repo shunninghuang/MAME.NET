@@ -1305,6 +1305,7 @@ namespace mame
                             MC68000.mm1 = new MC68000[MC68000.nMC68000];
                             MC68000.mm1[0] = new MC68000();
                             MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            ncpu = 1;
                             cpu = new cpuexec_data[ncpu];
                             cpu[0] = MC68000.mm1[0];
                             ncpu = 1;

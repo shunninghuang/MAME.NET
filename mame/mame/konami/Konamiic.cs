@@ -243,9 +243,9 @@ namespace mame
                 }
                 else if (offset == 0x1e80)
                 {
-                    Tmap.tilemap_set_flip(K052109_tilemap[0], (byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
-                    Tmap.tilemap_set_flip(K052109_tilemap[1], (byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
-                    Tmap.tilemap_set_flip(K052109_tilemap[2], (byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
+                    K052109_tilemap[0].tilemap_set_flip((byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
+                    K052109_tilemap[1].tilemap_set_flip((byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
+                    K052109_tilemap[2].tilemap_set_flip((byte)((data & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
                     if (K052109_tileflip_enable != ((data & 0x06) >> 1))
                     {
                         K052109_tileflip_enable = ((data & 0x06) >> 1);
@@ -2455,7 +2455,7 @@ namespace mame
                             }
                             for (i = 0; i < 16; i++)
                             {
-                                Tmap.tilemap_set_flip(K056832_tilemap[i], (byte)flip);
+                                K056832_tilemap[i].tilemap_set_flip((byte)flip);
                             }
                         }
                         if ((new_data & 0x02) != (old_data & 0x02))
@@ -2535,7 +2535,7 @@ namespace mame
                             }
                             for (i = 0; i < 16; i++)
                             {
-                                Tmap.tilemap_set_flip(K056832_tilemap[i], (byte)flip);
+                                K056832_tilemap[i].tilemap_set_flip((byte)flip);
                             }
                         }
                         if ((new_data & 0x02) != (old_data & 0x02))
@@ -2615,7 +2615,7 @@ namespace mame
                             }
                             for (i = 0; i < 16; i++)
                             {
-                                Tmap.tilemap_set_flip(K056832_tilemap[i], (byte)flip);
+                                K056832_tilemap[i].tilemap_set_flip((byte)flip);
                             }
                         }
                         if ((new_data & 0x02) != (old_data & 0x02))
@@ -3873,6 +3873,22 @@ namespace mame
         public static void K053252_word_w2(int offset, byte data)
         {
             K053252_regs[offset] = (ushort)((K053252_regs[offset] & 0xff00) | data);
+        }
+        public static void SaveStateBinary_K053252(BinaryWriter writer)
+        {
+            int i;
+            for (i = 0; i < 0x10; i++)
+            {
+                writer.Write(K053252_regs[i]);
+            }
+        }
+        public static void LoadStateBinary_K053252(BinaryReader reader)
+        {
+            int i;
+            for (i = 0; i < 0x10; i++)
+            {
+                K053252_regs[i] = reader.ReadUInt16();
+            }
         }
     }
 }

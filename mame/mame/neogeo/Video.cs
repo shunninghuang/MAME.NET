@@ -34,10 +34,6 @@ namespace mame
         public static int[,] zoom_x_tables;
         private static int[] transarray, bgarray;
         private static int trans_color;
-        private static byte combine_5_weights(double[] tab, int w0, int w1, int w2, int w3, int w4)
-        {
-            return (byte)(tab[0] * w0 + tab[1] * w1 + tab[2] * w2 + tab[3] * w3 + tab[4] * w4 + 0.5);
-        }
         private static int get_pen(ushort data)
         {
             double[] weights;
@@ -56,19 +52,19 @@ namespace mame
                 else
                     weights = rgb_weights_normal;
             }
-            r = combine_5_weights(weights,
+            r = resnet.combine_5_weights(weights,
                                   (data >> 11) & 0x01,
                                   (data >> 10) & 0x01,
                                   (data >> 9) & 0x01,
                                   (data >> 8) & 0x01,
                                   (data >> 14) & 0x01);
-            g = combine_5_weights(weights,
+            g = resnet.combine_5_weights(weights,
                                   (data >> 7) & 0x01,
                                   (data >> 6) & 0x01,
                                   (data >> 5) & 0x01,
                                   (data >> 4) & 0x01,
                                   (data >> 13) & 0x01);
-            b = combine_5_weights(weights,
+            b = resnet.combine_5_weights(weights,
                                   (data >> 3) & 0x01,
                                   (data >> 2) & 0x01,
                                   (data >> 1) & 0x01,

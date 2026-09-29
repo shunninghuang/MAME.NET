@@ -140,23 +140,22 @@ namespace mame
         {
             enable = _enable;
         }
-        public static void tilemap_set_flip(Tmap tmap, byte _attributes)
+        public void tilemap_set_flip(byte _attributes)
         {
-            if (tmap == null)
+            if (attributes != _attributes)
             {
-                foreach (Tmap t1 in Tilemap.lsTmap)
-                {
-                    if (t1.attributes != _attributes)
-                    {
-                        t1.attributes = _attributes;
-                        t1.mappings_update();
-                    }
-                }
+                attributes = _attributes;
+                mappings_update();
             }
-            else if (tmap.attributes != _attributes)
+        }
+        public static void tilemap_set_flip_alltilemap(byte _attributes)
+        {
+            foreach (Tmap t1 in Tilemap.lsTmap)
             {
-                tmap.attributes = _attributes;
-                tmap.mappings_update();
+                if (t1 != null)
+                {
+                    t1.tilemap_set_flip(_attributes);
+                }
             }
         }
         public void get_row_col(int index, out int row, out int col)

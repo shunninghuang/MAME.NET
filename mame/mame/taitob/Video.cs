@@ -25,7 +25,7 @@ namespace mame
             {
                 framebuffer_page = (byte)((~video_control & 0x40) >> 6);
             }
-            Tmap.tilemap_set_flip(null, (byte)((video_control & 0x10) != 0 ? (Tilemap.TILEMAP_FLIPX | Tilemap.TILEMAP_FLIPY) : 0));
+            Tmap.tilemap_set_flip_alltilemap((byte)((video_control & 0x10) != 0 ? (Tilemap.TILEMAP_FLIPX | Tilemap.TILEMAP_FLIPY) : 0));
         }
         public static ushort TC0180VCU_word_r(int offset)
         {

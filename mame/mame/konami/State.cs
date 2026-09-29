@@ -1685,11 +1685,16 @@ namespace mame
             SaveStateBinary_K055555(writer);
             SaveStateBinary_K054338(writer);
             SaveStateBinary_K056832(writer);
-            SaveStateBinary_K055673(writer);            
+            SaveStateBinary_K055673(writer);
+            SaveStateBinary_K053252(writer);
             SaveStateBinary_konamigx(writer);
             for (i = 0; i < 0x1000; i++)
             {
                 writer.Write(Generic.paletteram16[i]);
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                writer.Write(Generic.spriteram16[i]);
             }
             for (i = 0; i < 0x800; i++)
             {
@@ -1745,11 +1750,16 @@ namespace mame
             LoadStateBinary_K055555(reader);
             LoadStateBinary_K054338(reader);
             LoadStateBinary_K056832(reader);
-            LoadStateBinary_K055673(reader);            
+            LoadStateBinary_K055673(reader);
+            LoadStateBinary_K053252(reader);
             LoadStateBinary_konamigx(reader);
             for (i = 0; i < 0x1000; i++)
             {
                 Generic.paletteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                Generic.spriteram16[i] = reader.ReadUInt16();
             }
             for (i = 0; i < 0x800; i++)
             {
@@ -1807,10 +1817,15 @@ namespace mame
             SaveStateBinary_K056832(writer);
             SaveStateBinary_K055673(writer);
             SaveStateBinary_K053936(writer);
+            SaveStateBinary_K053252(writer);
             SaveStateBinary_konamigx(writer);
             for (i = 0; i < 0x1000; i++)
             {
                 writer.Write(Generic.paletteram16[i]);
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                writer.Write(Generic.spriteram16[i]);
             }
             for (i = 0; i < 0x800; i++)
             {
@@ -1872,10 +1887,15 @@ namespace mame
             LoadStateBinary_K056832(reader);
             LoadStateBinary_K055673(reader);
             LoadStateBinary_K053936(reader);
+            LoadStateBinary_K053252(reader);
             LoadStateBinary_konamigx(reader);
             for (i = 0; i < 0x1000; i++)
             {
                 Generic.paletteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                Generic.spriteram16[i] = reader.ReadUInt16();
             }
             for (i = 0; i < 0x800; i++)
             {
@@ -1937,10 +1957,15 @@ namespace mame
             SaveStateBinary_K056832(writer);
             SaveStateBinary_K055673(writer);
             SaveStateBinary_K053936(writer);
+            SaveStateBinary_K053252(writer);
             SaveStateBinary_konamigx(writer);
             for (i = 0; i < 0x1000; i++)
             {
                 writer.Write(Generic.paletteram16[i]);
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                writer.Write(Generic.spriteram16[i]);
             }
             for (i = 0; i < 0x800; i++)
             {
@@ -1999,10 +2024,15 @@ namespace mame
             LoadStateBinary_K056832(reader);
             LoadStateBinary_K055673(reader);
             LoadStateBinary_K053936(reader);
+            LoadStateBinary_K053252(reader);
             LoadStateBinary_konamigx(reader);
             for (i = 0; i < 0x1000; i++)
             {
                 Generic.paletteram16[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x8000; i++)
+            {
+                Generic.spriteram16[i] = reader.ReadUInt16();
             }
             for (i = 0; i < 0x800; i++)
             {

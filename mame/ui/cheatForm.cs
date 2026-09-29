@@ -48,8 +48,7 @@ namespace ui
                 case "Tad":
                 case "Megasys1":
                 case "Gaelco":                
-                case "Taito B":
-                case "Konami":
+                case "Taito B":                
                 case "Capcom":
                     CheatReadByte = (int i1) => { return Memory.mainram[i1]; };
                     CheatWriteByte = (int i1, byte b1) => { Memory.mainram[i1] = b1; };
@@ -74,7 +73,11 @@ namespace ui
                 case "M92":
                     CheatReadByte = (int i1) => { return Nec.nn1[0].ReadByte(i1); };
                     CheatWriteByte = (int i1, byte b1) => { Nec.nn1[0].WriteByte(i1, b1); };
-                    break;                
+                    break;
+                case "Konami":
+                    CheatReadByte = (int i1) => { return (byte)MC68000.mm1[0].ReadByte(i1); };
+                    CheatWriteByte = (int i1, byte b1) => { MC68000.mm1[0].WriteByte(i1, (sbyte)b1); };
+                    break;
             }
         }
         private void cbCht_SelectedIndexChanged(object sender, EventArgs e)

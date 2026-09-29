@@ -179,7 +179,7 @@ namespace mame
         {
             int i;
             flipscreen = data & 0x01;
-            Tmap.tilemap_set_flip(bg_tilemap, flipscreen != 0 ? Tilemap.TILEMAP_FLIPX : Tilemap.TILEMAP_FLIPY);
+            bg_tilemap.tilemap_set_flip(flipscreen != 0 ? Tilemap.TILEMAP_FLIPX : Tilemap.TILEMAP_FLIPY);
             Generic.coin_counter_w(0, data & 0x02);
             Generic.coin_counter_w(1, data & 0x20);
             i = (data & 0x10) >> 4;

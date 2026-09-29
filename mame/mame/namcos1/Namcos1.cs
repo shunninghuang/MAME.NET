@@ -9,47 +9,42 @@ namespace mame
     public partial class Namcos1
     {
         public static int dac0_value, dac1_value, dac0_gain, dac1_gain;
-        public static byte[] gfx1rom, gfx2rom, gfx3rom, user1rom,mcurom;
+        public static byte[] gfx1rom, gfx2rom, spriterom, user1rom, mcurom, nvramrom;
         public static byte[] audiorom, voicerom, bank_ram20, bank_ram30;
         public static byte dipsw;
-        public static byte[] ByteTo2byte(byte[] bb1)
-        {
-            byte[] bb2 = null;
-            int i1,n1;
-            if (bb1 != null)
-            {
-                n1 = bb1.Length;
-                bb2 = new byte[n1*2];
-                for (i1 = 0; i1 < n1; i1++)
-                {
-                    bb2[i1 * 2] = (byte)(bb1[i1] >> 4);
-                    bb2[i1 * 2 + 1] = (byte)(bb1[i1] & 0x0f);
-                }
-            }
-            return bb2;
-        }
         public static void Namcos1Init()
         {
-            Machine.bRom = true;            
+            Machine.bRom = true;
             user1rom_offset = new int[2, 8];
             audiorom = Machine.GetRom("audiocpu.rom");
             gfx1rom = Machine.GetRom("gfx1.rom");
             gfx2rom = Machine.GetRom("gfx2.rom");
-            gfx3rom = ByteTo2byte(Machine.GetRom("gfx3.rom"));
+            spriterom = Machine.GetRom("sprite.rom");
             user1rom = Machine.GetRom("user1.rom");
             mcurom = Properties.Resources.mcu;
-            voicerom = new byte[0xc0000];
-            byte[] bb1 = Machine.GetRom("voice.rom");
-            Array.Copy(bb1, voicerom, bb1.Length);
+            voicerom = Machine.GetRom("voice.rom");
             bank_ram20 = new byte[0x2000];
             bank_ram30 = new byte[0x80];
-            Namco.namco_wavedata = new byte[0x400];
             Generic.generic_nvram = new byte[0x800];
+            Namco.namco_wavedata = new byte[0x400];
             cus117_offset = new int[2, 8];
             key = new byte[8];
-            if (audiorom == null || gfx1rom == null || gfx2rom == null || gfx3rom == null || user1rom == null || voicerom == null)
+            switch (Machine.sName)
             {
-                Machine.bRom = false;
+                case "mmaze":
+                case "mmaze2":
+                    nvramrom = Machine.GetRom("nvram.rom");
+                    if (audiorom == null || gfx1rom == null || gfx2rom == null || spriterom == null || user1rom == null || voicerom == null || nvramrom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
+                default:
+                    if (audiorom == null || gfx1rom == null || gfx2rom == null || spriterom == null || user1rom == null || voicerom == null)
+                    {
+                        Machine.bRom = false;
+                    }
+                    break;
             }
             if (Machine.bRom)
             {

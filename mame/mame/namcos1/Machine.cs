@@ -289,6 +289,11 @@ namespace mame
             }
             wdog = 0;
         }
+        public static void machine_reset_mmaze()
+        {
+            Array.Copy(nvramrom, Generic.generic_nvram, 0x800);
+            machine_reset_namcos1();
+        }
         public static void namcos1_mcu_bankswitch_w(byte data)
         {
             int addr;

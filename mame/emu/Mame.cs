@@ -500,7 +500,7 @@ namespace mame
                 case "CPS-1":
                     for (i = 0; i < 3; i++)
                     {
-                        CPS.ttmap[i].all_tiles_dirty = true;
+                        CPS.ttmap[i].tilemap_mark_all_tiles_dirty();
                     }
                     YM2151.ym2151_postload();
                     break;
@@ -509,17 +509,17 @@ namespace mame
                 case "CPS2turbo":
                     for (i = 0; i < 3; i++)
                     {
-                        CPS.ttmap[i].all_tiles_dirty = true;
+                        CPS.ttmap[i].tilemap_mark_all_tiles_dirty();
                     }
                     break;
                 case "Data East":
-                    Dataeast.bg_tilemap.all_tiles_dirty = true;
+                    Dataeast.bg_tilemap.tilemap_mark_all_tiles_dirty();
                     AY8910.AA8910[0].ay8910_postload();
                     YM2203.FF2203[0].ym2203_postload();
                     break;
                 case "Tehkan":
-                    Tehkan.bg_tilemap.all_tiles_dirty = true;
-                    Tehkan.fg_tilemap.all_tiles_dirty = true;
+                    Tehkan.bg_tilemap.tilemap_mark_all_tiles_dirty();
+                    Tehkan.fg_tilemap.tilemap_mark_all_tiles_dirty();
                     break;
                 case "Neo Geo":
                     Neogeo.regenerate_pens();
@@ -527,8 +527,8 @@ namespace mame
                     YM2610.F2610.ym2610_postload();
                     break;
                 case "Technos":
-                    Technos.bg_tilemap.all_tiles_dirty = true;
-                    Technos.fg_tilemap.all_tiles_dirty = true;
+                    Technos.bg_tilemap.tilemap_mark_all_tiles_dirty();
+                    Technos.fg_tilemap.tilemap_mark_all_tiles_dirty();
                     for (i = 0; i < 3; i++)
                     {
                         AY8910.AA8910[0].ay8910_postload();
@@ -540,9 +540,9 @@ namespace mame
                     AY8910.AA8910[0].ay8910_postload();
                     break;
                 case "Tad":
-                    Tad.background_layer.all_tiles_dirty = true;
-                    Tad.foreground_layer.all_tiles_dirty = true;
-                    Tad.text_layer.all_tiles_dirty = true;
+                    Tad.background_layer.tilemap_mark_all_tiles_dirty();
+                    Tad.foreground_layer.tilemap_mark_all_tiles_dirty();
+                    Tad.text_layer.tilemap_mark_all_tiles_dirty();
                     break;
                 case "Megasys1":
                     switch (Machine.sName)
@@ -597,41 +597,41 @@ namespace mame
                     }
                     for (i = 0; i < 3; i++)
                     {
-                        Megasys1.megasys1_tmap[i].all_tiles_dirty = true;
+                        Megasys1.megasys1_tmap[i].tilemap_mark_all_tiles_dirty();
                     }
                     break;
                 case "Gaelco":
-                    Gaelco.gaelco_tilemap[0].all_tiles_dirty = true;
-                    Gaelco.gaelco_tilemap[1].all_tiles_dirty = true;
+                    Gaelco.gaelco_tilemap[0].tilemap_mark_all_tiles_dirty();
+                    Gaelco.gaelco_tilemap[1].tilemap_mark_all_tiles_dirty();
                     break;
                 case "Kaneko":
-                    Kaneko.bg_tilemap.all_tiles_dirty = true;
-                    Kaneko.fg_tilemap.all_tiles_dirty = true;
+                    Kaneko.bg_tilemap.tilemap_mark_all_tiles_dirty();
+                    Kaneko.fg_tilemap.tilemap_mark_all_tiles_dirty();
                     AY8910.AA8910[0].ay8910_postload();
                     YM2203.FF2203[0].ym2203_postload();
                     break;
                 case "Namco System 1":
                     for (i = 0; i < 6; i++)
                     {
-                        Namcos1.ttmap[i].all_tiles_dirty = true;
+                        Namcos1.ttmap[i].tilemap_mark_all_tiles_dirty();
                     }
                     YM2151.ym2151_postload();
                     break;
                 case "IGS011":
                     break;
                 case "PGM":
-                    PGM.pgm_tx_tilemap.all_tiles_dirty = true;
-                    PGM.pgm_bg_tilemap.all_tiles_dirty = true;
+                    PGM.pgm_tx_tilemap.tilemap_mark_all_tiles_dirty();
+                    PGM.pgm_bg_tilemap.tilemap_mark_all_tiles_dirty();
                     break;
                 case "M72":
-                    M72.bg_tilemap.all_tiles_dirty = true;
-                    M72.fg_tilemap.all_tiles_dirty = true;
+                    M72.bg_tilemap.tilemap_mark_all_tiles_dirty();
+                    M72.fg_tilemap.tilemap_mark_all_tiles_dirty();
                     break;
                 case "M92":
                     for (i = 0; i < 3; i++)
                     {
-                        M92.pf_layer[i].tmap.all_tiles_dirty = true;
-                        M92.pf_layer[i].wide_tmap.all_tiles_dirty = true;
+                        M92.pf_layer[i].tmap.tilemap_mark_all_tiles_dirty();
+                        M92.pf_layer[i].wide_tmap.tilemap_mark_all_tiles_dirty();
                     }
                     break;
                 case "Taito":
@@ -668,15 +668,15 @@ namespace mame
                         case "opwolfu":
                         case "opwolfb":
                         case "opwolfp":
-                            Taito.PC080SN_tilemap[0][0].all_tiles_dirty = true;
-                            Taito.PC080SN_tilemap[0][1].all_tiles_dirty = true;
+                            Taito.PC080SN_tilemap[0][0].tilemap_mark_all_tiles_dirty();
+                            Taito.PC080SN_tilemap[0][1].tilemap_mark_all_tiles_dirty();
                             break;
                     }
                     break;
                 case "Taito B":
-                    Taitob.bg_tilemap.all_tiles_dirty = true;
-                    Taitob.fg_tilemap.all_tiles_dirty = true;
-                    Taitob.tx_tilemap.all_tiles_dirty = true;
+                    Taitob.bg_tilemap.tilemap_mark_all_tiles_dirty();
+                    Taitob.fg_tilemap.tilemap_mark_all_tiles_dirty();
+                    Taitob.tx_tilemap.tilemap_mark_all_tiles_dirty();
                     AY8910.AA8910[0].ay8910_postload();
                     switch (Machine.sName)
                     {
@@ -773,9 +773,10 @@ namespace mame
                         case "glfgreatj":
                         case "prmrsocr":
                         case "prmrsocrj":
-                            Konami.K052109_tilemap[0].all_tiles_dirty = true;
-                            Konami.K052109_tilemap[1].all_tiles_dirty = true;
-                            Konami.K052109_tilemap[2].all_tiles_dirty = true;
+                            for (i = 0; i < 3; i++)
+                            {
+                                Konami.K052109_tilemap[i].tilemap_mark_all_tiles_dirty();
+                            }
                             for (i = 0; i < 0x800; i++)
                             {
                                 Palette.update_adjusted_color(0, i);
@@ -826,7 +827,7 @@ namespace mame
                         case "gaiapolsj":
                             for (i = 0; i < 0x10; i++)
                             {
-                                Konami.K056832_tilemap[i].all_tiles_dirty = true;
+                                Konami.K056832_tilemap[i].tilemap_mark_all_tiles_dirty();
                             }
                             for (i = 0; i < 0x800; i++)
                             {
@@ -852,8 +853,8 @@ namespace mame
                         case "makaimurc":
                         case "makaimurg":
                         case "diamond":
-                            Capcom.bg_tilemap.all_tiles_dirty = true;
-                            Capcom.fg_tilemap.all_tiles_dirty = true;
+                            Capcom.bg_tilemap.tilemap_mark_all_tiles_dirty();
+                            Capcom.fg_tilemap.tilemap_mark_all_tiles_dirty();
                             Capcom.bg_tilemap.tilemap_set_scrollx(0, Capcom.scrollx[0] + 256 * Capcom.scrollx[1]);
                             Capcom.fg_tilemap.tilemap_set_scrollx(0, Capcom.scrolly[0] + 256 * Capcom.scrolly[1]);
                             AY8910.AA8910[0].ay8910_postload();
@@ -867,9 +868,9 @@ namespace mame
                         case "sfjan":
                         case "sfan":
                         case "sfp":
-                            Capcom.bg_tilemap.all_tiles_dirty = true;
-                            Capcom.fg_tilemap.all_tiles_dirty = true;
-                            Capcom.tx_tilemap.all_tiles_dirty = true;
+                            Capcom.bg_tilemap.tilemap_mark_all_tiles_dirty();
+                            Capcom.fg_tilemap.tilemap_mark_all_tiles_dirty();
+                            Capcom.tx_tilemap.tilemap_mark_all_tiles_dirty();
                             Capcom.bg_tilemap.tilemap_set_scrollx(0, Capcom.bg_scrollx);
                             Capcom.fg_tilemap.tilemap_set_scrollx(0, Capcom.fg_scrollx);
                             break;

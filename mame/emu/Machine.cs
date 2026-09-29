@@ -89,7 +89,16 @@ namespace mame
                 case "Namco System 1":
                     Namcos1.driver_init();
                     Namcos1.video_start_namcos1();
-                    machine_reset_callback = Namcos1.machine_reset_namcos1;
+                    switch (Machine.sName)
+                    {
+                        case "mmaze":
+                        case "mmaze2":
+                            machine_reset_callback = Namcos1.machine_reset_mmaze;
+                            break;
+                        default:
+                            machine_reset_callback = Namcos1.machine_reset_namcos1;
+                            break;
+                    }
                     break;
                 case "IGS011":
                     IGS011.video_start_igs011();

@@ -106,7 +106,7 @@ namespace mame
             {
                 for (j = 0; j < dstwidth; j++)
                 {
-                    col = Namcos1.gfx3rom[srcdata_offset + i * 0x20 + j];
+                    col = Namcos1.spriterom[srcdata_offset + i * 0x20 + j];
                     if (col != 0x0f)
                     {
                         if (((1 << (Tilemap.priority_bitmap[(offsety + ydir * i) * Tilemap.screen_width + offsetx + xdir * j] & 0x1f)) & pmask) == 0)
@@ -159,7 +159,7 @@ namespace mame
             {
                 for (j = 0; j < dstwidth; j++)
                 {
-                    col = Namcos1.gfx3rom[src_offset + i * 0x20 + j];
+                    col = Namcos1.spriterom[src_offset + i * 0x20 + j];
                     if (col != 0x0f)
                     {
                         switch (gfx_drawmode_table[col])

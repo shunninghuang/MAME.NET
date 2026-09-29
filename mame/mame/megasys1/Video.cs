@@ -636,7 +636,7 @@ namespace mame
                 active_layers = megasys1_active_layers & reallyactive;
                 active_layers |= 1 << ((pri & 0xf0000) >> 16);
             }
-            Tmap.tilemap_set_flip(null, (byte)((megasys1_screen_flag & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
+            Tmap.tilemap_set_flip_alltilemap((byte)((megasys1_screen_flag & 1) != 0 ? (Tilemap.TILEMAP_FLIPY | Tilemap.TILEMAP_FLIPX) : 0));
             for (i = 0; i < 3; i++)
             {
                 if (megasys1_tmap[i] != null)
