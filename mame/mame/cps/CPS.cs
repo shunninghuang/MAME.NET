@@ -2663,6 +2663,10 @@ namespace mame
             Eeprom.eeprom_set_cs_line(((data & 0x80) != 0) ? LineState.CLEAR_LINE : LineState.ASSERT_LINE);
             Eeprom.eeprom_set_clock_line(((data & 0x40) != 0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
         }
+        public static void cps1_irq_handler_mus(int irq)
+        {
+            Cpuint.cpunum_set_input_line(1, 0, (irq != 0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
+        }
         public static void sf2m3_layer_w(ushort data)
         {
             cps1_cps_b_w(0x0a, data);

@@ -120,7 +120,106 @@ namespace mame
                     analog_p1.absolute = false;
                     analog_p1.wraps = true;
                     analog_p1.interpolate = true;
-                    break;                
+                    break;
+                case "Sega":
+                    switch (Machine.sName)
+                    {
+                        case "astorm":
+                        case "astormj":
+                        case "astormjd":
+                        case "bloxeed":
+                        case "bloxeeda":
+                        case "bloxeedd":
+                        case "cltchitr":
+                        case "cltchitrj":
+                        case "cltchitrd":
+                        case "cltchitrjd":
+                        case "ddcrewu":
+                        case "ddcrew2":
+                        case "ddcrew1":
+                        case "ddcrewj":
+                        case "ddcrewj2":
+                        case "ddcrewd":
+                        case "ddcrewud":
+                        case "ddcrew2d":
+                        case "ddcrew1d":
+                        case "ddcrewjd":
+                        case "ddcrewj2d":
+                        case "hamaway":
+                        case "pontoon":
+                        case "pontoona":
+                        case "shdancer":
+                        case "shdancerj":
+                        case "shdancer1":
+                            loop_inputports_callback = sega.loop_inputports_system18;
+                            record_port_callback = sega.record_port;
+                            replay_port_callback = sega.replay_port;
+                            break;                        
+                        case "astorm3":
+                        case "astormu":
+                        case "astorm3d":
+                        case "astormud":                        
+                        case "desertbr":
+                        case "desertbrj":
+                        case "desertbrd":
+                        case "desertbrjd":
+                        case "ddcrew":
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                        case "mwalkd":
+                        case "mwalkud":
+                        case "mwalkjd":
+                            loop_inputports_callback = sega.loop_inputports_astorm;
+                            record_port_callback = sega.record_port;
+                            replay_port_callback = sega.replay_port;
+                            break;
+                        case "lghost":
+                        case "lghostu":
+                        case "lghostj":
+                        case "lghostd":
+                        case "lghostud":
+                            loop_inputports_callback = sega.loop_inputports_lghost;
+                            record_port_callback = sega.record_port;
+                            replay_port_callback = sega.replay_port;
+                            break;
+                        case "wwallyj":
+                        case "wwallyja":
+                        case "wwallyja3p":
+                        case "wwallyjd":
+                        case "wwallyjad":
+                            loop_inputports_callback = sega.loop_inputports_wwallyj;
+                            record_port_callback = sega.record_port;
+                            replay_port_callback = sega.replay_port;
+                            analog_p0 = new analog_field_state();
+                            analog_p1 = new analog_field_state();
+                            analog_p0.adjdefvalue = 0;
+                            analog_p1.adjdefvalue = 0;
+                            analog_p0.sensitivity = 10;
+                            analog_p1.sensitivity = 10;
+                            analog_p0.reverse = true;
+                            analog_p1.reverse = true;
+                            analog_p0.delta = 20;
+                            analog_p1.delta = 20;
+                            analog_p0.minimum = 0;
+                            analog_p1.minimum = 0;
+                            analog_p0.maximum = 0x1fe00;
+                            analog_p1.maximum = 0x1fe00;
+                            analog_p0.reverse_val = 0x20000;
+                            analog_p1.reverse_val = 0x20000;
+                            analog_p0.scalepos = 0x8000;
+                            analog_p1.scalepos = 0x8000;
+                            analog_p0.scaleneg = 0x8000;
+                            analog_p1.scaleneg = 0x8000;
+                            analog_p0.absolute = false;
+                            analog_p0.wraps = true;
+                            analog_p0.interpolate = true;
+                            analog_p1.absolute = false;
+                            analog_p1.wraps = true;
+                            analog_p1.interpolate = true;
+                            break;
+                    }
+                    break;
                 case "Data East":
                     loop_inputports_callback = Dataeast.loop_inputports_dataeast_pcktgal;
                     record_port_callback = Dataeast.record_port_pcktgal;

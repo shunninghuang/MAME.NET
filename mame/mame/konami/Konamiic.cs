@@ -2243,22 +2243,10 @@ namespace mame
             }
             K056832_videoram = new ushort[0x1000 * 17];
             K056832_tilemap = new Tmap[16];
-            K056832_tilemap[0x0] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x1] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x2] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x3] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x4] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x5] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x6] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x7] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x8] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0x9] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0xa] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0xb] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0xc] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0xd] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0xe] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
-            K056832_tilemap[0xf] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
+            for (i = 0; i < 16; i++)
+            {
+                K056832_tilemap[i] = Tmap.tilemap_create(Tmap.tilemap_scan_rows, 8, 8, 64, 32);
+            }
             K056832_tilemap[0x0].tile_update3 = K056832_tilemap[0x0].tile_update_konami_k056832_0;
             K056832_tilemap[0x1].tile_update3 = K056832_tilemap[0x1].tile_update_konami_k056832_1;
             K056832_tilemap[0x2].tile_update3 = K056832_tilemap[0x2].tile_update_konami_k056832_2;

@@ -21,7 +21,13 @@ namespace mame
         public static long ATTOSECONDS_PER_SECOND = (long)(1e18);
         public static Atime ATTOTIME_ZERO = new Atime(0, 0);
         public static Atime ATTOTIME_NEVER = new Atime(1000000000, 0);
-        public static long ATTOSECONDS_PER_NANOSECOND=(long)1e9;
+        public static long ATTOSECONDS_PER_MILLISECOND = (long)1e15;
+        public static long ATTOSECONDS_PER_MICROSECOND = (long)1e12;
+        public static long ATTOSECONDS_PER_NANOSECOND = (long)1e9;
+        public static Atime ATTOTIME_IN_MSEC(long ms)
+        {
+            return new Atime((int)(ms / 1000), (long)((ms % 1000) * ATTOSECONDS_PER_MILLISECOND));
+        }
         public static Atime ATTOTIME_IN_NSEC(long ns)
         {
             return new Atime((int)(ns / 1000000000), (long)((ns % 1000000000) * ATTOSECONDS_PER_NANOSECOND));
@@ -151,7 +157,7 @@ namespace mame
                 return ATTOTIME_ZERO;
 
             /* split attoseconds into upper and lower halves which fit into 32 bits */
-            attohi = divu_64x32_rem((ulong)_time1.attoseconds, 1000000000,out attolo);
+            attohi = divu_64x32_rem((ulong)_time1.attoseconds, 1000000000, out attolo);
 
             /* scale the lower half, then split into high/low parts */
             temp = mulu_32x32(attolo, factor);
@@ -200,7 +206,7 @@ namespace mame
             attohi = divu_64x32_rem((ulong)_time1.attoseconds, 1000000000, out attolo);
 
             /* divide the seconds and get the remainder */
-            result.seconds = (int)divu_64x32_rem((ulong)_time1.seconds, factor,  out remainder);
+            result.seconds = (int)divu_64x32_rem((ulong)_time1.seconds, factor, out remainder);
 
             /* combine the upper half of attoseconds with the remainder and divide that */
             temp = (ulong)attohi + mulu_32x32(remainder, 1000000000);

@@ -61,6 +61,7 @@ namespace mame
         public static int[,] input_line_vector;
         public static int[,] input_event_index;
         //public static int[, ,] input_state;
+        public static Func<int, int>[] drv_irq_callbacks = new Func<int, int>[8];
         public static List<irq> lirq;
         public static List<vec> lvec;
         public static void cpuint_init()
@@ -75,6 +76,7 @@ namespace mame
             //input_state = new int[8, 35, 32];
             for (i = 0; i < 8; i++)
             {
+                drv_irq_callbacks[i] = null;
                 for (j = 0; j < 35; j++)
                 {
                     input_line_state[i, j] = 0;
@@ -95,15 +97,7 @@ namespace mame
                     interrupt_vector[i, j] = 0xff;
                     input_event_index[i, j] = 0;
                 }
-            }            
-        }
-        public static void cps1_irq_handler_mus(int irq)
-        {
-            cpunum_set_input_line(1, 0, (irq != 0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
-        }
-        public static void namcos1_sound_interrupt(int irq)
-        {
-            cpunum_set_input_line(2, 1, (irq != 0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
+            }
         }
         public static void cpunum_set_input_line(int cpunum, int line, LineState state)
         {
@@ -212,6 +206,10 @@ namespace mame
                 int i1 = 1;
             }
         }
+        public static void cpunum_set_irq_callback(int cpunum, Func<int, int> callback)
+        {
+            drv_irq_callbacks[cpunum] = callback;
+        }
         public static int cpu_irq_callback(int cpunum, int line)
         {
             int vector = input_line_vector[cpunum, line];
@@ -219,6 +217,10 @@ namespace mame
             {
                 Cpuexec.cpu[cpunum].set_irq_line(line, LineState.CLEAR_LINE);
                 input_line_state[cpunum, line] = (byte)LineState.CLEAR_LINE;
+            }
+            if (drv_irq_callbacks[cpunum] != null)
+            {
+                vector = drv_irq_callbacks[cpunum](line);
             }
             return vector;
         }

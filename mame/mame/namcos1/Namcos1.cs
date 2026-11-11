@@ -74,7 +74,7 @@ namespace mame
         }
         public static byte dsw_r(int offset)
         {
-            int ret = dipsw;// 0xff;// input_port_read(machine, "DIPSW");
+            int ret = dipsw;
             if ((offset & 2) == 0)
             {
                 ret >>= 4;
@@ -116,6 +116,10 @@ namespace mame
         {
             dac1_value = data - 0x80;
             namcos1_update_DACs();
+        }
+        public static void namcos1_sound_interrupt(int irq)
+        {
+            Cpuint.cpunum_set_input_line(2, 1, (irq != 0) ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
         }
         public static void nvram_handler_load_namcos1()
         {

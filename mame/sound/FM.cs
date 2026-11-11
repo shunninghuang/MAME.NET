@@ -24,7 +24,7 @@ namespace mame
             public int lfo_inc;
             public int[] lfo_freq;
             public int[,] idt_tab;
-            private int[] iconnect1 = new int[8], iconnect2 = new int[8], iconnect3 = new int[8], iconnect4 = new int[6], imem = new int[13];
+            public int[] iconnect1 = new int[8], iconnect2 = new int[8], iconnect3 = new int[8], iconnect4 = new int[6], imem = new int[13];
             public FM_OPN()
             {
                 int i;
@@ -163,7 +163,7 @@ namespace mame
                 Atime expiry_period = Attotime.attotime_mul(Attotime.ATTOTIME_IN_HZ(ST.clock), (uint)(busyclock * ST.timer_prescaler));
                 ST.busy_expiry_time = Attotime.attotime_add(Timer.get_current_time(), expiry_period);
             }
-            private void FM_KEYON(int type,int c, int s)
+            private void FM_KEYON(int type, int c, int s)
             {
                 if (CH[c].SLOT[s].key == 0)
                 {
@@ -616,7 +616,7 @@ namespace mame
                     CH[c].SLOT[2].phase += (uint)CH[c].SLOT[2].Incr;
                     CH[c].SLOT[1].phase += (uint)CH[c].SLOT[1].Incr;
                     CH[c].SLOT[3].phase += (uint)CH[c].SLOT[3].Incr;
-                }                
+                }
             }
             public void refresh_fc_eg_slot(int type, int c, int s, int fc, int kc)
             {
@@ -721,7 +721,7 @@ namespace mame
             public void OPNSetPres(int pres, int timer_prescaler, int SSGpres)
             {
                 int i;
-                ST.freqbase = (ST.rate!=0) ? ((double)ST.clock / ST.rate) / pres : 0;
+                ST.freqbase = (ST.rate != 0) ? ((double)ST.clock / ST.rate) / pres : 0;
                 eg_timer_add = (uint)((1 << 16) * ST.freqbase);
                 eg_timer_overflow = (3) * (1 << 16);
                 ST.timer_prescaler = timer_prescaler;
@@ -776,7 +776,7 @@ namespace mame
                         c = (byte)(v & 0x03);
                         if (c == 3)
                             break;
-                        if ((v & 0x04) != 0 && (type & TYPE_6CH)!=0)
+                        if ((v & 0x04) != 0 && (type & TYPE_6CH) != 0)
                             c += 3;
                         if ((v & 0x10) != 0)
                             FM_KEYON(type, c, 0);
@@ -1012,7 +1012,6 @@ namespace mame
             public read_handler read;
             public reset_handler reset;
         }
-        
         public static int TYPE_SSG = 0x01, TYPE_LFOPAN = 0x02, TYPE_6CH = 0x04, TYPE_DAC = 0x08, TYPE_ADPCM = 0x10, TYPE_2610 = 0x20;
         public static int TYPE_YM2203 = (TYPE_SSG), TYPE_YM2608 = (TYPE_SSG | TYPE_LFOPAN | TYPE_6CH | TYPE_ADPCM), TYPE_YM2610 = (TYPE_SSG | TYPE_LFOPAN | TYPE_6CH | TYPE_ADPCM | TYPE_2610), TYPE_YM2612 = (TYPE_DAC | TYPE_LFOPAN | TYPE_6CH);
         public static int[] ipan = new int[6];
@@ -1105,7 +1104,7 @@ namespace mame
 
             (12*8),(13*8),(14*8),(15*8),
 
-            (16),(16),(16),(16),
+            (16*8),(16*8),(16*8),(16*8),
 
             (16*8),(16*8),(16*8),(16*8),(16*8),(16*8),(16*8),(16*8),
             (16*8),(16*8),(16*8),(16*8),(16*8),(16*8),(16*8),(16*8),
@@ -1239,11 +1238,10 @@ namespace mame
         public delegate void FM_TIMERHANDLER(int c, int cnt, int clock);
         public delegate void FM_IRQHANDLER(int irq);
         public delegate void set_clock_handler(int clock);
-        public delegate void write_handler(int address,byte data);
+        public delegate void write_handler(int address, byte data);
         public delegate byte read_handler();
         public delegate void reset_handler();
         private static int[] lfo_pm_table = new int[128 * 8 * 32];
-        private static int[] iconnect1 = new int[8], iconnect2 = new int[8], iconnect3 = new int[8], iconnect4 = new int[6], imem = new int[13];
         public static int[] out_fm = new int[13];
         public static int[] out_adpcm = new int[4];
         public static int[] out_delta = new int[4];
@@ -1269,7 +1267,7 @@ namespace mame
             {
                 return val;
             }
-        } 
+        }
         private static int op_calc(uint phase, uint env, int pm)
         {
             uint p;
@@ -1381,6 +1379,463 @@ namespace mame
                     jedi_table[step * 16 + nib] = ((nib & 0x08) != 0) ? -value : value;
                 }
             }
-        }        
+        }
+    }
+    public class YM2612
+    {
+        public byte[] REGS;
+        public FM.FM_OPN OPN;
+        public byte addr_A1;
+        public int dacen;
+        public int dacout;
+        public Timer.emu_timer[] timer;
+        public sound_stream stream;
+        public static int dacena;
+        public static YM2612[] FF2612 = new YM2612[2] { new YM2612(), new YM2612() };
+        public void ym2612_update_one(int offset, int length)
+        {
+            int i;
+            int dacouta = dacout;
+            dacena = dacen;
+            OPN.refresh_fc_eg_chan(OPN.type, 0);
+            OPN.refresh_fc_eg_chan(OPN.type, 1);
+            if ((OPN.ST.mode & 0xc0) != 0)
+            {
+                if (OPN.CH[2].SLOT[0].Incr == -1)
+                {
+                    OPN.refresh_fc_eg_slot(OPN.type, 2, 0, (int)OPN.SL3.fc[1], OPN.SL3.kcode[1]);
+                    OPN.refresh_fc_eg_slot(OPN.type, 2, 2, (int)OPN.SL3.fc[2], OPN.SL3.kcode[2]);
+                    OPN.refresh_fc_eg_slot(OPN.type, 2, 1, (int)OPN.SL3.fc[0], OPN.SL3.kcode[0]);
+                    OPN.refresh_fc_eg_slot(OPN.type, 2, 3, (int)OPN.CH[2].fc, OPN.CH[2].kcode);
+                }
+            }
+            else
+            {
+                OPN.refresh_fc_eg_chan(OPN.type, 2);
+            }
+            OPN.refresh_fc_eg_chan(OPN.type, 3);
+            OPN.refresh_fc_eg_chan(OPN.type, 4);
+            OPN.refresh_fc_eg_chan(OPN.type, 5);
+            for (i = 0; i < length; i++)
+            {
+                OPN.advance_lfo();
+                FM.out_fm[0] = 0;
+                FM.out_fm[1] = 0;
+                FM.out_fm[2] = 0;
+                FM.out_fm[3] = 0;
+                FM.out_fm[4] = 0;
+                FM.out_fm[5] = 0;
+                OPN.eg_timer += OPN.eg_timer_add;
+                while (OPN.eg_timer >= OPN.eg_timer_overflow)
+                {
+                    OPN.eg_timer -= OPN.eg_timer_overflow;
+                    OPN.eg_cnt++;
+                    OPN.advance_eg_channel(0);
+                    OPN.advance_eg_channel(1);
+                    OPN.advance_eg_channel(2);
+                    OPN.advance_eg_channel(3);
+                    OPN.advance_eg_channel(4);
+                    OPN.advance_eg_channel(5);
+                }
+                OPN.chan_calc(0, 0);
+                OPN.chan_calc(1, 1);
+                OPN.chan_calc(2, 2);
+                OPN.chan_calc(3, 3);
+                OPN.chan_calc(4, 4);
+                if (dacena != 0)
+                {
+                    OPN.iconnect4[5] = dacouta;
+                }
+                else
+                {
+                    OPN.chan_calc(5, 5);
+                }
+                {
+                    int lt, rt;
+                    lt = (int)((FM.out_fm[0] >> 0) & OPN.pan[0]);
+                    rt = (int)((FM.out_fm[0] >> 0) & OPN.pan[1]);
+                    lt += (int)((FM.out_fm[1] >> 0) & OPN.pan[2]);
+                    rt += (int)((FM.out_fm[1] >> 0) & OPN.pan[3]);
+                    lt += (int)((FM.out_fm[2] >> 0) & OPN.pan[4]);
+                    rt += (int)((FM.out_fm[2] >> 0) & OPN.pan[5]);
+                    lt += (int)((FM.out_fm[3] >> 0) & OPN.pan[6]);
+                    rt += (int)((FM.out_fm[3] >> 0) & OPN.pan[7]);
+                    lt += (int)((FM.out_fm[4] >> 0) & OPN.pan[8]);
+                    rt += (int)((FM.out_fm[4] >> 0) & OPN.pan[9]);
+                    lt += (int)((FM.out_fm[5] >> 0) & OPN.pan[10]);
+                    rt += (int)((FM.out_fm[5] >> 0) & OPN.pan[11]);
+                    lt = FM.Limit(lt, 32767, -32768);
+                    rt = FM.Limit(rt, 32767, -32768);
+                    stream.streamoutput[0][offset + i] = lt;
+                    stream.streamoutput[1][offset + i] = rt;
+                }
+            }
+        }
+        public void ym2612_postload()
+        {
+            int r;
+            dacout = ((int)REGS[0x2a] - 0x80) << 6;
+            dacen = REGS[0x2d] & 0x80;
+            for (r = 0x30; r < 0x9e; r++)
+            {
+                if ((r & 3) != 3)
+                {
+                    OPN.OPNWriteReg(r, REGS[r]);
+                    OPN.OPNWriteReg(r | 0x100, REGS[r | 0x100]);
+                }
+            }
+            for (r = 0xb0; r < 0xb6; r++)
+            {
+                if ((r & 3) != 3)
+                {
+                    OPN.OPNWriteReg(r, REGS[r]);
+                    OPN.OPNWriteReg(r | 0x100, REGS[r | 0x100]);
+                }
+            }
+        }
+        public static void ym2612_init(int index, int clock, int rate, FM.FM_TIMERHANDLER timer_handler, FM.FM_IRQHANDLER IRQHandler)
+        {
+            int i;
+            FF2612[index].REGS = new byte[512];
+            FF2612[index].OPN = new FM.FM_OPN();
+            FF2612[index].addr_A1 = 0;
+            FF2612[index].dacen = 0;
+            FF2612[index].dacout = 0;
+            FM.init_tables();
+            FF2612[index].OPN.type = FM.TYPE_YM2612;
+            FF2612[index].OPN.ST.clock = clock;
+            FF2612[index].OPN.ST.rate = rate;
+            FF2612[index].OPN.ST.timer_handler = timer_handler;
+            FF2612[index].OPN.ST.IRQ_Handler = IRQHandler;
+            FF2612[index].ym2612_reset_chip();
+        }
+        public void ym2612_reset_chip()
+        {
+            int i;
+            OPN.OPNSetPres(6 * 24, 6 * 24, 0);
+            OPN.FM_IRQMASK_SET(0x03);
+            OPN.FM_BUSY_CLEAR();
+            OPN.OPNWriteMode(0x27, 0x30);
+            OPN.eg_timer = 0;
+            OPN.eg_cnt = 0;
+            OPN.FM_STATUS_RESET(0xff);
+            OPN.reset_channels(6);
+            for (i = 0xb6; i >= 0xb4; i--)
+            {
+                OPN.OPNWriteReg(i, 0xc0);
+                OPN.OPNWriteReg(i | 0x100, 0xc0);
+            }
+            for (i = 0xb2; i >= 0x30; i--)
+            {
+                OPN.OPNWriteReg(i, 0);
+                OPN.OPNWriteReg(i | 0x100, 0);
+            }
+            for (i = 0x26; i >= 0x20; i--)
+            {
+                OPN.OPNWriteReg(i, 0);
+            }
+            dacen = 0;
+        }
+        public void ym2612_write(int a, byte v)
+        {
+            int addr;
+            v &= 0xff;
+            switch (a & 3)
+            {
+                case 0:
+                    OPN.ST.address = v;
+                    addr_A1 = 0;
+                    break;
+                case 1:
+                    if (addr_A1 != 0)
+                    {
+                        break;
+                    }
+                    addr = OPN.ST.address;
+                    REGS[addr] = v;
+                    switch (addr & 0xf0)
+                    {
+                        case 0x20:
+                            switch (addr)
+                            {
+                                case 0x2a:
+                                    stream.stream_update();
+                                    dacout = ((int)v - 0x80) << 6;
+                                    break;
+                                case 0x2b:
+                                    dacen = v & 0x80;
+                                    break;
+                                default:
+                                    stream.stream_update();
+                                    OPN.OPNWriteMode(addr, v);
+                                    break;
+                            }
+                            break;
+                        default:
+                            stream.stream_update();
+                            OPN.OPNWriteReg(addr, v);
+                            break;
+                    }
+                    break;
+                case 2:
+                    OPN.ST.address = v;
+                    addr_A1 = 1;
+                    break;
+                case 3:
+                    if (addr_A1 != 1)
+                    {
+                        break;
+                    }
+                    addr = OPN.ST.address;
+                    REGS[addr | 0x100] = v;
+                    stream.stream_update();
+                    OPN.OPNWriteReg(addr | 0x100, v);
+                    break;
+            }
+        }
+        public byte ym2612_read(int a)
+        {
+            switch (a & 3)
+            {
+                case 0:
+                    return OPN.FM_STATUS_FLAG();
+                case 1:
+                case 2:
+                case 3:
+                    return OPN.FM_STATUS_FLAG();
+            }
+            return 0;
+        }
+        public void ym2612_timer_over(int c)
+        {
+            if (c != 0)
+            {
+                OPN.TimerBOver();
+            }
+            else
+            {
+                stream.stream_update();
+                OPN.TimerAOver();
+                if ((OPN.ST.mode & 0x80) != 0)
+                {
+                    OPN.CSMKeyControll();
+                }
+            }
+        }
+        public static void timer_callback_2612_0_0()
+        {
+            FF2612[0].ym2612_timer_over(0);
+        }
+        public static void timer_callback_2612_0_1()
+        {
+            FF2612[0].ym2612_timer_over(1);
+        }
+        public static void timer_callback_2612_1_0()
+        {
+            FF2612[1].ym2612_timer_over(0);
+        }
+        public static void timer_callback_2612_1_1()
+        {
+            FF2612[1].ym2612_timer_over(1);
+        }
+        public void timer_callback_2612_0()
+        {
+            ym2612_timer_over(0);
+        }
+        public void timer_callback_2612_1()
+        {
+            ym2612_timer_over(1);
+        }
+        public void timer_handler(int c, int count, int clock)
+        {
+            if (count == 0)
+            {
+                Timer.timer_enable(timer[c], false);
+            }
+            else
+            {
+                Atime period = Attotime.attotime_mul(Attotime.ATTOTIME_IN_HZ(clock), (uint)count);
+                if (Timer.timer_enable(timer[c], true) == false)
+                {
+                    Timer.timer_adjust_periodic(timer[c], period, Attotime.ATTOTIME_NEVER);
+                }
+            }
+        }
+        public void SaveStateBinary(BinaryWriter writer)
+        {
+            int i, j;
+            writer.Write(REGS, 0, 0x200);
+            writer.Write(OPN.ST.freqbase);
+            writer.Write(OPN.ST.timer_prescaler);
+            writer.Write(OPN.ST.busy_expiry_time.seconds);
+            writer.Write(OPN.ST.busy_expiry_time.attoseconds);
+            writer.Write(OPN.ST.address);
+            writer.Write(OPN.ST.irq);
+            writer.Write(OPN.ST.irqmask);
+            writer.Write(OPN.ST.status);
+            writer.Write(OPN.ST.mode);
+            writer.Write(OPN.ST.prescaler_sel);
+            writer.Write(OPN.ST.fn_h);
+            writer.Write(OPN.ST.TA);
+            writer.Write(OPN.ST.TAC);
+            writer.Write(OPN.ST.TB);
+            writer.Write(OPN.ST.TBC);
+            for (i = 0; i < 12; i++)
+            {
+                writer.Write(OPN.pan[i]);
+            }
+            writer.Write(OPN.eg_cnt);
+            writer.Write(OPN.eg_timer);
+            writer.Write(OPN.eg_timer_add);
+            writer.Write(OPN.eg_timer_overflow);
+            writer.Write(OPN.lfo_cnt);
+            writer.Write(OPN.lfo_inc);
+            for (i = 0; i < 8; i++)
+            {
+                writer.Write(OPN.lfo_freq[i]);
+            }
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(OPN.SL3.fc[i]);
+            }
+            writer.Write(OPN.SL3.fn_h);
+            writer.Write(OPN.SL3.kcode, 0, 3);
+            for (i = 0; i < 3; i++)
+            {
+                writer.Write(OPN.SL3.block_fnum[i]);
+            }
+            for (i = 0; i < 6; i++)
+            {
+                for (j = 0; j < 4; j++)
+                {
+                    writer.Write(OPN.CH[i].SLOT[j].KSR);
+                    writer.Write(OPN.CH[i].SLOT[j].ar);
+                    writer.Write(OPN.CH[i].SLOT[j].d1r);
+                    writer.Write(OPN.CH[i].SLOT[j].d2r);
+                    writer.Write(OPN.CH[i].SLOT[j].rr);
+                    writer.Write(OPN.CH[i].SLOT[j].ksr);
+                    writer.Write(OPN.CH[i].SLOT[j].mul);
+                    writer.Write(OPN.CH[i].SLOT[j].phase);
+                    writer.Write(OPN.CH[i].SLOT[j].Incr);
+                    writer.Write(OPN.CH[i].SLOT[j].state);
+                    writer.Write(OPN.CH[i].SLOT[j].tl);
+                    writer.Write(OPN.CH[i].SLOT[j].volume);
+                    writer.Write(OPN.CH[i].SLOT[j].sl);
+                    writer.Write(OPN.CH[i].SLOT[j].vol_out);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sh_ar);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sel_ar);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sh_d1r);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sel_d1r);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sh_d2r);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sel_d2r);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sh_rr);
+                    writer.Write(OPN.CH[i].SLOT[j].eg_sel_rr);
+                    writer.Write(OPN.CH[i].SLOT[j].ssg);
+                    writer.Write(OPN.CH[i].SLOT[j].ssgn);
+                    writer.Write(OPN.CH[i].SLOT[j].key);
+                    writer.Write(OPN.CH[i].SLOT[j].AMmask);
+                }
+            }
+            writer.Write(addr_A1);
+            writer.Write(dacen);
+            writer.Write(dacout);
+        }
+        public void LoadStateBinary(BinaryReader reader)
+        {
+            int i, j;
+            REGS = reader.ReadBytes(0x200);
+            OPN.ST.freqbase = reader.ReadDouble();
+            OPN.ST.timer_prescaler = reader.ReadInt32();
+            OPN.ST.busy_expiry_time.seconds = reader.ReadInt32();
+            OPN.ST.busy_expiry_time.attoseconds = reader.ReadInt64();
+            OPN.ST.address = reader.ReadByte();
+            OPN.ST.irq = reader.ReadByte();
+            OPN.ST.irqmask = reader.ReadByte();
+            OPN.ST.status = reader.ReadByte();
+            OPN.ST.mode = reader.ReadByte();
+            OPN.ST.prescaler_sel = reader.ReadByte();
+            OPN.ST.fn_h = reader.ReadByte();
+            OPN.ST.TA = reader.ReadInt32();
+            OPN.ST.TAC = reader.ReadInt32();
+            OPN.ST.TB = reader.ReadByte();
+            OPN.ST.TBC = reader.ReadInt32();
+            for (i = 0; i < 12; i++)
+            {
+                OPN.pan[i] = reader.ReadUInt32();
+            }
+            OPN.eg_cnt = reader.ReadUInt32();
+            OPN.eg_timer = reader.ReadUInt32();
+            OPN.eg_timer_add = reader.ReadUInt32();
+            OPN.eg_timer_overflow = reader.ReadUInt32();
+            OPN.lfo_cnt = reader.ReadInt32();
+            OPN.lfo_inc = reader.ReadInt32();
+            for (i = 0; i < 8; i++)
+            {
+                OPN.lfo_freq[i] = reader.ReadInt32();
+            }
+            for (i = 0; i < 3; i++)
+            {
+                OPN.SL3.fc[i] = reader.ReadUInt32();
+            }
+            OPN.SL3.fn_h = reader.ReadByte();
+            OPN.SL3.kcode = reader.ReadBytes(3);
+            for (i = 0; i < 3; i++)
+            {
+                OPN.SL3.block_fnum[i] = reader.ReadUInt32();
+            }
+            for (i = 0; i < 6; i++)
+            {
+                for (j = 0; j < 4; j++)
+                {
+                    OPN.CH[i].SLOT[j].KSR = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].ar = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].d1r = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].d2r = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].rr = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].ksr = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].mul = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].phase = reader.ReadUInt32();
+                    OPN.CH[i].SLOT[j].Incr = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].state = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].tl = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].volume = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].sl = reader.ReadInt32();
+                    OPN.CH[i].SLOT[j].vol_out = reader.ReadUInt32();
+                    OPN.CH[i].SLOT[j].eg_sh_ar = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].eg_sel_ar = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].eg_sh_d1r = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].eg_sel_d1r = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].eg_sh_d2r = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].eg_sel_d2r = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].eg_sh_rr = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].eg_sel_rr = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].ssg = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].ssgn = reader.ReadByte();
+                    OPN.CH[i].SLOT[j].key = reader.ReadUInt32();
+                    OPN.CH[i].SLOT[j].AMmask = reader.ReadUInt32();
+                }
+            }
+            addr_A1 = reader.ReadByte();
+            dacen = reader.ReadInt32();
+            dacout = reader.ReadInt32();
+        }
+        public static void ym2612_start(int sndindex, int clock)
+        {
+            int rate = clock / 72;
+            FF2612[sndindex] = new YM2612();
+            FF2612[sndindex].timer = new Timer.emu_timer[2];
+            if (sndindex == 0)
+            {
+                FF2612[0].timer[0] = Timer.timer_alloc_common(FF2612[0].timer_callback_2612_0, "timer_callback_2612_0_0", false);
+                FF2612[0].timer[1] = Timer.timer_alloc_common(FF2612[0].timer_callback_2612_1, "timer_callback_2612_0_1", false);
+            }
+            else if (sndindex == 1)
+            {
+                FF2612[1].timer[0] = Timer.timer_alloc_common(FF2612[1].timer_callback_2612_0, "timer_callback_2612_1_0", false);
+                FF2612[1].timer[1] = Timer.timer_alloc_common(FF2612[1].timer_callback_2612_1, "timer_callback_2612_1_1", false);
+            }
+            FF2612[sndindex].stream = new sound_stream(rate, 0, 2, FF2612[sndindex].ym2612_update_one);
+            ym2612_init(sndindex, clock, rate, FF2612[sndindex].timer_handler, null);
+        }
     }
 }

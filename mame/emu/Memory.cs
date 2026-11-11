@@ -25,6 +25,13 @@ namespace mame
                     CPS.short1 = -1;
                     CPS.short2 = -1;
                     break;
+                case "Sega":
+                    sega.sbyte1 = -1;
+                    sega.sbyte2 = -1;
+                    sega.sbyte3 = -1;
+                    sega.sbyte4 = -1;
+                    sega.sbytes = -1;
+                    break;
                 case "Data East":
                     Dataeast.byte1 = 0xff;
                     Dataeast.byte2 = 0xff;
@@ -359,6 +366,13 @@ namespace mame
                     CPS.short0_old = 0;
                     CPS.short1_old = 0;
                     CPS.short2_old = 0;
+                    break;
+                case "Sega":
+                    sega.sbyte1_old = 0;
+                    sega.sbyte2_old = 0;
+                    sega.sbyte3_old = 0;
+                    sega.sbyte4_old = 0;
+                    sega.sbytes_old = 0;
                     break;
                 case "Data East":
                     Dataeast.byte1_old = 0;

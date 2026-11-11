@@ -7,7 +7,7 @@ using mame;
 
 namespace cpu.hd6309
 {
-    public unsafe partial class Hd6309 : cpuexec_data
+    public partial class Hd6309 : cpuexec_data
     {
         public static Hd6309[] mm1;
         public Action[] hd6309_main, hd6309_page01, hd6309_page11;

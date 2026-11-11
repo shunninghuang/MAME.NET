@@ -16,6 +16,7 @@ using cpu.m6809;
 using cpu.nec;
 using cpu.i8039;
 using cpu.i8x41;
+using cpu.mcs51;
 using ui;
 
 namespace mame
@@ -230,6 +231,106 @@ namespace mame
                     cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
                     vblank_interrupts_per_frame = 262;
                     vblank_interrupt = CPS.cps2_interrupt;
+                    break;
+                case "Sega":
+                    switch (Machine.sName)
+                    {
+                        case "astorm":
+                        case "astorm3":
+                        case "astormu":
+                        case "astormj":
+                        case "bloxeed":
+                        case "bloxeeda":
+                        case "cltchitr":
+                        case "cltchitrj":
+                        case "desertbr":
+                        case "desertbrj":
+                        case "ddcrew":
+                        case "ddcrewu":
+                        case "ddcrew2":
+                        case "ddcrew1":
+                        case "ddcrewj":
+                        case "ddcrewj2":
+                        case "hamaway":
+                        case "lghost":
+                        case "lghostu":
+                        case "lghostj":
+                        case "pontoon":
+                        case "pontoona":
+                        case "shdancer":
+                        case "shdancerj":
+                        case "shdancer1":
+                        case "wwallyj":
+                        case "wwallyja":
+                        case "wwallyja3p":
+                        case "astorm3d":
+                        case "astormud":
+                        case "astormjd":
+                        case "bloxeedd":
+                        case "cltchitrd":
+                        case "cltchitrjd":
+                        case "desertbrd":
+                        case "desertbrjd":
+                        case "ddcrewd":
+                        case "ddcrewud":
+                        case "ddcrew2d":
+                        case "ddcrew1d":
+                        case "ddcrewjd":
+                        case "ddcrewj2d":
+                        case "lghostd":
+                        case "lghostud":
+                        case "wwallyjd":
+                        case "wwallyjad":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            ncpu = 2;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[0].cycles_per_second = 10000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Generic.irq4_line_hold0;
+                            break;
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                        case "mwalkd":
+                        case "mwalkud":
+                        case "mwalkjd":
+                            MC68000.nMC68000 = 1;
+                            MC68000.mm1 = new MC68000[MC68000.nMC68000];
+                            MC68000.mm1[0] = new MC68000();
+                            MC68000.mm1[0].irq_callback = Cpuint.cpu_0_irq_callback;
+                            Z80A.nZ80 = 1;
+                            Z80A.zz1 = new Z80A[Z80A.nZ80];
+                            Z80A.zz1[0] = new Z80A();
+                            Z80A.zz1[0].irq_callback = Cpuint.cpu_1_irq_callback;
+                            I8051.I1 = new I8051();
+                            I8051.I1.irq_callback = Cpuint.cpu_2_irq_callback;
+                            ncpu = 3;
+                            cpu = new cpuexec_data[ncpu];
+                            cpu[0] = MC68000.mm1[0];
+                            cpu[1] = Z80A.zz1[0];
+                            cpu[2] = I8051.I1;
+                            cpu[0].cycles_per_second = 10000000;
+                            cpu[1].cycles_per_second = 8000000;
+                            cpu[2].cycles_per_second = 8000000;
+                            cpu[0].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[0].cycles_per_second;
+                            cpu[1].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[1].cycles_per_second;
+                            cpu[2].attoseconds_per_cycle = Attotime.ATTOSECONDS_PER_SECOND / cpu[2].cycles_per_second;
+                            vblank_interrupts_per_frame = 1;
+                            vblank_interrupt = Generic.irq0_line_pulse2;
+                            break;
+                    }                    
                     break;
                 case "Data East":
                     M6502.mm1 = new M6502[2];
@@ -1973,6 +2074,231 @@ namespace mame
                     Z80A.zz1[0].WriteMemory = CPS.ZWriteMemory_qsound;
                     Z80A.zz1[0].ReadHardware = CPS.ZReadHardware;
                     Z80A.zz1[0].WriteHardware = CPS.ZWriteHardware;
+                    break;
+                case "Sega":
+                    switch (Machine.sName)
+                    {
+                        case "astorm":
+                        case "astorm3":
+                        case "astormu":
+                        case "astormj":
+                        case "bloxeed":
+                        case "bloxeeda":                        
+                        case "pontoon":
+                        case "pontoona":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5874d;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5874;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5874d;
+                            MC68000.mm1[0].ReadWord = sega.MReadWord_5874;
+                            MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5874;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5874d;
+                            MC68000.mm1[0].ReadLong = sega.MReadLong_5874;
+                            MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5874;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5874;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5874;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5874;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            break;
+                        case "cltchitr":
+                        case "cltchitrj":                        
+                        case "ddcrew":
+                        case "ddcrewu":
+                        case "ddcrew2":
+                        case "ddcrew1":
+                        case "ddcrewj":
+                        case "ddcrewj2":
+                        case "lghost":
+                        case "lghostu":
+                        case "lghostj":                        
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5987d;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5987;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5987d;
+                            MC68000.mm1[0].ReadWord = sega.MReadWord_5987;
+                            MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5987;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5987d;
+                            MC68000.mm1[0].ReadLong = sega.MReadLong_5987;
+                            MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5987;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5987;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5987;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5987;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;                            
+                            break;
+                        case "desertbr":
+                        case "desertbrj":
+                        case "wwallyj":
+                        case "wwallyja":
+                        case "wwallyja3p":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5987d_desertbr;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5987_desertbr;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5987d_desertbr;
+                            MC68000.mm1[0].ReadWord = sega.MReadWord_5987_desertbr;
+                            MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5987_desertbr;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5987d_desertbr;
+                            MC68000.mm1[0].ReadLong = sega.MReadLong_5987_desertbr;
+                            MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5987_desertbr;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5987;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5987;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5987;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18; 
+                            break;
+                        case "hamaway":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_7525;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_7525;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_7525;
+                            MC68000.mm1[0].ReadWord = sega.MReadWord_7525;
+                            MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_7525;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_7525;
+                            MC68000.mm1[0].ReadLong = sega.MReadLong_7525;
+                            MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_7525;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_7525;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_7525;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_7525;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            break;
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5874d;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5874;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5874d;
+                            MC68000.mm1[0].ReadWord = sega.MReadWord_5874;
+                            MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5874;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5874d;
+                            MC68000.mm1[0].ReadLong = sega.MReadLong_5874;
+                            MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5874;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5874;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5874;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5874;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            I8051.I1.ReadOp = I8051.I1.ReadOpArg = sega.IReadOp_system18;
+                            I8051.I1.ReadMemory = sega.IReadMemory_system18;
+                            I8051.I1.ReadData = sega.IReadData_system18;
+                            I8051.I1.WriteData = sega.IWriteData_system18;
+                            I8051.I1.ReadIO = sega.IReadIO_system18;
+                            I8051.I1.WriteIO = sega.IWriteIO_system18;
+                            break;
+                        case "shdancer":
+                        case "shdancerj":
+                        case "shdancer1":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_shdancer;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_shdancer;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_shdancer;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_shdancer;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_shdancer;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_shdancer;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_shdancer;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_shdancer;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_shdancer;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            break;                        
+                        case "astorm3d":
+                        case "astormud":
+                        case "astormjd":
+                        case "bloxeedd":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5874;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5874;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5874;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5874;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5874;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5874;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5874;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5874;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5874;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            break;
+                        case "mwalkd":
+                        case "mwalkud":
+                        case "mwalkjd":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5874;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5874;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5874;
+                            MC68000.mm1[0].ReadWord = MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5874;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5874;
+                            MC68000.mm1[0].ReadLong = MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5874;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5874;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5874;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5874;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            I8051.I1.ReadOp = I8051.I1.ReadOpArg = sega.IReadOp_system18;
+                            I8051.I1.ReadMemory = sega.IReadMemory_system18;
+                            I8051.I1.ReadData = sega.IReadData_system18;
+                            I8051.I1.WriteData = sega.IWriteData_system18;
+                            I8051.I1.ReadIO = sega.IReadIO_system18;
+                            I8051.I1.WriteIO = sega.IWriteIO_system18;
+                            break;
+                        case "cltchitrd":
+                        case "cltchitrjd":
+                        case "desertbrd":
+                        case "desertbrjd":
+                        case "ddcrewd":
+                        case "ddcrewud":
+                        case "ddcrew2d":
+                        case "ddcrew1d":
+                        case "ddcrewjd":
+                        case "ddcrewj2d":
+                        case "lghostd":
+                        case "lghostud":                        
+                        case "wwallyjd":
+                        case "wwallyjad":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5987;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5987;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5987;
+                            MC68000.mm1[0].ReadWord = sega.MReadWord_5987;
+                            MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5987;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5987;
+                            MC68000.mm1[0].ReadLong = sega.MReadLong_5987;
+                            MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5987;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5987;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5987;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5987;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            break;
+                    }
                     break;
                 case "Data East":
                     M6502.mm1[0].ReadOp = Dataeast.D0ReadOp;
@@ -4206,6 +4532,7 @@ namespace mame
                 case "CPS-1(QSound)":
                 case "CPS2":
                 case "CPS2turbo":
+                case "Sega":
                 case "Neo Geo":
                 case "PGM":
                 case "Taito B":
@@ -4632,6 +4959,23 @@ namespace mame
                     Timer.timer_adjust_periodic(timedint_timer, timedint_period, timedint_period);
                     Cpuexec.cpu[0].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 262);
                     Cpuexec.cpu[0].partial_frame_timer = Timer.timer_alloc_common(Cpuexec.trigger_partial_frame_interrupt, "trigger_partial_frame_interrupt", false);
+                    break;
+                case "Sega":
+                    timeslice_period = new Atime(0, Video.screenstate.frame_period);
+                    timeslice_timer = Timer.timer_alloc_common(cpu_timeslicecallback, "cpu_timeslicecallback", false);
+                    Timer.timer_adjust_periodic(timeslice_timer, timeslice_period, timeslice_period);
+                    switch (Machine.sName)
+                    {
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                        case "mwalkd":
+                        case "mwalkud":
+                        case "mwalkjd":
+                            interleave_boost_timer = Timer.timer_alloc_common(null_callback, "boost_callback", false);
+                            interleave_boost_timer_end = Timer.timer_alloc_common(end_interleave_boost, "end_interleave_boost", false);
+                            break;
+                    }
                     break;
                 case "Tehkan":
                     Cpuexec.cpu[1].partial_frame_period = Attotime.attotime_div(Video.frame_update_time, 2);
@@ -5083,6 +5427,65 @@ namespace mame
                     Cpuexec.cpu[0].iloops = 0;
                     CPS.cps2_interrupt();
                     Timer.timer_adjust_periodic(Cpuexec.cpu[0].partial_frame_timer, Cpuexec.cpu[0].partial_frame_period, Attotime.ATTOTIME_NEVER);
+                    break;
+                case "Sega":
+                    switch (Machine.sName)
+                    {
+                        case "astorm":
+                        case "astorm3":
+                        case "astormu":
+                        case "astormj":
+                        case "bloxeed":
+                        case "bloxeeda":
+                        case "cltchitr":
+                        case "cltchitrj":
+                        case "desertbr":
+                        case "desertbrj":
+                        case "ddcrew":
+                        case "ddcrewu":
+                        case "ddcrew2":
+                        case "ddcrew1":
+                        case "ddcrewj":
+                        case "ddcrewj2":
+                        case "hamaway":
+                        case "lghost":
+                        case "lghostu":
+                        case "lghostj":
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                        case "pontoon":
+                        case "pontoona":
+                        case "shdancer":
+                        case "shdancerj":
+                        case "shdancer1":
+                        case "wwallyj":
+                        case "wwallyja":
+                        case "wwallyja3p":
+                        case "astorm3d":
+                        case "astormud":
+                        case "astormjd":
+                        case "bloxeedd":
+                        case "cltchitrd":
+                        case "cltchitrjd":
+                        case "desertbrd":
+                        case "desertbrjd":
+                        case "ddcrewd":
+                        case "ddcrewud":
+                        case "ddcrew2d":
+                        case "ddcrew1d":
+                        case "ddcrewjd":
+                        case "ddcrewj2d":
+                        case "lghostd":
+                        case "lghostud":
+                        case "mwalkd":
+                        case "mwalkud":
+                        case "mwalkjd":
+                        case "wwallyjd":
+                        case "wwallyjad":
+                            vblank_interrupt();
+                            break;
+                    }
                     break;
                 case "Data East":
                     Generic.nmi_line_pulse0();

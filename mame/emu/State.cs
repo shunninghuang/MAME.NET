@@ -29,6 +29,73 @@ namespace mame
                     savestate_callback = CPS.SaveStateBinary_cps2;
                     loadstate_callback = CPS.LoadStateBinary_cps2;
                     break;
+                case "Sega":
+                    switch (Machine.sName)
+                    {
+                        case "astorm":
+                        case "astorm3":
+                        case "astormu":
+                        case "astormj":
+                        case "bloxeed":
+                        case "bloxeeda":
+                        case "cltchitr":
+                        case "cltchitrj":
+                        case "desertbr":
+                        case "desertbrj":
+                        case "ddcrew":
+                        case "ddcrewu":
+                        case "ddcrew2":
+                        case "ddcrew1":
+                        case "ddcrewj":
+                        case "ddcrewj2":
+                        case "lghost":
+                        case "lghostu":
+                        case "lghostj":
+                        case "pontoon":
+                        case "pontoona":
+                        case "wwallyj":
+                        case "wwallyja":
+                        case "wwallyja3p":
+                            savestate_callback = sega.SaveStateBinary_astorm;
+                            loadstate_callback = sega.LoadStateBinary_astorm;
+                            break;
+                        case "shdancer":
+                        case "shdancerj":
+                        case "shdancer1":
+                        case "astorm3d":
+                        case "astormjd":
+                        case "bloxeedd":
+                        case "cltchitrd":
+                        case "cltchitrjd":
+                        case "desertbrd":
+                        case "desertbrjd":
+                        case "ddcrewd":
+                        case "ddcrewud":
+                        case "ddcrew2d":
+                        case "ddcrew1d":
+                        case "ddcrewjd":
+                        case "ddcrewj2d":
+                        case "lghostd":
+                        case "lghostud":
+                        case "wwallyjd":
+                        case "wwallyjad":
+                            savestate_callback = sega.SaveStateBinary_system18;
+                            loadstate_callback = sega.LoadStateBinary_system18;
+                            break;
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                            savestate_callback = sega.SaveStateBinary_mwalk;
+                            loadstate_callback = sega.LoadStateBinary_mwalk;
+                            break;
+                        case "mwalkd":
+                        case "mwalkud":
+                        case "mwalkjd":
+                            savestate_callback = sega.SaveStateBinary_mwalkd;
+                            loadstate_callback = sega.LoadStateBinary_mwalkd;
+                            break;
+                    }
+                    break;
                 case "CPS2turbo":
                     savestate_callback = CPS.SaveStateBinary_cps2turbo;
                     loadstate_callback = CPS.LoadStateBinary_cps2turbo;

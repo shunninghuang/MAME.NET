@@ -17,10 +17,6 @@ namespace mame
         {
             m_ColorG = Color.Magenta;
         }
-        public static void GetData()
-        {
-
-        }
         public static Bitmap GetTx()
         {
             int i1, i2, iOffset, i3, i4;

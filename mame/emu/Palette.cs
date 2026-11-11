@@ -47,6 +47,12 @@ namespace mame
                     numcolors = 0xc00;
                     palette_set_callback = palette_entry_set_color1;
                     break;
+                case "Sega":
+                    trans_color = Color.Black;
+                    trans_uint = (uint)trans_color.ToArgb();
+                    numcolors = 0x2001;
+                    palette_set_callback = palette_entry_set_color2;
+                    break;
                 case "Data East":
                     trans_color = Color.Magenta;
                     trans_uint = (uint)trans_color.ToArgb();
@@ -319,6 +325,9 @@ namespace mame
             }
             switch (Machine.sBoard)
             {
+                case "Sega":
+                    entry_color[0x2000] = trans_uint;
+                    break;
                 case "SunA8":
                     entry_color[0xff] = trans_uint;
                     break;
@@ -477,6 +486,16 @@ namespace mame
         public static byte pal1bit(byte bits)
         {
             return (byte)(((bits & 1) != 0) ? 0xff : 0x00);
+        }
+        public static byte pal2bit(byte bits)
+        {
+            bits &= 3;
+            return (byte)((bits << 6) | (bits << 4) | (bits << 2) | bits);
+        }
+        public static byte pal3bit(byte bits)
+        {
+            bits &= 7;
+            return (byte)((bits << 5) | (bits << 2) | (bits >> 1));
         }
         public static byte pal4bit(byte bits)
         {

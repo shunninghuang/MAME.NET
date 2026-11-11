@@ -162,6 +162,12 @@ namespace mame
             lt2.Add(new emu_timer2(55, Taito.cchip_timer, "cchip_timer"));
             lt2.Add(new emu_timer2(56, Technos.ddragon_scanline_callback, "ddragon_scanline_callback"));
             lt2.Add(new emu_timer2(57, Seibu.sound_nmi, "sound_nmi"));
+            lt2.Add(new emu_timer2(58, YM2612.timer_callback_2612_0_0, "timer_callback_2612_0_0"));
+            lt2.Add(new emu_timer2(59, YM2612.timer_callback_2612_0_1, "timer_callback_2612_0_1"));
+            lt2.Add(new emu_timer2(60, YM2612.timer_callback_2612_1_0, "timer_callback_2612_1_0"));
+            lt2.Add(new emu_timer2(61, YM2612.timer_callback_2612_1_1, "timer_callback_2612_1_1"));
+            lt2.Add(new emu_timer2(62, sega.boost_interleave, "boost_interleave"));
+            lt2.Add(new emu_timer2(63, sega.segaic16_tilemap_16b_latch_values, "segaic16_tilemap_16b_latch_values"));
         }
         public static Atime get_current_time()
         {
@@ -275,14 +281,7 @@ namespace mame
             }
             else
             {
-                foreach (emu_timer et in lt)
-                {
-                    if (et.func == timer1.func)
-                    {
-                        lt.Remove(et);
-                        break;
-                    }
-                }
+                lt.Remove(timer1);
             }
         }
         /*public static void sort()
@@ -343,7 +342,8 @@ namespace mame
                 {
                     if (timer.temporary)
                     {
-                        timer_list_remove(timer);
+                        timer_remove(timer);
+                        //timer_list_remove(timer);
                     }
                     else
                     {
@@ -751,6 +751,34 @@ namespace mame
                     Cpuexec.timedint_timer = lt[i];
                     lt.Remove(lt[i]);
                     lt.Add(Cpuexec.timedint_timer);
+                }
+                else if (lt[i].func == "timer_callback_2612_0_0")
+                {
+                    YM2612.FF2612[0].timer[0] = lt[i];
+                    lt.Remove(lt[i]);
+                    lt.Add(YM2612.FF2612[0].timer[0]);
+                }
+                else if (lt[i].func == "timer_callback_2612_0_1")
+                {
+                    YM2612.FF2612[0].timer[1] = lt[i];
+                    lt.Remove(lt[i]);
+                    lt.Add(YM2612.FF2612[0].timer[1]);
+                }
+                else if (lt[i].func == "timer_callback_2612_1_0")
+                {
+                    YM2612.FF2612[1].timer[0] = lt[i];
+                    lt.Remove(lt[i]);
+                    lt.Add(YM2612.FF2612[1].timer[0]);
+                }
+                else if (lt[i].func == "timer_callback_2612_1_1")
+                {
+                    YM2612.FF2612[1].timer[1] = lt[i];
+                    lt.Remove(lt[i]);
+                    lt.Add(YM2612.FF2612[1].timer[1]);
+                }
+                else
+                {
+                    int i2 = 1;
                 }
             }
             for (i = n; i < 32; i++)

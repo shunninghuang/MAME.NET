@@ -34,6 +34,67 @@ namespace mame
                     CPS.video_start_cps();
                     machine_reset_callback = CPS.machine_reset_cps;
                     break;
+                case "Sega":
+                    sega.driver_init();
+                    sega.video_start_system18();
+                    switch (Machine.sName)
+                    {
+                        case "astorm":
+                        case "astorm3":
+                        case "astormu":
+                        case "astormj":
+                        case "bloxeed":
+                        case "bloxeeda":
+                        case "cltchitr":
+                        case "cltchitrj":
+                        case "desertbr":
+                        case "desertbrj":
+                        case "ddcrew":
+                        case "ddcrewu":
+                        case "ddcrew2":
+                        case "ddcrew1":
+                        case "ddcrewj":
+                        case "ddcrewj2":
+                        case "hamaway":
+                        case "lghost":
+                        case "lghostu":
+                        case "lghostj":
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                        case "pontoon":
+                        case "pontoona":
+                        case "shdancer":
+                        case "shdancerj":
+                        case "shdancer1":
+                        case "wwallyj":
+                        case "wwallyja":
+                        case "wwallyja3p":
+                        case "astorm3d":
+                        case "astormud":
+                        case "astormjd":
+                        case "bloxeedd":
+                        case "cltchitrd":
+                        case "cltchitrjd":
+                        case "desertbrd":
+                        case "desertbrjd":
+                        case "ddcrewd":
+                        case "ddcrewud":
+                        case "ddcrew2d":
+                        case "ddcrew1d":
+                        case "ddcrewjd":
+                        case "ddcrewj2d":
+                        case "lghostd":
+                        case "lghostud":
+                        case "mwalkd":
+                        case "mwalkud":
+                        case "mwalkjd":
+                        case "wwallyjd":
+                        case "wwallyjad":
+                            machine_reset_callback = sega.machine_reset_system18;
+                            break;
+                    }
+                    break;
                 case "Data East":
                     Dataeast.video_start_pcktgal();
                     machine_reset_callback = Dataeast.machine_reset_dataeast;

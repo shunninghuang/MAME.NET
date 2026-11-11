@@ -826,8 +826,7 @@ namespace cpu.i8039
             opcode_main[0xFC] = new s_opcode { cycles = 1, function = mov_a_r4 };
             opcode_main[0xFD] = new s_opcode { cycles = 1, function = mov_a_r5 };
             opcode_main[0xFE] = new s_opcode { cycles = 1, function = mov_a_r6 };
-            opcode_main[0xFF] = new s_opcode { cycles = 1, function = mov_a_r7 };
-            
+            opcode_main[0xFF] = new s_opcode { cycles = 1, function = mov_a_r7 };            
         }
         private int Ext_IRQ()
         {

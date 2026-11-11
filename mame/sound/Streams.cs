@@ -287,6 +287,93 @@ namespace mame
                 }
             }
         }
+        private static void generate_resampled_data_ym2612(int chip, int gain, int minput)
+        {
+            int offset;
+            int sample0, sample1;
+            long basetime;
+            int basesample;
+            uint basefrac;
+            uint step;
+            int sampindex;
+            basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample - mixerstream.attoseconds_per_sample;
+            if (basetime >= 0)
+                basesample = (int)(basetime / YM2612.FF2612[chip].stream.attoseconds_per_sample);
+            else
+                basesample = (int)(-(-basetime / YM2612.FF2612[chip].stream.attoseconds_per_sample) - 1);
+            offset = basesample - YM2612.FF2612[chip].stream.output_base_sampindex;
+            basefrac = (uint)((basetime - basesample * YM2612.FF2612[chip].stream.attoseconds_per_sample) / (Attotime.ATTOSECONDS_PER_SECOND >> 22));
+            step = (uint)(((ulong)YM2612.FF2612[chip].stream.sample_rate << 22) / 48000);
+            if (step > 0x400000)
+            {
+                int smallstep = (int)(step >> 14);
+                for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+                {
+                    int remainder = smallstep;
+                    int tpos = 0;
+                    int scale;
+                    scale = (int)((0x400000 - basefrac) >> 14);
+                    sample0 = YM2612.FF2612[chip].stream.streamoutput[0][offset + tpos] * scale;
+                    sample1 = YM2612.FF2612[chip].stream.streamoutput[1][offset + tpos] * scale;
+                    tpos++;
+                    remainder -= scale;
+                    while (remainder > 0x100)
+                    {
+                        sample0 += YM2612.FF2612[chip].stream.streamoutput[0][offset + tpos] * 0x100;
+                        sample1 += YM2612.FF2612[chip].stream.streamoutput[1][offset + tpos] * 0x100;
+                        tpos++;
+                        remainder -= 0x100;
+                    }
+                    sample0 += YM2612.FF2612[chip].stream.streamoutput[0][offset + tpos] * remainder;
+                    sample1 += YM2612.FF2612[chip].stream.streamoutput[1][offset + tpos] * remainder;
+                    sample0 /= smallstep;
+                    sample1 /= smallstep;
+                    mixerstream.streaminput[minput][sampindex] = (sample0 * gain) >> 8;
+                    mixerstream.streaminput[minput + 1][sampindex] = (sample1 * gain) >> 8;
+                    basefrac += step;
+                    offset += (int)(basefrac >> 22);
+                    basefrac &= 0x3fffff;
+                }
+            }
+        }
+        private static void generate_resampled_data_rf5c68(int gain, int minput)
+        {
+            int offset;
+            int sample;
+            long basetime;
+            int basesample;
+            uint basefrac;
+            uint step;
+            int i1, i2, i3, i4, i5;
+            int sampindex;
+            basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample - rf5c68.r1.stream.attoseconds_per_sample * 2;
+            if (basetime >= 0)
+                basesample = (int)(basetime / rf5c68.r1.stream.attoseconds_per_sample);
+            else
+                basesample = (int)(-(-basetime / rf5c68.r1.stream.attoseconds_per_sample) - 1);
+            offset = basesample - rf5c68.r1.stream.output_base_sampindex;
+            basefrac = (uint)((basetime - basesample * rf5c68.r1.stream.attoseconds_per_sample) / (Attotime.ATTOSECONDS_PER_SECOND >> 22));
+            step = (uint)(((ulong)rf5c68.r1.stream.sample_rate << 22) / 48000);
+            if (step < 0x400000)
+            {
+                for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+                {
+                    int interp_frac = (int)(basefrac >> 10);
+                    if (iCount == 743 && sampindex == 0x3a0)
+                    {
+                        i2 = rf5c68.r1.stream.streamoutput[0][offset];
+                        i3 = rf5c68.r1.stream.streamoutput[0][offset + 1];
+                        i4 = (rf5c68.r1.stream.streamoutput[1][offset] * (0x1000 - interp_frac) + rf5c68.r1.stream.streamoutput[1][offset + 1] * interp_frac) >> 12;
+                        i1 = 1;
+                    }                    
+                    mixerstream.streaminput[minput][sampindex] = (((rf5c68.r1.stream.streamoutput[0][offset] * (0x1000 - interp_frac) + rf5c68.r1.stream.streamoutput[0][offset + 1] * interp_frac) >> 12) * gain) >> 8;
+                    mixerstream.streaminput[minput + 1][sampindex] = (((rf5c68.r1.stream.streamoutput[1][offset] * (0x1000 - interp_frac) + rf5c68.r1.stream.streamoutput[1][offset + 1] * interp_frac) >> 12) * gain) >> 8;
+                    basefrac += step;
+                    offset += (int)(basefrac >> 22);
+                    basefrac &= 0x3fffff;
+                }
+            }
+        }
         private static void generate_resampled_data_ay8910_3(int chip, int gain, int start)
         {
             int offset;
@@ -380,7 +467,7 @@ namespace mame
             uint basefrac;
             uint step;
             int sampindex;
-            basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample - mixerstream.attoseconds_per_sample;
+            basetime = mixerstream.output_sampindex * mixerstream.attoseconds_per_sample - ym3526stream.attoseconds_per_sample*2;
             if (basetime >= 0)
                 basesample = (int)(basetime / ym3526stream.attoseconds_per_sample);
             else
@@ -1051,6 +1138,20 @@ namespace mame
                 second_tick = true;
             }
             qsoundstream.adjuststream(second_tick);
+            mixerstream.adjuststream(second_tick);
+            last_update_second = curtime.seconds;
+        }
+        private static void streams_update_sega_system18()
+        {
+            Atime curtime = Timer.global_basetime;
+            bool second_tick = false;
+            if (curtime.seconds != last_update_second)
+            {
+                second_tick = true;
+            }
+            YM2612.FF2612[0].stream.adjuststream(second_tick);
+            YM2612.FF2612[1].stream.adjuststream(second_tick);
+            rf5c68.r1.stream.adjuststream(second_tick);
             mixerstream.adjuststream(second_tick);
             last_update_second = curtime.seconds;
         }

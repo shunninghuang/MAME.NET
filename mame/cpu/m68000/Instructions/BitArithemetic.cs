@@ -772,9 +772,9 @@ namespace cpu.m68000
             //m68k_op_lsl_16_al           , 0xffff, 0xe3f9, { 20}
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-            int src;
+            uint src;
             ushort res;
-            src = PeekValueW(mode, reg);
+            src = (uint)((ushort)PeekValueW(mode, reg));
             res = (ushort)(src << 1);
             WriteValueW(mode, reg, (short)res);
             N = ((res & 0x8000) != 0);
@@ -884,9 +884,9 @@ namespace cpu.m68000
             //m68k_op_lsr_16_al           , 0xffff, 0xe2f9, { 20}
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-            int src;
+            uint src;
             ushort res;
-            src = PeekValueW(mode, reg);
+            src = (uint)((ushort)PeekValueW(mode, reg));
             res = (ushort)(src >> 1);
             WriteValueW(mode, reg, (short)res);
             N = false;
@@ -1003,9 +1003,9 @@ namespace cpu.m68000
             //m68k_op_asl_16_al           , 0xffff, 0xe1f9, { 20}
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-            int src;
+            uint src;
             ushort res;
-            src = PeekValueW(mode, reg);
+            src = (uint)((ushort)PeekValueW(mode, reg));
             res = (ushort)(src << 1);
             WriteValueW(mode, reg, (short)res);
             N = ((res & 0x8000) != 0);
@@ -1122,9 +1122,9 @@ namespace cpu.m68000
             //m68k_op_asr_16_al           , 0xffff, 0xe0f9, { 20}
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-            int src;
+            uint src;
             ushort res;
-            src = PeekValueW(mode, reg);
+            src = (uint)((ushort)PeekValueW(mode, reg));
             res = (ushort)(src >> 1);
             if ((src & 0x8000) != 0)
             {
@@ -1238,9 +1238,9 @@ namespace cpu.m68000
             //m68k_op_rol_16_al           , 0xffff, 0xe7f9, { 20}
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-            int src;
+            uint src;
             uint res;
-            src = PeekValueW(mode, reg);
+            src = (uint)((ushort)PeekValueW(mode, reg));
             res = (uint)(((src << 1) | (src >> 15)) & 0xffff);
             WriteValueW(mode, reg, (short)res);
             N = ((res & 0x8000) != 0);
@@ -1350,9 +1350,9 @@ namespace cpu.m68000
             //m68k_op_ror_16_al           , 0xffff, 0xe6f9, { 20}
             int mode = (op >> 3) & 0x07;
             int reg = op & 0x07;
-            int src;
+            uint src;
             uint res;
-            src = PeekValueW(mode, reg);
+            src = (uint)((ushort)PeekValueW(mode, reg));
             res = (uint)(((src >> 1) | (src << 15)) & 0xffff);
             WriteValueW(mode, reg, (short)res);
             N = ((res & 0x8000) != 0);

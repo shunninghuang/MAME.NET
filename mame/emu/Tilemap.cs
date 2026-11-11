@@ -659,6 +659,10 @@ namespace mame
                     screen_width = 0x200;
                     screen_height = 0x200;
                     break;
+                case "Sega":
+                    screen_width = 0x158;//0x156
+                    screen_height = 0x106;
+                    break;
                 case "Data East":
                     screen_width = 0x100;
                     screen_height = 0x100;
@@ -732,6 +736,7 @@ namespace mame
                 case "CPS-1(QSound)":
                 case "CPS2":
                 case "CPS2turbo":
+                case "Sega":
                 case "Data East":
                 case "Tehkan":
                 case "Technos":
@@ -748,6 +753,7 @@ namespace mame
                     bb0F = new byte[0x400];
                     bbFF = new byte[0x4000000];
                     bb10 = new byte[0x800];
+                    bb00 = new byte[0x20000];
                     for (i = 0; i < 0x4000000; i++)
                     {
                         bbFF[i] = 0xff;
@@ -759,6 +765,10 @@ namespace mame
                     for (i = 0; i < 0x800; i++)
                     {
                         bb10[i] = 0x10;
+                    }
+                    for (i = 0; i < 0x20000; i++)
+                    {
+                        bb00[i] = 0;
                     }
                     break;
                 case "Megasys1":

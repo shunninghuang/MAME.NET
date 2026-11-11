@@ -1881,6 +1881,10 @@ namespace cpu.m68000
                         int b = ReadOpLong(PC); PC += 4;
                         int a = ReadValueL(mode, reg);
                         long result = a - b;
+                        if (mode == 0)
+                        {
+                            cmpild_instr_callback((uint)b, reg);
+                        }
                         N = (result & 0x80000000) != 0;
                         Z = result == 0;
                         V = result > int.MaxValue || result < int.MinValue;

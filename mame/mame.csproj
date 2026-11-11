@@ -72,12 +72,16 @@
     <Compile Include="cpu\m6809\Disassembler.cs" />
     <Compile Include="cpu\m6809\M6809.cs" />
     <Compile Include="cpu\m6809\M6809op.cs" />
+    <Compile Include="cpu\mcs51\8051dasm.cs" />
+    <Compile Include="cpu\mcs51\i8051.cs" />
+    <Compile Include="cpu\mcs51\i8051ops.cs" />
     <Compile Include="cpu\nec\Nec.cs" />
     <Compile Include="cpu\nec\NecEa.cs" />
     <Compile Include="cpu\nec\NecInstr.cs" />
     <Compile Include="cpu\nec\NecModrm.cs" />
     <Compile Include="emu\Crosshair.cs" />
     <Compile Include="emu\Emupal.cs" />
+    <Compile Include="emu\fd1094.cs" />
     <Compile Include="emu\Hd63484.cs" />
     <Compile Include="emu\Mouse.cs" />
     <Compile Include="emu\Pd4900a.cs" />
@@ -203,6 +207,16 @@
     <Compile Include="mame\pgm\State.cs" />
     <Compile Include="mame\pgm\Tilemap.cs" />
     <Compile Include="mame\pgm\Video.cs" />
+    <Compile Include="mame\sega\gdi.cs" />
+    <Compile Include="mame\sega\genesis.cs" />
+    <Compile Include="mame\sega\input.cs" />
+    <Compile Include="mame\sega\memory.cs" />
+    <Compile Include="mame\sega\s16fd.cs" />
+    <Compile Include="mame\sega\sega.cs" />
+    <Compile Include="mame\sega\segaic16.cs" />
+    <Compile Include="mame\sega\segas18.cs" />
+    <Compile Include="mame\sega\state.cs" />
+    <Compile Include="mame\sega\tilemap.cs" />
     <Compile Include="mame\seibu\Drawgfx.cs" />
     <Compile Include="mame\seibu\Gdi.cs" />
     <Compile Include="mame\seibu\Input.cs" />
@@ -280,6 +294,7 @@
     <Compile Include="sound\K054539.cs" />
     <Compile Include="sound\MSM5205.cs" />
     <Compile Include="sound\Namco.cs" />
+    <Compile Include="sound\rf5c68.cs" />
     <Compile Include="sound\Sample.cs" />
     <Compile Include="sound\SN76496.cs" />
     <Compile Include="sound\Taitosnd.cs" />
@@ -347,6 +362,12 @@
     </Compile>
     <Compile Include="ui\megasys1Form.Designer.cs">
       <DependentUpon>megasys1Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ui\segaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ui\segaForm.Designer.cs">
+      <DependentUpon>segaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ui\seibuForm.cs">
       <SubType>Form</SubType>
@@ -590,6 +611,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ui\pgmForm.resx">
       <DependentUpon>pgmForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\segaForm.resx">
+      <DependentUpon>segaForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ui\seibuForm.resx">

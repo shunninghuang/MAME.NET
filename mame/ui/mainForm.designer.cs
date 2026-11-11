@@ -40,6 +40,7 @@
             this.ipsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.segaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataeastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tehkanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.neogeoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,6 +162,7 @@
             // 
             this.boardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cpsToolStripMenuItem,
+            this.segaToolStripMenuItem,
             this.dataeastToolStripMenuItem,
             this.tehkanToolStripMenuItem,
             this.neogeoToolStripMenuItem,
@@ -169,7 +171,7 @@
             this.tadToolStripMenuItem,
             this.megasys1ToolStripMenuItem,
             this.gaelcoToolStripMenuItem,
-			this.kanekoToolStripMenuItem,
+            this.kanekoToolStripMenuItem,
             this.namcos1ToolStripMenuItem,
             this.igs011ToolStripMenuItem,
             this.pgmToolStripMenuItem,
@@ -186,28 +188,35 @@
             // cpsToolStripMenuItem
             // 
             this.cpsToolStripMenuItem.Name = "cpsToolStripMenuItem";
-            this.cpsToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.cpsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.cpsToolStripMenuItem.Text = "CPS debugger";
             this.cpsToolStripMenuItem.Click += new System.EventHandler(this.cpsToolStripMenuItem_Click);
+            // 
+            // segaToolStripMenuItem
+            // 
+            this.segaToolStripMenuItem.Name = "segaToolStripMenuItem";
+            this.segaToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.segaToolStripMenuItem.Text = "Sega debugger";
+            this.segaToolStripMenuItem.Click += new System.EventHandler(this.segaToolStripMenuItem_Click);
             // 
             // dataeastToolStripMenuItem
             // 
             this.dataeastToolStripMenuItem.Name = "dataeastToolStripMenuItem";
-            this.dataeastToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.dataeastToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.dataeastToolStripMenuItem.Text = "Dataeast debugger";
             this.dataeastToolStripMenuItem.Click += new System.EventHandler(this.dataeastToolStripMenuItem_Click);
             // 
             // tehkanToolStripMenuItem
             // 
             this.tehkanToolStripMenuItem.Name = "tehkanToolStripMenuItem";
-            this.tehkanToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.tehkanToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.tehkanToolStripMenuItem.Text = "Tehkan debugger";
             this.tehkanToolStripMenuItem.Click += new System.EventHandler(this.tehkanToolStripMenuItem_Click);
             // 
             // neogeoToolStripMenuItem
             // 
             this.neogeoToolStripMenuItem.Name = "neogeoToolStripMenuItem";
-            this.neogeoToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.neogeoToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.neogeoToolStripMenuItem.Text = "Neogeo debugger";
             this.neogeoToolStripMenuItem.Click += new System.EventHandler(this.neogeoToolStripMenuItem_Click);
             // 
@@ -228,21 +237,21 @@
             // tadToolStripMenuItem
             // 
             this.tadToolStripMenuItem.Name = "tadToolStripMenuItem";
-            this.tadToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.tadToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.tadToolStripMenuItem.Text = "Tad debugger";
             this.tadToolStripMenuItem.Click += new System.EventHandler(this.tadToolStripMenuItem_Click);
             // 
             // megasys1ToolStripMenuItem
             // 
             this.megasys1ToolStripMenuItem.Name = "megasys1ToolStripMenuItem";
-            this.megasys1ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.megasys1ToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.megasys1ToolStripMenuItem.Text = "Megasys1 debugger";
             this.megasys1ToolStripMenuItem.Click += new System.EventHandler(this.megasys1ToolStripMenuItem_Click);
             // 
             // gaelcoToolStripMenuItem
             // 
             this.gaelcoToolStripMenuItem.Name = "gaelcoToolStripMenuItem";
-            this.gaelcoToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.gaelcoToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.gaelcoToolStripMenuItem.Text = "Gaelco debugger";
             this.gaelcoToolStripMenuItem.Click += new System.EventHandler(this.gaelcoToolStripMenuItem_Click);
             // 
@@ -256,63 +265,63 @@
             // namcos1ToolStripMenuItem
             // 
             this.namcos1ToolStripMenuItem.Name = "namcos1ToolStripMenuItem";
-            this.namcos1ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.namcos1ToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.namcos1ToolStripMenuItem.Text = "Namcos1 debugger";
             this.namcos1ToolStripMenuItem.Click += new System.EventHandler(this.namcos1ToolStripMenuItem_Click);
             // 
             // igs011ToolStripMenuItem
             // 
             this.igs011ToolStripMenuItem.Name = "igs011ToolStripMenuItem";
-            this.igs011ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.igs011ToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.igs011ToolStripMenuItem.Text = "IGS011 debugger";
             this.igs011ToolStripMenuItem.Click += new System.EventHandler(this.igs011ToolStripMenuItem_Click);
             // 
             // pgmToolStripMenuItem
             // 
             this.pgmToolStripMenuItem.Name = "pgmToolStripMenuItem";
-            this.pgmToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.pgmToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.pgmToolStripMenuItem.Text = "Pgm debugger";
             this.pgmToolStripMenuItem.Click += new System.EventHandler(this.pgmToolStripMenuItem_Click);
             // 
             // m72ToolStripMenuItem
             // 
             this.m72ToolStripMenuItem.Name = "m72ToolStripMenuItem";
-            this.m72ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.m72ToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.m72ToolStripMenuItem.Text = "M72 debugger";
             this.m72ToolStripMenuItem.Click += new System.EventHandler(this.m72ToolStripMenuItem_Click);
             // 
             // m92ToolStripMenuItem
             // 
             this.m92ToolStripMenuItem.Name = "m92ToolStripMenuItem";
-            this.m92ToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.m92ToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.m92ToolStripMenuItem.Text = "M92 debugger";
             this.m92ToolStripMenuItem.Click += new System.EventHandler(this.m92ToolStripMenuItem_Click);
             // 
             // taitoToolStripMenuItem
             // 
             this.taitoToolStripMenuItem.Name = "taitoToolStripMenuItem";
-            this.taitoToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.taitoToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.taitoToolStripMenuItem.Text = "Taito debugger";
             this.taitoToolStripMenuItem.Click += new System.EventHandler(this.taitoToolStripMenuItem_Click);
             // 
             // taitobToolStripMenuItem
             // 
             this.taitobToolStripMenuItem.Name = "taitobToolStripMenuItem";
-            this.taitobToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.taitobToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.taitobToolStripMenuItem.Text = "TaitoB debugger";
             this.taitobToolStripMenuItem.Click += new System.EventHandler(this.taitobToolStripMenuItem_Click);
             // 
             // konamiToolStripMenuItem
             // 
             this.konamiToolStripMenuItem.Name = "konamiToolStripMenuItem";
-            this.konamiToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.konamiToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.konamiToolStripMenuItem.Text = "Konami debugger";
             this.konamiToolStripMenuItem.Click += new System.EventHandler(this.konamiToolStripMenuItem_Click);
             // 
             // capcomToolStripMenuItem
             // 
             this.capcomToolStripMenuItem.Name = "capcomToolStripMenuItem";
-            this.capcomToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.capcomToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.capcomToolStripMenuItem.Text = "Capcom debugger";
             this.capcomToolStripMenuItem.Click += new System.EventHandler(this.capcomToolStripMenuItem_Click);
             // 
@@ -367,13 +376,6 @@
             this.tsslStatus.Name = "tsslStatus";
             this.tsslStatus.Size = new System.Drawing.Size(17, 17);
             this.tsslStatus.Text = "...";
-            // 
-            // kanekoToolStripMenuItem
-            // 
-            this.kanekoToolStripMenuItem.Name = "kanekoToolStripMenuItem";
-            this.kanekoToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.kanekoToolStripMenuItem.Text = "Kaneko debugger";
-            this.kanekoToolStripMenuItem.Click += new System.EventHandler(this.kanekoToolStripMenuItem_Click);
             // 
             // mainForm
             // 
@@ -438,5 +440,6 @@
         private System.Windows.Forms.ToolStripMenuItem megasys1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem kanekoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem seibuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem segaToolStripMenuItem;
     }
 }

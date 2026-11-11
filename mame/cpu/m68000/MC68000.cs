@@ -47,7 +47,11 @@ namespace cpu.m68000
         public int usp, ssp;
         public bool stopped;
 
-        public Func<int, int> irq_callback = delegate(int line) { return 0; };
+        public Func<int, int> irq_callback;
+        public Action reset_instr_callback;
+        public Action<uint, int> cmpild_instr_callback;
+        public Action rte_instr_callback;
+        public Action tas_instr_callback;
 
         /// <summary>Machine/Interrupt mode</summary>
         public bool M { get { return m; } set { m = value; } } // TODO probably have some switch logic maybe
@@ -58,8 +62,16 @@ namespace cpu.m68000
         }
         public void m68k_set_irq(int interrupt)
         {
+            int old_level = Interrupt;
             Interrupt = interrupt;
-            m68ki_check_interrupts();
+            if (old_level != 7 && Interrupt == 7)
+            {
+                m68ki_exception_interrupt(7);
+            }
+            else
+            {
+                m68ki_check_interrupts();
+            }
         }
 
         /// <summary>Supervisor/User mode</summary>
@@ -171,6 +183,12 @@ namespace cpu.m68000
 
         public MC68000()
         {
+            Z = true;
+            irq_callback = delegate(int line) { return 0; };
+            reset_instr_callback = delegate() { };
+            cmpild_instr_callback = delegate(uint val, int reg) { };
+            rte_instr_callback = delegate() { };
+            tas_instr_callback = delegate() { };
             BuildOpcodeTable();
         }
         public override void Reset()
@@ -206,7 +224,6 @@ namespace cpu.m68000
             pendingCycles = 0;
             S = true;
             M = false;
-            Z = true;
             InterruptMaskLevel = 7;
             Interrupt = 0;
             A[7].s32 = ReadOpLong(0);
@@ -246,9 +263,10 @@ namespace cpu.m68000
                     m68ki_check_interrupts();
                     debugger_stop_cpu_hook_callback();
                     int delta = prevCycles - pendingCycles;
-                    totalExecutedCycles += (ulong)delta;                    
+                    totalExecutedCycles += (ulong)delta;
                 }
                 while (pendingCycles > 0);
+                PPC = PC;
                 pendingCycles -= int_cycles;
                 //totalExecutedCycles += (ulong)int_cycles;
                 int_cycles = 0;
@@ -258,6 +276,22 @@ namespace cpu.m68000
             pendingCycles = 0;
             int_cycles = 0;
             return cycles;
+        }
+        public void m68ki_exception_interrupt(int int_level)
+        {
+            stopped = false;
+            int interrupt1 = Interrupt;
+            irq_callback(Interrupt);
+            short sr = (short)SR;                  // capture current SR.
+            S = true;                               // switch to supervisor mode, if not already in it.
+            A[7].s32 -= 4;                          // Push PC on stack
+            WriteLong(A[7].s32, PC);
+            A[7].s32 -= 2;                          // Push SR on stack
+            WriteWord(A[7].s32, sr);
+            PC = ReadLong((24 + interrupt1) * 4);   // Jump to interrupt vector
+            InterruptMaskLevel = interrupt1;        // Set interrupt mask to level currently being entered
+            Interrupt = 0;                          // "ack" interrupt. Note: this is wrong.
+            int_cycles += 0x2c;
         }
         public void m68ki_check_interrupts()
         {

@@ -7,7 +7,7 @@ using mame;
 
 namespace cpu.konami
 {
-    public sealed partial class KonamiCpu : cpuexec_data
+    public partial class KonamiCpu : cpuexec_data
     {
         public static KonamiCpu k1;
         public Action[] konami_main, konami_indexed, konami_direct, konami_extended;

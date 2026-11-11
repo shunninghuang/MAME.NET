@@ -51,6 +51,37 @@ namespace mame
                 }
             }
         }
+        public static void ui_update_sega()
+        {
+            int i;
+            int red, green, blue;
+            if (single_step || Mame.paused)
+            {
+                byte bright = 0xa7;
+                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
+                {
+                    if (Palette.bbitmap[Video.curbitmap].uu1[i] >= Palette.numcolors)
+                    {
+                        continue;
+                    }
+                    red = (int)(((Palette.entry_color[Palette.bbitmap[Video.curbitmap].uu1[i]] & 0xff0000) >> 16) * bright / 0xff);
+                    green = (int)(((Palette.entry_color[Palette.bbitmap[Video.curbitmap].uu1[i]] & 0xff00) >> 8) * bright / 0xff);
+                    blue = (int)((Palette.entry_color[Palette.bbitmap[Video.curbitmap].uu1[i]] & 0xff) * bright / 0xff);
+                    Video.bitmapcolor[i] = (int)Palette.make_argb(0xff, red, green, blue);
+                }
+            }
+            else
+            {
+                for (i = 0; i < Video.fullwidth * Video.fullheight; i++)
+                {
+                    if (Palette.bbitmap[Video.curbitmap].uu1[i] >= Palette.numcolors)
+                    {
+                        continue;
+                    }
+                    Video.bitmapcolor[i] = (int)Palette.entry_color[Palette.bbitmap[Video.curbitmap].uu1[i]];
+                }
+            }
+        }
         public static void ui_update_tehkan()
         {
             int i;

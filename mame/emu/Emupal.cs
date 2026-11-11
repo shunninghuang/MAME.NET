@@ -134,6 +134,10 @@ namespace mame
                 }
             }
         }
+        public static void palette_set_color_rgb(int pen, byte r, byte g, byte b)
+        {
+            palette_entry_set_color4(pen,  make_rgb(r, g, b));
+        }
         public static void palette_set_brightness(int pen, double bright)
         {
             palette_entry_set_contrast(pen, (float)bright);

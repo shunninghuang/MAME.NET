@@ -512,6 +512,43 @@ namespace mame
                         CPS.ttmap[i].tilemap_mark_all_tiles_dirty();
                     }
                     break;
+                case "Sega":
+                    switch (Machine.sName)
+                    {
+                        case "astorm":
+                        case "astorm3":
+                        case "astormu":
+                        case "astormj":
+                        case "bloxeed":
+                        case "bloxeeda":
+                        case "cltchitr":
+                        case "cltchitrj":
+                        case "desertbr":
+                        case "desertbrj":
+                        case "ddcrew":
+                        case "ddcrewu":
+                        case "ddcrew2":
+                        case "ddcrew1":
+                        case "ddcrewj":
+                        case "ddcrewj2":
+                        case "lghost":
+                        case "lghostu":
+                        case "lghostj":
+                        case "mwalk":
+                        case "mwalku":
+                        case "mwalkj":
+                        case "pontoon":
+                        case "pontoona":
+                        case "wwallyj":
+                        case "wwallyja":
+                        case "wwallyja3p":
+                            sega.fd1094_postload();
+                            break;
+                    }
+                    YM2612.FF2612[0].ym2612_postload();
+                    YM2612.FF2612[1].ym2612_postload();
+                    Tmap.tilemap_mark_all_tiles_dirty_alltilemap();
+                    break;
                 case "Data East":
                     Dataeast.bg_tilemap.tilemap_mark_all_tiles_dirty();
                     AY8910.AA8910[0].ay8910_postload();
@@ -536,7 +573,7 @@ namespace mame
                     YM2151.ym2151_postload();
                     break;
                 case "Seibu":
-                    Seibu.bg_tilemap.all_tiles_dirty = true;
+                    Seibu.bg_tilemap.tilemap_mark_all_tiles_dirty();
                     AY8910.AA8910[0].ay8910_postload();
                     break;
                 case "Tad":

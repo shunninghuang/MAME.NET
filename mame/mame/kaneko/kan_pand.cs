@@ -105,7 +105,7 @@ namespace mame
         }
         public static void pandora_spriteram_w(int offset, byte data)
         {
-            offset = Gaelco.BITSWAP16(offset, 15, 14, 13, 12, 11, 7, 6, 5, 4, 3, 2, 1, 0, 10, 9, 8);
+            offset = Generic.BITSWAP16(offset, 15, 14, 13, 12, 11, 7, 6, 5, 4, 3, 2, 1, 0, 10, 9, 8);
             if (pandora_spriteram == null)
             {
                 return;
@@ -118,7 +118,7 @@ namespace mame
         }
         public static byte pandora_spriteram_r(int offset)
         {
-            offset = Gaelco.BITSWAP16(offset, 15, 14, 13, 12, 11, 7, 6, 5, 4, 3, 2, 1, 0, 10, 9, 8);
+            offset = Generic.BITSWAP16(offset, 15, 14, 13, 12, 11, 7, 6, 5, 4, 3, 2, 1, 0, 10, 9, 8);
             if (pandora_spriteram == null)
             {
                 return 0x00;

@@ -4893,6 +4893,370 @@
     <year>2026</year>
     <manufacturer>Zero800</manufacturer>
   </game>
+  <game name="astorm" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Alien Storm (World, 2 Players) (FD1094 317-0154)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="astorm3" board="Sega">
+    <parent>astorm</parent>
+    <direction></direction>
+    <description>Alien Storm (World, 3 Players) (FD1094 317-0148)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="astormu" board="Sega">
+    <parent>astorm</parent>
+    <direction></direction>
+    <description>Alien Storm (US, 3 Players) (FD1094 317-0147)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="astormj" board="Sega">
+    <parent>astorm</parent>
+    <direction></direction>
+    <description>Alien Storm (Japan, 2 Players) (FD1094 317-0146)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="bloxeed" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Bloxeed (Japan) (FD1094 317-0139)</description>
+    <year>1989</year>
+    <manufacturer>Sega / Elorg</manufacturer>
+  </game>
+  <game name="bloxeeda" board="Sega">
+    <parent>bloxeed</parent>
+    <direction></direction>
+    <description>Bloxeed (Japan, earlier) (FD1094 317-0139)</description>
+    <year>1989</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="cltchitr" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Clutch Hitter (US) (FD1094 317-0176)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="cltchitrj" board="Sega">
+    <parent>cltchitr</parent>
+    <direction></direction>
+    <description>Clutch Hitter (Japan) (FD1094 317-0175)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <!--<game name="desertbr" board="Sega">
+    <parent></parent>
+    <direction>270</direction>
+    <description>Desert Breaker (World) (FD1094 317-0196)</description>
+    <year>1992</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="desertbrj" board="Sega">
+    <parent>desertbr</parent>
+    <direction>270</direction>
+    <description>Desert Breaker (Japan) (FD1094 317-0194)</description>
+    <year>1992</year>
+    <manufacturer>Sega</manufacturer>
+  </game>-->
+  <game name="ddcrew" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>D. D. Crew (World, 3 Players) (FD1094 317-0190)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="ddcrewu" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (US, 4 Players) (FD1094 317-0186)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="ddcrew2" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (World, 2 Players) (FD1094 317-0184)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="ddcrew1" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (World, 4 Players) (FD1094 317-0187)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="ddcrewj" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (Japan, 4 Players) (FD1094 317-0185)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="ddcrewj2" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (Japan, 2 Players) (FD1094 317-0182)</description>
+    <year>1991</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <!--<game name="hamaway" board="Sega">
+    <parent></parent>
+    <direction>90</direction>
+    <description>Hammer Away (Japan, prototype)</description>
+    <year>1991</year>
+    <manufacturer>Sega / Santos</manufacturer>
+  </game>
+  <game name="lghost" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Laser Ghost (World) (FD1094 317-0166)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="lghostu" board="Sega">
+    <parent>lghost</parent>
+    <direction></direction>
+    <description>Laser Ghost (US) (FD1094 317-0165)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="lghostj" board="Sega">
+    <parent>lghost</parent>
+    <direction></direction>
+    <description>Laser Ghost (Japan) (FD1094 317-0164)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>-->
+  <game name="mwalk" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Michael Jackson's Moonwalker (World) (FD1094/8751 317-0159)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="mwalku" board="Sega">
+    <parent>mwalk</parent>
+    <direction></direction>
+    <description>Michael Jackson's Moonwalker (US) (FD1094/8751 317-0158)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="mwalkj" board="Sega">
+    <parent>mwalk</parent>
+    <direction></direction>
+    <description>Michael Jackson's Moonwalker (Japan) (FD1094/8751 317-0157)</description>
+    <year>1990</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <!--<game name="pontoon" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Pontoon</description>
+    <year>1989</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="pontoona" board="Sega">
+    <parent>pontoon</parent>
+    <direction></direction>
+    <description>Pontoon (FD1094 317-?)</description>
+    <year>1989</year>
+    <manufacturer>Sega</manufacturer>
+  </game>-->
+  <game name="shdancer" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Shadow Dancer (World)</description>
+    <year>1989</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="shdancerj" board="Sega">
+    <parent>shdancer</parent>
+    <direction></direction>
+    <description>Shadow Dancer (Japan)</description>
+    <year>1989</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="shdancer1" board="Sega">
+    <parent>shdancer</parent>
+    <direction></direction>
+    <description>Shadow Dancer (US)</description>
+    <year>1989</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <!--<game name="wwallyj" board="Sega">
+    <parent></parent>
+    <direction></direction>
+    <description>Wally wo Sagase! (rev B, Japan, 2 players) (FD1094 317-0197B)</description>
+    <year>1992</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="wwallyja" board="Sega">
+    <parent>wwallyj</parent>
+    <direction></direction>
+    <description>Wally wo Sagase! (rev A, Japan, 2 players) (FD1094 317-0197A)</description>
+    <year>1992</year>
+    <manufacturer>Sega</manufacturer>
+  </game>
+  <game name="wwallyja3p" board="Sega">
+    <parent>wwallyj</parent>
+    <direction></direction>
+    <description>Wally wo Sagase! (rev A, Japan, 3 players) (FD1094 317-0198A)</description>
+    <year>1992</year>
+    <manufacturer>Sega</manufacturer>
+  </game>-->
+  <game name="astorm3d" board="Sega">
+    <parent>astorm</parent>
+    <direction></direction>
+    <description>Alien Storm (World, 3 Players) (bootleg of FD1094 317-0148 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="astormud" board="Sega">
+    <parent>astorm</parent>
+    <direction></direction>
+    <description>Alien Storm (US, 3 Players) (bootleg of FD1094 317-0147 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="astormjd" board="Sega">
+    <parent>astorm</parent>
+    <direction></direction>
+    <description>Alien Storm (Japan, 2 Players) (bootleg of FD1094 317-0146 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="bloxeedd" board="Sega">
+    <parent>bloxeed</parent>
+    <direction></direction>
+    <description>Bloxeed (Japan) (bootleg of FD1094 317-0139 set)</description>
+    <year>1989</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="cltchitrd" board="Sega">
+    <parent>cltchitr</parent>
+    <direction></direction>
+    <description>Clutch Hitter (US) (bootleg of FD1094 317-0176 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="cltchitrjd" board="Sega">
+    <parent>cltchitr</parent>
+    <direction></direction>
+    <description>Clutch Hitter (Japan) (bootleg of FD1094 317-0175 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <!--<game name="desertbrd" board="Sega">
+    <parent>desertbr</parent>
+    <direction>270</direction>
+    <description>Desert Breaker (World) (bootleg of FD1094 317-0196 set)</description>
+    <year>1992</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="desertbrjd" board="Sega">
+    <parent>desertbr</parent>
+    <direction>270</direction>
+    <description>Desert Breaker (Japan) (bootleg of FD1094 317-0194 set)</description>
+    <year>1992</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
+  <game name="ddcrewd" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (World, 3 Players) (bootleg of FD1094 317-0190 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="ddcrewud" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (US, 4 Players) (bootleg of FD1094 317-0186 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="ddcrew2d" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (World, 2 Players) (bootleg of FD1094 317-0184 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="ddcrew1d" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (World, 4 Players) (bootleg of FD1094 317-0187 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="ddcrewjd" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (Japan, 4 Players) (bootleg of FD1094 317-0185 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="ddcrewj2d" board="Sega">
+    <parent>ddcrew</parent>
+    <direction></direction>
+    <description>D. D. Crew (Japan, 2 Players) (bootleg of FD1094 317-0182 set)</description>
+    <year>1991</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <!--<game name="lghostd" board="Sega">
+    <parent>lghost</parent>
+    <direction></direction>
+    <description>Laser Ghost (World) (bootleg of FD1094 317-0166 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="lghostud" board="Sega">
+    <parent>lghost</parent>
+    <direction></direction>
+    <description>Laser Ghost (US) (bootleg of FD1094 317-0165 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
+  <game name="mwalkd" board="Sega">
+    <parent>mwalk</parent>
+    <direction></direction>
+    <description>Michael Jackson's Moonwalker (World) (bootleg of FD1094/8751 317-0159 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="mwalkud" board="Sega">
+    <parent>mwalk</parent>
+    <direction></direction>
+    <description>Michael Jackson's Moonwalker (US) (bootleg of FD1094/8751 317-0158 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="mwalkjd" board="Sega">
+    <parent>mwalk</parent>
+    <direction></direction>
+    <description>Michael Jackson's Moonwalker (Japan) (bootleg of FD1094/8751 317-0157 set)</description>
+    <year>1990</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <!--<game name="wwallyjd" board="Sega">
+    <parent>wwallyj</parent>
+    <direction></direction>
+    <description>Wally wo Sagase! (rev B, Japan) (bootleg of FD1094 317-0197B set)</description>
+    <year>1992</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>
+  <game name="wwallyjad" board="Sega">
+    <parent>wwallyj</parent>
+    <direction></direction>
+    <description>Wally wo Sagase! (rev A, Japan) (bootleg of FD1094 317-0197A set)</description>
+    <year>1992</year>
+    <manufacturer>bootleg</manufacturer>
+  </game>-->
   <game name="pcktgal" board="Data East">
     <parent></parent>
     <direction></direction>

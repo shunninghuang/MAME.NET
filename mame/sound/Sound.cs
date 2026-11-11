@@ -57,6 +57,15 @@ namespace mame
                     qsoundstream = new sound_stream(4000000 / 166, 0, 2, QSound.qsound_update);
                     mixerstream = new sound_stream(48000, 2, 0, null);
                     break;
+                case "Sega":
+                    latched_value = new ushort[1];
+                    utempdata = new ushort[1];
+                    sound_update = sound_update_sega_system18;
+                    YM2612.ym2612_start(0, 8000000);
+                    YM2612.ym2612_start(1, 8000000);
+                    rf5c68.rf5c68_start(10000000);
+                    mixerstream = new sound_stream(48000, 6, 0, null);
+                    break;
                 case "Data East":
                     latched_value = new ushort[1];
                     utempdata = new ushort[1];
@@ -910,6 +919,10 @@ namespace mame
                 case "CPS2":
                 case "CPS2turbo":
                     break;
+                case "Sega":
+                    YM2612.FF2612[0].ym2612_reset_chip();
+                    YM2612.FF2612[1].ym2612_reset_chip();
+                    break;
                 case "Data East":
                     YM2203.FF2203[0].ym2203_reset_chip();
                     FMOpl.ym3812_reset_chip();
@@ -1380,6 +1393,36 @@ namespace mame
             }
             osd_update_audio_stream(finalmixb, 0x3c0);
             streams_update_qsound();
+        }
+        public static void sound_update_sega_system18()
+        {
+            int sampindex;
+            YM2612.FF2612[0].stream.stream_update();
+            YM2612.FF2612[1].stream.stream_update();
+            rf5c68.r1.stream.stream_update();
+            generate_resampled_data_ym2612(0, 0x66, 0);
+            generate_resampled_data_ym2612(1, 0x66, 2);
+            generate_resampled_data_rf5c68(0x100, 4);
+            mixerstream.output_sampindex += 0x3c0;
+            for (sampindex = 0; sampindex < 0x3c0; sampindex++)
+            {
+                int samp;
+                samp = mixerstream.streaminput[0][sampindex] + mixerstream.streaminput[1][sampindex] + mixerstream.streaminput[2][sampindex] + mixerstream.streaminput[3][sampindex] + mixerstream.streaminput[4][sampindex] + mixerstream.streaminput[5][sampindex];
+                if (samp < -32768)
+                {
+                    samp = -32768;
+                }
+                else if (samp > 32767)
+                {
+                    samp = 32767;
+                }
+                finalmixb[sampindex * 4] = (byte)samp;
+                finalmixb[sampindex * 4 + 1] = (byte)((samp & 0xff00) >> 8);
+                finalmixb[sampindex * 4 + 2] = (byte)samp;
+                finalmixb[sampindex * 4 + 3] = (byte)((samp & 0xff00) >> 8);
+            }
+            osd_update_audio_stream(finalmixb, 0x3c0);
+            streams_update_sega_system18();
         }
         public static void sound_update_dataeast_pcktgal()
         {

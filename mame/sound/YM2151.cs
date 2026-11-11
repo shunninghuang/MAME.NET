@@ -943,7 +943,7 @@ namespace mame
             switch (Machine.sBoard)
             {
                 case "CPS-1":
-                    PSG.irqhandler = Cpuint.cps1_irq_handler_mus;
+                    PSG.irqhandler = CPS.cps1_irq_handler_mus;
                     break;
                 case "Technos":
                     PSG.irqhandler = Technos.irq_handler;
@@ -993,7 +993,7 @@ namespace mame
                     }
                     break;
                 case "Namco System 1":
-                    PSG.irqhandler = Cpuint.namcos1_sound_interrupt;
+                    PSG.irqhandler = Namcos1.namcos1_sound_interrupt;
                     break;
                 case "M72":
                     PSG.irqhandler = M72.m72_ym2151_irq_handler;

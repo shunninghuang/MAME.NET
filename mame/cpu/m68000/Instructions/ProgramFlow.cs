@@ -241,6 +241,7 @@ namespace cpu.m68000
         {
             if (S)
             {
+                reset_instr_callback();
                 pendingCycles -= 132;
             }
             else
@@ -257,6 +258,7 @@ namespace cpu.m68000
 
         void RTE()
         {
+            rte_instr_callback();
             short newSR = ReadWord(A[7].s32);
             A[7].s32 += 2;
             PC = ReadLong(A[7].s32);

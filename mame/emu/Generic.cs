@@ -206,6 +206,18 @@ namespace mame
         {
             irqn_line_set(cpunum, 0, (int)LineState.HOLD_LINE);
         }
+        public static void irq0_line_pulse2()
+        {
+            irq0_line_pulse(2);
+        }
+        public static void irq0_line_pulse(int cpunum)
+        {
+            irqn_line_set(cpunum, 0, (int)LineState.PULSE_LINE);
+        }
+        public static void irq4_line_hold0()
+        {
+            irq4_line_hold(0);
+        }
         public static void irq4_line_hold(int cpunum)
         {
             irqn_line_set(cpunum, 4, (int)LineState.HOLD_LINE);
@@ -466,6 +478,40 @@ namespace mame
         {
             paletteram16[offset] = (ushort)((paletteram16[offset] & 0xff00) | data);
             set_color_888(offset / 2, 16, 8, 0, paletteram32_be(offset));
+        }
+        public static int BIT(int x, int n)
+        {
+            return (x >> n) & 1;
+        }
+        public static int BITSWAP8(int val, int B7, int B6, int B5, int B4, int B3, int B2, int B1, int B0)
+        {
+            return ((BIT(val, B7) << 7) |
+                (BIT(val, B6) << 6) |
+                (BIT(val, B5) << 5) |
+                (BIT(val, B4) << 4) |
+                (BIT(val, B3) << 3) |
+                (BIT(val, B2) << 2) |
+                (BIT(val, B1) << 1) |
+                (BIT(val, B0) << 0));
+        }
+        public static int BITSWAP16(int val, int B15, int B14, int B13, int B12, int B11, int B10, int B9, int B8, int B7, int B6, int B5, int B4, int B3, int B2, int B1, int B0)
+        {
+            return ((BIT(val, B15) << 15) |
+                (BIT(val, B14) << 14) |
+                (BIT(val, B13) << 13) |
+                (BIT(val, B12) << 12) |
+                (BIT(val, B11) << 11) |
+                (BIT(val, B10) << 10) |
+                (BIT(val, B9) << 9) |
+                (BIT(val, B8) << 8) |
+                (BIT(val, B7) << 7) |
+                (BIT(val, B6) << 6) |
+                (BIT(val, B5) << 5) |
+                (BIT(val, B4) << 4) |
+                (BIT(val, B3) << 3) |
+                (BIT(val, B2) << 2) |
+                (BIT(val, B1) << 1) |
+                (BIT(val, B0) << 0));
         }
     }
 }

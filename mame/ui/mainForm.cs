@@ -28,6 +28,7 @@ namespace ui
         public z80Form z80form;
         public m6809Form m6809form;
         public cpsForm cpsform;
+        public segaForm segaform;
         public dataeastForm dataeastform;
         public tehkanForm tehkanform;
         public neogeoForm neogeoform;
@@ -88,6 +89,7 @@ namespace ui
             InitZ80Form();
             InitM6809Form();
             InitCpsForm();
+            InitSegaForm();
             InitDataeastForm();
             InitTehkanForm();
             InitNeogeoForm();
@@ -124,6 +126,7 @@ namespace ui
             Machine.lsParents = RomInfo.GetParents(Machine.sName);
             int i;
             cpsToolStripMenuItem.Enabled = false;
+            segaToolStripMenuItem.Enabled = false;
             dataeastToolStripMenuItem.Enabled = false;
             tehkanToolStripMenuItem.Enabled = false;
             neogeoToolStripMenuItem.Enabled = false;
@@ -204,6 +207,23 @@ namespace ui
                     CPS.CPSInit();
                     CPS.GDIInit();
                     break;
+                case "Sega":
+                    Video.nMode = 1;
+                    itemSize = new ToolStripMenuItem[Video.nMode];
+                    for (i = 0; i < Video.nMode; i++)
+                    {
+                        itemSize[i] = new ToolStripMenuItem();
+                        itemSize[i].Size = new Size(152, 22);
+                        itemSize[i].Click += new EventHandler(itemsizeToolStripMenuItem_Click);
+                    }
+                    itemSize[0].Text = "320x224";
+                    resetToolStripMenuItem.DropDownItems.Clear();
+                    resetToolStripMenuItem.DropDownItems.AddRange(itemSize);
+                    Video.iMode = 0;
+                    itemSelect();
+                    segaToolStripMenuItem.Enabled = true;
+                    sega.segaInit();
+                    sega.GDIInit();
                     break;
                 case "Data East":
                     Video.nMode = 1;
@@ -699,6 +719,10 @@ namespace ui
         {
             cpsform = new cpsForm(this);
         }
+        private void InitSegaForm()
+        {
+            segaform = new segaForm(this);
+        }
         private void InitDataeastForm()
         {
             dataeastform = new dataeastForm(this);
@@ -935,6 +959,10 @@ namespace ui
         {
             cpsform.Show();
         }
+        private void segaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            segaform.Show();
+        }
         private void dataeastToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dataeastform.Show();
@@ -1160,6 +1188,15 @@ namespace ui
                         Video.offsety = 12;
                         Video.width = 416;
                         Video.height = 234;
+                    }
+                    break;
+                case "Sega":
+                    if (Video.iMode == 0)
+                    {
+                        Video.offsetx = 0;
+                        Video.offsety = 0;
+                        Video.width = 320;
+                        Video.height = 224;
                     }
                     break;
                 case "Data East":
