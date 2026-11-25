@@ -99,4 +99,4 @@ You can make the MAME.NET cheat file refer to cheat file of MAME or other emulat
 
 There are two files for record input. The .sta file records the initial state and the .inp file records the input key.
 
-2026-11-11: support 1223 games.
+2026-11-25: support 1224 games.

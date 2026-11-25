@@ -5005,14 +5005,14 @@
     <year>1991</year>
     <manufacturer>Sega</manufacturer>
   </game>
-  <!--<game name="hamaway" board="Sega">
+  <game name="hamaway" board="Sega">
     <parent></parent>
     <direction>90</direction>
     <description>Hammer Away (Japan, prototype)</description>
     <year>1991</year>
     <manufacturer>Sega / Santos</manufacturer>
   </game>
-  <game name="lghost" board="Sega">
+  <!--<game name="lghost" board="Sega">
     <parent></parent>
     <direction></direction>
     <description>Laser Ghost (World) (FD1094 317-0166)</description>

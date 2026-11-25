@@ -53,6 +53,25 @@ namespace ui
                     ttb[1].Text = Convert.ToString(CPS.dswb, 16);
                     ttb[2].Text = Convert.ToString(CPS.dswc, 16);
                     break;
+                case "Sega":
+                    n = 1;
+                    llb = new Label[n];
+                    ttb = new TextBox[n];
+                    for (i = 0; i < n; i++)
+                    {
+                        llb[i] = new Label();
+                        llb[i].Location = new Point(12, 347 + 27 * i);
+                        llb[i].Size = new Size(41, 12);
+                        Controls.Add(llb[i]);
+                        ttb[i] = new TextBox();
+                        ttb[i].Location = new Point(59, 344 + 27 * i);
+                        ttb[i].Size = new Size(70, 21);
+                        ttb[i].TabIndex = 13 + i;
+                        Controls.Add(ttb[i]);
+                    }
+                    llb[0].Text = "dsw:";
+                    ttb[0].Text = Convert.ToString(sega.dsw, 16);
+                    break;
                 case "Tehkan":
                     n = 2;
                     llb = new Label[n];
@@ -171,6 +190,9 @@ namespace ui
                     CPS.dswa = byte.Parse(ttb[0].Text, NumberStyles.HexNumber);
                     CPS.dswb = byte.Parse(ttb[1].Text, NumberStyles.HexNumber);
                     CPS.dswc = byte.Parse(ttb[2].Text, NumberStyles.HexNumber);
+                    break;
+                case "Sega":
+                    sega.dsw = byte.Parse(ttb[0].Text, NumberStyles.HexNumber);
                     break;
                 case "Tehkan":
                     Tehkan.dsw1 = byte.Parse(ttb[0].Text, NumberStyles.HexNumber);

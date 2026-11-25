@@ -209,12 +209,6 @@ namespace mame
                     {
                         Machine.bRom = false;
                     }
-                    if (Machine.bRom)
-                    {
-                        porth = 0xff;
-                        coinage = 0xff;
-                        dsw = 0xfd;
-                    }
                     break;
                 case "bloxeedd":
                     Memory.mainrom = Machine.GetRom("maincpu.rom");
@@ -224,15 +218,12 @@ namespace mame
                     {
                         mainrom2[i] = (ushort)(Memory.mainrom[i * 2] * 0x100 + Memory.mainrom[i * 2 + 1]);
                     }
+                    porth = 0xff;
+                    coinage = 0xff;
+                    dsw = 0x77;
                     if (Memory.mainrom == null || Memory.audiorom == null || tilesrom == null || spritesrom == null)
                     {
                         Machine.bRom = false;
-                    }
-                    if (Machine.bRom)
-                    {
-                        porth = 0xff;
-                        coinage = 0xff;
-                        dsw = 0x77;
                     }
                     break;
                 case "ddcrewd":
@@ -248,15 +239,12 @@ namespace mame
                     {
                         mainrom2[i] = (ushort)(Memory.mainrom[i * 2] * 0x100 + Memory.mainrom[i * 2 + 1]);
                     }
+                    porth = 0xff;
+                    coinage = 0xff;
+                    dsw = 0x77;
                     if (Memory.mainrom == null || Memory.audiorom == null || tilesrom == null || spritesrom == null)
                     {
                         Machine.bRom = false;
-                    }
-                    if (Machine.bRom)
-                    {
-                        porth = 0xff;
-                        coinage = 0xff;
-                        dsw = 0x77;
                     }
                     break;
                 case "mwalkd":                
@@ -270,15 +258,12 @@ namespace mame
                         mainrom2[i] = (ushort)(Memory.mainrom[i * 2] * 0x100 + Memory.mainrom[i * 2 + 1]);
                     }
                     mcurom = Machine.GetRom("mcu.rom");
+                    porth = 0xff;
+                    coinage = 0xff;
+                    dsw = 0x41;
                     if (Memory.mainrom == null || Memory.audiorom == null || tilesrom == null || spritesrom == null || mcurom == null)
                     {
                         Machine.bRom = false;
-                    }
-                    if (Machine.bRom)
-                    {
-                        porth = 0xff;
-                        coinage = 0xff;
-                        dsw = 0x41;
                     }
                     break;
                 case "mwalkud":
@@ -291,15 +276,12 @@ namespace mame
                         mainrom2[i] = (ushort)(Memory.mainrom[i * 2] * 0x100 + Memory.mainrom[i * 2 + 1]);
                     }
                     mcurom = Machine.GetRom("mcu.rom");
+                    porth = 0xff;
+                    coinage = 0xff;
+                    dsw = 0x71;
                     if (Memory.mainrom == null || Memory.audiorom == null || tilesrom == null || spritesrom == null || mcurom == null)
                     {
                         Machine.bRom = false;
-                    }
-                    if (Machine.bRom)
-                    {
-                        porth = 0xff;
-                        coinage = 0xff;
-                        dsw = 0x71;
                     }
                     break;
             }

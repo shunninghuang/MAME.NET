@@ -22,18 +22,7 @@ namespace mame
             writer.Write(vdp_enable);
             writer.Write(vdp_mixing);
             writer.Write(misc_io_data, 0, 0x10);
-            for (i = 0; i < 0x8000; i++)
-            {
-                writer.Write(segaic16_tileram_0[i]);
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                writer.Write(segaic16_textram_0[i]);
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                writer.Write(segaic16_spriteram_0[i]);
-            }
+            SaveStateBinary_segaic16(writer);
             SaveStateBinary_genesis(writer);
             for (i = 0; i < 0x1000; i++)
             {
@@ -78,18 +67,7 @@ namespace mame
             vdp_enable = reader.ReadByte();
             vdp_mixing = reader.ReadByte();
             misc_io_data = reader.ReadBytes(0x10);
-            for (i = 0; i < 0x8000; i++)
-            {
-                segaic16_tileram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                segaic16_textram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                segaic16_spriteram_0[i] = reader.ReadUInt16();
-            }
+            LoadStateBinary_segaic16(reader);
             LoadStateBinary_genesis(reader);
             for (i = 0; i < 0x1000; i++)
             {
@@ -134,18 +112,7 @@ namespace mame
             writer.Write(vdp_enable);
             writer.Write(vdp_mixing);
             writer.Write(misc_io_data, 0, 0x10);
-            for (i = 0; i < 0x8000; i++)
-            {
-                writer.Write(segaic16_tileram_0[i]);
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                writer.Write(segaic16_textram_0[i]);
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                writer.Write(segaic16_spriteram_0[i]);
-            }
+            SaveStateBinary_segaic16(writer);
             SaveStateBinary_genesis(writer);
             SaveStateBinary_s16fd(writer);
             for (i = 0; i < 0x1000; i++)
@@ -191,18 +158,7 @@ namespace mame
             vdp_enable = reader.ReadByte();
             vdp_mixing = reader.ReadByte();
             misc_io_data = reader.ReadBytes(0x10);
-            for (i = 0; i < 0x8000; i++)
-            {
-                segaic16_tileram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                segaic16_textram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                segaic16_spriteram_0[i] = reader.ReadUInt16();
-            }
+            LoadStateBinary_segaic16(reader);
             LoadStateBinary_genesis(reader);
             LoadStateBinary_s16fd(reader);
             for (i = 0; i < 0x1000; i++)
@@ -249,18 +205,7 @@ namespace mame
             writer.Write(vdp_mixing);
             writer.Write(misc_io_data, 0, 0x10);
             writer.Write(mcu_data);
-            for (i = 0; i < 0x8000; i++)
-            {
-                writer.Write(segaic16_tileram_0[i]);
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                writer.Write(segaic16_textram_0[i]);
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                writer.Write(segaic16_spriteram_0[i]);
-            }
+            SaveStateBinary_segaic16(writer);
             SaveStateBinary_genesis(writer);
             SaveStateBinary_s16fd(writer);
             for (i = 0; i < 0x1000; i++)
@@ -308,18 +253,7 @@ namespace mame
             vdp_mixing = reader.ReadByte();
             misc_io_data = reader.ReadBytes(0x10);
             mcu_data = reader.ReadByte();
-            for (i = 0; i < 0x8000; i++)
-            {
-                segaic16_tileram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                segaic16_textram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                segaic16_spriteram_0[i] = reader.ReadUInt16();
-            }
+            LoadStateBinary_segaic16(reader);
             LoadStateBinary_genesis(reader);
             LoadStateBinary_s16fd(reader);
             for (i = 0; i < 0x1000; i++)
@@ -367,18 +301,7 @@ namespace mame
             writer.Write(vdp_mixing);
             writer.Write(misc_io_data, 0, 0x10);
             writer.Write(mcu_data);
-            for (i = 0; i < 0x8000; i++)
-            {
-                writer.Write(segaic16_tileram_0[i]);
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                writer.Write(segaic16_textram_0[i]);
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                writer.Write(segaic16_spriteram_0[i]);
-            }
+            SaveStateBinary_segaic16(writer);
             SaveStateBinary_genesis(writer);
             for (i = 0; i < 0x1000; i++)
             {
@@ -425,18 +348,7 @@ namespace mame
             vdp_mixing = reader.ReadByte();
             misc_io_data = reader.ReadBytes(0x10);
             mcu_data = reader.ReadByte();
-            for (i = 0; i < 0x8000; i++)
-            {
-                segaic16_tileram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x800; i++)
-            {
-                segaic16_textram_0[i] = reader.ReadUInt16();
-            }
-            for (i = 0; i < 0x400; i++)
-            {
-                segaic16_spriteram_0[i] = reader.ReadUInt16();
-            }
+            LoadStateBinary_segaic16(reader);
             LoadStateBinary_genesis(reader);
             for (i = 0; i < 0x1000; i++)
             {

@@ -2267,9 +2267,7 @@ namespace mame
                             I8051.I1.WriteIO = sega.IWriteIO_system18;
                             break;
                         case "cltchitrd":
-                        case "cltchitrjd":
-                        case "desertbrd":
-                        case "desertbrjd":
+                        case "cltchitrjd":                        
                         case "ddcrewd":
                         case "ddcrewud":
                         case "ddcrew2d":
@@ -2286,6 +2284,26 @@ namespace mame
                             MC68000.mm1[0].ReadWord = sega.MReadWord_5987;
                             MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5987;
                             MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5987;
+                            MC68000.mm1[0].ReadLong = sega.MReadLong_5987;
+                            MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5987;
+                            MC68000.mm1[0].WriteByte = sega.MWriteByte_5987;
+                            MC68000.mm1[0].WriteWord = sega.MWriteWord_5987;
+                            MC68000.mm1[0].WriteLong = sega.MWriteLong_5987;
+                            Z80A.zz1[0].ReadOp = sega.ZReadOp_system18;
+                            Z80A.zz1[0].ReadOpArg = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].ReadMemory = sega.ZReadMemory_system18;
+                            Z80A.zz1[0].WriteMemory = sega.ZWriteMemory_system18;
+                            Z80A.zz1[0].ReadHardware = sega.ZReadHardware_system18;
+                            Z80A.zz1[0].WriteHardware = sega.ZWriteHardware_system18;
+                            break;
+                        case "desertbrd":
+                        case "desertbrjd":
+                            MC68000.mm1[0].ReadOpByte = sega.MReadOpByte_5987_desertbr;
+                            MC68000.mm1[0].ReadByte = sega.MReadByte_5987_desertbr;
+                            MC68000.mm1[0].ReadOpWord = sega.MReadOpWord_5987_desertbr;
+                            MC68000.mm1[0].ReadWord = sega.MReadWord_5987_desertbr;
+                            MC68000.mm1[0].ReadPcrelWord = sega.MReadWord_5987_desertbr;
+                            MC68000.mm1[0].ReadOpLong = sega.MReadOpLong_5987_desertbr;
                             MC68000.mm1[0].ReadLong = sega.MReadLong_5987;
                             MC68000.mm1[0].ReadPcrelLong = sega.MReadLong_5987;
                             MC68000.mm1[0].WriteByte = sega.MWriteByte_5987;

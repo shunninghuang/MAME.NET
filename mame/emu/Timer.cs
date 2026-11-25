@@ -776,6 +776,12 @@ namespace mame
                     lt.Remove(lt[i]);
                     lt.Add(YM2612.FF2612[1].timer[1]);
                 }
+                else if (lt[i].func == "segaic16_tilemap_16b_latch_values")
+                {
+                    sega.bg_tilemap[0].latch_timer = lt[i];
+                    lt.Remove(lt[i]);
+                    lt.Add(sega.bg_tilemap[0].latch_timer);
+                }
                 else
                 {
                     int i2 = 1;

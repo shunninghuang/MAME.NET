@@ -434,7 +434,10 @@ namespace mame
             mcu_data = data;
             Cpuint.cpunum_set_input_line(2, 1, LineState.PULSE_LINE);
         }
-
+        public static void setirq10(int irq)
+        {
+            Cpuint.cpunum_set_input_line(1, 0, irq != 0 ? LineState.ASSERT_LINE : LineState.CLEAR_LINE);
+        }
         public static void video_start_system18()
         {
             int i;
@@ -525,10 +528,6 @@ namespace mame
             for (j = Video.new_clip.min_y; j <= Video.new_clip.max_y; j++)
             {
                 Array.Copy(Tilemap.bb00, 0, Tilemap.priority_bitmap, Tilemap.screen_width * j + Video.new_clip.min_x, Video.new_clip.max_x - Video.new_clip.min_x + 1);
-            }
-            if (Video.screenstate.frame_number == 0x1b0)
-            {
-                int i1 = 1;
             }
             segaic16_tilemap_draw(0, Palette.bbitmap[Video.curbitmap], Video.new_clip, 1, 0 | 0, 0x00);//0x80
             segaic16_tilemap_draw(0, Palette.bbitmap[Video.curbitmap], Video.new_clip, 1, 1 | 0, 0x00);//0x80

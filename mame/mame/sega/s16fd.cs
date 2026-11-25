@@ -51,7 +51,7 @@ namespace mame
             }
             fd1094_state = state;
             //cpunum_set_info_int(0, CPUINFO_INT_REGISTER + M68K_PREF_ADDR, 0x0010);
-            state = fd1094.fd1094_set_state(fd1094_key, state) & 0xff;
+            state = fd1094_set_state(fd1094_key, state) & 0xff;
             for (i = 0; i < 8; i++)
             {
                 if (fd1094_cached_states[i] == state)
@@ -66,7 +66,7 @@ namespace mame
             for (addr = 0; addr < fd1094_cpuregionsize / 2; addr++)
             {
                 ushort dat;
-                dat = (ushort)fd1094.fd1094_decode(addr, fd1094_cpuregion[addr], fd1094_key, 0);
+                dat = (ushort)fd1094_decode(addr, fd1094_cpuregion[addr], fd1094_key, 0);
                 fd1094_cacheregion[fd1094_current_cacheposition][addr] = dat;
             }
             fd1094_userregion = fd1094_cacheregion[fd1094_current_cacheposition];
@@ -99,7 +99,7 @@ namespace mame
             int i;
             for (i = 0; i < 4; i++)
             {
-                fd1094_userregion[i] = (ushort)fd1094.fd1094_decode(i, fd1094_cpuregion[i], fd1094_key, 1);
+                fd1094_userregion[i] = (ushort)fd1094_decode(i, fd1094_cpuregion[i], fd1094_key, 1);
             }
         }
         public static void fd1094_machine_init()
@@ -131,7 +131,7 @@ namespace mame
             for (addr = 0; addr < fd1094_cpuregionsize / 2; addr++)
             {
                 ushort dat;
-                dat = (ushort)fd1094.fd1094_decode(addr, fd1094_cpuregion[addr], fd1094_key, 0);
+                dat = (ushort)fd1094_decode(addr, fd1094_cpuregion[addr], fd1094_key, 0);
                 fd1094_cacheregion[0][addr] = dat;
             }
             fd1094_userregion = fd1094_cacheregion[0];

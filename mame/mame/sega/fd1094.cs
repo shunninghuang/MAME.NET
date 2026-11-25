@@ -5,7 +5,7 @@ using System.Text;
 
 namespace mame
 {
-    public class fd1094
+    public partial class sega
     {
         public static int selected_state, irq_mode;
         public static int global_key1, global_key2, global_key3;        

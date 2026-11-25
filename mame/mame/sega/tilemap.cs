@@ -152,10 +152,6 @@ namespace mame
                     else
                     {
                         logindex = row * cols + column;
-                        if (Video.screenstate.frame_number == 0x13d && row == 0x4 && column == 0x18)
-                        {
-                            int i1 = 1;
-                        }
                         if (tileflags[logindex] == Tilemap.TILE_FLAG_DIRTY)
                         {
                             tile_update3(logindex, column, row);

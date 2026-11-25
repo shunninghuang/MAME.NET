@@ -63,6 +63,7 @@ namespace mame
             public draw_layer_delegate draw_layer;
             public ushort[] textram;
             public ushort[] tileram;
+            public Timer.emu_timer latch_timer;
         }
         public struct multiply_chip
         {
@@ -572,13 +573,11 @@ namespace mame
                 bg_tilemap[0].latched_yscroll[i] = textram[0xe90 / 2 + i];
                 bg_tilemap[0].latched_xscroll[i] = textram[0xe98 / 2 + i];
             }
-            Timer.emu_timer timer = Timer.timer_alloc_common(segaic16_tilemap_16b_latch_values, "segaic16_tilemap_16b_latch_values", true);
-            Timer.timer_adjust_periodic(timer, Video.video_screen_get_time_until_pos(261, 0), Attotime.ATTOTIME_NEVER);
+            Timer.timer_adjust_periodic(bg_tilemap[0].latch_timer, Video.video_screen_get_time_until_pos(261, 0), Attotime.ATTOTIME_NEVER);
         }
         public static void segaic16_tilemap_16b_reset()
         {
-            Timer.emu_timer timer = Timer.timer_alloc_common(segaic16_tilemap_16b_latch_values, "segaic16_tilemap_16b_latch_values", true);
-            Timer.timer_adjust_periodic(timer, Video.video_screen_get_time_until_pos(261, 0), Attotime.ATTOTIME_NEVER);
+            Timer.timer_adjust_periodic(bg_tilemap[0].latch_timer, Video.video_screen_get_time_until_pos(261, 0), Attotime.ATTOTIME_NEVER);
         }
         public static void segaic16_tilemap_init(int which, int type, int colorbase, int xoffs, int numbanks)
         {
@@ -633,6 +632,7 @@ namespace mame
                     bg_tilemap[which].numpages = 16;
                     bg_tilemap[which].draw_layer = segaic16_tilemap_16b_draw_layer;
                     bg_tilemap[which].reset = segaic16_tilemap_16b_reset;
+                    bg_tilemap[which].latch_timer = Timer.timer_alloc_common(segaic16_tilemap_16b_latch_values, "segaic16_tilemap_16b_latch_values", false);
                     break;
                 /*case 3:
                     get_text_info = segaic16_tilemap_16b_alt_text_info;
@@ -1024,6 +1024,7 @@ namespace mame
                 case 0x1f:
                     if (oldval != data)
                     {
+                        int i1 = 1;
                         //update_memory_mapping(machine, chip);
                     }
                     break;
@@ -1051,6 +1052,82 @@ namespace mame
                     break;
             }
             return unmapped_val;
+        }
+        public static void SaveStateBinary_segaic16(BinaryWriter writer)
+        {
+            int i;
+            writer.Write(segaic16_display_enable);
+            for (i = 0; i < 0x8000; i++)
+            {
+                writer.Write(segaic16_tileram_0[i]);
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                writer.Write(segaic16_textram_0[i]);
+            }
+            for (i = 0; i < 0x400; i++)
+            {
+                writer.Write(segaic16_spriteram_0[i]);
+            }
+            writer.Write(bg_tilemap[0].index);
+            writer.Write(bg_tilemap[0].type);
+            writer.Write(bg_tilemap[0].numpages);
+            writer.Write(bg_tilemap[0].flip);
+            writer.Write(bg_tilemap[0].rowscroll);
+            writer.Write(bg_tilemap[0].colscroll);
+            writer.Write(bg_tilemap[0].bank, 0, 8);
+            writer.Write(bg_tilemap[0].banksize);
+            for (i = 0; i < 4; i++)
+            {
+                writer.Write(bg_tilemap[0].latched_xscroll[i]);
+            }
+            for (i = 0; i < 4; i++)
+            {
+                writer.Write(bg_tilemap[0].latched_yscroll[i]);
+            }
+            for (i = 0; i < 4; i++)
+            {
+                writer.Write(bg_tilemap[0].latched_pageselect[i]);
+            }
+            writer.Write(bg_tilemap[0].xoffs);
+        }
+        public static void LoadStateBinary_segaic16(BinaryReader reader)
+        {
+            int i;
+            segaic16_display_enable = reader.ReadByte();
+            for (i = 0; i < 0x8000; i++)
+            {
+                segaic16_tileram_0[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x800; i++)
+            {
+                segaic16_textram_0[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 0x400; i++)
+            {
+                segaic16_spriteram_0[i] = reader.ReadUInt16();
+            }
+            bg_tilemap[0].index = reader.ReadByte();
+            bg_tilemap[0].type = reader.ReadByte();
+            bg_tilemap[0].numpages = reader.ReadByte();
+            bg_tilemap[0].flip = reader.ReadByte();
+            bg_tilemap[0].rowscroll = reader.ReadByte();
+            bg_tilemap[0].colscroll = reader.ReadByte();
+            bg_tilemap[0].bank = reader.ReadBytes(8);
+            bg_tilemap[0].banksize = reader.ReadUInt16();
+            for (i = 0; i < 4; i++)
+            {
+                bg_tilemap[0].latched_xscroll[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 4; i++)
+            {
+                bg_tilemap[0].latched_yscroll[i] = reader.ReadUInt16();
+            }
+            for (i = 0; i < 4; i++)
+            {
+                bg_tilemap[0].latched_pageselect[i] = reader.ReadUInt16();
+            }
+            bg_tilemap[0].xoffs = reader.ReadInt32();
         }
     }
 }

@@ -1638,14 +1638,6 @@ namespace mame
         {
             FF2612[1].ym2612_timer_over(1);
         }
-        public void timer_callback_2612_0()
-        {
-            ym2612_timer_over(0);
-        }
-        public void timer_callback_2612_1()
-        {
-            ym2612_timer_over(1);
-        }
         public void timer_handler(int c, int count, int clock)
         {
             if (count == 0)
@@ -1826,16 +1818,31 @@ namespace mame
             FF2612[sndindex].timer = new Timer.emu_timer[2];
             if (sndindex == 0)
             {
-                FF2612[0].timer[0] = Timer.timer_alloc_common(FF2612[0].timer_callback_2612_0, "timer_callback_2612_0_0", false);
-                FF2612[0].timer[1] = Timer.timer_alloc_common(FF2612[0].timer_callback_2612_1, "timer_callback_2612_0_1", false);
+                FF2612[0].timer[0] = Timer.timer_alloc_common(timer_callback_2612_0_0, "timer_callback_2612_0_0", false);
+                FF2612[0].timer[1] = Timer.timer_alloc_common(timer_callback_2612_0_1, "timer_callback_2612_0_1", false);
             }
             else if (sndindex == 1)
             {
-                FF2612[1].timer[0] = Timer.timer_alloc_common(FF2612[1].timer_callback_2612_0, "timer_callback_2612_1_0", false);
-                FF2612[1].timer[1] = Timer.timer_alloc_common(FF2612[1].timer_callback_2612_1, "timer_callback_2612_1_1", false);
+                FF2612[1].timer[0] = Timer.timer_alloc_common(timer_callback_2612_1_0, "timer_callback_2612_1_0", false);
+                FF2612[1].timer[1] = Timer.timer_alloc_common(timer_callback_2612_1_1, "timer_callback_2612_1_1", false);
             }
             FF2612[sndindex].stream = new sound_stream(rate, 0, 2, FF2612[sndindex].ym2612_update_one);
-            ym2612_init(sndindex, clock, rate, FF2612[sndindex].timer_handler, null);
+            if (sndindex == 0)
+            {
+                switch (Machine.sBoard)
+                {
+                    case "Sega":
+                        ym2612_init(sndindex, clock, rate, FF2612[sndindex].timer_handler, sega.setirq10);
+                        break;
+                    default:
+                        ym2612_init(sndindex, clock, rate, FF2612[sndindex].timer_handler, null);
+                        break;
+                }
+            }
+            else if (sndindex == 1)
+            {
+                ym2612_init(sndindex, clock, rate, FF2612[sndindex].timer_handler, null);
+            }
         }
     }
 }

@@ -1066,7 +1066,7 @@ namespace mame
         {
             address &= 0xffffff;
             sbyte result = 0;
-            if (address >= regs[0x11] * 0x10000 && address <= regs[0x11] * 0x10000 + 0xfffff)
+            if (address >= regs[0x11] * 0x10000 && address <= regs[0x11] * 0x10000 + 0x7ffff)
             {
                 int offset = address - regs[0x11] * 0x10000;
                 result = (sbyte)Memory.mainrom[offset];
@@ -1075,10 +1075,6 @@ namespace mame
             {
                 int offset = address - regs[0x13] * 0x10000 + 0x80000;
                 result = (sbyte)Memory.mainrom[offset];
-            }
-            else if (address >= regs[0x13] * 0x10000 + 0x80000&&address<=regs[0x13] * 0x10000 +0x1fffff)
-            {
-                result = 0;
             }
             return result;
         }
@@ -1086,7 +1082,7 @@ namespace mame
         {
             address &= 0xffffff;
             sbyte result = 0;
-            if (address >= regs[0x11] * 0x10000 && address <= regs[0x11] * 0x10000 + 0xfffff)
+            if (address >= regs[0x11] * 0x10000 && address <= regs[0x11] * 0x10000 + 0x7ffff)
             {
                 int offset = address - regs[0x11] * 0x10000;
                 result = (sbyte)Memory.mainrom[offset];
@@ -1095,10 +1091,6 @@ namespace mame
             {
                 int offset = address - regs[0x13] * 0x10000 + 0x80000;
                 result = (sbyte)Memory.mainrom[offset];
-            }
-            else if (address >= regs[0x13] * 0x10000 + 0x80000 && address <= regs[0x13] * 0x10000 + 0x1fffff)
-            {
-                result = 0;
             }
             else if (address >= regs[0x15] * 0x10000 && address <= regs[0x15] * 0x10000 + 0x10)
             {
@@ -1188,7 +1180,7 @@ namespace mame
         {
             address &= 0xffffff;
             short result = 0;
-            if (address >= regs[0x11] * 0x10000 && address + 1 <= regs[0x11] * 0x10000 + 0xfffff)
+            if (address >= regs[0x11] * 0x10000 && address + 1 <= regs[0x11] * 0x10000 + 0x7ffff)
             {
                 int offset = address - regs[0x11] * 0x10000;
                 result = (short)(Memory.mainrom[offset] * 0x100 + Memory.mainrom[offset + 1]);
@@ -1197,10 +1189,6 @@ namespace mame
             {
                 int offset = address - regs[0x13] * 0x10000 + 0x80000;
                 result = (short)(Memory.mainrom[offset] * 0x100 + Memory.mainrom[offset + 1]);
-            }
-            else if (address >= regs[0x13] * 0x10000 + 0x80000 && address + 1 <= regs[0x13] * 0x10000 + 0x1fffff)
-            {
-                result = 0;
             }
             return result;
         }
@@ -1208,7 +1196,7 @@ namespace mame
         {
             address &= 0xffffff;
             short result = 0;
-            if (address >= regs[0x11] * 0x10000 && address + 1 <= regs[0x11] * 0x10000 + 0xfffff)
+            if (address >= regs[0x11] * 0x10000 && address + 1 <= regs[0x11] * 0x10000 + 0x7ffff)
             {
                 int offset = address - regs[0x11] * 0x10000;
                 result = (short)(Memory.mainrom[offset] * 0x100 + Memory.mainrom[offset + 1]);
@@ -1217,10 +1205,6 @@ namespace mame
             {
                 int offset = address - regs[0x13] * 0x10000 + 0x80000;
                 result = (short)(Memory.mainrom[offset] * 0x100 + Memory.mainrom[offset + 1]);
-            }
-            else if (address >= regs[0x13] * 0x10000 + 0x80000 && address + 1 <= regs[0x13] * 0x10000 + 0x1fffff)
-            {
-                result = 0;
             }
             else if (address >= regs[0x15] * 0x10000 && address + 1 <= regs[0x15] * 0x10000 + 0x10)
             {
@@ -1368,7 +1352,19 @@ namespace mame
                     misc_io_w2(offset, (byte)value);
                 }
             }
-            else
+            else if (address >= 0x3e0000 && address + 1 <= 0x3e003f)
+            {
+                int offset = (address - 0x3e0000) / 2;
+                if (address % 2 == 0)
+                {
+
+                }
+                else if (address % 2 == 1)
+                {
+                    rom_837_7525_bank_w2(offset, (byte)value);
+                }
+            }
+            else if (address >= 0xfe0000 && address <= 0xfe003f)
             {
                 int offset = address / 2;
                 if (address % 2 == 0)
@@ -1425,7 +1421,12 @@ namespace mame
                 int offset = (address - regs[0x1f] * 0x10000) / 2;
                 misc_io_w(offset, (ushort)value);
             }
-            else
+            else if (address >= 0x3e0000 && address + 1 <= 0x3e003f)
+            {
+                int offset = (address - 0x3e0000) / 2;
+                rom_837_7525_bank_w(offset, (ushort)value);
+            }
+            else if (address >= 0xfe0000 && address + 1 <= 0xfe003f)
             {
                 int offset = address / 2;
                 memory_mapper_w(offset, (byte)value);
@@ -1694,7 +1695,7 @@ namespace mame
                     misc_io_w2(offset, (byte)value);
                 }
             }
-            else
+            else if (address >= 0xfe0000 && address <= 0xfe003f)
             {
                 int offset = address / 2;
                 if (address % 2 == 0)
@@ -1746,7 +1747,7 @@ namespace mame
                 int offset = (address - regs[0x1f] * 0x10000) / 2;
                 misc_io_w(offset, (ushort)value);
             }
-            else
+            else if (address >= 0xfe0000 && address + 1 <= 0xfe003f)
             {
                 int offset = address / 2;
                 memory_mapper_w(offset, (byte)value);

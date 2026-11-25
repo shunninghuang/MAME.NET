@@ -547,6 +547,11 @@ namespace mame
                     }
                     YM2612.FF2612[0].ym2612_postload();
                     YM2612.FF2612[1].ym2612_postload();
+                    sega.bg_tilemap[0].textmap_info.bank = sega.bg_tilemap[0].bank;
+                    for (i = 0; i < 16; i++)
+                    {
+                        sega.bg_tilemap[0].tilemap_info1[i].bank = sega.bg_tilemap[0].bank;
+                    }
                     Tmap.tilemap_mark_all_tiles_dirty_alltilemap();
                     break;
                 case "Data East":
